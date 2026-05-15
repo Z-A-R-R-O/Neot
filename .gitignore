@@ -70,3 +70,4 @@ supabase/.branches/
 *.pem
 secrets/
 *.bak
+/dev.db
