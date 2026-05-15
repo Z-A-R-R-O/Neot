@@ -106,7 +106,7 @@ export function QuizEditor({ content, onChange }: QuizEditorProps) {
 
       <div className="space-y-3">
         {questions.map((question, index) => (
-          <Card key={question.id} padding="sm">
+          <Card key={question.id} size="sm">
             <CardHeader className="mb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium">

@@ -49,7 +49,7 @@ export function OverviewStats({ stats }: OverviewStatsProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {statCards.map(({ label, value, icon: Icon, color, format }) => (
-        <Card key={value} padding="md">
+        <Card key={value}>
           <CardContent className="flex items-center gap-3">
             <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", color)}>
               <Icon className="h-5 w-5" />

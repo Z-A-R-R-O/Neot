@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import type { CourseListItem } from "@/hooks/useCourses";
 
-const difficultyColors: Record<string, "default" | "success" | "warning" | "danger"> = {
-  beginner: "success",
-  intermediate: "warning",
-  advanced: "danger",
+const difficultyColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
+  beginner: "default",
+  intermediate: "secondary",
+  advanced: "outline",
+  expert: "destructive",
 };
 
 interface CourseCardProps {
@@ -37,13 +38,12 @@ export function CourseCard({ course, enrolled, progress }: CourseCardProps) {
         <div className="flex items-center gap-2">
           <Badge
             variant={difficultyColors[course.difficulty] ?? "default"}
-            size="sm"
           >
             {course.difficulty}
           </Badge>
-          {enrolled && (
-            <Badge variant="secondary" size="sm">
-              Enrolled
+          {course.category && (
+            <Badge variant="secondary">
+              {course.category.name}
             </Badge>
           )}
         </div>

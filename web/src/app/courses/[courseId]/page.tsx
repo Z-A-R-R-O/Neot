@@ -11,10 +11,10 @@ import { EnrollButton } from "@/components/courses/enroll-button";
 import { ModuleList } from "@/components/courses/module-list";
 import { useCourse } from "@/hooks/useCourses";
 
-const difficultyColors: Record<string, "success" | "warning" | "danger"> = {
-  beginner: "success",
-  intermediate: "warning",
-  advanced: "danger",
+const difficultyColors: Record<string, "default" | "secondary" | "outline"> = {
+  beginner: "default",
+  intermediate: "secondary",
+  advanced: "outline",
 };
 
 export default function CourseDetailPage({
@@ -54,7 +54,7 @@ export default function CourseDetailPage({
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <Badge variant={difficultyColors[course.difficulty] ?? "success"}>
+                <Badge variant={difficultyColors[course.difficulty] ?? "default"}>
                   {course.difficulty}
                 </Badge>
                 {course.category && (

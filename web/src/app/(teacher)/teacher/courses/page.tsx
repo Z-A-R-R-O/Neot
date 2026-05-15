@@ -13,10 +13,10 @@ import { LoadingScreen } from "@/components/ui/loading-screen";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
 
-const statusVariants: Record<string, "success" | "warning" | "secondary" | "danger"> = {
-  published: "success",
-  draft: "warning",
-  archived: "secondary",
+const statusVariants: Record<string, "default" | "secondary" | "outline"> = {
+  published: "default",
+  draft: "secondary",
+  archived: "outline",
 };
 
 export default function TeacherCoursesPage() {
@@ -100,7 +100,6 @@ export default function TeacherCoursesPage() {
                   </div>
                   <Badge
                     variant={statusVariants[course.status] ?? "secondary"}
-                    size="sm"
                     className="ml-2 shrink-0"
                   >
                     {course.status}

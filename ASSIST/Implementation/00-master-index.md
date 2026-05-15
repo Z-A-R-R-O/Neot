@@ -83,7 +83,7 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 
 | **Password hash in dedicated column** (`passwordHash`) | Security: avoids metadata corruption, clear schema intent |
 | **`content_schema` stored as JSON string in `Lesson.content`** | Keeps Prisma SQLite schema simple; JSONB would require Postgres |
 | **Zustand for UI state** + **TanStack Query for server state** | Clear separation: local UI state vs. async data caching |
-| **Radix UI primitives** | Accessible, unstyled, composable; Tailwind for styling layer |
+| **shadcn/ui components** (Radix Nova preset) | Accessible, styled, registry-managed; replaces hand-rolled Radix wrappers |
 | **In-memory rate limiter** (no Redis) | Simple for single-process dev; swap to Redis when scaling |
 
 ---
@@ -99,7 +99,7 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 
 - Auth API routes: `POST /api/auth/login`, `POST /api/auth/signup`, `POST /api/auth/logout`, `GET /api/auth/me`
 - Rate limiting on login (5 req/min per IP)
 - CSRF origin validation on mutation endpoints
-- 19 Radix UI primitives (button, card, dialog, tooltip, etc.)
+- 14 shadcn/ui components (button, card, dialog, dropdown-menu, input, label, select, skeleton, tabs, tooltip, avatar, badge, progress, textarea)
 - Layout shell: role-based sidebar, header, mobile nav
 - Auth proxy (`src/proxy.ts`) — session-based route protection
 - Error/loading/empty/offline states

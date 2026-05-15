@@ -20,7 +20,7 @@ const blockTypes = [
 
 export function BlockPalette({ onAddBlock }: BlockPaletteProps) {
   return (
-    <Card padding="sm">
+    <Card size="sm">
       <h3 className="mb-3 text-sm font-semibold text-gray-900">Add Block</h3>
       <div className="grid grid-cols-2 gap-2">
         {blockTypes.map(({ type, label, icon: Icon }) => (

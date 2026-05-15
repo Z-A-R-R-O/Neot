@@ -1,45 +1,31 @@
-"use client";
+"use client"
 
-import { forwardRef } from "react";
-import * as ProgressPrimitive from "@radix-ui/react-progress";
+import * as React from "react"
+import { Progress as ProgressPrimitive } from "radix-ui"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-type ProgressVariant = "default" | "success" | "warning";
-
-interface ProgressProps {
-  value?: number;
-  variant?: ProgressVariant;
-  className?: string;
+function Progress({
+  className,
+  value,
+  ...props
+}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+  return (
+    <ProgressPrimitive.Root
+      data-slot="progress"
+      className={cn(
+        "relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-muted",
+        className
+      )}
+      {...props}
+    >
+      <ProgressPrimitive.Indicator
+        data-slot="progress-indicator"
+        className="size-full flex-1 bg-primary transition-all"
+        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+      />
+    </ProgressPrimitive.Root>
+  )
 }
 
-const indicatorStyles: Record<ProgressVariant, string> = {
-  default: "bg-primary-600",
-  success: "bg-green-500",
-  warning: "bg-amber-500",
-};
-
-export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
-  ({ value = 0, variant = "default", className }, ref) => {
-    return (
-      <ProgressPrimitive.Root
-        ref={ref}
-        value={value}
-        className={cn(
-          "relative h-2 w-full overflow-hidden rounded-full bg-gray-200",
-          className,
-        )}
-      >
-        <ProgressPrimitive.Indicator
-          className={cn(
-            "h-full w-full flex-1 rounded-full transition-all duration-300",
-            indicatorStyles[variant],
-          )}
-          style={{ transform: `translateX(-${100 - Math.min(value, 100)}%)` }}
-        />
-      </ProgressPrimitive.Root>
-    );
-  },
-);
-
-Progress.displayName = "Progress";
+export { Progress }

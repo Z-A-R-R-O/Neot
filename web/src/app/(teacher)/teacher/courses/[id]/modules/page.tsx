@@ -182,7 +182,7 @@ export default function CourseModulesPage() {
       ) : (
         <div className="space-y-3">
           {modules.map((mod: { id: string; title: string; description: string | null; sortOrder: number; lessons?: { id: string }[] }, idx: number) => (
-            <Card key={mod.id} padding="sm">
+            <Card key={mod.id} size="sm">
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-0.5 text-gray-400">
                   <button

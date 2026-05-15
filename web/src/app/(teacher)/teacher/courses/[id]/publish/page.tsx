@@ -112,7 +112,7 @@ export default function PublishCoursePage() {
             Review and publish your course.
           </p>
         </div>
-        <Badge variant={isPublished ? "success" : "warning"}>
+        <Badge variant={isPublished ? "default" : "secondary"}>
           {isPublished ? "Published" : "Draft"}
         </Badge>
       </div>

@@ -121,65 +121,45 @@ function CourseList() {
 // TanStack Query for server state.
 // React state (useState) for local UI state.
 
-// ✅ Zustand store
-interface AuthStore {
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-}
-
+// ✅ Zustand store (auth via local API)
 export const useAuthStore = create<AuthStore>((set) => ({
-  user: null,
-  login: async (email, password) => {
-    const user = await supabase.auth.signInWithPassword({ email, password });
-    set({ user: user.data.user });
-  },
-  logout: () => {
-    supabase.auth.signOut();
-    set({ user: null });
-  },
+  // See src/stores/authStore.ts for implementation
 }));
+
+// ✅ UI components via shadcn/ui (Radix Nova preset)
+// Components are registry-managed at src/components/ui/
+// Add new: npx shadcn@latest add <component>
+// Never hand-roll Radix wrappers — use shadcn CLI instead
 ```
 
 ---
 
 ## 3. Database Rules
 
-### Migrations
+### Schema Management (Prisma + SQLite)
 
-```sql
--- One migration file per logical change
--- Always include rollback instructions in comments
+```prisma
+// Schema: prisma/schema.prisma
+// Push changes: npx prisma db push
+// Generate client: npx prisma generate
+// Config: prisma.config.ts (Prisma 7 style)
 
--- 001_core_schema.sql
--- Up
-CREATE TABLE public.profiles ( ... );
--- Down
--- DROP TABLE public.profiles;
+model Profile {
+  id           String   @id           // UUID from crypto.randomUUID()
+  email        String?                // Used as login identifier
+  passwordHash String?  @map("password_hash")  // bcrypt hash
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  // ...
+}
 ```
 
-- Always add RLS policies for every table
-- Always add indexes for foreign keys and frequently queried columns
-- Use `gen_random_uuid()` for all primary keys
-- Use `created_at` and `updated_at` on all tables
-- Use JSONB for flexible/frequently changing schemas
-- Use `TIMESTAMPTZ` (never `TIMESTAMP` without timezone)
-
-### RLS
-
-```sql
--- Every table must have RLS enabled
-ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
-
--- Named policies for clarity
-CREATE POLICY "Teachers can insert their own courses"
-  ON public.courses FOR INSERT
-  WITH CHECK (auth.uid() = teacher_id);
-
-CREATE POLICY "Anyone can read published courses"
-  ON public.courses FOR SELECT
-  USING (status = 'published');
-```
+- Use `@map()` for snake_case column names in SQLite
+- Always add `createdAt` and `updatedAt` on all tables
+- Use `@default(uuid())` for primary keys (or generate from crypto in app code for Profile)
+- Use `cascade` delete for child relations
+- Access control is handled in API route handlers (no RLS with SQLite)
+- No migrations yet — Prisma schema is source of truth; use `db push` during dev
 
 ---
 
@@ -201,8 +181,9 @@ export async function POST(request: Request) {
   const parsed = schema.safeParse(body);
   if (!parsed.success) return Response.json({ error: parsed.error }, { status: 400 });
   
-  // Authenticate
-  const { user } = await supabase.auth.getUser();
+  // Authenticate (local auth via Prisma sessions)
+  import { getUser } from "@/lib/auth";
+  const user = await getUser();
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
   
   // Authorize

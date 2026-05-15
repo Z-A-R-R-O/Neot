@@ -4,7 +4,7 @@ import { Menu, LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -38,11 +38,10 @@ export function Header({ onMenuToggle }: HeaderProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500">
-            <Avatar
-              src={user?.avatarUrl ?? undefined}
-              fallback={user?.email?.charAt(0).toUpperCase() ?? "U"}
-              size="sm"
-            />
+            <Avatar size="sm">
+              <AvatarImage src={user?.avatarUrl ?? undefined} alt="" />
+              <AvatarFallback>{user?.email?.charAt(0).toUpperCase() ?? "U"}</AvatarFallback>
+            </Avatar>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
