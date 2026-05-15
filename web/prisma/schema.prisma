@@ -252,3 +252,13 @@ model Media {
 
   @@map("media")
 }
+
+model PlatformSetting {
+  key       String   @id
+  value     String
+  group     String   @default("general")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("platform_settings")
+}
