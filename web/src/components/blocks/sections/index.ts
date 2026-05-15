@@ -1,0 +1,9 @@
+export { HeroSection } from "./hero-section";
+export { FeatureGridSection } from "./feature-grid-section";
+export { StatsBarSection } from "./stats-bar-section";
+export { CtaBannerSection } from "./cta-banner-section";
+export { FaqSection } from "./faq-section";
+export { PricingTableSection } from "./pricing-table-section";
+export { CourseCarouselSection } from "./course-carousel-section";
+export { TestimonialsSection } from "./testimonials-section";
+export { CustomHtmlSection } from "./custom-html-section";

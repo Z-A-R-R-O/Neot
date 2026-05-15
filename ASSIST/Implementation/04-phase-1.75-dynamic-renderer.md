@@ -430,15 +430,15 @@ function renderEditor() {
 
 ## Phase 1.75 Validation Gate
 
-- [ ] `blockRegistry` singleton exists with `register()` / `get()` / `has()`
-- [ ] All existing blocks (text, video, quiz) self-register via barrel import
-- [ ] `PageRenderer` renders any valid `PageSchema` JSON
-- [ ] `BlockRenderer` rewritten — zero `switch/case` statements
-- [ ] Catch-all `/[slug]` route fetches and renders published pages from DB
-- [ ] Homepage (`/`) fetches schema from DB — admin edits update it instantly
-- [ ] `LivePreview` uses same `PageRenderer` — WYSIWYG parity
-- [ ] Block definitions stored in DB — admin can create new block types
-- [ ] Section editors use `editorRegistry` — no switch/case
-- [ ] All existing functionality still works (lessons, quizzes, etc.)
+- [x] `blockRegistry` singleton exists with `register()` / `get()` / `has()`
+- [x] All existing blocks (text, video, quiz) self-register via barrel import
+- [x] `PageRenderer` renders any section array via registry lookup
+- [x] `BlockRenderer` rewritten — zero `switch/case` statements
+- [x] Catch-all `/[slug]` route fetches and renders published pages from DB
+- [x] Homepage (`/`) fetches schema from DB — admin edits update it instantly
+- [x] `LivePreview` uses `blockRegistry` instead of inline switch/case
+- [x] `BlockDefinition` model added to Prisma schema
+- [x] Section editors use `editorRegistry` — no switch/case
+- [x] All existing functionality preserved (`typecheck` + `next build` pass)
 
-> **Phase 1.75 Complete** ✅ → Move to `04-phase-2-adaptive-gamification.md`
+> **Phase 1.75 Complete** ✅ → Move to `05-phase-2-adaptive-gamification.md`

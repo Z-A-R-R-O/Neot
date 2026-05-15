@@ -5,6 +5,8 @@ import { type ReactNode } from "react";
 import { QueryProvider } from "@/lib/providers";
 import { ThemeProvider } from "@/lib/theme/theme-provider";
 
+import "@/lib/registrations";
+
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryProvider>

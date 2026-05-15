@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 
 interface QuizBlockProps {
   content: Record<string, unknown>;
-  lessonId: string;
-  blockId: string;
+  lessonId?: string;
+  blockId?: string;
 }
 
 interface AnswerRecord {
@@ -19,7 +19,7 @@ interface AnswerRecord {
   selected: string | string[];
 }
 
-export function QuizBlock({ content, lessonId, blockId }: QuizBlockProps) {
+export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockProps) {
   const config = content as unknown as QuizBlockConfig & { questions?: QuizQuestion[] };
   const questions = config.questions ?? [];
   const [currentQuestion, setCurrentQuestion] = useState(0);

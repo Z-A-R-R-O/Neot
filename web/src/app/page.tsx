@@ -1,48 +1,34 @@
-import Link from "next/link";
-import { BookOpen, School, BarChart3, User, LogIn, UserPlus } from "lucide-react";
+import { prisma } from "@/lib/db";
+import { PageRenderer } from "@/components/blocks/page-renderer";
 
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+async function getHomepageSections() {
+  try {
+    const page = await prisma.customPage.findFirst({
+      where: { slug: "home", status: "published" },
+      include: { sections: { orderBy: { sortOrder: "asc" } } },
+    });
+    if (!page) return null;
+    return page.sections.map((s: { id: string; blockType: string; content: string }) => ({
+      id: s.id,
+      blockType: s.blockType,
+      content: JSON.parse(s.content) as Record<string, unknown>,
+    }));
+  } catch {
+    return null;
+  }
+}
 
-const links = [
-  {
-    href: "/courses",
-    label: "Explore Courses",
-    desc: "Browse available courses",
-    icon: BookOpen,
-  },
-  {
-    href: "/teacher",
-    label: "Teacher Dashboard",
-    desc: "Create and manage courses",
-    icon: School,
-  },
-  {
-    href: "/teacher/courses/new",
-    label: "Create Course",
-    desc: "Build a new course",
-    icon: BarChart3,
-  },
-  {
-    href: "/login",
-    label: "Login",
-    desc: "Sign in to your account",
-    icon: LogIn,
-  },
-  {
-    href: "/signup",
-    label: "Sign Up",
-    desc: "Create a new account",
-    icon: UserPlus,
-  },
-  {
-    href: "/dashboard",
-    label: "Student Dashboard",
-    desc: "Your learning journey",
-    icon: User,
-  },
-];
+export default async function Home() {
+  const sections = await getHomepageSections();
 
-export default function Home() {
+  if (sections && sections.length > 0) {
+    return (
+      <main className="min-h-screen bg-background text-foreground">
+        <PageRenderer sections={sections} />
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background px-6 text-foreground">
       <section className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
@@ -54,25 +40,6 @@ export default function Home() {
           Learning should adapt to humans. Humans should not adapt to systems.
         </p>
       </section>
-
-      <nav className="mt-12 grid w-full max-w-3xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {links.map((link) => {
-          const Icon = link.icon;
-          return (
-            <Link key={link.href} href={link.href}>
-              <Card className="h-full transition-shadow hover:shadow-md">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Icon className="h-5 w-5 text-primary" />
-                    <CardTitle className="text-sm">{link.label}</CardTitle>
-                  </div>
-                  <CardDescription>{link.desc}</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-          );
-        })}
-      </nav>
     </main>
   );
 }

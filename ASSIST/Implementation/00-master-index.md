@@ -12,11 +12,8 @@
 | 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | ✅ Complete |
 | 1 | **Core Learning** | Course player + Teacher builder + Quiz | ✅ Complete (Tasks 1.4-1.17 shipped; schema via Prisma) |
 | 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | ✅ Complete |
-| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + schema-driven homepage | 🔲 Next |
-| 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Not started |
-| 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
-| 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
-| 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
+| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + schema-driven homepage | ✅ Complete |
+| 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Next |
 | 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
 | 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
 | 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
@@ -135,9 +132,23 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - All API routes admin-protected with `getUser()` + role check
 - 4 Prisma models: `CustomPage`, `PageSection`, `SiteTheme`, `Media`, `PlatformSetting`
 
+### Phase 1.75 — Dynamic Renderer (✅ Complete)
+- `BlockRegistry` singleton at `lib/block-registry.ts` with `register()`/`getComponent()`/`getEditor()`/`getByScope()`
+- `EditorRegistry` singleton at `lib/editor-registry.ts` for admin section editors
+- Shared types at `types/registry.ts`: `BlockComponentProps`, `EditorComponentProps`, `RegistryEntry`
+- Central `registrations.ts` — single import in `providers.tsx` registers all blocks + editors
+- `PageRenderer` component — render any array of sections via registry lookup
+- `BlockRenderer` rewritten — zero `switch/case`, uses `blockRegistry.getComponent()`
+- 9 page section render components (hero, feature-grid, stats-bar, cta-banner, faq, pricing, course-carousel, testimonials, custom-html)
+- 6 page section editors registered in `editorRegistry`
+- Homepage (`/`) — schema-driven: fetches `CustomPage` where `slug="home"`, falls back to welcome Hero
+- Catch-all `[...slug]` route — renders any published `CustomPage` by path
+- `LivePreview` — uses `blockRegistry.getComponent()` instead of 150-line inline `switch/case`
+- `BlockDefinition` model added to Prisma schema
+- `typecheck` + `next build` — both pass with zero errors
+
 ### Gaps / Next Up
 - **Phase 1 Validation Gate** — E2E testing flow
-- **Phase 1.75 — Dynamic Renderer** — Component registry, PageRenderer, schema-driven homepage
 - **Phase 2 — Adaptive + Gamification** — XP/streaks/badges UI, adaptive engine, recs
 - **Password reset** — needs email service integration
 

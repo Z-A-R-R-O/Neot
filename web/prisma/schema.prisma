@@ -236,6 +236,21 @@ model PageSection {
   @@map("page_sections")
 }
 
+model BlockDefinition {
+  id          String   @id @default(uuid())
+  type        String   @unique
+  label       String
+  description String?
+  scope       String   @default("lesson")
+  icon        String?
+  category    String   @default("general")
+  schema      String   @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("block_definitions")
+}
+
 model Media {
   id          String   @id @default(uuid())
   filename    String

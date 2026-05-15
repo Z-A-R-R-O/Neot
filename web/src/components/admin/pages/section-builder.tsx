@@ -6,13 +6,8 @@ import { Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionPalette } from "@/components/admin/pages/section-palette";
 import { SectionWrapper } from "@/components/admin/pages/section-wrapper";
-import { HeroEditor } from "@/components/admin/pages/section-editors/hero-editor";
-import { FeatureGridEditor } from "@/components/admin/pages/section-editors/feature-grid-editor";
-import { StatsBarEditor } from "@/components/admin/pages/section-editors/stats-bar-editor";
-import { CtaEditor } from "@/components/admin/pages/section-editors/cta-editor";
-import { FaqEditor } from "@/components/admin/pages/section-editors/faq-editor";
-import { PricingEditor } from "@/components/admin/pages/section-editors/pricing-editor";
 import { LivePreview } from "@/components/admin/pages/live-preview";
+import { editorRegistry } from "@/lib/editor-registry";
 import {
   usePageBuilderStore,
   type SectionType,
@@ -126,32 +121,24 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
       );
     }
 
-    const editorProps = {
-      content: selectedSection.content,
-      onChange: (content: Record<string, unknown>) =>
-        handleContentChange(selectedSection.id, content),
-    };
+    const Editor = editorRegistry.get(selectedSection.blockType);
 
-    switch (selectedSection.blockType) {
-      case "hero":
-        return <HeroEditor {...editorProps} />;
-      case "feature-grid":
-        return <FeatureGridEditor {...editorProps} />;
-      case "stats-bar":
-        return <StatsBarEditor {...editorProps} />;
-      case "cta-banner":
-        return <CtaEditor {...editorProps} />;
-      case "faq":
-        return <FaqEditor {...editorProps} />;
-      case "pricing-table":
-        return <PricingEditor {...editorProps} />;
-      default:
-        return (
-          <div className="text-sm text-gray-500">
-            No editor available for {selectedSection.blockType} yet.
-          </div>
-        );
+    if (!Editor) {
+      return (
+        <div className="text-sm text-gray-500">
+          No editor available for {selectedSection.blockType} yet.
+        </div>
+      );
     }
+
+    return (
+      <Editor
+        content={selectedSection.content}
+        onChange={(content: Record<string, unknown>) =>
+          handleContentChange(selectedSection.id, content)
+        }
+      />
+    );
   }
 
   return (
