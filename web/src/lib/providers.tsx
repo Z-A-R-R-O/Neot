@@ -1,26 +1,28 @@
-import { QueryClient } from "@tanstack/react-query";
+"use client";
 
-export function makeQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 60 * 24,
-        retry: 2,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
-}
+import { useState, type ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-let browserQueryClient: QueryClient | undefined;
+export function QueryProvider({ children }: { children: ReactNode }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 5,
+            gcTime: 1000 * 60 * 60 * 24,
+            retry: 2,
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  );
 
-export function getQueryClient() {
-  if (typeof window === "undefined") {
-    return makeQueryClient();
-  }
-  if (!browserQueryClient) {
-    browserQueryClient = makeQueryClient();
-  }
-  return browserQueryClient;
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+    </QueryClientProvider>
+  );
 }
