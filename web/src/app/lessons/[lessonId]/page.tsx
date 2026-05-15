@@ -1,0 +1,80 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+
+import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/db";
+import { LessonPlayer } from "@/components/player/player-shell";
+
+export default async function LessonPage({
+  params,
+}: {
+  params: Promise<{ lessonId: string }>;
+}) {
+  const { lessonId } = await params;
+
+  let userId: string | undefined;
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id;
+  } catch {
+    // Supabase not configured
+  }
+
+  if (!userId) redirect("/login");
+
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    include: {
+      module: {
+        include: {
+          course: { select: { id: true, title: true } },
+        },
+      },
+    },
+  });
+
+  if (!lesson) redirect("/courses");
+
+  const content = (() => {
+    try {
+      const parsed = JSON.parse(lesson.content);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  })();
+
+  const allLessons = await prisma.lesson.findMany({
+    where: { moduleId: lesson.moduleId },
+    orderBy: { sortOrder: "asc" },
+    select: { id: true, title: true, sortOrder: true },
+  });
+
+  const currentIndex = allLessons.findIndex((l) => l.id === lessonId);
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <div className="flex items-center gap-4 border-b px-6 py-3">
+        <Link
+          href={`/courses/${lesson.module.courseId}`}
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          {lesson.module.course.title}
+        </Link>
+        <span className="text-sm text-gray-300">/</span>
+        <span className="text-sm text-gray-700">{lesson.title}</span>
+      </div>
+
+      <LessonPlayer
+        lesson={lesson}
+        blocks={content}
+        allLessons={allLessons}
+        currentLessonIndex={currentIndex}
+        userId={userId}
+      />
+    </div>
+  );
+}

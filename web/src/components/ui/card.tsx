@@ -70,3 +70,15 @@ export function CardDescription({
     </p>
   );
 }
+
+export function CardContent({
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("", className)} {...props}>
+      {children}
+    </div>
+  );
+}

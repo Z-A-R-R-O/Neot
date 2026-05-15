@@ -40,8 +40,15 @@ export async function getCourse(courseId: string) {
 }
 
 export async function getCourseLessons(courseId: string) {
-  const lessons = await prisma.lesson.findMany({
+  const modules = await prisma.module.findMany({
     where: { courseId },
+    select: { id: true },
+  });
+
+  const moduleIds = modules.map((m) => m.id);
+
+  const lessons = await prisma.lesson.findMany({
+    where: { moduleId: { in: moduleIds } },
     orderBy: { sortOrder: "asc" },
   });
 

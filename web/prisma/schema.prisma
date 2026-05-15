@@ -25,10 +25,25 @@ model Profile {
 
   courses    Course[]
   enrollments Enrollment[]
+  lessonProgress LessonProgress[]
   xpTransactions XPTransaction[]
   userAchievements UserAchievement[]
 
   @@map("profiles")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  icon        String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  courses Course[]
+
+  @@map("categories")
 }
 
 model Course {
@@ -36,26 +51,45 @@ model Course {
   title            String
   description      String?
   thumbnailUrl     String?  @map("thumbnail_url")
+  categoryId       String?  @map("category_id")
   teacherId        String   @map("teacher_id")
   subject          String?
   gradeLevel       String?  @map("grade_level")
+  ageRange         String?  @map("age_range")
   difficulty       String   @default("beginner")
+  isAdaptive       Boolean  @default(false) @map("is_adaptive")
   status           String   @default("draft")
   estimatedMinutes Int?     @map("estimated_minutes")
   metadata         String   @default("{}")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  teacher  Profile   @relation(fields: [teacherId], references: [id])
-  lessons  Lesson[]
+  category  Category?  @relation(fields: [categoryId], references: [id])
+  teacher   Profile    @relation(fields: [teacherId], references: [id])
+  modules   Module[]
   enrollments Enrollment[]
 
   @@map("courses")
 }
 
+model Module {
+  id          String   @id @default(uuid())
+  courseId    String   @map("course_id")
+  title       String
+  description String?
+  sortOrder   Int      @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons Lesson[]
+
+  @@map("modules")
+}
+
 model Lesson {
   id               String   @id @default(uuid())
-  courseId          String   @map("course_id")
+  moduleId         String   @map("module_id")
   title            String
   description      String?
   sortOrder        Int      @map("sort_order")
@@ -65,9 +99,29 @@ model Lesson {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  progress LessonProgress[]
 
   @@map("lessons")
+}
+
+model LessonProgress {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  lessonId  String   @map("lesson_id")
+  status    String   @default("not_started")
+  timeSpent Int      @default(0) @map("time_spent")
+  score     Float?
+  metadata  String   @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
 }
 
 model Enrollment {
@@ -78,10 +132,12 @@ model Enrollment {
   startedAt   DateTime  @default(now()) @map("started_at")
   completedAt DateTime? @map("completed_at")
   createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, courseId])
   @@map("enrollments")
 }
 
