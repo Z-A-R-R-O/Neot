@@ -271,15 +271,15 @@ Settings stored in `platform_settings` (key-value JSONB): General, Auth, Email, 
 
 ## Phase 1.5 Validation Gate
 
-- [ ] Page builder creates editable homepage sections (6+ types)
-- [ ] Theme switching changes entire app appearance instantly
-- [ ] Theme editor with live preview works
-- [ ] CSS variable system fully functional
-- [ ] Block library management works
-- [ ] User management (search, filter, suspend) works
-- [ ] Media library upload/download works
-- [ ] Platform settings persist and affect the app
-- [ ] Admin dashboard shows real analytics
-- [ ] All admin pages load under 2s
+- [x] Page builder creates editable homepage sections (6+ types)
+- [x] Theme switching changes entire app appearance instantly
+- [x] Theme editor with live preview works
+- [x] CSS variable system fully functional
+- [x] Block library management works
+- [x] User management (search, filter, suspend) works
+- [x] Media library upload/download works
+- [x] Platform settings persist and affect the app
+- [x] Admin dashboard shows real analytics
+- [x] All admin pages load under 2s
 
 > **Phase 1.5 Complete** ✅ → Move to `04-phase-2-adaptive-gamification.md`
