@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, type KeyboardEvent } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 
 interface InlineEditorProps {
   value: string;
@@ -11,15 +11,17 @@ interface InlineEditorProps {
 }
 
 export function InlineEditor({ value, onChange, className = "", placeholder = "", multiline = false }: InlineEditorProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLSpanElement>(null);
   const [editing, setEditing] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
+  const [prevValue, setPrevValue] = useState(value);
 
-  useEffect(() => {
+  if (value !== prevValue) {
+    setPrevValue(value);
     if (!editing) {
       setInternalValue(value);
     }
-  }, [value, editing]);
+  }
 
   function handleDoubleClick() {
     setEditing(true);
@@ -54,7 +56,7 @@ export function InlineEditor({ value, onChange, className = "", placeholder = ""
   }
 
   return (
-    <div
+    <span
       ref={ref}
       contentEditable={editing}
       suppressContentEditableWarning
@@ -74,9 +76,14 @@ export function InlineEditor({ value, onChange, className = "", placeholder = ""
           ? "outline-dashed outline-1 outline-primary-500/50 cursor-text"
           : "cursor-pointer hover:outline-dotted hover:outline-1 hover:outline-primary-500/30"
       }`}
-      style={{ whiteSpace: multiline ? "pre-wrap" : "nowrap" }}
+      style={{ 
+        whiteSpace: multiline ? "pre-wrap" : "nowrap",
+        display: multiline ? "block" : "inline-block",
+        minWidth: "1em",
+        minHeight: "1em"
+      }}
     >
       {internalValue || placeholder}
-    </div>
+    </span>
   );
 }

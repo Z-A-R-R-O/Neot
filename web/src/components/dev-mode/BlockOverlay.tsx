@@ -13,7 +13,7 @@ interface BlockOverlayProps {
   children: React.ReactNode;
 }
 
-export function BlockOverlay({ blockId, type, label, path, children }: BlockOverlayProps) {
+export function BlockOverlay({ blockId, label, path, children }: Omit<BlockOverlayProps, "type">) {
   const ref = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
 
@@ -69,22 +69,28 @@ export function BlockOverlay({ blockId, type, label, path, children }: BlockOver
 
       {isSelected && rect && (
         <div
-          className="pointer-events-none fixed z-[9999]"
+          className="fixed z-[9999]"
           style={{
             left: rect.left,
             top: rect.top,
             width: rect.width,
             height: rect.height,
+            pointerEvents: "none"
           }}
         >
-          <div className="absolute inset-0 border-2 border-primary-500/60 rounded-[inherit]" />
-          <div className="absolute -inset-[3px] border border-primary-500/20 rounded-[inherit]" />
+          <div className="absolute inset-0 border-2 border-primary-500 rounded-[inherit] shadow-[0_0_0_1px_rgba(79,124,255,0.2)]" />
 
-          <div className="absolute -top-7 left-0 flex items-center gap-1.5 rounded-t-md bg-primary-500 px-2 py-1 text-[10px] font-medium text-white whitespace-nowrap shadow-lg">
-            <span className="opacity-70">{path}</span>
-            <span>{label}</span>
-            <span className="ml-1 opacity-60">({type})</span>
-            <div className="ml-3 flex items-center gap-1 border-l border-white/20 pl-2">
+          <div 
+            className="absolute -top-8 left-0 flex items-center gap-2 rounded-lg bg-primary-500 p-1 text-[10px] font-bold text-white shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
+            style={{ pointerEvents: "auto" }}
+          >
+            <div className="flex items-center gap-1.5 px-2">
+              <span className="opacity-60">{path}</span>
+              <span className="h-1 w-1 rounded-full bg-white/40" />
+              <span>{label}</span>
+            </div>
+            
+            <div className="flex items-center gap-0.5 rounded-md bg-white/10 p-0.5">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -96,7 +102,7 @@ export function BlockOverlay({ blockId, type, label, path, children }: BlockOver
                     usePageBuilderStore.getState().reorderSections(newSections);
                   }
                 }}
-                className="hover:text-white/80"
+                className="rounded p-1 transition-colors hover:bg-white/20"
               >
                 <ChevronUp className="h-3 w-3" />
               </button>
@@ -111,32 +117,33 @@ export function BlockOverlay({ blockId, type, label, path, children }: BlockOver
                     usePageBuilderStore.getState().reorderSections(newSections);
                   }
                 }}
-                className="hover:text-white/80"
+                className="rounded p-1 transition-colors hover:bg-white/20"
               >
                 <ChevronDown className="h-3 w-3" />
               </button>
+              <div className="mx-1 h-3 w-px bg-white/20" />
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   usePageBuilderStore.getState().removeSection(blockId);
                   useDevModeStore.getState().select(null);
                 }}
-                className="ml-1 text-white/60 hover:text-red-300"
+                className="rounded p-1 transition-colors hover:bg-red-500/40 hover:text-white"
               >
                 <Trash2 className="h-3 w-3" />
               </button>
             </div>
           </div>
 
-          <div className="absolute -bottom-5 right-0 rounded-md bg-[#1a1a2e]/90 px-1.5 py-0.5 text-[10px] text-white/60 whitespace-nowrap">
+          <div className="absolute -bottom-6 right-0 rounded-full bg-background/80 px-2 py-0.5 text-[9px] font-bold text-foreground/60 shadow-sm backdrop-blur-md border border-glass-border">
             {Math.round(rect.width)} × {Math.round(rect.height)}
           </div>
 
-          {/* Resize Handles */}
-          <div className="absolute -left-1 -top-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
-          <div className="absolute -right-1 -top-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
-          <div className="absolute -bottom-1 -left-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
-          <div className="absolute -bottom-1 -right-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
+          {/* Figma-style handles */}
+          <div className="absolute -left-1.5 -top-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
+          <div className="absolute -right-1.5 -top-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
+          <div className="absolute -bottom-1.5 -left-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
+          <div className="absolute -bottom-1.5 -right-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
         </div>
       )}
 

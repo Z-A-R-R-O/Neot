@@ -6,6 +6,7 @@ import { useDevModeStore } from "@/stores/devModeStore";
 import { useHistoryStore } from "@/stores/historyStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 import { initHistoryMiddleware, setUndoing, setInitialized } from "@/stores/history-middleware";
+import { DevModeShell } from "./DevModeShell";
 
 interface DevModeProviderProps {
   children: ReactNode;
@@ -94,5 +95,5 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  return <>{children}</>;
+  return <DevModeShell>{children}</DevModeShell>;
 }

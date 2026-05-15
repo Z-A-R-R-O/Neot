@@ -17,7 +17,7 @@ interface PropertiesPanelProps {
 }
 
 export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange }: PropertiesPanelProps) {
-  const [activeTab, setActiveTab] = useState<"content" | "style">("content");
+  const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects">("content");
   const enabled = useDevModeStore((s) => s.enabled);
   const updateSection = usePageBuilderStore((s) => s.updateSection);
 
@@ -26,18 +26,17 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
   if (!selectedBlock) {
     return (
       <div className="flex h-full flex-col items-center justify-center p-6 text-center">
-        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-muted/50">
-          <span className="text-lg">🎨</span>
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-muted/30 border border-border">
+          <span className="text-xl">✨</span>
         </div>
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Select an element</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">Select an element to edit</p>
       </div>
     );
   }
 
-  const handleStyleChange = (key: string, value: any) => {
+  const handleStyleChange = (key: string, value: string | number | boolean) => {
     if (!selectedBlock) return;
     const newStyles = { ...(selectedBlock.styles || {}), [key]: value };
-    // In our store, styles are inside settings.styles
     const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
     if (section) {
       updateSection(selectedBlock.id, {
@@ -49,45 +48,58 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSettingsChange = (key: string, value: string | number | boolean) => {
+    if (!selectedBlock) return;
+    const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
+    if (section) {
+      updateSection(selectedBlock.id, {
+        settings: {
+          ...(section.settings || {}),
+          [key]: value
+        }
+      });
+    }
+  };
+
   return (
-    <div className="flex h-full flex-col bg-background">
-      <div className="border-b border-border p-4">
-        <div className="mb-4 flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded bg-primary-500/10 text-[10px] font-bold text-primary-400 ring-1 ring-primary-500/20">
+    <div className="flex h-full flex-col bg-background/50 backdrop-blur-xl">
+      <div className="border-b border-border p-5">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-500 text-[11px] font-bold text-white shadow-glow-sm">
             {selectedBlock.type[0].toUpperCase()}
           </div>
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
-              {selectedBlock.type}
-            </p>
-            <p className="text-xs font-semibold text-foreground">{selectedBlock.label}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                {selectedBlock.type}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-foreground">{selectedBlock.label}</p>
           </div>
         </div>
 
-        <div className="flex rounded-lg bg-muted/30 p-1">
-          <button
-            onClick={() => setActiveTab("content")}
-            className={`flex-1 rounded-md py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${
-              activeTab === "content" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Content
-          </button>
-          <button
-            onClick={() => setActiveTab("style")}
-            className={`flex-1 rounded-md py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${
-              activeTab === "style" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Style
-          </button>
+        <div className="grid grid-cols-4 gap-1 rounded-xl bg-muted/20 p-1 border border-border/50">
+          {(["content", "style", "motion", "effects"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`rounded-lg py-1.5 text-[9px] font-bold uppercase tracking-wider transition-all ${
+                activeTab === tab 
+                  ? "bg-background text-foreground shadow-sm ring-1 ring-black/5" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-        {activeTab === "content" ? (
-          <div className="space-y-6">
-            <Section title="Basic Content">
+      <div className="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-8">
+        {activeTab === "content" && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
+            <Section title="Main Content">
               {Object.entries(selectedBlock.content).map(([key, val]) => (
                 <PropertyRow key={key} label={key}>
                   {typeof val === "boolean" ? (
@@ -112,16 +124,18 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
                           [key]: e.target.value,
                         });
                       }}
-                      className="w-full rounded-md bg-muted/30 px-2 py-1 text-[11px] text-foreground outline-none ring-1 ring-border transition-all focus:ring-primary-500/40"
+                      className="w-full rounded-lg bg-muted/30 px-3 py-2 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50 transition-all focus:ring-primary-500/40 focus:bg-background"
                     />
                   )}
                 </PropertyRow>
               ))}
             </Section>
           </div>
-        ) : (
-          <div className="space-y-6">
-            <Section title="Layout & Spacing">
+        )}
+
+        {activeTab === "style" && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
+            <Section title="Layout">
               <PropertyRow label="Padding Y">
                 <Slider
                   value={String(selectedBlock.styles?.paddingY || "64px")}
@@ -132,7 +146,7 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
                 <select
                   value={String(selectedBlock.styles?.maxWidth || "max-w-6xl")}
                   onChange={(e) => handleStyleChange("maxWidth", e.target.value)}
-                  className="w-full rounded-md bg-muted/30 px-2 py-1 text-[11px] text-foreground outline-none ring-1 ring-border"
+                  className="w-full rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50"
                 >
                   <option value="max-w-4xl">4xl</option>
                   <option value="max-w-5xl">5xl</option>
@@ -143,40 +157,72 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
               </PropertyRow>
             </Section>
 
-            <Section title="Appearance">
-              <PropertyRow label="Background">
-                <input
-                  type="color"
-                  value={String(selectedBlock.styles?.backgroundColor || "#0B0D10")}
-                  onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
-                  className="h-6 w-full cursor-pointer rounded border-0 bg-transparent"
-                />
+            <Section title="Background">
+              <PropertyRow label="Color">
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={String(selectedBlock.styles?.backgroundColor || "#0B0D10")}
+                    onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
+                    className="h-8 w-12 cursor-pointer rounded-lg border-0 bg-muted/30 p-1"
+                  />
+                  <input
+                    type="text"
+                    value={String(selectedBlock.styles?.backgroundColor || "#0B0D10")}
+                    onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
+                    className="flex-1 rounded-lg bg-muted/30 px-2 text-[10px] font-mono"
+                  />
+                </div>
               </PropertyRow>
-              <PropertyRow label="Opacity">
-                <Slider
-                  value={String(selectedBlock.styles?.opacity || "100%")}
-                  onChange={(v) => handleStyleChange("opacity", v)}
-                />
+            </Section>
+          </div>
+        )}
+
+        {activeTab === "motion" && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
+            <Section title="Entrance Animation">
+              <PropertyRow label="Type">
+                <select
+                  className="w-full rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50"
+                >
+                  <option>Fade Up</option>
+                  <option>Scale In</option>
+                  <option>Blur Reveal</option>
+                </select>
+              </PropertyRow>
+              <PropertyRow label="Duration">
+                <Slider value="0.8s" onChange={() => {}} />
               </PropertyRow>
             </Section>
 
-            <Section title="Typography">
-              <PropertyRow label="Text Align">
-                <div className="flex rounded-md bg-muted/30 p-0.5">
-                  {["left", "center", "right"].map((align) => (
-                    <button
-                      key={align}
-                      onClick={() => handleStyleChange("textAlign", align)}
-                      className={`flex-1 rounded py-1 text-[9px] uppercase font-bold ${
-                        (selectedBlock.styles?.textAlign || "left") === align
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {align}
-                    </button>
-                  ))}
-                </div>
+            <Section title="Hover Effects">
+              <PropertyRow label="Scale">
+                <Slider value="1.05" onChange={() => {}} />
+              </PropertyRow>
+              <PropertyRow label="Tilt">
+                <input type="checkbox" className="h-4 w-4 rounded border-border bg-muted/30" />
+              </PropertyRow>
+            </Section>
+          </div>
+        )}
+
+        {activeTab === "effects" && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
+            <Section title="Glassmorphism">
+              <PropertyRow label="Blur">
+                <Slider value="16px" onChange={() => {}} />
+              </PropertyRow>
+              <PropertyRow label="Transparency">
+                <Slider value="40%" onChange={() => {}} />
+              </PropertyRow>
+            </Section>
+
+            <Section title="Lighting">
+              <PropertyRow label="Inner Glow">
+                <input type="checkbox" className="h-4 w-4 rounded border-border bg-muted/30" />
+              </PropertyRow>
+              <PropertyRow label="Mesh Gradient">
+                <input type="checkbox" className="h-4 w-4 rounded border-border bg-muted/30" />
               </PropertyRow>
             </Section>
           </div>

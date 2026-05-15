@@ -18,22 +18,23 @@ export function CtaBannerSection({ content, blockId }: { content: Record<string,
   };
 
   return (
-    <section className="relative overflow-hidden px-6 py-24">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(79,124,255,0.08)_0%,transparent_60%)]" />
+    <section className="relative overflow-hidden px-6 py-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,124,255,0.05)_0%,transparent_70%)]" />
 
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={{
-          visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } },
-        }}
-        className="glass-card relative mx-auto max-w-4xl overflow-hidden p-10 text-center sm:p-16"
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="glass-thick relative mx-auto max-w-5xl overflow-hidden rounded-[48px] p-12 text-center sm:p-24 shadow-2xl"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-accent-500/5" />
+        <div className="noise absolute inset-0 opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-accent-500/10" />
+        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-primary-500/10 blur-[100px]" />
+        <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-accent-500/10 blur-[100px]" />
 
-        <div className="relative z-10 flex flex-col items-center gap-8">
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="relative z-10 flex flex-col items-center gap-10">
+          <h2 className="font-heading text-4xl font-bold tracking-tight text-foreground sm:text-6xl max-w-2xl leading-[1.1]">
             <InlineEditor
               value={text}
               onChange={(v) => handleUpdate("text", v)}
@@ -41,10 +42,14 @@ export function CtaBannerSection({ content, blockId }: { content: Record<string,
             />
           </h2>
 
-          <div className="flex flex-col items-center gap-2">
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex flex-col items-center"
+          >
             <Link
               href={buttonLink}
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-primary-500 px-7 py-3.5 text-base font-semibold text-white shadow-glow-sm transition-all duration-300 hover:shadow-glow"
+              className="group relative inline-flex h-16 items-center gap-3 overflow-hidden rounded-2xl bg-foreground px-10 text-lg font-bold text-background transition-all shadow-2xl"
             >
               <span className="relative z-10">
                 <InlineEditor
@@ -52,10 +57,9 @@ export function CtaBannerSection({ content, blockId }: { content: Record<string,
                   onChange={(v) => handleUpdate("buttonText", v)}
                 />
               </span>
-              <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-primary-400 to-primary-500 transition-transform duration-500 group-hover:translate-x-0" />
+              <ArrowRight className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </section>

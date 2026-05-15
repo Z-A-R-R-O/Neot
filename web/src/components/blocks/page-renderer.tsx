@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { blockRegistry } from "@/lib/block-registry";
 import { BlockOverlay } from "@/components/dev-mode/BlockOverlay";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore, type SectionType } from "@/stores/pageBuilderStore";
 
 interface Section {
   id: string;
@@ -14,13 +16,30 @@ interface PageRendererProps {
   sections: Section[];
 }
 
-export function PageRenderer({ sections }: PageRendererProps) {
+export function PageRenderer({ sections: initialSections }: PageRendererProps) {
   const enabled = useDevModeStore((s) => s.enabled);
-  if (!sections.length) return null;
+  const { sections, setSections } = usePageBuilderStore();
+
+  // Initialize store with server-side sections if dev mode is enabled
+  useEffect(() => {
+    if (enabled && sections.length === 0 && initialSections.length > 0) {
+      setSections(initialSections.map(s => ({
+        ...s,
+        blockType: s.blockType as SectionType,
+        pageId: "current",
+        sortOrder: 0,
+        settings: {}
+      })));
+    }
+  }, [enabled, initialSections, setSections, sections.length]);
+
+  const displaySections = enabled && sections.length > 0 ? sections : initialSections;
+
+  if (!displaySections.length) return null;
 
   return (
     <>
-      {sections.map((section) => {
+      {displaySections.map((section) => {
         const Component = blockRegistry.getComponent(section.blockType);
         if (!Component) {
           return (
@@ -46,7 +65,6 @@ export function PageRenderer({ sections }: PageRendererProps) {
             <BlockOverlay
               key={section.id}
               blockId={section.id}
-              type={section.blockType}
               label={section.blockType}
               path={`Page > ${section.blockType}`}
             >
