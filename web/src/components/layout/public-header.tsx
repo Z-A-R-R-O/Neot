@@ -27,15 +27,13 @@ export function PublicHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-6">
       <motion.nav
-        initial={{ y: -20, opacity: 0 }}
+        initial={false}
         animate={{ 
-          y: 0, 
-          opacity: 1,
           scale: scrolled ? 0.95 : 1,
           width: scrolled ? "90%" : "100%",
         }}
         transition={{ 
-          duration: 1.2, 
+          duration: 0.4, 
           ease: [0.16, 1, 0.3, 1] 
         }}
         className={`flex max-w-5xl items-center justify-between rounded-full px-8 transition-all duration-700 ${
