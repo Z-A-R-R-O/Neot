@@ -40,6 +40,7 @@ import { StatsBarEditor } from "@/components/admin/pages/section-editors/stats-b
 import { CtaEditor } from "@/components/admin/pages/section-editors/cta-editor";
 import { FaqEditor } from "@/components/admin/pages/section-editors/faq-editor";
 import { PricingEditor } from "@/components/admin/pages/section-editors/pricing-editor";
+import { TestimonialsEditor } from "@/components/admin/pages/section-editors/testimonials-editor";
 
 editorRegistry.register("hero", HeroEditor);
 editorRegistry.register("feature-grid", FeatureGridEditor);
@@ -47,3 +48,4 @@ editorRegistry.register("stats-bar", StatsBarEditor);
 editorRegistry.register("cta-banner", CtaEditor);
 editorRegistry.register("faq", FaqEditor);
 editorRegistry.register("pricing-table", PricingEditor);
+editorRegistry.register("testimonials", TestimonialsEditor);

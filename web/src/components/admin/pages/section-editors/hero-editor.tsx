@@ -58,6 +58,26 @@ export function HeroEditor({ content, onChange }: HeroEditorProps) {
           />
         </div>
       </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="hero-secondary-cta-text">Secondary CTA Text</Label>
+          <Input
+            id="hero-secondary-cta-text"
+            value={(content.secondaryCtaText as string) ?? ""}
+            onChange={(e) => onChange({ ...content, secondaryCtaText: e.target.value })}
+            placeholder="Explore Courses"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="hero-secondary-cta-link">Secondary CTA Link</Label>
+          <Input
+            id="hero-secondary-cta-link"
+            value={(content.secondaryCtaLink as string) ?? ""}
+            onChange={(e) => onChange({ ...content, secondaryCtaLink: e.target.value })}
+            placeholder="/courses"
+          />
+        </div>
+      </div>
       <div className="space-y-2">
         <Label>Background</Label>
         <Select

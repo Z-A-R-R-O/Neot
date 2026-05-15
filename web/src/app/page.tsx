@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { PageRenderer } from "@/components/blocks/page-renderer";
+import { PublicLayout } from "@/components/layout/public-layout";
 
 async function getHomepageSections() {
   try {
@@ -21,25 +22,29 @@ async function getHomepageSections() {
 export default async function Home() {
   const sections = await getHomepageSections();
 
-  if (sections && sections.length > 0) {
-    return (
-      <main className="min-h-screen bg-background text-foreground">
-        <PageRenderer sections={sections} />
-      </main>
-    );
-  }
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-6 text-foreground">
-      <section className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-700">
-          Adaptive Learning Platform
-        </p>
-        <h1 className="font-heading text-5xl font-bold sm:text-7xl">NEOT</h1>
-        <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-          Learning should adapt to humans. Humans should not adapt to systems.
-        </p>
-      </section>
-    </main>
+    <PublicLayout>
+      <main className="min-h-screen bg-background text-foreground">
+        {sections && sections.length > 0 ? (
+          <PageRenderer sections={sections} />
+        ) : (
+          <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24">
+            <div className="aurora pointer-events-none absolute inset-0" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(79,124,255,0.08)_0%,transparent_60%)]" />
+            <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-400">
+                Adaptive Learning Platform
+              </p>
+              <h1 className="font-heading text-hero font-bold tracking-tight sm:text-hero-xl">
+                NEOT
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+                Learning should adapt to humans. Humans should not adapt to systems.
+              </p>
+            </div>
+          </section>
+        )}
+      </main>
+    </PublicLayout>
   );
 }

@@ -143,27 +143,29 @@ User Action → Frontend → API Gateway → Backend Service → Database
 └──────────────────────────────────────────┘
 ```
 
-## Admin CMS Architecture (Directus)
+## Admin CMS / Visual Experience Engine
+
+> **Evolved vision:** See `16-visual-experience-engine.md`. The admin system transitions to a **Dual Mode Visual Experience Engine** — editing happens directly on the live frontend via an overlay (Dev Mode), not in a separate CMS panel.
 
 ```
-┌────────────────────────────────────────────┐
-│              Directus CMS                   │
-│                                              │
-│  ┌────────────┐  ┌────────────┐            │
-│  │   Schema   │  │  Content   │            │
-│  │   Builder  │  │  Manager   │            │
-│  └────────────┘  └────────────┘            │
-│                                              │
-│  ┌────────────┐  ┌────────────┐            │
-│  │   Theme    │  │   Block    │            │
-│  │   Engine   │  │  Library   │            │
-│  └────────────┘  └────────────┘            │
-│                                              │
-│  ┌────────────┐  ┌────────────┐            │
-│  │   User     │  │  Analytics │            │
-│  │   Manager  │  │  Dashboard │            │
-│  └────────────┘  └────────────┘            │
-└────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│              Visual Experience Engine (V2)                │
+│                                                            │
+│  ┌────────────────────────┐  ┌────────────────────────┐  │
+│  │    Viewer Mode          │  │    Dev Mode Overlay    │  │
+│  │  (production frontend)  │  │  (editing on live DOM) │  │
+│  └────────────────────────┘  └────────────────────────┘  │
+│                                                            │
+│  ┌──────────────────────────────────────────────────────┐ │
+│  │              Shared Block Engine                      │ │
+│  │  BlockRegistry  →  PageRenderer  →  Block Tree       │ │
+│  └──────────────────────────────────────────────────────┘ │
+│                                                            │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐          │
+│  │  Theme     │  │  Media     │  │  User      │          │
+│  │  Engine    │  │  Library   │  │  Manager   │          │
+│  └────────────┘  └────────────┘  └────────────┘          │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ## Key Architectural Decisions

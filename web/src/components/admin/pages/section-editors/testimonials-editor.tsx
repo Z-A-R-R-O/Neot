@@ -4,25 +4,25 @@ import { Plus, Trash2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-interface StatItem {
-  number?: string;
-  label?: string;
-  icon?: string;
-  prefix?: string;
-  suffix?: string;
+interface TestimonialItem {
+  name?: string;
+  role?: string;
+  text?: string;
+  avatar?: string;
 }
 
-interface StatsBarEditorProps {
+interface TestimonialsEditorProps {
   content: Record<string, unknown>;
   onChange: (content: Record<string, unknown>) => void;
 }
 
-export function StatsBarEditor({ content, onChange }: StatsBarEditorProps) {
-  const items = (content.items as StatItem[]) ?? [];
+export function TestimonialsEditor({ content, onChange }: TestimonialsEditorProps) {
+  const items = (content.items as TestimonialItem[]) ?? [];
 
-  function updateItem(index: number, data: Partial<StatItem>) {
+  function updateItem(index: number, data: Partial<TestimonialItem>) {
     const next = [...items];
     next[index] = { ...next[index], ...data };
     onChange({ ...content, items: next });
@@ -31,7 +31,7 @@ export function StatsBarEditor({ content, onChange }: StatsBarEditorProps) {
   function addItem() {
     onChange({
       ...content,
-      items: [...items, { number: "", label: "", icon: "BarChart3" }],
+      items: [...items, { name: "", role: "", text: "" }],
     });
   }
 
@@ -45,10 +45,10 @@ export function StatsBarEditor({ content, onChange }: StatsBarEditorProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <Label>Stat Items</Label>
+        <Label>Testimonials</Label>
         <Button variant="outline" size="sm" onClick={addItem}>
           <Plus className="h-3 w-3" />
-          Add Stat
+          Add Testimonial
         </Button>
       </div>
       {items.map((item, i) => (
@@ -58,7 +58,7 @@ export function StatsBarEditor({ content, onChange }: StatsBarEditorProps) {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-gray-500">
-              Stat {i + 1}
+              Testimonial {i + 1}
             </span>
             <Button
               variant="ghost"
@@ -70,31 +70,20 @@ export function StatsBarEditor({ content, onChange }: StatsBarEditorProps) {
             </Button>
           </div>
           <Input
-            placeholder="Number (e.g. 10,000+)"
-            value={item.number ?? ""}
-            onChange={(e) => updateItem(i, { number: e.target.value })}
+            placeholder="Name"
+            value={item.name ?? ""}
+            onChange={(e) => updateItem(i, { name: e.target.value })}
           />
           <Input
-            placeholder="Label (e.g. Active Students)"
-            value={item.label ?? ""}
-            onChange={(e) => updateItem(i, { label: e.target.value })}
+            placeholder="Role"
+            value={item.role ?? ""}
+            onChange={(e) => updateItem(i, { role: e.target.value })}
           />
-          <div className="grid grid-cols-2 gap-2">
-            <Input
-              placeholder="Prefix (e.g. $)"
-              value={item.prefix ?? ""}
-              onChange={(e) => updateItem(i, { prefix: e.target.value })}
-            />
-            <Input
-              placeholder="Suffix (e.g. +)"
-              value={item.suffix ?? ""}
-              onChange={(e) => updateItem(i, { suffix: e.target.value })}
-            />
-          </div>
-          <Input
-            placeholder="Icon name"
-            value={item.icon ?? ""}
-            onChange={(e) => updateItem(i, { icon: e.target.value })}
+          <Textarea
+            placeholder="Testimonial text"
+            value={item.text ?? ""}
+            onChange={(e) => updateItem(i, { text: e.target.value })}
+            rows={3}
           />
         </div>
       ))}

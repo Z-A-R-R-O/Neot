@@ -1,5 +1,7 @@
 # Admin Panel — Detailed Specification
 
+> **CRITICAL STRATEGIC DIRECTION:** See `16-visual-experience-engine.md` for the evolved vision. The admin panel is transitioning from a traditional CMS to a **Dual Mode Visual Experience Engine** — where the frontend itself becomes the editor (Dev Mode overlay on the live site). This spec documents the current admin panel; the new vision supersedes it for all future development.
+
 ## Overview
 The "Control Center" for the entire platform. This is the main differentiator — a full no-code platform builder that lets admins control everything from homepage layout to AI behavior, without touching code.
 
