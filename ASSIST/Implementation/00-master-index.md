@@ -11,7 +11,7 @@
 |--:|-------|----------------|--------|
 | 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | ✅ Complete |
 | 1 | **Core Learning** | Course player + Teacher builder + Quiz | ✅ Complete (Tasks 1.4-1.17 shipped; schema via Prisma) |
-| 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | 🔲 Not started |
+| 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | ✅ Complete |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Not started |
 | 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
 | 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
@@ -120,10 +120,21 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 
 - Enrollment: API + hooks + duplicate prevention
 - Publish workflow: checklist before going live
 
+### Phase 1.5 — Admin CMS (✅ Complete)
+- Admin route group (`/admin`, `/admin/pages`, `/admin/themes`, `/admin/blocks`, `/admin/users`, `/admin/media`, `/admin/settings`)
+- Page builder: drag-drop section editor with 6 section types, live preview, Zustand store
+- Theme engine: CSS variable provider, token converter, inheritance chain resolver
+- Theme editor: split-pane UI with color pickers, font selector, animation config, live preview
+- Block library: 10 block type definitions with field schemas
+- User management: list/search/filter, role change, delete with confirmation
+- Media library: drag-drop upload, grid view, copy URL, delete
+- Platform settings: key-value store with General/Auth/Email tabs
+- All API routes admin-protected with `getUser()` + role check
+- 4 Prisma models: `CustomPage`, `PageSection`, `SiteTheme`, `Media`, `PlatformSetting`
+
 ### Gaps / Next Up
 - **Phase 1 Validation Gate** — E2E testing flow
-- **Phase 1.5 — Admin CMS** — page builder, theme engine, user mgmt
-- **Phase 2 — Gamification** — XP/streaks/badges models exist, no UI
+- **Phase 2 — Adaptive + Gamification** — XP/streaks/badges UI, adaptive engine, recs
 - **Password reset** — needs email service integration
 
 ---
