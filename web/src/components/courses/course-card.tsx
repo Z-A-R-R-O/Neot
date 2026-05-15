@@ -22,9 +22,9 @@ export function CourseCard({ course, enrolled, progress }: CourseCardProps) {
   return (
     <Link
       href={`/courses/${course.id}`}
-      className="group block overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
+      className="group block overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md"
     >
-      <div className="aspect-video bg-gradient-to-br from-primary-100 to-primary-50">
+      <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/10">
         {course.thumbnailUrl && (
           <img
             src={course.thumbnailUrl}
@@ -48,17 +48,17 @@ export function CourseCard({ course, enrolled, progress }: CourseCardProps) {
           )}
         </div>
 
-        <h3 className="mt-2 font-semibold text-gray-900 group-hover:text-primary-600">
+        <h3 className="mt-2 font-semibold text-card-foreground group-hover:text-primary">
           {course.title}
         </h3>
 
         {course.description && (
-          <p className="mt-1 line-clamp-2 text-sm text-gray-500">
+          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
             {course.description}
           </p>
         )}
 
-        <div className="mt-3 flex items-center gap-4 text-xs text-gray-400">
+        <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
           {course.estimatedMinutes && (
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
@@ -77,15 +77,15 @@ export function CourseCard({ course, enrolled, progress }: CourseCardProps) {
 
         {enrolled && progress !== undefined && (
           <div className="mt-3">
-            <div className="flex items-center justify-between text-xs text-gray-500">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Progress</span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <div className="mt-1 h-1.5 w-full rounded-full bg-gray-200">
+            <div className="mt-1 h-1.5 w-full rounded-full bg-muted">
               <div
                 className={cn(
                   "h-full rounded-full transition-all",
-                  progress >= 100 ? "bg-green-500" : "bg-primary-500",
+                  progress >= 100 ? "bg-green-500" : "bg-primary",
                 )}
                 style={{ width: `${Math.min(progress, 100)}%` }}
               />

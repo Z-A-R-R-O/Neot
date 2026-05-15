@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { ChevronUp, ChevronDown, Trash2 } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 
 interface BlockOverlayProps {
   blockId: string;
@@ -59,6 +61,7 @@ export function BlockOverlay({ blockId, type, label, path, children }: BlockOver
         onClick={(e) => {
           e.stopPropagation();
           select(blockId);
+          usePageBuilderStore.getState().selectSection(blockId);
         }}
       >
         {children}
@@ -81,11 +84,59 @@ export function BlockOverlay({ blockId, type, label, path, children }: BlockOver
             <span className="opacity-70">{path}</span>
             <span>{label}</span>
             <span className="ml-1 opacity-60">({type})</span>
+            <div className="ml-3 flex items-center gap-1 border-l border-white/20 pl-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const sections = usePageBuilderStore.getState().sections;
+                  const idx = sections.findIndex((s) => s.id === blockId);
+                  if (idx > 0) {
+                    const newSections = [...sections];
+                    [newSections[idx - 1], newSections[idx]] = [newSections[idx], newSections[idx - 1]];
+                    usePageBuilderStore.getState().reorderSections(newSections);
+                  }
+                }}
+                className="hover:text-white/80"
+              >
+                <ChevronUp className="h-3 w-3" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const sections = usePageBuilderStore.getState().sections;
+                  const idx = sections.findIndex((s) => s.id === blockId);
+                  if (idx < sections.length - 1) {
+                    const newSections = [...sections];
+                    [newSections[idx], newSections[idx + 1]] = [newSections[idx + 1], newSections[idx]];
+                    usePageBuilderStore.getState().reorderSections(newSections);
+                  }
+                }}
+                className="hover:text-white/80"
+              >
+                <ChevronDown className="h-3 w-3" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  usePageBuilderStore.getState().removeSection(blockId);
+                  useDevModeStore.getState().select(null);
+                }}
+                className="ml-1 text-white/60 hover:text-red-300"
+              >
+                <Trash2 className="h-3 w-3" />
+              </button>
+            </div>
           </div>
 
           <div className="absolute -bottom-5 right-0 rounded-md bg-[#1a1a2e]/90 px-1.5 py-0.5 text-[10px] text-white/60 whitespace-nowrap">
             {Math.round(rect.width)} × {Math.round(rect.height)}
           </div>
+
+          {/* Resize Handles */}
+          <div className="absolute -left-1 -top-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
+          <div className="absolute -right-1 -top-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
+          <div className="absolute -bottom-1 -left-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
+          <div className="absolute -bottom-1 -right-1 h-2 w-2 rounded-full border border-primary-500 bg-white" />
         </div>
       )}
 

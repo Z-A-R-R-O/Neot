@@ -1,13 +1,7 @@
 "use client";
 
-import { useCallback } from "react";
-import { Save, Loader2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { SectionPalette } from "@/components/admin/pages/section-palette";
-import { SectionWrapper } from "@/components/admin/pages/section-wrapper";
+import { useCallback, useEffect } from "react";
 import { LivePreview } from "@/components/admin/pages/live-preview";
-import { editorRegistry } from "@/lib/editor-registry";
 import {
   usePageBuilderStore,
   type SectionType,
@@ -48,8 +42,17 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
     setLoading,
     markClean,
     removeSection,
+    selectSection,
   } = usePageBuilderStore();
   const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const devSelectedId = useDevModeStore((s) => s.selectedId);
+
+  // Sync devModeStore selection → pageBuilderStore selection
+  useEffect(() => {
+    if (devModeEnabled && devSelectedId !== selectedId) {
+      selectSection(devSelectedId);
+    }
+  }, [devSelectedId, devModeEnabled, selectedId, selectSection]);
 
   function handleAddSection(blockType: SectionType) {
     const newSection: PageSection = {
@@ -119,35 +122,6 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
 
   const selectedSection = sections.find((s) => s.id === selectedId);
 
-  function renderEditor() {
-    if (!selectedSection) {
-      return (
-        <div className="flex items-center justify-center py-16 text-sm text-gray-400">
-          Select a section to edit its content
-        </div>
-      );
-    }
-
-    const Editor = editorRegistry.get(selectedSection.blockType);
-
-    if (!Editor) {
-      return (
-        <div className="text-sm text-gray-500">
-          No editor available for {selectedSection.blockType} yet.
-        </div>
-      );
-    }
-
-    return (
-      <Editor
-        content={selectedSection.content}
-        onChange={(content: Record<string, unknown>) =>
-          handleContentChange(selectedSection.id, content)
-        }
-      />
-    );
-  }
-
   const treeNodes = sections.map((s) => ({
     id: s.id,
     type: s.blockType,
@@ -160,110 +134,61 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
     updateSection(selectedSection.id, { content: preset.schema.content });
   }
 
-  if (devModeEnabled) {
-    return (
-      <div className="flex h-full">
-        <div className="flex w-64 shrink-0 flex-col border-r border-[rgba(255,255,255,0.06)] bg-[#0B0D10]">
-          <StructureTree blocks={treeNodes} onAddBlock={() => {}} />
-        </div>
-
-        <div className="flex flex-1 flex-col bg-[#0B0D10]">
-          <div className="flex flex-1 overflow-hidden">
-            <div className="flex-1 overflow-y-auto">
-              <LivePreview />
-            </div>
-
-            <div className="w-80 shrink-0 overflow-y-auto border-l border-[rgba(255,255,255,0.06)] bg-[#111315]">
-              <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] px-4 py-3">
-                <span className="text-xs font-semibold text-foreground">
-                  {selectedSection ? selectedSection.blockType : "Properties"}
-                </span>
-                {selectedSection && (
-                  <PresetPicker
-                    blockType={selectedSection.blockType}
-                    onApply={handleApplyPreset}
-                  />
-                )}
-              </div>
-              <PropertiesPanel
-                selectedBlock={
-                  selectedSection
-                    ? {
-                        id: selectedSection.id,
-                        type: selectedSection.blockType,
-                        label: selectedSection.blockType,
-                        content: selectedSection.content,
-                      }
-                    : null
-                }
-                onContentChange={(id, content) => handleContentChange(id, content)}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex h-full">
-      <div className="flex w-80 shrink-0 flex-col border-r border-gray-200 bg-gray-50 p-4">
-        <SectionPalette onAdd={handleAddSection} />
+    <div className="flex h-full dark">
+      <div className="flex w-64 shrink-0 flex-col border-r border-border bg-background">
+        <StructureTree
+          blocks={treeNodes}
+          onAddBlock={() => handleAddSection("hero")}
+          onSelect={(id) => selectSection(id)}
+          onDelete={(id) => removeSection(id)}
+          onDuplicate={(id) => {
+            const source = sections.find((s) => s.id === id);
+            if (!source) return;
+            const copy: PageSection = {
+              ...source,
+              id: crypto.randomUUID(),
+              sortOrder: sections.length,
+            };
+            addSection(copy);
+          }}
+        />
       </div>
 
-      <div className="flex flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-3">
-          <h2 className="text-sm font-semibold text-gray-900">Sections</h2>
-          <Button
-            size="sm"
-            onClick={handleSave}
-            disabled={!isDirty || isLoading}
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4" />
-            )}
-            Save
-          </Button>
-        </div>
-
-        <div className="flex flex-1">
-          <div className="flex-1 overflow-y-auto p-6">
-            {sections.length === 0 ? (
-              <div className="flex items-center justify-center py-16 text-sm text-gray-400">
-                Click a section type from the palette to add it
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {sections.map((section, idx) => (
-                  <SectionWrapper
-                    key={section.id}
-                    sectionId={section.id}
-                    blockType={section.blockType}
-                    isFirst={idx === 0}
-                    isLast={idx === sections.length - 1}
-                  >
-                    {renderEditor()}
-                  </SectionWrapper>
-                ))}
-              </div>
-            )}
+      <div className="flex flex-1 flex-col bg-background">
+        <div className="flex flex-1 overflow-hidden">
+          <div className="flex-1 overflow-y-auto bg-background/50">
+            <LivePreview />
           </div>
 
-          <div className="w-96 shrink-0 overflow-y-auto border-l border-gray-200 bg-white p-4">
-            <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-gray-500">
-              {selectedSection
-                ? `Edit: ${selectedSection.blockType}`
-                : "Properties"}
-            </h3>
-            {renderEditor()}
+          <div className="w-80 shrink-0 overflow-y-auto border-l border-border bg-card">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <span className="text-xs font-semibold text-foreground">
+                {selectedSection ? selectedSection.blockType : "Properties"}
+              </span>
+              {selectedSection && (
+                <PresetPicker
+                  blockType={selectedSection.blockType}
+                  onApply={handleApplyPreset}
+                />
+              )}
+            </div>
+            <PropertiesPanel
+              selectedBlock={
+                selectedSection
+                  ? {
+                      id: selectedSection.id,
+                      type: selectedSection.blockType,
+                      label: selectedSection.blockType,
+                      content: selectedSection.content,
+                      styles: selectedSection.settings.styles,
+                    }
+                  : null
+              }
+              onContentChange={(id, content) => handleContentChange(id, content)}
+            />
           </div>
         </div>
-      </div>
-
-      <div className="w-96 shrink-0 overflow-y-auto">
-        <LivePreview />
       </div>
     </div>
   );

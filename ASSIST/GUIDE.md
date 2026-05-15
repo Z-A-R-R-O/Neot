@@ -107,7 +107,10 @@ ASSIST/
 │   ├── 01-phase-0-foundation.md (✅ done)
 │   ├── 02-phase-1-core-learning.md (✅ done)
 │   ├── 03-phase-1.5-admin-cms.md (✅ done)
-│   ├── 04-phase-1.75-dynamic-renderer.md (next)
+│   ├── 04-phase-1.75-dynamic-renderer.md (✅ done)
+│   ├── 11-phase-ui-transformation.md (✅ done)
+│   ├── 12-phase-2.5-dev-mode.md (🚧 in-progress)
+│   ├── 13-phase-dev-mode-e2e.md (🚧 in-progress)
 │   ├── 05-phase-2-adaptive-gamification.md
 │   ├── 06-phase-3-ai-mobile.md
 │   ├── 07-phase-4-parent-school.md
@@ -153,7 +156,9 @@ Read the relevant spec in `Vision - Core/` for context. Follow conventions in `0
 | 0 Foundation | ✅ Complete |
 | 1 Core Learning | ✅ Complete |
 | 1.5 Admin CMS | ✅ Complete |
-| 1.75 Dynamic Renderer | 🔲 Next |
+| 1.75 Dynamic Renderer | ✅ Complete |
+| UI Transformation | ✅ Complete |
+| 2.5 Dev Mode | 🚧 In Progress |
 | 2 Adaptive + Gamification | 🔲 Not started |
 | 3 AI + Mobile | 🔲 Not started |
 | 4 Parent + School | 🔲 Not started |

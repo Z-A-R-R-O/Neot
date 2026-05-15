@@ -5,6 +5,8 @@ import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Courses", href: "/courses" },
@@ -30,7 +32,7 @@ export function PublicHeader() {
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         className={`flex w-full max-w-6xl items-center justify-between rounded-2xl px-6 py-3 transition-all duration-500 ${
           scrolled
-            ? "border border-[rgba(255,255,255,0.08)] bg-[rgba(11,13,16,0.8)] shadow-glass backdrop-blur-xl"
+            ? "border border-glass-border bg-background/80 shadow-glass backdrop-blur-xl"
             : "bg-transparent"
         }`}
       >
@@ -54,6 +56,7 @@ export function PublicHeader() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <Link
             href="/login"
             className="rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -70,12 +73,15 @@ export function PublicHeader() {
           </Link>
         </div>
 
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="relative z-50 flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground md:hidden"
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="relative z-50 flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground"
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </motion.nav>
 
       <AnimatePresence>
@@ -85,7 +91,7 @@ export function PublicHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-4 top-20 z-40 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(11,13,16,0.95)] p-6 backdrop-blur-xl md:hidden"
+            className="fixed inset-x-4 top-20 z-40 rounded-2xl border border-glass-border bg-background/95 p-6 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
@@ -98,7 +104,7 @@ export function PublicHeader() {
                   {link.label}
                 </Link>
               ))}
-              <hr className="border-[rgba(255,255,255,0.08)]" />
+              <hr className="border-glass-border" />
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}

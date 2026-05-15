@@ -58,17 +58,17 @@ export function SectionWrapper({
       className={cn(
         "group relative rounded-lg border-2 transition-colors",
         isSelected
-          ? "border-primary-500 bg-primary-50/30"
-          : "border-gray-200 hover:border-gray-300",
+          ? "border-primary-500 bg-primary-500/10"
+          : "border-border hover:border-muted-foreground/30",
       )}
       onClick={() => selectSection(sectionId)}
     >
-      <div className="flex items-center justify-between border-b border-inherit bg-gray-50 px-3 py-1.5">
+      <div className="flex items-center justify-between border-b border-inherit bg-muted/50 px-3 py-1.5">
         <div className="flex items-center gap-2">
-          <div className="cursor-grab text-gray-400 active:cursor-grabbing">
+          <div className="cursor-grab text-muted-foreground active:cursor-grabbing">
             <GripVertical className="h-4 w-4" />
           </div>
-          <span className="text-xs font-medium text-gray-600">
+          <span className="text-xs font-medium text-foreground">
             {sectionLabels[blockType] ?? blockType}
           </span>
         </div>

@@ -37,6 +37,8 @@ export default function EditPagePage() {
   const { setSections, setLoading, sections, isDirty } = usePageBuilderStore();
   const enabled = useDevModeStore((s) => s.enabled);
 
+  const [toast, setToast] = useState<{ message: string; variant: "success" | "error" } | null>(null);
+
   const handlePublish = async () => {
     setLoading(true);
     try {
@@ -77,8 +79,13 @@ export default function EditPagePage() {
           settings: JSON.parse(s.settings),
         })),
       );
+      useDevModeStore.getState().disable();
+      setToast({ message: "Published!", variant: "success" });
+      setTimeout(() => setToast(null), 3000);
     } catch (err) {
       console.error("Failed to publish", err);
+      setToast({ message: "Failed to publish", variant: "error" });
+      setTimeout(() => setToast(null), 3000);
     } finally {
       setLoading(false);
     }
@@ -130,28 +137,52 @@ export default function EditPagePage() {
 
   return (
     <DevModeProvider>
-      <div className="flex h-[calc(100vh-4rem)] flex-col">
-        <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/admin/pages")}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-          <div className="flex items-center gap-2">
-            <h1 className="text-sm font-semibold text-gray-900">
-              {pageData.title}
-            </h1>
-            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-500">
-              {pageData.status}
-            </span>
+      {toast && (
+        <div
+          className={`fixed right-4 top-20 z-[100] rounded-lg border px-4 py-3 text-sm font-medium shadow-lg transition-all ${
+            toast.variant === "success"
+              ? "border-green-200 bg-green-50 text-green-800"
+              : "border-red-200 bg-red-50 text-red-800"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+      <div className="flex h-screen flex-col overflow-hidden bg-background">
+        {/* Top Toolbar */}
+        <div className="z-50 flex h-12 shrink-0 items-center justify-between border-b border-border bg-background px-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 hover:bg-muted/50"
+              onClick={() => router.push("/admin/pages")}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div className="h-4 w-[1px] bg-border" />
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                Pages /
+              </span>
+              <h1 className="text-xs font-semibold text-foreground">
+                {pageData.title}
+              </h1>
+              <span className="ml-2 rounded-full bg-primary-500/10 px-2 py-0.5 text-[10px] font-medium text-primary-400 ring-1 ring-inset ring-primary-500/20">
+                {pageData.status}
+              </span>
+            </div>
           </div>
 
-          <div className="ml-auto flex items-center gap-3">
-            {enabled && <HistoryPanel />}
-            {enabled && <ResponsiveBar />}
+          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1">
+            <ResponsiveBar />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              <HistoryPanel />
+            </div>
+            <div className="h-4 w-[1px] bg-border" />
             <DevModeToggle />
             <PublishButton
               onPublish={handlePublish}
@@ -160,6 +191,7 @@ export default function EditPagePage() {
           </div>
         </div>
 
+        {/* Main Editor Area */}
         <div className="flex-1 overflow-hidden">
           <SectionBuilder pageId={pageData.id} />
         </div>

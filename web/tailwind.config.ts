@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -17,6 +18,16 @@ const config: Config = {
         elevated: "var(--elevated)",
         glass: "var(--glass)",
         "glass-border": "var(--glass-border)",
+        card: "var(--card)",
+        "card-foreground": "var(--card-foreground)",
+        popover: "var(--popover)",
+        "popover-foreground": "var(--popover-foreground)",
+        muted: "var(--muted)",
+        destructive: "var(--destructive)",
+        "destructive-foreground": "var(--destructive-foreground)",
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
         primary: {
           50: "#EBF0FF",
           100: "#D6E0FF",
@@ -42,6 +53,8 @@ const config: Config = {
           900: "#191233",
         },
         accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
           50: "#E6FDFF",
           100: "#CCFBFF",
           200: "#99F7FF",

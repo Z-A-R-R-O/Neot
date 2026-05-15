@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { InlineEditor } from "@/components/dev-mode/InlineEditor";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 
 interface FeatureCard {
   title?: string;
@@ -21,8 +23,16 @@ const iconMap: Record<string, string> = {
   puzzle: "🧩",
 };
 
-export function FeatureGridSection({ content }: { content: Record<string, unknown> }) {
+export function FeatureGridSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const updateSection = usePageBuilderStore((s) => s.updateSection);
   const cards = (content.cards as FeatureCard[]) ?? [];
+
+  const handleCardUpdate = (index: number, key: string, value: string) => {
+    if (!blockId) return;
+    const newCards = [...cards];
+    newCards[index] = { ...newCards[index], [key]: value };
+    updateSection(blockId, { content: { ...content, cards: newCards } });
+  };
 
   if (!cards.length) {
     return (
@@ -55,8 +65,8 @@ export function FeatureGridSection({ content }: { content: Record<string, unknow
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-primary-400">
             Features
           </p>
-          <h2 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl">
-            <span className="gradient-text">Everything you need to learn</span>
+          <h2 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl text-foreground">
+            Everything you need to learn
           </h2>
         </motion.div>
 
@@ -78,10 +88,17 @@ export function FeatureGridSection({ content }: { content: Record<string, unknow
                 </div>
                 <div>
                   <h3 className="mb-3 text-2xl font-bold text-foreground">
-                    {primary.title || "Feature"}
+                    <InlineEditor
+                      value={primary.title || "Feature"}
+                      onChange={(v) => handleCardUpdate(0, "title", v)}
+                    />
                   </h3>
                   <p className="max-w-md leading-relaxed text-muted-foreground">
-                    {primary.description || ""}
+                    <InlineEditor
+                      value={primary.description || ""}
+                      onChange={(v) => handleCardUpdate(0, "description", v)}
+                      multiline
+                    />
                   </p>
                 </div>
               </div>
@@ -90,13 +107,23 @@ export function FeatureGridSection({ content }: { content: Record<string, unknow
 
           <div className="flex flex-col gap-6">
             {leftCol.map((card, i) => (
-              <FeatureCard key={`left-${i}`} card={card} index={i} />
+              <FeatureCardComponent
+                key={`left-${i}`}
+                card={card}
+                index={i}
+                onUpdate={(key, val) => handleCardUpdate(cards.indexOf(card), key, val)}
+              />
             ))}
           </div>
 
           <div className="flex flex-col gap-6">
             {rightCol.map((card, i) => (
-              <FeatureCard key={`right-${i}`} card={card} index={i + (leftCol?.length || 0)} />
+              <FeatureCardComponent
+                key={`right-${i}`}
+                card={card}
+                index={i + (leftCol?.length || 0)}
+                onUpdate={(key, val) => handleCardUpdate(cards.indexOf(card), key, val)}
+              />
             ))}
           </div>
         </div>
@@ -105,7 +132,15 @@ export function FeatureGridSection({ content }: { content: Record<string, unknow
   );
 }
 
-function FeatureCard({ card, index }: { card: FeatureCard; index: number }) {
+function FeatureCardComponent({
+  card,
+  index,
+  onUpdate,
+}: {
+  card: FeatureCard;
+  index: number;
+  onUpdate: (key: string, val: string) => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -126,10 +161,17 @@ function FeatureCard({ card, index }: { card: FeatureCard; index: number }) {
         </div>
         <div>
           <h3 className="mb-1.5 font-semibold text-foreground">
-            {card.title || "Feature"}
+            <InlineEditor
+              value={card.title || "Feature"}
+              onChange={(v) => onUpdate("title", v)}
+            />
           </h3>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            {card.description || ""}
+            <InlineEditor
+              value={card.description || ""}
+              onChange={(v) => onUpdate("description", v)}
+              multiline
+            />
           </p>
         </div>
       </div>

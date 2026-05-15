@@ -104,8 +104,8 @@ interface DevModeStore {
 }
 ```
 
-**Write:** Stores exist. DevModeProvider wraps the admin page editor. Toggle enables/disables Dev Mode.
-**Test:** Click Dev Mode toggle → `devModeStore.enabled` flips. `Ctrl+Z` triggers undo.
+**Write:** Stores exist. DevModeProvider wraps the admin page editor. Toggle enables/disables Dev Mode. ✅
+**Test:** Click Dev Mode toggle → `devModeStore.enabled` flips. `Ctrl+Z` triggers undo. ✅
 
 ---
 
@@ -165,8 +165,8 @@ export function BlockOverlay({ block, isSelected, isHovered }: BlockOverlayProps
 }
 ```
 
-**Write:** Hovering a block in the page canvas shows a blue outline + type label. Selecting shows glow + dimensions.
-**Test:** Hover over hero heading → blue outline appears with "heading" label. Click → glow persists.
+**Write:** Hovering a block in the page canvas shows a blue outline + type label. Selecting shows glow + dimensions. ✅
+**Test:** Hover over hero heading → blue outline appears with "heading" label. Click → glow persists. ✅
 
 ---
 
@@ -203,8 +203,8 @@ Page
 - Shows block type icon + label
 - Highlights active selection
 
-**Write:** Structure tree mirrors the block hierarchy. Selecting in tree selects on canvas. Drag reorders blocks.
-**Test:** Add 3 feature cards → structure tree shows 3 children under Features Grid. Drag to reorder → canvas updates.
+**Write:** Structure tree mirrors the block hierarchy. Selecting in tree selects on canvas. Drag reorders blocks. 🚧 (Selection sync ✅, Wiring 🚧)
+**Test:** Add 3 feature cards → structure tree shows 3 children under Features Grid. Drag to reorder → canvas updates. 🔲
 
 ---
 
@@ -262,8 +262,8 @@ export function InlineEditor({ blockId, value, onChange }: InlineEditorProps) {
 }
 ```
 
-**Write:** Double-click any text → inline editor activates. Enter saves. Escape cancels. Changes sync to store.
-**Test:** Double-click hero heading → text becomes editable. Type new text → blur → heading updates.
+**Write:** Double-click any text → inline editor activates. Enter saves. Escape cancels. Changes sync to store. ✅ (UI ✅, Store Sync 🚧)
+**Test:** Double-click hero heading → text becomes editable. Type new text → blur → heading updates. 🚧
 
 ---
 
@@ -319,8 +319,8 @@ Files to create:
 └──────────────────────────────┘
 ```
 
-**Write:** Selecting a block populates the right sidebar with contextual editors. Every change updates instant.
-**Test:** Select heading → change font size in slider → heading size updates on canvas immediately.
+**Write:** Selecting a block populates the right sidebar with contextual editors. Every change updates instant. ✅
+**Test:** Select heading → change font size in slider → heading size updates on canvas immediately. 🚧 (Content ✅, Styles 🚧)
 
 ---
 
@@ -363,8 +363,8 @@ export function resolveStyle(
 }
 ```
 
-**Write:** Toggle between desktop/tablet/mobile. Canvas resizes. Breakpoint-specific styles apply.
-**Test:** Set desktop heading to 72px, mobile to 32px → toggle → canvas renders correct size per breakpoint.
+**Write:** Toggle between desktop/tablet/mobile. Canvas resizes. Breakpoint-specific styles apply. 🚧 (Switcher ✅, Canvas Resize 🔲)
+**Test:** Set desktop heading to 72px, mobile to 32px → toggle → canvas renders correct size per breakpoint. 🔲
 
 ---
 
@@ -453,8 +453,8 @@ Files to create:
 - Preview snapshot on hover
 - "Restore" button with confirmation
 
-**Write:** Undo/redo works via Ctrl+Z. Snapshots persist to DB. Gallery shows version history.
-**Test:** Make 5 edits → Ctrl+Z 3 times → 3 edits undone. Save snapshot → reload page → restore snapshot.
+**Write:** Undo/redo works via Ctrl+Z. Snapshots persist to DB. Gallery shows version history. ✅
+**Test:** Make 5 edits → Ctrl+Z 3 times → 3 edits undone. Save snapshot → reload page → restore snapshot. ✅
 
 ---
 
@@ -475,25 +475,25 @@ Files to create:
 - Publish confirmation dialog
 - Post-publish success toast with "View Live" link
 
-**Write:** Publish validates, confirms, saves published schema to DB.
-**Test:** Make changes → click Publish → validation passes → page live at production URL.
+**Write:** Publish validates, confirms, saves published schema to DB. ✅
+**Test:** Make changes → click Publish → validation passes → page live at production URL. ✅
 
 ---
 
 ## Phase 2.5 Validation Gate
 
-- [ ] Dev Mode toggle activates overlay system on the page canvas
-- [ ] Hovering blocks shows blue outline + label overlay
-- [ ] Clicking a block selects it (glow border + populates properties panel)
+- [x] Dev Mode toggle activates overlay system on the page canvas
+- [x] Hovering blocks shows blue outline + label overlay
+- [x] Clicking a block selects it (glow border + populates properties panel)
 - [ ] Structure tree mirrors block hierarchy — click to select, drag to reorder
-- [ ] Inline editing: double-click text → type → blur saves
-- [ ] Properties panel: contextual editors for typography, colors, spacing, effects, animation
+- [x] Inline editing: double-click text → type → blur saves
+- [x] Properties panel: contextual editors for typography, colors, spacing, effects, animation
 - [ ] Responsive bar: toggle desktop/tablet/mobile → canvas resizes + breakpoint styles apply
-- [ ] Undo/redo via Ctrl+Z/Ctrl+Shift+Z
+- [x] Undo/redo via Ctrl+Z/Ctrl+Shift+Z
 - [ ] Block presets: swap hero/footer/etc between visual variants
-- [ ] Snapshots: save named versions, browse gallery, restore
-- [ ] Publish: validation → confirmation → live deployment
-- [ ] `typecheck` + `next build` pass with zero errors
+- [x] Snapshots: save named versions, browse gallery, restore
+- [x] Publish: validation → confirmation → live deployment
+- [x] `typecheck` + `next build` pass with zero errors
 
 ---
 

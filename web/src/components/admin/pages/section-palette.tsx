@@ -87,7 +87,7 @@ interface SectionPaletteProps {
 export function SectionPalette({ onAdd }: SectionPaletteProps) {
   return (
     <div className="space-y-2">
-      <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
+      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         Add Section
       </p>
       <div className="grid grid-cols-1 gap-2">
@@ -100,10 +100,10 @@ export function SectionPalette({ onAdd }: SectionPaletteProps) {
               className="h-auto justify-start gap-3 px-3 py-2.5"
               onClick={() => onAdd(item.type)}
             >
-              <Icon className="h-4 w-4 shrink-0 text-gray-400" />
+              <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
               <div className="min-w-0 text-left">
-                <div className="text-sm font-medium">{item.label}</div>
-                <div className="text-xs text-gray-400">{item.description}</div>
+                <div className="text-sm font-medium text-foreground">{item.label}</div>
+                <div className="text-xs text-muted-foreground">{item.description}</div>
               </div>
             </Button>
           );

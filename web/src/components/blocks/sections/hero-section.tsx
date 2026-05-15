@@ -3,18 +3,65 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { InlineEditor } from "@/components/dev-mode/InlineEditor";
+import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 
 interface HeroSectionProps {
   content: Record<string, unknown>;
+  blockId?: string;
 }
 
-export function HeroSection({ content }: HeroSectionProps) {
+export function HeroSection({ content, blockId }: HeroSectionProps) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const updateSection = usePageBuilderStore((s) => s.updateSection);
+
   const title = (content.title as string) || "Learn Anything. Built for the Future.";
   const subtitle =
     (content.subtitle as string) ||
     "Learning should adapt to humans. Humans should not adapt to systems.";
   const ctaText = (content.ctaText as string) || "Start Learning";
   const secondaryCtaText = (content.secondaryCtaText as string) || "Explore Courses";
+
+  function handleContentChange(key: string, value: string) {
+    if (!blockId) return;
+    updateSection(blockId, { content: { ...content, [key]: value } });
+  }
+
+  function renderTitle() {
+    if (!devModeEnabled) {
+      return (
+        <>
+          <span className="text-foreground">{title.split(".")[0]}.</span>
+          <br />
+          <span className="gradient-text-accent">{title.split(".")[1] || "Built for the Future."}</span>
+        </>
+      );
+    }
+
+    return (
+      <InlineEditor
+        value={title}
+        onChange={(v) => handleContentChange("title", v)}
+        className=""
+      />
+    );
+  }
+
+  function renderSubtitle() {
+    if (!devModeEnabled) {
+      return <>{subtitle}</>;
+    }
+
+    return (
+      <InlineEditor
+        value={subtitle}
+        onChange={(v) => handleContentChange("subtitle", v)}
+        className=""
+        multiline
+      />
+    );
+  }
 
   return (
     <section className="relative flex min-h-[90vh] items-center overflow-hidden px-6 pt-24">
@@ -44,9 +91,7 @@ export function HeroSection({ content }: HeroSectionProps) {
             transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             className="text-hero font-heading leading-[1.05] tracking-tight sm:text-hero-xl"
           >
-            <span className="text-foreground">{title.split(".")[0]}.</span>
-            <br />
-            <span className="gradient-text-accent">{title.split(".")[1] || "Built for the Future."}</span>
+            {renderTitle()}
           </motion.h1>
 
           <motion.p
@@ -55,7 +100,7 @@ export function HeroSection({ content }: HeroSectionProps) {
             transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             className="max-w-lg text-lg leading-relaxed text-muted-foreground"
           >
-            {subtitle}
+            {renderSubtitle()}
           </motion.p>
 
           <motion.div

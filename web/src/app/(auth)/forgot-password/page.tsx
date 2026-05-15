@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
           </CardHeader>
           <Link
             href="/login"
-            className="mt-4 inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
+            className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to sign in
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {serverError && (
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
               {serverError}
             </div>
           )}
@@ -110,7 +110,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-6 text-center">
           <Link
             href="/login"
-            className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
+            className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to sign in

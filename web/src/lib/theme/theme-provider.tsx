@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { useTheme } from "@/lib/theme/useTheme";
+import { ThemeModeProvider } from "@/lib/theme/useThemeMode";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
+function ThemeVarsProvider({ children }: { children: React.ReactNode }) {
   const { cssVars, isLoading } = useTheme();
 
   useEffect(() => {
@@ -25,4 +26,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, [cssVars, isLoading]);
 
   return <>{children}</>;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  return (
+    <ThemeModeProvider>
+      <ThemeVarsProvider>
+        {children}
+      </ThemeVarsProvider>
+    </ThemeModeProvider>
+  );
 }

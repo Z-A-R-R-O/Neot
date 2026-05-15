@@ -21,11 +21,15 @@ ASSIST/
 │   ├── 01-phase-0-foundation.md
 │   ├── 02-phase-1-core-learning.md
 │   ├── 03-phase-1.5-admin-cms.md
-│   ├── 04-phase-2-adaptive-gamification.md
-│   ├── 05-phase-3-ai-mobile.md
-│   ├── 06-phase-4-parent-school.md
-│   ├── 07-phase-5-scale-marketplace.md
-│   └── 08-engineering-standards.md
+│   ├── 04-phase-1.75-dynamic-renderer.md
+│   ├── 11-phase-ui-transformation.md
+│   ├── 12-phase-2.5-dev-mode.md
+│   ├── 13-phase-dev-mode-e2e.md
+│   ├── 05-phase-2-adaptive-gamification.md
+│   ├── 06-phase-3-ai-mobile.md
+│   ├── 07-phase-4-parent-school.md
+│   ├── 08-phase-5-scale-marketplace.md
+│   └── 10-engineering-standards.md
 ├── Tools/                     ← Automation scripts for the build workflow
 │   └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <description>"
 └── Log/                       ← Change journal — one .md file per work session
@@ -152,6 +156,9 @@ The commit format is: `XX -- NEOT -- <description>` where `XX` auto-increments.
 | **0** Foundation | None | — |
 | **1** Core Learning | Phase 0 done | Phase 0 validation gate ✅ |
 | **1.5** Admin CMS | Phase 1 course basics stable | Course CRUD + lesson player working |
+| **1.75** Dynamic Renderer | Phase 1.5 done | Section builder + registry ready |
+| **UI** Redesign | Phase 1.75 done | Page builder working |
+| **2.5** Dev Mode | Phase 1.75 done | Block registry + overlay store ready |
 | **2** Adaptive + Gamification | Phase 1 done | Quiz system + progress tracking working |
 | **3** AI + Mobile | Phase 2 + 1.5 done | Adaptive profiles + CMS settings ready |
 | **4** Parent + School | Phase 1 done | Student/teacher data populated |

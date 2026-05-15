@@ -4,10 +4,14 @@ import { Layers, Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { TreeNode } from "./TreeNode";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 
 interface StructureTreeProps {
   blocks: TreeNodeData[];
   onAddBlock?: () => void;
+  onSelect?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onDuplicate?: (id: string) => void;
 }
 
 interface TreeNodeData {
@@ -18,7 +22,7 @@ interface TreeNodeData {
   visible?: boolean;
 }
 
-export function StructureTree({ blocks, onAddBlock }: StructureTreeProps) {
+export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplicate }: StructureTreeProps) {
   const [search, setSearch] = useState("");
 
   const enabled = useDevModeStore((s) => s.enabled);
@@ -45,21 +49,21 @@ export function StructureTree({ blocks, onAddBlock }: StructureTreeProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] px-4 py-3">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">
           <Layers className="h-4 w-4 text-muted-foreground" />
           <span className="text-xs font-medium text-foreground">Layers</span>
         </div>
         <button
           onClick={onAddBlock}
-          className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+          className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <Plus className="h-3.5 w-3.5" />
         </button>
       </div>
 
-      <div className="border-b border-[rgba(255,255,255,0.06)] px-3 py-2">
-        <div className="flex items-center gap-2 rounded-lg bg-[rgba(255,255,255,0.04)] px-2.5 py-1.5">
+      <div className="border-b border-border px-3 py-2">
+        <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-2.5 py-1.5">
           <Search className="h-3.5 w-3.5 text-muted-foreground" />
           <input
             type="text"
@@ -86,15 +90,19 @@ export function StructureTree({ blocks, onAddBlock }: StructureTreeProps) {
                 key={node.id}
                 node={node}
                 depth={0}
-                onSelect={(id) => useDevModeStore.getState().select(id)}
+                onSelect={(id) => {
+                  useDevModeStore.getState().select(id);
+                  usePageBuilderStore.getState().selectSection(id);
+                  onSelect?.(id);
+                }}
                 onToggleVisibility={(id) => {
                   // Toggle visibility - would update page store
                 }}
                 onDuplicate={(id) => {
-                  // Duplicate block - would update page store
+                  onDuplicate?.(id);
                 }}
                 onDelete={(id) => {
-                  // Delete block - would update page store
+                  onDelete?.(id);
                 }}
               />
             ))}
