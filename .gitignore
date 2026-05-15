@@ -63,6 +63,10 @@ supabase/.branches/
 **.packages
 **.pub/
 
+# ── Database ────────────────────────────────────────────
+*.db
+*.db-journal
+
 # ── Misc ─────────────────────────────────────────────────
 *.pem
 secrets/
