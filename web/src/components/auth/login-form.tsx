@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail, Lock, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
@@ -37,9 +37,9 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {serverError && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {serverError}
         </div>
       )}
@@ -48,40 +48,74 @@ export function LoginForm() {
         <Label htmlFor="email" required>
           Email
         </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          autoComplete="email"
-          error={errors.email?.message}
-          {...register("email")}
-        />
+        <div className="relative">
+          <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="email"
+            error={errors.email?.message}
+            className="pl-11"
+            {...register("email")}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="password" required>
           Password
         </Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="··········"
-          autoComplete="current-password"
-          error={errors.password?.message}
-          {...register("password")}
-        />
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="password"
+            type="password"
+            placeholder="··········"
+            autoComplete="current-password"
+            error={errors.password?.message}
+            className="pl-11"
+            {...register("password")}
+          />
+        </div>
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      <div className="flex items-center justify-end">
+        <Link
+          href="/forgot-password"
+          className="text-sm text-muted-foreground transition-colors hover:text-primary-400"
+        >
+          Forgot password?
+        </Link>
+      </div>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="group relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-foreground text-sm font-semibold text-background transition-all hover:shadow-glow-sm active:scale-[0.98] disabled:opacity-50"
+      >
         {isSubmitting ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
             Signing in...
           </>
         ) : (
-          "Sign in"
+          <>
+            Sign in
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </>
         )}
-      </Button>
+      </button>
+
+      <p className="text-center text-sm text-muted-foreground">
+        Don&apos;t have an account?{" "}
+        <Link
+          href="/signup"
+          className="font-semibold text-primary-400 transition-colors hover:text-primary-300"
+        >
+          Sign up
+        </Link>
+      </p>
     </form>
   );
 }

@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail, Lock, ArrowRight, User } from "lucide-react";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
@@ -50,9 +50,12 @@ export function SignupForm() {
 
   if (success) {
     return (
-      <div className="rounded-lg bg-green-50 p-6 text-center">
-        <p className="font-medium text-green-800">Check your email</p>
-        <p className="mt-1 text-sm text-green-600">
+      <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-8 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/20">
+          <Mail className="h-6 w-6 text-green-400" />
+        </div>
+        <h3 className="text-lg font-bold text-foreground">Check your email</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
           We sent a confirmation link to your email address.
         </p>
       </div>
@@ -60,9 +63,9 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {serverError && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {serverError}
         </div>
       )}
@@ -71,83 +74,111 @@ export function SignupForm() {
         <Label htmlFor="email" required>
           Email
         </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          autoComplete="email"
-          error={errors.email?.message}
-          {...register("email")}
-        />
+        <div className="relative">
+          <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="email"
+            error={errors.email?.message}
+            className="pl-11"
+            {...register("email")}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="password" required>
           Password
         </Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="··········"
-          autoComplete="new-password"
-          error={errors.password?.message}
-          {...register("password")}
-        />
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="password"
+            type="password"
+            placeholder="··········"
+            autoComplete="new-password"
+            error={errors.password?.message}
+            className="pl-11"
+            {...register("password")}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="confirmPassword" required>
           Confirm Password
         </Label>
-        <Input
-          id="confirmPassword"
-          type="password"
-          placeholder="··········"
-          autoComplete="new-password"
-          error={errors.confirmPassword?.message}
-          {...register("confirmPassword")}
-        />
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            id="confirmPassword"
+            type="password"
+            placeholder="··········"
+            autoComplete="new-password"
+            error={errors.confirmPassword?.message}
+            className="pl-11"
+            {...register("confirmPassword")}
+          />
+        </div>
       </div>
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-gray-700">
-          Age Group <span className="text-red-500">*</span>
-        </legend>
-        <div className="flex gap-4">
+      <div className="space-y-3">
+        <Label required>Age Group</Label>
+        <div className="grid grid-cols-3 gap-3">
           {[
-            { value: "under13", label: "Under 13" },
-            { value: "13to18", label: "13–18" },
-            { value: "18plus", label: "18+" },
+            { value: "under13", label: "Under 13", icon: <User className="h-4 w-4" /> },
+            { value: "13to18", label: "13–18", icon: <User className="h-4 w-4" /> },
+            { value: "18plus", label: "18+", icon: <User className="h-4 w-4" /> },
           ].map((option) => (
             <label
               key={option.value}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 px-4 py-3 text-sm has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50"
+              className="group flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] px-4 py-4 text-sm text-muted-foreground transition-all has-[:checked]:border-primary-500/30 has-[:checked]:bg-primary-500/10 has-[:checked]:text-primary-400 hover:border-[rgba(255,255,255,0.15)]"
             >
               <input
                 type="radio"
                 value={option.value}
-                className="text-primary-600 focus:ring-primary-500"
+                className="sr-only"
                 {...register("ageGroup")}
               />
-              {option.label}
+              {option.icon}
+              <span className="font-medium">{option.label}</span>
             </label>
           ))}
         </div>
         {errors.ageGroup && (
-          <p className="text-sm text-red-500">{errors.ageGroup.message}</p>
+          <p className="text-sm text-red-400">{errors.ageGroup.message}</p>
         )}
-      </fieldset>
+      </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="group relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-foreground text-sm font-semibold text-background transition-all hover:shadow-glow-sm active:scale-[0.98] disabled:opacity-50"
+      >
         {isSubmitting ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
             Creating account...
           </>
         ) : (
-          "Create account"
+          <>
+            Create account
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </>
         )}
-      </Button>
+      </button>
+
+      <p className="text-center text-sm text-muted-foreground">
+        Already have an account?{" "}
+        <Link
+          href="/login"
+          className="font-semibold text-primary-400 transition-colors hover:text-primary-300"
+        >
+          Sign in
+        </Link>
+      </p>
     </form>
   );
 }

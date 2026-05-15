@@ -1,44 +1,13 @@
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { AuthSplitLayout } from "@/components/auth/auth-split-layout";
 import { LoginForm } from "@/components/auth/login-form";
-import { SocialButtons } from "@/components/auth/social-buttons";
-import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Welcome back</CardTitle>
-          <CardDescription>
-            Sign in to your NEOT account
-          </CardDescription>
-        </CardHeader>
-
-        <LoginForm />
-
-        <div className="mt-4 text-center text-sm">
-          <Link
-            href="/forgot-password"
-            className="text-primary hover:text-primary/80"
-          >
-            Forgot your password?
-          </Link>
-        </div>
-
-        <div className="mt-6">
-          <SocialButtons />
-        </div>
-
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-primary hover:text-primary/80"
-          >
-            Sign up
-          </Link>
-        </p>
-      </Card>
-    </div>
+    <AuthSplitLayout
+      title="Welcome back"
+      subtitle="Sign in to your NEOT account"
+    >
+      <LoginForm />
+    </AuthSplitLayout>
   );
 }
