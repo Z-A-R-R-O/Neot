@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { InlineEditor } from "@/components/dev-mode/InlineEditor";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface StatItem {
   number?: string;
@@ -9,8 +12,17 @@ interface StatItem {
   suffix?: string;
 }
 
-export function StatsBarSection({ content }: { content: Record<string, unknown> }) {
+export function StatsBarSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const updateSection = usePageBuilderStore((s) => s.updateSection);
   const items = (content.items as StatItem[]) ?? [];
+
+  const handleStatUpdate = (index: number, key: string, value: string) => {
+    if (!blockId) return;
+    const newItems = [...items];
+    newItems[index] = { ...newItems[index], [key]: value };
+    updateSection(blockId, { content: { ...content, items: newItems } });
+  };
 
   if (!items.length) {
     return (
@@ -48,11 +60,17 @@ export function StatsBarSection({ content }: { content: Record<string, unknown> 
               >
                 <span className="font-heading text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                   <span className="gradient-text-accent">
-                    {item.prefix || ""}{item.number || "0"}{item.suffix || ""}
+                    {item.prefix || ""}
+                    {devModeEnabled ? (
+                      <InlineEditor value={item.number || "0"} onChange={(v) => handleStatUpdate(i, "number", v)} />
+                    ) : (item.number || "0")}
+                    {item.suffix || ""}
                   </span>
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  {item.label || "Stat"}
+                  {devModeEnabled ? (
+                    <InlineEditor value={item.label || "Stat"} onChange={(v) => handleStatUpdate(i, "label", v)} />
+                  ) : (item.label || "Stat")}
                 </span>
               </motion.div>
             ))}

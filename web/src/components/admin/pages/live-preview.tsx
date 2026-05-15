@@ -51,7 +51,6 @@ export function LivePreview() {
             <BlockOverlay
               key={section.id}
               blockId={section.id}
-              type={section.blockType}
               label={section.blockType}
               path={`Page > ${section.blockType}`}
             >

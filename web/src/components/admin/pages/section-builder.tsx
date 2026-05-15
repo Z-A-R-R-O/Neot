@@ -181,7 +181,7 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
                       type: selectedSection.blockType,
                       label: selectedSection.blockType,
                       content: selectedSection.content,
-                      styles: selectedSection.settings.styles,
+                      styles: selectedSection.settings.styles as Record<string, unknown> | undefined,
                     }
                   : null
               }

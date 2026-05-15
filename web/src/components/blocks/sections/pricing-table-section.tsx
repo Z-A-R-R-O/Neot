@@ -3,6 +3,9 @@
 import { Check, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { InlineEditor } from "@/components/dev-mode/InlineEditor";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface PricingPlan {
   name?: string;
@@ -13,8 +16,17 @@ interface PricingPlan {
   ctaText?: string;
 }
 
-export function PricingTableSection({ content }: { content: Record<string, unknown> }) {
+export function PricingTableSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const updateSection = usePageBuilderStore((s) => s.updateSection);
   const plans = (content.plans as PricingPlan[]) ?? [];
+
+  const handlePlanUpdate = (index: number, key: string, value: string) => {
+    if (!blockId) return;
+    const newPlans = [...plans];
+    newPlans[index] = { ...newPlans[index], [key]: value };
+    updateSection(blockId, { content: { ...content, plans: newPlans } });
+  };
 
   if (!plans.length) {
     return (
@@ -50,7 +62,7 @@ export function PricingTableSection({ content }: { content: Record<string, unkno
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan, i) => (
-            <PricingCard key={i} plan={plan} index={i} />
+            <PricingCard key={i} plan={plan} index={i} devModeEnabled={devModeEnabled} onUpdate={(key, val) => handlePlanUpdate(i, key, val)} />
           ))}
         </div>
       </div>
@@ -58,7 +70,7 @@ export function PricingTableSection({ content }: { content: Record<string, unkno
   );
 }
 
-function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
+function PricingCard({ plan, index, devModeEnabled, onUpdate }: { plan: PricingPlan; index: number; devModeEnabled: boolean; onUpdate: (key: string, val: string) => void }) {
   const features = plan.features ?? [];
   const isHighlighted = plan.highlighted;
 
@@ -87,16 +99,24 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
       <div className="relative z-10 flex flex-col gap-6">
         <div>
           <h3 className="mb-1 text-lg font-semibold text-foreground">
-            {plan.name || "Plan"}
+            {devModeEnabled ? (
+              <InlineEditor value={plan.name || "Plan"} onChange={(v) => onUpdate("name", v)} />
+            ) : (plan.name || "Plan")}
           </h3>
           {plan.description && (
-            <p className="text-sm text-muted-foreground">{plan.description}</p>
+            <p className="text-sm text-muted-foreground">
+              {devModeEnabled ? (
+                <InlineEditor value={plan.description} onChange={(v) => onUpdate("description", v)} multiline />
+              ) : plan.description}
+            </p>
           )}
         </div>
 
         <div className="flex items-baseline gap-1">
           <span className="font-heading text-4xl font-bold text-foreground">
-            {plan.price || "$0"}
+            {devModeEnabled ? (
+              <InlineEditor value={plan.price || "$0"} onChange={(v) => onUpdate("price", v)} />
+            ) : (plan.price || "$0")}
           </span>
           {plan.price && !plan.price.startsWith("$0") && (
             <span className="text-sm text-muted-foreground">/month</span>
@@ -111,7 +131,9 @@ function PricingCard({ plan, index }: { plan: PricingPlan; index: number }) {
               : "glass glass-hover text-foreground hover:text-primary-400"
           }`}
         >
-          {plan.ctaText || "Get Started"}
+          {devModeEnabled ? (
+            <InlineEditor value={plan.ctaText || "Get Started"} onChange={(v) => onUpdate("ctaText", v)} />
+          ) : (plan.ctaText || "Get Started")}
           <ArrowRight className="h-4 w-4" />
         </Link>
 

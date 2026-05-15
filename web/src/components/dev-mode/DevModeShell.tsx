@@ -20,6 +20,13 @@ export function DevModeShell({ children }: DevModeShellProps) {
 
   const selectedSection = sections.find((s) => s.id === selectedId);
 
+  const treeNodes = sections.map((s) => ({
+    id: s.id,
+    type: s.blockType,
+    label: s.blockType,
+    children: [] as { id: string; type: string; label: string }[],
+  }));
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background dark">
       {/* Left Sidebar: Layers */}
@@ -75,7 +82,7 @@ export function DevModeShell({ children }: DevModeShellProps) {
                   type: selectedSection.blockType,
                   label: selectedSection.blockType,
                   content: selectedSection.content,
-                  styles: selectedSection.settings.styles,
+                  styles: selectedSection.settings.styles as Record<string, unknown> | undefined,
                 }
               : null
           }

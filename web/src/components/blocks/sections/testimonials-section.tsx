@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { InlineEditor } from "@/components/dev-mode/InlineEditor";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface TestimonialItem {
   name?: string;
@@ -9,8 +12,17 @@ interface TestimonialItem {
   avatar?: string;
 }
 
-export function TestimonialsSection({ content }: { content: Record<string, unknown> }) {
+export function TestimonialsSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const updateSection = usePageBuilderStore((s) => s.updateSection);
   const items = (content.items as TestimonialItem[]) ?? [];
+
+  const handleItemUpdate = (index: number, key: string, value: string) => {
+    if (!blockId) return;
+    const newItems = [...items];
+    newItems[index] = { ...newItems[index], [key]: value };
+    updateSection(blockId, { content: { ...content, items: newItems } });
+  };
 
   if (!items.length) {
     return (
@@ -44,7 +56,7 @@ export function TestimonialsSection({ content }: { content: Record<string, unkno
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item, i) => (
-            <TestimonialCard key={i} item={item} index={i} />
+            <TestimonialCard key={i} item={item} index={i} devModeEnabled={devModeEnabled} onUpdate={(key, val) => handleItemUpdate(i, key, val)} />
           ))}
         </div>
       </div>
@@ -52,7 +64,7 @@ export function TestimonialsSection({ content }: { content: Record<string, unkno
   );
 }
 
-function TestimonialCard({ item, index }: { item: TestimonialItem; index: number }) {
+function TestimonialCard({ item, index, devModeEnabled, onUpdate }: { item: TestimonialItem; index: number; devModeEnabled: boolean; onUpdate: (key: string, val: string) => void }) {
   const initials = (item.name || "U")
     .split(" ")
     .map((n) => n[0])
@@ -78,7 +90,9 @@ function TestimonialCard({ item, index }: { item: TestimonialItem; index: number
         </div>
 
         <p className="flex-1 text-base leading-relaxed text-foreground/80 font-medium italic">
-          &quot;{item.text || "Great platform for learning!"}&quot;
+          &quot;{devModeEnabled ? (
+            <InlineEditor value={item.text || ""} onChange={(v) => onUpdate("text", v)} multiline />
+          ) : (item.text || "Great platform for learning!")}&quot;
         </p>
 
         <div className="flex items-center gap-4">
@@ -86,9 +100,17 @@ function TestimonialCard({ item, index }: { item: TestimonialItem; index: number
             {initials}
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground">{item.name || "User"}</p>
+            <p className="text-sm font-bold text-foreground">
+              {devModeEnabled ? (
+                <InlineEditor value={item.name || "User"} onChange={(v) => onUpdate("name", v)} />
+              ) : (item.name || "User")}
+            </p>
             {item.role && (
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{item.role}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                {devModeEnabled ? (
+                  <InlineEditor value={item.role} onChange={(v) => onUpdate("role", v)} />
+                ) : item.role}
+              </p>
             )}
           </div>
         </div>

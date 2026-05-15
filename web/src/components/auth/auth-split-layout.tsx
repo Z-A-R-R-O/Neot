@@ -70,7 +70,7 @@ export function AuthSplitLayout({ children, title, subtitle }: AuthSplitLayoutPr
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-10 w-full max-w-md"
         >
-          <div className="mb-8 lg:hidden">
+          <div className="mb-6 lg:hidden">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-[8px] bg-primary-500 shadow-glow-sm">
                 <span className="text-xs font-bold text-white">N</span>
@@ -78,6 +78,17 @@ export function AuthSplitLayout({ children, title, subtitle }: AuthSplitLayoutPr
               <span className="text-lg font-bold tracking-tight text-foreground">NEOT</span>
             </Link>
           </div>
+
+          <Link
+            href="/"
+            className="mb-6 flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+            Back to home
+          </Link>
 
           <div className="mb-8">
             <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">

@@ -3,15 +3,27 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { InlineEditor } from "@/components/dev-mode/InlineEditor";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface FaqItem {
   question?: string;
   answer?: string;
 }
 
-export function FaqSection({ content }: { content: Record<string, unknown> }) {
+export function FaqSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const updateSection = usePageBuilderStore((s) => s.updateSection);
   const items = (content.items as FaqItem[]) ?? [];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const handleItemUpdate = (index: number, key: string, value: string) => {
+    if (!blockId) return;
+    const newItems = [...items];
+    newItems[index] = { ...newItems[index], [key]: value };
+    updateSection(blockId, { content: { ...content, items: newItems } });
+  };
 
   if (!items.length) {
     return (
@@ -68,7 +80,12 @@ export function FaqSection({ content }: { content: Record<string, unknown> }) {
               >
                 <div className="flex items-center justify-between gap-4 px-6 py-5">
                   <span className="text-sm font-medium text-foreground sm:text-base">
-                    {item.question || `Question ${i + 1}`}
+                    {devModeEnabled ? (
+                      <InlineEditor
+                        value={item.question || `Question ${i + 1}`}
+                        onChange={(v) => handleItemUpdate(i, "question", v)}
+                      />
+                    ) : (item.question || `Question ${i + 1}`)}
                   </span>
                   <ChevronDown
                     className={`h-4 w-4 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${
@@ -87,7 +104,13 @@ export function FaqSection({ content }: { content: Record<string, unknown> }) {
                     >
                       <div className="border-t border-[rgba(255,255,255,0.06)] px-6 pb-5 pt-4">
                         <p className="text-sm leading-relaxed text-muted-foreground">
-                          {item.answer || "No answer provided."}
+                          {devModeEnabled ? (
+                            <InlineEditor
+                              value={item.answer || ""}
+                              onChange={(v) => handleItemUpdate(i, "answer", v)}
+                              multiline
+                            />
+                          ) : (item.answer || "No answer provided.")}
                         </p>
                       </div>
                     </motion.div>
