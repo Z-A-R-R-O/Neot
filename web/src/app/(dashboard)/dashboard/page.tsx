@@ -8,7 +8,7 @@ export default async function DashboardPage() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    email = user?.email;
+    email = user?.email ?? undefined;
   } catch {
     // Supabase not configured
   }

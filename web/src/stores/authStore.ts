@@ -1,10 +1,19 @@
 import { create } from "zustand";
-import type { User } from "@supabase/supabase-js";
+
+export type LocalUser = {
+  id: string;
+  email: string | null;
+  fullName: string | null;
+  role: string;
+  ageGroup: string | null;
+  avatarUrl: string | null;
+  onboardingCompleted: boolean;
+};
 
 interface AuthState {
-  user: User | null;
+  user: LocalUser | null;
   isLoading: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: LocalUser | null) => void;
   setLoading: (loading: boolean) => void;
   reset: () => void;
 }

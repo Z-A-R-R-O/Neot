@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db";
+import { getUserId } from "@/lib/auth";
 
 const roleSchema = z.object({
   role: z.enum(["student", "teacher", "parent"]),
@@ -18,18 +17,7 @@ const roleSchema = z.object({
 });
 
 export async function PATCH(request: Request) {
-  let userId: string | undefined;
-
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    userId = user?.id;
-  } catch {
-    // Supabase not configured — use dev fallback for local dev
-  }
-
+  const userId = await getUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

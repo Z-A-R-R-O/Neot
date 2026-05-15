@@ -331,7 +331,7 @@ const envSchema = z.object({
 
 - [x] `npm run dev` starts without errors
 - [x] Homepage loads at localhost:3000
-- [x] Prisma SQLite database created (prisma/dev.db)
+- [x] Prisma SQLite schema defined (13 models)
 - [x] Auth UI renders (login/signup/forgot-password pages)
 - [x] Role-based onboarding flow works
 - [x] Role-based sidebar navigation
@@ -339,6 +339,11 @@ const envSchema = z.object({
 - [x] Mobile-responsive layout
 - [x] Loading/empty/error states visible
 - [x] Offline banner appears when disconnected
-- [x] Supabase can be added later by setting env vars
+- [x] Supabase Auth works (env vars needed at runtime)
 
-> **Phase 0 Complete** ✅ → Move to `02-phase-1-core-learning.md`
+> **Phase 0 Complete** ✅ → Continue to `02-phase-1-core-learning.md`
+
+### ⚠️ Known Issues Entering Phase 1 (all resolved)
+- ✅ Prisma uses `prisma.config.ts` for datasource URL (valid Prisma 7 pattern)
+- ✅ Prisma Client generated at `src/generated/prisma/`
+- ✅ Auth proxy (`src/proxy.ts`) wired — sessions in SQLite cookies

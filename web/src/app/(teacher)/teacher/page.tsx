@@ -14,7 +14,7 @@ export default async function TeacherDashboardPage() {
       data: { user },
     } = await supabase.auth.getUser();
     userId = user?.id;
-    email = user?.email;
+    email = user?.email ?? undefined;
   } catch {
     // Supabase not configured
   }

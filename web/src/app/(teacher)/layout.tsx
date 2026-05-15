@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { AppLayout } from "@/components/layout/app-layout";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export default async function TeacherLayout({
@@ -9,24 +9,14 @@ export default async function TeacherLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let userId: string | undefined;
+  const user = await getUser();
 
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    userId = user?.id;
-  } catch {
-    // Supabase not configured
-  }
-
-  if (!userId) {
+  if (!user) {
     redirect("/login");
   }
 
   const profile = await prisma.profile.findUnique({
-    where: { id: userId },
+    where: { id: user.id },
     select: { role: true },
   });
 

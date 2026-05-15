@@ -2,28 +2,18 @@ import { redirect } from "next/navigation";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { OnboardingFlow } from "@/components/auth/onboarding-flow";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export default async function OnboardingPage() {
-  let userId: string | undefined;
+  const user = await getUser();
 
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    userId = user?.id;
-  } catch {
-    // Supabase not configured
-  }
-
-  if (!userId) {
+  if (!user) {
     redirect("/login");
   }
 
   const profile = await prisma.profile.findUnique({
-    where: { id: userId },
+    where: { id: user.id },
     select: { onboardingCompleted: true, role: true },
   });
 

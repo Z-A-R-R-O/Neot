@@ -39,7 +39,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500">
             <Avatar
-              src={user?.user_metadata?.avatar_url}
+              src={user?.avatarUrl ?? undefined}
               fallback={user?.email?.charAt(0).toUpperCase() ?? "U"}
               size="sm"
             />

@@ -1,7 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
-
-import { getSupabasePublicEnv } from "./env";
+import { type NextRequest, NextResponse } from "next/server";
+import { getUser, getSessionCookieName, getSessionCookieValue } from "@/lib/auth";
 
 const protectedPathPrefixes = ["/dashboard", "/teacher", "/admin", "/onboarding"];
 const authPathPrefixes = ["/login", "/signup", "/forgot-password"];
@@ -11,37 +9,7 @@ function isPrefixedPath(pathname: string, prefixes: string[]) {
 }
 
 export async function updateSession(request: NextRequest) {
-  const supabaseEnv = getSupabasePublicEnv();
-
-  if (!supabaseEnv) {
-    return NextResponse.next({ request });
-  }
-
-  let response = NextResponse.next({ request });
-
-  const supabase = createServerClient(supabaseEnv.url, supabaseEnv.anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value);
-        });
-
-        response = NextResponse.next({ request });
-
-        cookiesToSet.forEach(({ name, value, options }) => {
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getUser();
   const { pathname } = request.nextUrl;
   const isProtectedPath = isPrefixedPath(pathname, protectedPathPrefixes);
   const isAuthPath = isPrefixedPath(pathname, authPathPrefixes);
@@ -55,10 +23,10 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAuthPath) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/onboarding";
+    redirectUrl.pathname = user.onboardingCompleted ? "/dashboard" : "/onboarding";
     redirectUrl.search = "";
     return NextResponse.redirect(redirectUrl);
   }
 
-  return response;
+  return NextResponse.next({ request });
 }
