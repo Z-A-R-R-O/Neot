@@ -9,7 +9,7 @@
 
 | # | Phase | Primary Output | Status |
 |---|-------|----------------|--------|
-| 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | 🟡 (0.13, 0.14 remaining) |
+| 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | ✅ Complete |
 | 1 | **Core Learning** | Course player + Teacher builder + Quiz | 🔲 |
 | 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | 🔲 |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 |

@@ -329,16 +329,16 @@ const envSchema = z.object({
 
 ## Phase 0 Validation Gate
 
-- [ ] `npm run dev` starts without errors
-- [ ] Homepage loads at localhost:3000
-- [ ] Prisma SQLite database created (prisma/dev.db)
-- [ ] Auth UI renders (login/signup/forgot-password pages)
-- [ ] Role-based onboarding flow works
-- [ ] Role-based sidebar navigation
-- [ ] All UI primitives render correctly
-- [ ] Mobile-responsive layout
-- [ ] Loading/empty/error states visible
-- [ ] Offline banner appears when disconnected
-- [ ] Supabase can be added later by setting env vars
+- [x] `npm run dev` starts without errors
+- [x] Homepage loads at localhost:3000
+- [x] Prisma SQLite database created (prisma/dev.db)
+- [x] Auth UI renders (login/signup/forgot-password pages)
+- [x] Role-based onboarding flow works
+- [x] Role-based sidebar navigation
+- [x] All UI primitives render correctly
+- [x] Mobile-responsive layout
+- [x] Loading/empty/error states visible
+- [x] Offline banner appears when disconnected
+- [x] Supabase can be added later by setting env vars
 
 > **Phase 0 Complete** ✅ → Move to `02-phase-1-core-learning.md`
