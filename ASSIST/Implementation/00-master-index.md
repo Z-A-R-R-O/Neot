@@ -116,17 +116,15 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 
 - Lesson player shell with sidebar nav + progress bar
 - Teacher area: courses, module manager, drag-drop lesson builder
 - Teacher block editors: text, video, quiz, quiz-question
-- Teacher dashboard: stats, quick actions
+- Teacher dashboard: stats, quick actions, full analytics (Recharts)
 - Enrollment: API + hooks + duplicate prevention
 - Publish workflow: checklist before going live
 
 ### Gaps / Next Up
-- **Task 1.15 — Course Analytics** — needs Recharts integration
 - **Phase 1 Validation Gate** — E2E testing flow
 - **Phase 1.5 — Admin CMS** — page builder, theme engine, user mgmt
 - **Phase 2 — Gamification** — XP/streaks/badges models exist, no UI
 - **Password reset** — needs email service integration
-- **Supabase packages removed** — zero external auth dependencies
 
 ---
 

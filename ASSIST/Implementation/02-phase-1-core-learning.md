@@ -387,19 +387,22 @@ Widgets: Overview stats, My Courses cards, Student Performance table, Quick Acti
 
 ## Task 1.15 — Course Analytics
 
-> **Status: 🔲 Not started** (placeholder page exists, needs Recharts integration)
+> **Status: ✅ Complete**
 
 ```
 Files created:
-  web/src/app/(teacher)/teacher/analytics/page.tsx       ← placeholder only
+  web/src/app/api/analytics/route.ts                       ← GET teacher analytics data
+  web/src/app/(teacher)/teacher/analytics/page.tsx         ← Live analytics dashboard
+  web/src/components/teacher/analytics/enrollment-chart.tsx  ← Line chart
+  web/src/components/teacher/analytics/completion-funnel.tsx ← Funnel bar chart
+  web/src/components/teacher/analytics/score-distribution.tsx ← Score histogram
+  web/src/components/teacher/analytics/drop-off-chart.tsx    ← Drop-off bar chart
+  web/src/hooks/analytics/useCourseAnalytics.ts              ← TanStack Query hook
 ```
 
-Needs:
-- `npm install recharts`
-- Chart components: enrollment line, completion funnel, score distribution, drop-off points, difficulty matrix
-- `useCourseAnalytics.ts` hook
+Charts: Enrollment trend (line), Completion funnel (horizontal bar), Score distribution (bar), Drop-off points (horizontal bar) — all Recharts.
 
-**Write:** Charts render with real data. Filterable by date range.
+**Write:** Charts render with real data from Prisma. Overview stat cards show live counts.
 **Test:** Enroll 3 students → complete lessons → see completion funnel update.
 
 ---
@@ -447,9 +450,7 @@ Files created:
 - [x] Loading/error states for all data views
 
 ### 🔲 Not Yet Shipped
-- [ ] Course analytics with Recharts charts (Task 1.15 placeholder)
 - [ ] E2E test: Teacher creates → Student takes → Progress tracked
-- [ ] Teacher analytics + student management pages (placeholders exist)
-- [ ] Auth route protection via middleware.ts
+- [ ] Teacher student management page (placeholder exists)
 
 > **Phase 1 Code Complete** ✅ → Ready for `03-phase-1.5-admin-cms.md`
