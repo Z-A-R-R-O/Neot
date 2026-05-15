@@ -1,6 +1,6 @@
 # Phase 0: Foundation
 
-> **Goal:** Deployed Next.js app with Supabase backend, auth, and CI/CD.
+> **Goal:** Deployed Next.js app with Prisma + SQLite backend, auth UI, and CI/CD.
 
 ---
 
@@ -329,17 +329,16 @@ const envSchema = z.object({
 
 ## Phase 0 Validation Gate
 
-- [ ] `npm run build` compiles without errors
-- [ ] User signup, login, logout works
-- [ ] Role-based routing (student/teacher/admin)
-- [ ] Supabase connected with core tables
-- [ ] RLS policies prevent unauthorized access
-- [ ] Directus admin panel accessible
+- [ ] `npm run dev` starts without errors
+- [ ] Homepage loads at localhost:3000
+- [ ] Prisma SQLite database created (prisma/dev.db)
+- [ ] Auth UI renders (login/signup/forgot-password pages)
+- [ ] Role-based onboarding flow works
+- [ ] Role-based sidebar navigation
 - [ ] All UI primitives render correctly
 - [ ] Mobile-responsive layout
 - [ ] Loading/empty/error states visible
-- [ ] CI pipeline passes on PR
-- [ ] Auto-deploy to Vercel works
 - [ ] Offline banner appears when disconnected
+- [ ] Supabase can be added later by setting env vars
 
 > **Phase 0 Complete** ✅ → Move to `02-phase-1-core-learning.md`

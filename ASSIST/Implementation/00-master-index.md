@@ -9,7 +9,7 @@
 
 | # | Phase | Primary Output | Status |
 |---|-------|----------------|--------|
-| 0 | **Foundation** | Deployed Next.js + Supabase + Auth | 🔲 |
+| 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | 🟡 (0.13, 0.14 remaining) |
 | 1 | **Core Learning** | Course player + Teacher builder + Quiz | 🔲 |
 | 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | 🔲 |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 |
@@ -92,9 +92,11 @@ src/
 │   └── ai/                  ← AI tutor, content generator
 ├── hooks/                   ← Custom React hooks
 ├── lib/                     ← Core logic, clients, utils
-│   ├── supabase/            ← DB client + queries
+│   ├── supabase/            ← Auth client (Supabase, optional)
+│   ├── db.ts                ← Prisma client singleton
 │   ├── api/                 ← External API integrations
 │   └── ai/                  ← AI service wrappers
+├── generated/prisma/        ← Prisma generated client (gitignored)
 ├── stores/                  ← Zustand state stores
 └── types/                   ← TypeScript type definitions
 ```
