@@ -15,7 +15,7 @@
 | 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + schema-driven homepage | ✅ Complete |
 | UI | **UI Transformation** | Premium dark palette, cinematic hero, glass design system | ✅ Complete |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Not started |
-| 2.5 | **Dev Mode — Visual Experience Engine** | Dual-mode overlay editor, inline editing, properties panel, structure tree, responsive system | 🚧 In Progress |
+| 2.5 | **Dev Mode — Visual Experience Engine** | Dual-mode overlay editor, inline editing, properties panel, structure tree, responsive system | ✅ Complete |
 | 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
 | 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
 | 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
@@ -170,21 +170,25 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - Admin editors updated for new fields (secondary CTA, prefix/suffix, testimonials)
 - `typecheck` + `next build` — zero errors
 
-### Phase 2.5 — Dev Mode (🚧 In Progress)
+### Phase 2.5 — Dev Mode (✅ Complete)
 - `devModeStore` — handles overlay state, device mode, hovered/selected IDs
 - `historyStore` — undo/redo stack with snapshots and persistence
 - `history-middleware` — automatic snapshot capture on `pageBuilderStore` changes
 - `DevModeProvider` — keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z, Del, Esc) and history initialization
-- `BlockOverlay` — hover/selection outlines, type labels, dimension indicators, and distance guides
-- `StructureTree` — layer hierarchy with selection sync (partially wired for delete/duplicate)
+- `BlockOverlay` — hover/selection outlines, type labels, dimension indicators, distance guides
+- `StructureTree` — layer hierarchy with search/filter, delete, duplicate, add actions
 - `PropertiesPanel` — contextual property editors for content and styles
 - `InlineEditor` — contentEditable wrapper for real-time text editing on canvas
-- `ResponsiveBar` — breakpoint switcher (Desktop, Tablet, Mobile)
+- `ResponsiveBar` — breakpoint switcher with canvas resize (Desktop/Tablet/Mobile)
 - `DevModeToggle` — global switch to enter/exit visual editing mode
 - `PublishButton` — saves all changes to DB and exits Dev Mode
+- `DevModeShell` — full editor layout (layers sidebar, canvas, properties panel)
+- Bidirectional selection sync between `devModeStore` and `pageBuilderStore`
+- Inline editing wired in all 7 section types (hero, feature-grid, cta-banner, faq, pricing, stats-bar, testimonials)
+- Undo/redo keyboard shortcuts with snapshot restore
+- Publish flow auto-exits Dev Mode with success toast
 
 ### Gaps / Next Up
-- **Phase 13 E2E Integration** — Full wiring of delete/duplicate/add in tree, inline editor sync with store, responsive canvas resizing
 - **Phase 2 — Adaptive + Gamification** — XP/streaks/badges UI, adaptive engine, recs
 - **Password reset** — needs email service integration
 
