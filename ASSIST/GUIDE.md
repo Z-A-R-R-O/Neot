@@ -107,11 +107,12 @@ ASSIST/
 │   ├── 01-phase-0-foundation.md (✅ done)
 │   ├── 02-phase-1-core-learning.md (✅ done)
 │   ├── 03-phase-1.5-admin-cms.md (✅ done)
-│   ├── 04-phase-2-adaptive-gamification.md (next)
-│   ├── 05-phase-3-ai-mobile.md
-│   ├── 06-phase-4-parent-school.md
-│   ├── 07-phase-5-scale-marketplace.md
-│   └── 08-engineering-standards.md
+│   ├── 04-phase-1.75-dynamic-renderer.md (next)
+│   ├── 05-phase-2-adaptive-gamification.md
+│   ├── 06-phase-3-ai-mobile.md
+│   ├── 07-phase-4-parent-school.md
+│   ├── 08-phase-5-scale-marketplace.md
+│   └── 10-engineering-standards.md
 ├── Log/                   ← One .md file per work session
 └── Tools/
     └── git-helper.ps1     ← Auto-numbered commits
@@ -152,7 +153,8 @@ Read the relevant spec in `Vision - Core/` for context. Follow conventions in `0
 | 0 Foundation | ✅ Complete |
 | 1 Core Learning | ✅ Complete |
 | 1.5 Admin CMS | ✅ Complete |
-| 2 Adaptive + Gamification | 🔲 Next |
+| 1.75 Dynamic Renderer | 🔲 Next |
+| 2 Adaptive + Gamification | 🔲 Not started |
 | 3 AI + Mobile | 🔲 Not started |
 | 4 Parent + School | 🔲 Not started |
 | 5 Scale + Marketplace | 🔲 Not started |

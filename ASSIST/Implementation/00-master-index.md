@@ -12,7 +12,11 @@
 | 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | ✅ Complete |
 | 1 | **Core Learning** | Course player + Teacher builder + Quiz | ✅ Complete (Tasks 1.4-1.17 shipped; schema via Prisma) |
 | 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | ✅ Complete |
+| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + schema-driven homepage | 🔲 Next |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Not started |
+| 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
+| 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
+| 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
 | 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
 | 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
 | 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
@@ -28,12 +32,12 @@ ASSIST/
 │   ├── 01-phase-0-foundation.md
 │   ├── 02-phase-1-core-learning.md
 │   ├── 03-phase-1.5-admin-cms.md
-│   ├── 04-phase-2-adaptive-gamification.md
-│   ├── 05-phase-3-ai-mobile.md
-│   ├── 06-phase-4-parent-school.md
-│   ├── 07-phase-5-scale-marketplace.md
-│   ├── 08-engineering-standards.md
-│   └── 09-reference-architecture.md
+│   ├── 04-phase-1.75-dynamic-renderer.md
+│   ├── 05-phase-2-adaptive-gamification.md
+│   ├── 06-phase-3-ai-mobile.md
+│   ├── 07-phase-4-parent-school.md
+│   ├── 08-phase-5-scale-marketplace.md
+│   └── 10-engineering-standards.md
 ├── Log/
 ├── Tools/
 └── Vision - Core/
@@ -57,15 +61,14 @@ ASSIST/
 ## Dependency Graph
 
 ```
-Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5
-                │                                    │
-                └──► Phase 1.5 ──────────────────────┘
-                                      │
-                                      └──► Phase 3
+Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5
+                                                │
+                                                └──► Phase 3
 ```
 
 - Phase 1.5 can start after Phase 1 course/lesson CRUD is stable
-- Phase 2 requires Phase 1 quiz system
+- **Phase 1.75 requires Phase 1.5** (page builder + theme engine + block definitions exist)
+- Phase 2 requires Phase 1.75 (dynamic renderer enables adaptive lesson mutation)
 - Phase 3 requires Phase 2 adaptive profiles + Phase 1.5 settings
 - Phase 4 requires Phase 1 student/teacher data
 - Phase 5 requires everything prior
@@ -134,6 +137,7 @@ Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 
 
 ### Gaps / Next Up
 - **Phase 1 Validation Gate** — E2E testing flow
+- **Phase 1.75 — Dynamic Renderer** — Component registry, PageRenderer, schema-driven homepage
 - **Phase 2 — Adaptive + Gamification** — XP/streaks/badges UI, adaptive engine, recs
 - **Password reset** — needs email service integration
 
