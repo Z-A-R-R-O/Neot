@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 
 interface BlockOverlayProps {
   blockId: string;
@@ -59,6 +60,7 @@ export function BlockOverlay({ blockId, type, label, path, children }: BlockOver
         onClick={(e) => {
           e.stopPropagation();
           select(blockId);
+          usePageBuilderStore.getState().selectSection(blockId);
         }}
       >
         {children}

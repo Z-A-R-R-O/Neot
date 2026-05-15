@@ -53,19 +53,19 @@ export function ThemeCard({ id, name, isActive, tokens, onActivate, onDelete }: 
               <CardDescription>
                 <div className="mt-1 flex gap-1">
                   <span
-                    className="inline-block h-4 w-4 rounded-full border"
+                    className="inline-block h-4 w-4 rounded-full border border-border"
                     style={{ backgroundColor: primaryColor }}
                   />
                   <span
-                    className="inline-block h-4 w-4 rounded-full border"
+                    className="inline-block h-4 w-4 rounded-full border border-border"
                     style={{ backgroundColor: parsedTokens.secondary ?? "#06b6d4" }}
                   />
                   <span
-                    className="inline-block h-4 w-4 rounded-full border"
+                    className="inline-block h-4 w-4 rounded-full border border-border"
                     style={{ backgroundColor: parsedTokens.accent ?? "#f59e0b" }}
                   />
                   <span
-                    className="inline-block h-4 w-4 rounded-full border"
+                    className="inline-block h-4 w-4 rounded-full border border-border"
                     style={{ backgroundColor: bgColor }}
                   />
                 </div>
@@ -74,7 +74,7 @@ export function ThemeCard({ id, name, isActive, tokens, onActivate, onDelete }: 
           </div>
         </div>
       </CardHeader>
-      <div className="flex gap-2 border-t border-gray-100 px-6 py-3">
+      <div className="flex gap-2 border-t border-border px-6 py-3">
         <Button
           variant="ghost"
           size="sm"
@@ -92,7 +92,7 @@ export function ThemeCard({ id, name, isActive, tokens, onActivate, onDelete }: 
           <Button
             variant="ghost"
             size="sm"
-            className="text-red-500 hover:text-red-600"
+            className="text-destructive hover:text-destructive"
             onClick={() => onDelete(id)}
           >
             Delete

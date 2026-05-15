@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { usePageBuilderStore } from "./pageBuilderStore";
 
 export interface Snapshot {
   id: string;
@@ -25,6 +26,16 @@ interface HistoryState {
   canRedo: () => boolean;
 }
 
+function captureCurrentSnapshot(): Snapshot {
+  const sections = usePageBuilderStore.getState().sections;
+  return {
+    id: crypto.randomUUID(),
+    timestamp: Date.now(),
+    label: "State",
+    data: JSON.stringify(sections),
+  };
+}
+
 export const useHistoryStore = create<HistoryState>((set, get) => ({
   past: [],
   future: [],
@@ -39,30 +50,29 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   undo: () => {
     const state = get();
     if (state.past.length === 0) return null;
-    const current = state.past[state.past.length - 1];
-    const previous = state.past.length > 1
-      ? state.past[state.past.length - 2]
-      : null;
 
-    if (previous) {
-      set({
-        past: state.past.slice(0, -1),
-        future: [current, ...state.future],
-      });
-    }
+    const previous = state.past[state.past.length - 1];
+    const currentSnapshot = captureCurrentSnapshot();
 
-    return previous ?? current;
+    set((s) => ({
+      past: s.past.slice(0, -1),
+      future: [currentSnapshot, ...s.future],
+    }));
+
+    return previous;
   },
 
   redo: () => {
     const state = get();
     if (state.future.length === 0) return null;
-    const next = state.future[0];
 
-    set({
-      past: [...state.past, next],
-      future: state.future.slice(1),
-    });
+    const next = state.future[0];
+    const currentSnapshot = captureCurrentSnapshot();
+
+    set((s) => ({
+      past: [...s.past, currentSnapshot],
+      future: s.future.slice(1),
+    }));
 
     return next;
   },
@@ -86,7 +96,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
     if (!snapshot) return undefined;
 
     set((s) => ({
-      past: [...s.past, snapshot],
+      past: [...s.past, captureCurrentSnapshot()],
       future: [],
     }));
 
@@ -100,7 +110,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
 
   clear: () => set({ past: [], future: [] }),
 
-  canUndo: () => get().past.length > 1,
+  canUndo: () => get().past.length > 0,
 
   canRedo: () => get().future.length > 0,
 }));

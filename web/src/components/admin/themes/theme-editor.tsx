@@ -76,8 +76,8 @@ export function ThemeEditor({ initialName, initialTokens, onSave }: ThemeEditorP
 
   return (
     <div className="flex h-full">
-      <div className="flex w-[440px] shrink-0 flex-col border-r border-gray-200">
-        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+      <div className="flex w-[440px] shrink-0 flex-col border-r border-border">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -117,7 +117,7 @@ export function ThemeEditor({ initialName, initialTokens, onSave }: ThemeEditorP
             <TabsContent value="colors" className="mt-4 space-y-6">
               {colorGroups.map((group) => (
                 <div key={group.label} className="space-y-2">
-                  <h4 className="text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <h4 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     {group.label}
                   </h4>
                   <div className="space-y-2">
@@ -200,7 +200,7 @@ export function ThemeEditor({ initialName, initialTokens, onSave }: ThemeEditorP
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto bg-gray-50 p-8">
+      <div className="flex-1 overflow-y-auto bg-muted p-8">
         <div className="mx-auto max-w-lg">
           <LivePreviewPanel tokens={tokens} />
         </div>

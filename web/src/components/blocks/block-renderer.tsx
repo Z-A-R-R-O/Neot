@@ -16,14 +16,14 @@ interface BlockRendererProps {
 
 export function BlockRenderer({ block, lessonId }: BlockRendererProps) {
   if (!block) {
-    return <p className="text-gray-400">No block to display.</p>;
+    return <p className="text-muted-foreground">No block to display.</p>;
   }
 
   const Component = blockRegistry.getComponent(block.type);
 
   if (!Component) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-400">
+      <div className="rounded-lg border border-dashed border-border p-8 text-center text-muted-foreground">
         Unknown block type: <code className="text-sm">{block.type}</code>
       </div>
     );

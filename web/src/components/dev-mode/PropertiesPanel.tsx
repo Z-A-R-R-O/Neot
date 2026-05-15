@@ -33,7 +33,7 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-3">
+      <div className="border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">
           <span className="text-[10px] uppercase tracking-wider text-primary-400">{selectedBlock.type}</span>
         </div>
@@ -54,7 +54,7 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
                       [key]: e.target.value,
                     });
                   }}
-                  className="w-full rounded-lg bg-[rgba(255,255,255,0.04)] px-2.5 py-1.5 text-xs text-foreground outline-none ring-1 ring-[rgba(255,255,255,0.06)] transition-all focus:ring-primary-500/40"
+                  className="w-full rounded-lg bg-muted/30 px-2.5 py-1.5 text-xs text-foreground outline-none ring-1 ring-border transition-all focus:ring-primary-500/40"
                 />
               </PropertyRow>
             ))}
@@ -82,10 +82,10 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
 
               <Section title="Colors">
                 <PropertyRow label="Text">
-                  <input type="color" value="#F5F7FA" className="h-8 w-full rounded-lg cursor-pointer" />
+                  <input type="color" value="#F5F7FA" className="h-8 w-full rounded-lg cursor-pointer bg-transparent border-0" />
                 </PropertyRow>
                 <PropertyRow label="Background">
-                  <input type="color" value="#0B0D10" className="h-8 w-full rounded-lg cursor-pointer" />
+                  <input type="color" value="#0B0D10" className="h-8 w-full rounded-lg cursor-pointer bg-transparent border-0" />
                 </PropertyRow>
               </Section>
 
@@ -141,7 +141,7 @@ function Slider({ value, onChange }: { value: string; onChange: (v: string) => v
         type="range"
         min="0"
         max="100"
-        className="h-1 w-full appearance-none rounded-full bg-[rgba(255,255,255,0.08)] accent-primary-500 cursor-pointer"
+        className="h-1 w-full appearance-none rounded-full bg-muted accent-primary-500 cursor-pointer"
       />
       <span className="w-10 text-right text-[10px] text-muted-foreground">{value}</span>
     </div>

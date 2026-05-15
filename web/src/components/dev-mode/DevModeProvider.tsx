@@ -3,6 +3,8 @@
 import { useEffect, useCallback, type ReactNode } from "react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { useHistoryStore } from "@/stores/historyStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { initHistoryMiddleware, setUndoing, setInitialized } from "@/stores/history-middleware";
 
 interface DevModeProviderProps {
   children: ReactNode;
@@ -10,9 +12,24 @@ interface DevModeProviderProps {
 
 export function DevModeProvider({ children }: DevModeProviderProps) {
   const enabled = useDevModeStore((s) => s.enabled);
-  const toggle = useDevModeStore((s) => s.toggle);
   const undo = useHistoryStore((s) => s.undo);
   const redo = useHistoryStore((s) => s.redo);
+
+  useEffect(() => {
+    initHistoryMiddleware();
+    setInitialized(false);
+    return () => {
+      setInitialized(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (enabled) {
+      setTimeout(() => setInitialized(true), 100);
+    } else {
+      setInitialized(false);
+    }
+  }, [enabled]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -20,12 +37,24 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
 
       if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
         e.preventDefault();
-        undo();
+        setUndoing(true);
+        const snapshot = undo();
+        if (snapshot) {
+          const sections = JSON.parse(snapshot.data);
+          usePageBuilderStore.getState().setSections(sections);
+        }
+        setUndoing(false);
       }
 
       if ((e.ctrlKey || e.metaKey) && e.key === "z" && e.shiftKey) {
         e.preventDefault();
-        redo();
+        setUndoing(true);
+        const snapshot = redo();
+        if (snapshot) {
+          const sections = JSON.parse(snapshot.data);
+          usePageBuilderStore.getState().setSections(sections);
+        }
+        setUndoing(false);
       }
 
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
@@ -33,13 +62,18 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
       }
 
       if (e.key === "Escape") {
+        const selectedId = useDevModeStore.getState().selectedId;
         useDevModeStore.getState().select(null);
+        usePageBuilderStore.getState().selectSection(null);
       }
 
       if (e.key === "Delete" || e.key === "Backspace") {
         const selectedId = useDevModeStore.getState().selectedId;
         if (selectedId) {
-          // Will be handled by pageStore when implemented
+          e.preventDefault();
+          usePageBuilderStore.getState().removeSection(selectedId);
+          useDevModeStore.getState().select(null);
+          usePageBuilderStore.getState().selectSection(null);
         }
       }
     },

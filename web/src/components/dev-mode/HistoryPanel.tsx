@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Undo2, Redo2, History, Camera, Trash2, Clock } from "lucide-react";
 import { useHistoryStore } from "@/stores/historyStore";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { setUndoing } from "@/stores/history-middleware";
 
 export function HistoryPanel() {
   const [open, setOpen] = useState(false);
@@ -23,14 +25,23 @@ export function HistoryPanel() {
   function handleSaveSnapshot() {
     const label = prompt("Name this snapshot:");
     if (label) {
-      saveSnapshot(label, "{}");
+      const sections = usePageBuilderStore.getState().sections;
+      saveSnapshot(label, JSON.stringify(sections));
     }
   }
 
   return (
     <div className="flex items-center gap-1">
       <button
-        onClick={() => undo()}
+        onClick={() => {
+          setUndoing(true);
+          const snapshot = undo();
+          if (snapshot) {
+            const sections = JSON.parse(snapshot.data);
+            usePageBuilderStore.getState().setSections(sections);
+          }
+          setUndoing(false);
+        }}
         disabled={!canUndo()}
         className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground disabled:opacity-30 disabled:pointer-events-none"
         title="Undo (Ctrl+Z)"
@@ -39,7 +50,15 @@ export function HistoryPanel() {
       </button>
 
       <button
-        onClick={() => redo()}
+        onClick={() => {
+          setUndoing(true);
+          const snapshot = redo();
+          if (snapshot) {
+            const sections = JSON.parse(snapshot.data);
+            usePageBuilderStore.getState().setSections(sections);
+          }
+          setUndoing(false);
+        }}
         disabled={!canRedo()}
         className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground disabled:opacity-30 disabled:pointer-events-none"
         title="Redo (Ctrl+Shift+Z)"
@@ -92,7 +111,11 @@ export function HistoryPanel() {
                       <button
                         onClick={() => {
                           if (confirm("Restore this version?")) {
-                            restoreSnapshot(snapshot.id);
+                            const restored = restoreSnapshot(snapshot.id);
+                            if (restored) {
+                              const sections = JSON.parse(restored.data);
+                              usePageBuilderStore.getState().setSections(sections);
+                            }
                           }
                         }}
                         className="flex-1 text-left"

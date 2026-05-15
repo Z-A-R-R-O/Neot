@@ -85,17 +85,17 @@ export function PricingEditor({ content, onChange }: PricingEditorProps) {
       {plans.map((plan, i) => (
         <div
           key={i}
-          className="space-y-3 rounded-lg border border-gray-200 p-4"
+          className="space-y-3 rounded-lg border border-border p-4"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-gray-500">
+            <span className="text-xs font-medium text-muted-foreground">
               Plan {i + 1}
             </span>
             <div className="flex items-center gap-2">
-              <label className="flex items-center gap-1.5 text-xs text-gray-500">
+              <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <input
                   type="checkbox"
-                  className="h-3.5 w-3.5 rounded border-gray-300"
+                  className="h-3.5 w-3.5 rounded border-border"
                   checked={plan.highlighted ?? false}
                   onChange={(e) =>
                     updatePlan(i, { highlighted: e.target.checked })
@@ -132,7 +132,7 @@ export function PricingEditor({ content, onChange }: PricingEditorProps) {
           />
           <div className="space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Features</span>
+              <span className="text-xs text-muted-foreground">Features</span>
               <Button
                 variant="ghost"
                 size="sm"

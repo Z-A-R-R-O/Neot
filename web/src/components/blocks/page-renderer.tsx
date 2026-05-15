@@ -23,7 +23,7 @@ export function PageRenderer({ sections }: PageRendererProps) {
           return (
             <div
               key={section.id}
-              className="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-400"
+              className="rounded-lg border border-dashed border-border p-8 text-center text-muted-foreground"
             >
               Unknown section type: <code className="text-sm">{section.blockType}</code>
             </div>

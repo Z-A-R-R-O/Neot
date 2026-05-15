@@ -26,12 +26,12 @@ export function MobileNav({ items, isOpen, onClose }: MobileNavProps) {
   return (
     <div className="fixed inset-0 z-50 lg:hidden">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white shadow-xl">
-        <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
-          <span className="text-lg font-bold text-gray-900">NEOT</span>
+      <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-card shadow-xl">
+        <div className="flex h-16 items-center justify-between border-b border-border px-4">
+          <span className="text-lg font-bold text-card-foreground">NEOT</span>
           <button
             onClick={onClose}
-            className="rounded-md p-1 text-gray-400 hover:text-gray-600"
+            className="rounded-md p-1 text-muted-foreground hover:text-foreground"
           >
             <X className="h-5 w-5" />
           </button>
@@ -49,8 +49,8 @@ export function MobileNav({ items, isOpen, onClose }: MobileNavProps) {
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                       isActive
-                        ? "bg-primary-50 text-primary-700"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
                     )}
                   >
                     <Icon className="h-5 w-5 shrink-0" />

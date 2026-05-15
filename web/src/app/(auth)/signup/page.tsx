@@ -20,11 +20,11 @@ export default function SignupPage() {
           <SocialButtons />
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-primary-600 hover:text-primary-700"
+            className="font-medium text-primary hover:text-primary/80"
           >
             Sign in
           </Link>

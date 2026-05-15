@@ -37,6 +37,8 @@ export default function EditPagePage() {
   const { setSections, setLoading, sections, isDirty } = usePageBuilderStore();
   const enabled = useDevModeStore((s) => s.enabled);
 
+  const [toast, setToast] = useState<{ message: string; variant: "success" | "error" } | null>(null);
+
   const handlePublish = async () => {
     setLoading(true);
     try {
@@ -77,8 +79,13 @@ export default function EditPagePage() {
           settings: JSON.parse(s.settings),
         })),
       );
+      useDevModeStore.getState().disable();
+      setToast({ message: "Published!", variant: "success" });
+      setTimeout(() => setToast(null), 3000);
     } catch (err) {
       console.error("Failed to publish", err);
+      setToast({ message: "Failed to publish", variant: "error" });
+      setTimeout(() => setToast(null), 3000);
     } finally {
       setLoading(false);
     }
@@ -130,8 +137,19 @@ export default function EditPagePage() {
 
   return (
     <DevModeProvider>
+      {toast && (
+        <div
+          className={`fixed right-4 top-20 z-[100] rounded-lg border px-4 py-3 text-sm font-medium shadow-lg transition-all ${
+            toast.variant === "success"
+              ? "border-green-200 bg-green-50 text-green-800"
+              : "border-red-200 bg-red-50 text-red-800"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
       <div className="flex h-[calc(100vh-4rem)] flex-col">
-        <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-2">
+        <div className="flex items-center gap-3 border-b border-border px-4 py-2">
           <Button
             variant="ghost"
             size="sm"
@@ -141,10 +159,10 @@ export default function EditPagePage() {
             Back
           </Button>
           <div className="flex items-center gap-2">
-            <h1 className="text-sm font-semibold text-gray-900">
+            <h1 className="text-sm font-semibold text-foreground">
               {pageData.title}
             </h1>
-            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-500">
+            <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
               {pageData.status}
             </span>
           </div>

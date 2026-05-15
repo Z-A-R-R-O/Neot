@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
@@ -23,7 +24,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-gray-200 bg-white/95 px-4 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 px-4 backdrop-blur lg:px-6">
       <Button
         variant="ghost"
         size="sm"
@@ -34,6 +35,8 @@ export function Header({ onMenuToggle }: HeaderProps) {
       </Button>
 
       <div className="flex-1" />
+
+      <ThemeToggle />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -46,7 +49,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <div className="px-2 py-1.5">
-            <p className="truncate text-sm font-medium text-gray-900">
+            <p className="truncate text-sm font-medium text-foreground">
               {user?.email}
             </p>
           </div>

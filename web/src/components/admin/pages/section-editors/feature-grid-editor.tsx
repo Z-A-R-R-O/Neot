@@ -78,10 +78,10 @@ export function FeatureGridEditor({ content, onChange }: FeatureGridEditorProps)
         {cards.map((card, i) => (
           <div
             key={i}
-            className="space-y-2 rounded-lg border border-gray-200 p-3"
+            className="space-y-2 rounded-lg border border-border p-3"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-500">
+              <span className="text-xs font-medium text-muted-foreground">
                 Card {i + 1}
               </span>
               <Button
