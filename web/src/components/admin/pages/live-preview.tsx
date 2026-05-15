@@ -2,6 +2,8 @@
 
 import { blockRegistry } from "@/lib/block-registry";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
+import { BlockOverlay } from "@/components/dev-mode/BlockOverlay";
 
 function renderSectionFallback(
   blockType: string,
@@ -20,6 +22,34 @@ function renderSectionFallback(
 
 export function LivePreview() {
   const { sections, selectedId, selectSection } = usePageBuilderStore();
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
+  const select = useDevModeStore((s) => s.select);
+
+  if (devModeEnabled) {
+    return (
+      <div className="min-h-full bg-[#0B0D10]">
+        {sections.map((section) => (
+          <BlockOverlay
+            key={section.id}
+            blockId={section.id}
+            type={section.blockType}
+            label={section.blockType}
+            path={`Page > ${section.blockType}`}
+          >
+            {renderSectionFallback(
+              section.blockType,
+              section.content as Record<string, unknown>,
+            )}
+          </BlockOverlay>
+        ))}
+        {sections.length === 0 && (
+          <div className="flex items-center justify-center py-16 text-sm text-gray-500">
+            Add sections to start building
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-full border-l border-gray-200 bg-white">
@@ -33,7 +63,10 @@ export function LivePreview() {
             className={`cursor-pointer border-b border-gray-100 px-6 transition-colors hover:bg-gray-50 ${
               selectedId === section.id ? "bg-primary-50" : ""
             }`}
-            onClick={() => selectSection(section.id)}
+            onClick={() => {
+              selectSection(section.id);
+              select(section.id);
+            }}
           >
             {renderSectionFallback(
               section.blockType,

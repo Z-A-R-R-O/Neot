@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
 import { SectionBuilder } from "@/components/admin/pages/section-builder";
 import { usePageBuilderStore, type SectionType } from "@/stores/pageBuilderStore";
+import { DevModeToggle } from "@/components/dev-mode/DevModeToggle";
+import { ResponsiveBar } from "@/components/dev-mode/ResponsiveBar";
+import { HistoryPanel } from "@/components/dev-mode/HistoryPanel";
+import { PublishButton } from "@/components/dev-mode/PublishButton";
+import { DevModeProvider } from "@/components/dev-mode/DevModeProvider";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface PageData {
   id: string;
@@ -28,7 +34,55 @@ export default function EditPagePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { setSections, setLoading } = usePageBuilderStore();
+  const { setSections, setLoading, sections, isDirty } = usePageBuilderStore();
+  const enabled = useDevModeStore((s) => s.enabled);
+
+  const handlePublish = async () => {
+    setLoading(true);
+    try {
+      for (const section of sections) {
+        const isNew = !section.id.includes("-");
+        if (isNew) {
+          await fetch(`/api/admin/pages/${pageData!.id}/sections`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              blockType: section.blockType,
+              sortOrder: section.sortOrder,
+              content: JSON.stringify(section.content),
+              settings: JSON.stringify(section.settings),
+            }),
+          });
+        } else {
+          await fetch(`/api/admin/pages/${pageData!.id}/sections/${section.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sortOrder: section.sortOrder,
+              content: JSON.stringify(section.content),
+              settings: JSON.stringify(section.settings),
+            }),
+          });
+        }
+      }
+      const res = await fetch(`/api/admin/pages/${pageData!.id}/sections`);
+      const serverSections = await res.json();
+      setSections(
+        serverSections.map((s: { id: string; pageId: string; blockType: string; sortOrder: number; content: string; settings: string }) => ({
+          id: s.id,
+          pageId: s.pageId,
+          blockType: s.blockType as SectionType,
+          sortOrder: s.sortOrder,
+          content: JSON.parse(s.content),
+          settings: JSON.parse(s.settings),
+        })),
+      );
+    } catch (err) {
+      console.error("Failed to publish", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     async function load() {
@@ -75,32 +129,41 @@ export default function EditPagePage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col">
-      <div className="flex items-center gap-4 border-b border-gray-200 px-6 py-3">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push("/admin/pages")}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Button>
-        <div>
-          <h1 className="text-lg font-semibold text-gray-900">
-            {pageData.title}
-          </h1>
-          <p className="text-xs text-gray-500">
-            /admin/pages/{pageData.slug}/edit
-          </p>
-        </div>
-        <span className="ml-auto rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-          {pageData.status}
-        </span>
-      </div>
+    <DevModeProvider>
+      <div className="flex h-[calc(100vh-4rem)] flex-col">
+        <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/admin/pages")}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <div className="flex items-center gap-2">
+            <h1 className="text-sm font-semibold text-gray-900">
+              {pageData.title}
+            </h1>
+            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-500">
+              {pageData.status}
+            </span>
+          </div>
 
-      <div className="flex-1 overflow-hidden">
-        <SectionBuilder pageId={pageData.id} />
+          <div className="ml-auto flex items-center gap-3">
+            {enabled && <HistoryPanel />}
+            {enabled && <ResponsiveBar />}
+            <DevModeToggle />
+            <PublishButton
+              onPublish={handlePublish}
+              isDirty={isDirty}
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-hidden">
+          <SectionBuilder pageId={pageData.id} />
+        </div>
       </div>
-    </div>
+    </DevModeProvider>
   );
 }

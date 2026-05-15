@@ -13,6 +13,11 @@ import {
   type SectionType,
   type PageSection,
 } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
+import { StructureTree } from "@/components/dev-mode/StructureTree";
+import { PropertiesPanel } from "@/components/dev-mode/PropertiesPanel";
+import { PresetPicker } from "@/components/dev-mode/PresetPicker";
+import { getPresets } from "@/lib/block-presets";
 
 const defaultContent: Record<SectionType, Record<string, unknown>> = {
   hero: { title: "", subtitle: "", ctaText: "Get Started", ctaLink: "/signup", background: "color" },
@@ -42,7 +47,9 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
     setSections,
     setLoading,
     markClean,
+    removeSection,
   } = usePageBuilderStore();
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
 
   function handleAddSection(blockType: SectionType) {
     const newSection: PageSection = {
@@ -138,6 +145,63 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
           handleContentChange(selectedSection.id, content)
         }
       />
+    );
+  }
+
+  const treeNodes = sections.map((s) => ({
+    id: s.id,
+    type: s.blockType,
+    label: s.blockType,
+    children: [] as { id: string; type: string; label: string }[],
+  }));
+
+  function handleApplyPreset(preset: { type: string; schema: { content: Record<string, unknown> } }) {
+    if (!selectedSection) return;
+    updateSection(selectedSection.id, { content: preset.schema.content });
+  }
+
+  if (devModeEnabled) {
+    return (
+      <div className="flex h-full">
+        <div className="flex w-64 shrink-0 flex-col border-r border-[rgba(255,255,255,0.06)] bg-[#0B0D10]">
+          <StructureTree blocks={treeNodes} onAddBlock={() => {}} />
+        </div>
+
+        <div className="flex flex-1 flex-col bg-[#0B0D10]">
+          <div className="flex flex-1 overflow-hidden">
+            <div className="flex-1 overflow-y-auto">
+              <LivePreview />
+            </div>
+
+            <div className="w-80 shrink-0 overflow-y-auto border-l border-[rgba(255,255,255,0.06)] bg-[#111315]">
+              <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] px-4 py-3">
+                <span className="text-xs font-semibold text-foreground">
+                  {selectedSection ? selectedSection.blockType : "Properties"}
+                </span>
+                {selectedSection && (
+                  <PresetPicker
+                    blockType={selectedSection.blockType}
+                    onApply={handleApplyPreset}
+                  />
+                )}
+              </div>
+              <PropertiesPanel
+                selectedBlock={
+                  selectedSection
+                    ? {
+                        id: selectedSection.id,
+                        type: selectedSection.blockType,
+                        label: selectedSection.blockType,
+                        content: selectedSection.content,
+                      }
+                    : null
+                }
+                onContentChange={(id, content) => handleContentChange(id, content)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
