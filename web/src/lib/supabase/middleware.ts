@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { getSupabasePublicEnv } from "./env";
 
-const protectedPathPrefixes = ["/dashboard", "/teacher", "/admin"];
+const protectedPathPrefixes = ["/dashboard", "/teacher", "/admin", "/onboarding"];
 const authPathPrefixes = ["/login", "/signup", "/forgot-password"];
 
 function isPrefixedPath(pathname: string, prefixes: string[]) {
@@ -11,10 +11,15 @@ function isPrefixedPath(pathname: string, prefixes: string[]) {
 }
 
 export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request });
-  const { url, anonKey } = getSupabasePublicEnv();
+  const supabaseEnv = getSupabasePublicEnv();
 
-  const supabase = createServerClient(url, anonKey, {
+  if (!supabaseEnv) {
+    return NextResponse.next({ request });
+  }
+
+  let response = NextResponse.next({ request });
+
+  const supabase = createServerClient(supabaseEnv.url, supabaseEnv.anonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -50,11 +55,10 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAuthPath) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/dashboard";
+    redirectUrl.pathname = "/onboarding";
     redirectUrl.search = "";
     return NextResponse.redirect(redirectUrl);
   }
 
   return response;
 }
-

@@ -3,11 +3,25 @@ import { cookies } from "next/headers";
 
 import { getSupabasePublicEnv } from "./env";
 
-export async function createClient() {
-  const cookieStore = await cookies();
-  const { url, anonKey } = getSupabasePublicEnv();
+let _isAvailable: boolean | null = null;
 
-  return createServerClient(url, anonKey, {
+function isSupabaseConfigured(): boolean {
+  if (_isAvailable !== null) return _isAvailable;
+  _isAvailable = getSupabasePublicEnv() !== null;
+  return _isAvailable;
+}
+
+export async function createClient() {
+  const env = getSupabasePublicEnv();
+  if (!env) {
+    throw new Error(
+      "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable auth.",
+    );
+  }
+
+  const cookieStore = await cookies();
+
+  return createServerClient(env.url, env.anonKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
@@ -25,3 +39,4 @@ export async function createClient() {
   });
 }
 
+export { isSupabaseConfigured };

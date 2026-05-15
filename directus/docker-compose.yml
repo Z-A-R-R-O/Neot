@@ -1,0 +1,36 @@
+services:
+  directus:
+    image: directus/directus:11.6
+    ports:
+      - "8055:8055"
+    volumes:
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+
+      DB_CLIENT: postgres
+      DB_HOST: ${SUPABASE_DB_HOST}
+      DB_PORT: 5432
+      DB_DATABASE: postgres
+      DB_USER: ${SUPABASE_DB_USER}
+      DB_PASSWORD: ${SUPABASE_DB_PASSWORD}
+
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+
+      STORAGE_LOCATIONS: supabase
+      STORAGE_SUPABASE_DRIVER: s3
+      STORAGE_SUPABASE_KEY: ${SUPABASE_S3_KEY}
+      STORAGE_SUPABASE_SECRET: ${SUPABASE_S3_SECRET}
+      STORAGE_SUPABASE_BUCKET: directus
+      STORAGE_SUPABASE_REGION: auto
+
+      CACHE_ENABLED: "true"
+      CACHE_TTL: 5m
+
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_POINTS: 100
+      RATE_LIMITER_DURATION: 60
+
+      EXTENSIONS_PATH: ./extensions

@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Profile {
+  id                  String   @id
+  email               String?
+  fullName            String?  @map("full_name")
+  avatarUrl           String?  @map("avatar_url")
+  role                String   @default("student")
+  ageGroup            String?  @map("age_group")
+  parentId            String?  @map("parent_id")
+  onboardingCompleted Boolean  @default(false) @map("onboarding_completed")
+  metadata            String   @default("{}")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  parent  Profile?  @relation("ParentChild", fields: [parentId], references: [id])
+  children Profile[] @relation("ParentChild")
+
+  courses    Course[]
+  enrollments Enrollment[]
+  xpTransactions XPTransaction[]
+  userAchievements UserAchievement[]
+
+  @@map("profiles")
+}
+
+model Course {
+  id               String   @id @default(uuid())
+  title            String
+  description      String?
+  thumbnailUrl     String?  @map("thumbnail_url")
+  teacherId        String   @map("teacher_id")
+  subject          String?
+  gradeLevel       String?  @map("grade_level")
+  difficulty       String   @default("beginner")
+  status           String   @default("draft")
+  estimatedMinutes Int?     @map("estimated_minutes")
+  metadata         String   @default("{}")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  teacher  Profile   @relation(fields: [teacherId], references: [id])
+  lessons  Lesson[]
+  enrollments Enrollment[]
+
+  @@map("courses")
+}
+
+model Lesson {
+  id               String   @id @default(uuid())
+  courseId          String   @map("course_id")
+  title            String
+  description      String?
+  sortOrder        Int      @map("sort_order")
+  content          String   @default("{}")
+  estimatedMinutes Int?     @map("estimated_minutes")
+  status           String   @default("draft")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("lessons")
+}
+
+model Enrollment {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  courseId    String    @map("course_id")
+  progress    Float     @default(0)
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("enrollments")
+}
+
+model XPTransaction {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  amount      Int
+  reason      String
+  referenceId String?  @map("reference_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("xp_transactions")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  iconUrl     String?  @map("icon_url")
+  xpReward    Int      @default(0) @map("xp_reward")
+  criteria    String   @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  userId        String   @map("user_id")
+  achievementId String   @map("achievement_id")
+  earnedAt      DateTime @default(now()) @map("earned_at")
+
+  user        Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model SiteTheme {
+  id        String   @id @default(uuid())
+  name      String
+  isActive  Boolean  @default(false) @map("is_active")
+  tokens    String   @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_themes")
+}
+
+model CustomPage {
+  id        String   @id @default(uuid())
+  title     String
+  slug      String   @unique
+  path      String   @unique
+  status    String   @default("draft")
+  layout    String   @default("default")
+  seo       String   @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  sections PageSection[]
+
+  @@map("custom_pages")
+}
+
+model PageSection {
+  id        String   @id @default(uuid())
+  pageId    String   @map("page_id")
+  blockType String   @map("block_type")
+  sortOrder Int      @map("sort_order")
+  content   String   @default("{}")
+  settings  String   @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  page CustomPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@map("page_sections")
+}

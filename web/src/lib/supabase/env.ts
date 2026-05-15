@@ -3,20 +3,22 @@ interface SupabasePublicEnv {
   anonKey: string;
 }
 
-function readRequiredEnv(name: string): string {
-  const value = process.env[name];
+function getOptionalEnv(name: string): string | undefined {
+  return process.env[name];
+}
 
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
+export function getSupabasePublicEnv(): SupabasePublicEnv | null {
+  const url = getOptionalEnv("NEXT_PUBLIC_SUPABASE_URL");
+  const anonKey = getOptionalEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+
+  if (!url || !anonKey) {
+    if (process.env.NODE_ENV === "development") {
+      return null;
+    }
+    throw new Error(
+      "Missing Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    );
   }
 
-  return value;
+  return { url, anonKey };
 }
-
-export function getSupabasePublicEnv(): SupabasePublicEnv {
-  return {
-    url: readRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    anonKey: readRequiredEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
-  };
-}
-
