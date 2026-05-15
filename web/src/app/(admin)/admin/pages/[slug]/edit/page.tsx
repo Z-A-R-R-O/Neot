@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { LoadingScreen } from "@/components/ui/loading-screen";
@@ -15,6 +15,22 @@ import { HistoryPanel } from "@/components/dev-mode/HistoryPanel";
 import { PublishButton } from "@/components/dev-mode/PublishButton";
 import { DevModeProvider } from "@/components/dev-mode/DevModeProvider";
 import { useDevModeStore } from "@/stores/devModeStore";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PageData {
   id: string;
@@ -38,6 +54,45 @@ export default function EditPagePage() {
   const enabled = useDevModeStore((s) => s.enabled);
 
   const [toast, setToast] = useState<{ message: string; variant: "success" | "error" } | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [settingsForm, setSettingsForm] = useState({
+    title: "",
+    slug: "",
+    path: "",
+    status: "draft",
+    layout: "default",
+  });
+
+  const handleUpdateSettings = async () => {
+    setSavingSettings(true);
+    try {
+      const res = await fetch(`/api/admin/pages/${pageData!.slug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settingsForm),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to update settings");
+      }
+      const updatedPage = await res.json();
+      setPageData(updatedPage);
+      setShowSettings(false);
+      setToast({ message: "Settings updated!", variant: "success" });
+      setTimeout(() => setToast(null), 3000);
+      
+      // If slug changed, update URL without reload
+      if (updatedPage.slug !== slug) {
+        router.replace(`/admin/pages/${updatedPage.slug}/edit`);
+      }
+    } catch (err) {
+      setToast({ message: err instanceof Error ? err.message : "Failed to update settings", variant: "error" });
+      setTimeout(() => setToast(null), 3000);
+    } finally {
+      setSavingSettings(false);
+    }
+  };
 
   const handlePublish = async () => {
     setLoading(true);
@@ -99,6 +154,13 @@ export default function EditPagePage() {
         const page: PageData & { sections: { id: string; pageId: string; blockType: string; sortOrder: number; content: string; settings: string }[] } = await pageRes.json();
 
         setPageData({ id: page.id, title: page.title, slug: page.slug, path: page.path, status: page.status, layout: page.layout });
+        setSettingsForm({
+          title: page.title,
+          slug: page.slug,
+          path: page.path,
+          status: page.status,
+          layout: page.layout,
+        });
 
         const sections = (page.sections ?? []).map((s) => ({
           id: s.id,
@@ -171,6 +233,14 @@ export default function EditPagePage() {
               <span className="ml-2 rounded-full bg-primary-500/10 px-2 py-0.5 text-[10px] font-medium text-primary-400 ring-1 ring-inset ring-primary-500/20">
                 {pageData.status}
               </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 ml-1 hover:bg-muted/50 text-muted-foreground hover:text-foreground"
+                onClick={() => setShowSettings(true)}
+              >
+                <Settings className="h-3.5 w-3.5" />
+              </Button>
             </div>
           </div>
 
@@ -195,6 +265,85 @@ export default function EditPagePage() {
         <div className="flex-1 overflow-hidden">
           <SectionBuilder pageId={pageData.id} />
         </div>
+
+        {/* Page Settings Dialog */}
+        <Dialog open={showSettings} onOpenChange={setShowSettings}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Page Settings</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="title" required>Title</Label>
+                <Input
+                  id="title"
+                  value={settingsForm.title}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, title: e.target.value })}
+                  placeholder="Page Title"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="slug" required>Slug</Label>
+                <Input
+                  id="slug"
+                  value={settingsForm.slug}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, slug: e.target.value })}
+                  placeholder="page-slug"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="path" required>Path</Label>
+                <Input
+                  id="path"
+                  value={settingsForm.path}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, path: e.target.value })}
+                  placeholder="/page-path"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Status</Label>
+                  <Select
+                    value={settingsForm.status}
+                    onValueChange={(v) => setSettingsForm({ ...settingsForm, status: v })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label>Layout</Label>
+                  <Select
+                    value={settingsForm.layout}
+                    onValueChange={(v) => setSettingsForm({ ...settingsForm, layout: v })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="default">Default</SelectItem>
+                      <SelectItem value="full_width">Full Width</SelectItem>
+                      <SelectItem value="landing">Landing</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowSettings(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateSettings} disabled={savingSettings}>
+                {savingSettings ? "Saving..." : "Save Changes"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </DevModeProvider>
   );

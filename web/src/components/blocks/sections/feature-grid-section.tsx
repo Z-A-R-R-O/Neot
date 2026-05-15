@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { InlineEditor } from "@/components/dev-mode/InlineEditor";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface FeatureCard {
   title?: string;
@@ -24,6 +25,7 @@ const iconMap: Record<string, string> = {
 };
 
 export function FeatureGridSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
   const updateSection = usePageBuilderStore((s) => s.updateSection);
   const cards = (content.cards as FeatureCard[]) ?? [];
 
@@ -76,6 +78,7 @@ export function FeatureGridSection({ content, blockId }: { content: Record<strin
               index={0}
               onUpdate={(key, val) => handleCardUpdate(0, key, val)}
               large
+              devModeEnabled={devModeEnabled}
             />
           )}
           {cards[1] && (
@@ -84,6 +87,7 @@ export function FeatureGridSection({ content, blockId }: { content: Record<strin
               className="lg:col-span-3 lg:row-span-1"
               index={1}
               onUpdate={(key, val) => handleCardUpdate(1, key, val)}
+              devModeEnabled={devModeEnabled}
             />
           )}
           {cards[2] && (
@@ -92,6 +96,7 @@ export function FeatureGridSection({ content, blockId }: { content: Record<strin
               className="lg:col-span-2 lg:row-span-1"
               index={2}
               onUpdate={(key, val) => handleCardUpdate(2, key, val)}
+              devModeEnabled={devModeEnabled}
             />
           )}
           {cards[3] && (
@@ -100,6 +105,7 @@ export function FeatureGridSection({ content, blockId }: { content: Record<strin
               className="lg:col-span-1 lg:row-span-1"
               index={3}
               onUpdate={(key, val) => handleCardUpdate(3, key, val)}
+              devModeEnabled={devModeEnabled}
             />
           )}
         </div>
@@ -114,12 +120,14 @@ function BentoCard({
   index,
   onUpdate,
   large = false,
+  devModeEnabled = false,
 }: {
   card: FeatureCard;
   className?: string;
   index: number;
   onUpdate: (key: string, val: string) => void;
   large?: boolean;
+  devModeEnabled?: boolean;
 }) {
   return (
     <motion.div
@@ -143,17 +151,21 @@ function BentoCard({
           </motion.div>
           <div>
             <h3 className={`${large ? "text-3xl" : "text-xl"} font-bold text-foreground mb-3`}>
-              <InlineEditor
-                value={card.title || "Feature"}
-                onChange={(v) => onUpdate("title", v)}
-              />
+              {devModeEnabled ? (
+                <InlineEditor
+                  value={card.title || "Feature"}
+                  onChange={(v) => onUpdate("title", v)}
+                />
+              ) : (card.title || "Feature")}
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              <InlineEditor
-                value={card.description || ""}
-                onChange={(v) => onUpdate("description", v)}
-                multiline
-              />
+              {devModeEnabled ? (
+                <InlineEditor
+                  value={card.description || ""}
+                  onChange={(v) => onUpdate("description", v)}
+                  multiline
+                />
+              ) : card.description}
             </p>
           </div>
         </div>

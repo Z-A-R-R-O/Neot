@@ -33,7 +33,7 @@ interface DevModeState {
 }
 
 export const useDevModeStore = create<DevModeState>((set) => ({
-  enabled: true,
+  enabled: false,
   hoveredId: null,
   selectedId: null,
   deviceMode: "desktop",

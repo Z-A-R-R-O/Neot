@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <PublicLayout>
-      <main className="min-h-screen bg-background text-foreground">
+      <main className="bg-background text-foreground">
         {sections && sections.length > 0 ? (
           <PageRenderer sections={sections} />
         ) : (

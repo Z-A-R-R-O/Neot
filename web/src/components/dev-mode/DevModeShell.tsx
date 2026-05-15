@@ -14,17 +14,11 @@ export function DevModeShell({ children }: DevModeShellProps) {
   const enabled = useDevModeStore((s) => s.enabled);
   const { sections, selectedId, updateSection, selectSection, removeSection, addSection } = usePageBuilderStore();
 
-  const selectedSection = sections.find((s) => s.id === selectedId);
-
-  const treeNodes = sections.map((s) => ({
-    id: s.id,
-    type: s.blockType,
-    label: s.blockType,
-  }));
-
   if (!enabled) {
     return <>{children}</>;
   }
+
+  const selectedSection = sections.find((s) => s.id === selectedId);
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background dark">

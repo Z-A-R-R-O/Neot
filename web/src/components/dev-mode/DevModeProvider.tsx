@@ -95,5 +95,9 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  return <DevModeShell>{children}</DevModeShell>;
+  return (enabled || searchParams?.get("dev") === "true") ? (
+    <DevModeShell>{children}</DevModeShell>
+  ) : (
+    <>{children}</>
+  );
 }

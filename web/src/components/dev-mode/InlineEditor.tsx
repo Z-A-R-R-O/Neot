@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 interface InlineEditorProps {
   value: string;
@@ -11,6 +12,7 @@ interface InlineEditorProps {
 }
 
 export function InlineEditor({ value, onChange, className = "", placeholder = "", multiline = false }: InlineEditorProps) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
   const ref = useRef<HTMLSpanElement>(null);
   const [editing, setEditing] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
@@ -24,6 +26,7 @@ export function InlineEditor({ value, onChange, className = "", placeholder = ""
   }
 
   function handleDoubleClick() {
+    if (!devModeEnabled) return;
     setEditing(true);
     setTimeout(() => {
       ref.current?.focus();

@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { InlineEditor } from "@/components/dev-mode/InlineEditor";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 
 export function CtaBannerSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
+  const devModeEnabled = useDevModeStore((s) => s.enabled);
   const updateSection = usePageBuilderStore((s) => s.updateSection);
   const text = (content.text as string) || "Ready to transform how you learn?";
   const buttonText = (content.buttonText as string) || "Get Started Free";
@@ -35,11 +37,13 @@ export function CtaBannerSection({ content, blockId }: { content: Record<string,
 
         <div className="relative z-10 flex flex-col items-center gap-10">
           <h2 className="font-heading text-4xl font-bold tracking-tight text-foreground sm:text-6xl max-w-2xl leading-[1.1]">
-            <InlineEditor
-              value={text}
-              onChange={(v) => handleUpdate("text", v)}
-              multiline
-            />
+            {devModeEnabled ? (
+              <InlineEditor
+                value={text}
+                onChange={(v) => handleUpdate("text", v)}
+                multiline
+              />
+            ) : text}
           </h2>
 
           <motion.div 
@@ -52,10 +56,12 @@ export function CtaBannerSection({ content, blockId }: { content: Record<string,
               className="group relative inline-flex h-16 items-center gap-3 overflow-hidden rounded-2xl bg-foreground px-10 text-lg font-bold text-background transition-all shadow-2xl"
             >
               <span className="relative z-10">
-                <InlineEditor
-                  value={buttonText}
-                  onChange={(v) => handleUpdate("buttonText", v)}
-                />
+                {devModeEnabled ? (
+                  <InlineEditor
+                    value={buttonText}
+                    onChange={(v) => handleUpdate("buttonText", v)}
+                  />
+                ) : buttonText}
               </span>
               <ArrowRight className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
