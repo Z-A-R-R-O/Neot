@@ -130,14 +130,18 @@ function StatCell({
   const parsed = parseInt(item.number || "0");
   const counted = useCountUp(parsed, 2, isInView);
 
-  // Micro trend SVG line
+  // Micro trend SVG line — seeded for hydration stability
+  const seed = (n: number) => {
+    const x = Math.sin(index * 7.3 + n * 4.1) * 10000;
+    return x - Math.floor(x);
+  };
   const trendPoints = [
-    [0, 25 - Math.random() * 10],
-    [18, 15 + Math.random() * 15],
-    [36, 20 + Math.random() * 10],
-    [54, 10 + Math.random() * 12],
-    [72, 18 + Math.random() * 8],
-    [90, 8 + Math.random() * 8],
+    [0, 25 - seed(1) * 10],
+    [18, 15 + seed(2) * 15],
+    [36, 20 + seed(3) * 10],
+    [54, 10 + seed(4) * 12],
+    [72, 18 + seed(5) * 8],
+    [90, 8 + seed(6) * 8],
   ];
 
   return (
