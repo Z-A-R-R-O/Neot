@@ -140,7 +140,7 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
       <div className="flex w-64 shrink-0 flex-col border-r border-border bg-background">
         <StructureTree
           blocks={treeNodes}
-          onAddBlock={() => handleAddSection("hero")}
+          onAddBlock={(type) => handleAddSection(type as SectionType)}
           onSelect={(id) => selectSection(id)}
           onDelete={(id) => removeSection(id)}
           onDuplicate={(id) => {

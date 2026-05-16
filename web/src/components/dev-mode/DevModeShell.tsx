@@ -62,11 +62,11 @@ export function DevModeShell({ children }: DevModeShellProps) {
           blocks={treeNodes}
           onSelect={(id) => selectSection(id)}
           onDelete={(id) => removeSection(id)}
-          onAddBlock={() => {
+          onAddBlock={(type) => {
             const newSection: PageSection = {
               id: crypto.randomUUID(),
               pageId: "current",
-              blockType: "hero" as SectionType,
+              blockType: type as SectionType,
               sortOrder: sections.length,
               content: {},
               settings: {},

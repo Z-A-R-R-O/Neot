@@ -1,6 +1,6 @@
 "use client";
 
-import { Layers, Plus, Search } from "lucide-react";
+import { Layers, Plus, Search, LayoutTemplate } from "lucide-react";
 import { useState } from "react";
 import {
   DndContext,
@@ -19,10 +19,11 @@ import {
 import { SortableTreeNode } from "./sortable-tree-node";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { blockRegistry } from "@/lib/block-registry";
 
 interface StructureTreeProps {
   blocks: TreeNodeData[];
-  onAddBlock?: () => void;
+  onAddBlock?: (type: string) => void;
   onSelect?: (id: string) => void;
   onDelete?: (id: string) => void;
   onDuplicate?: (id: string) => void;
@@ -39,6 +40,7 @@ export interface TreeNodeData {
 
 export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplicate, onReorder }: StructureTreeProps) {
   const [search, setSearch] = useState("");
+  const [showTypePicker, setShowTypePicker] = useState(false);
 
   const enabled = useDevModeStore((s) => s.enabled);
 
@@ -115,12 +117,39 @@ export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplic
           <Layers className="h-4 w-4 text-primary-500" />
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">Layers</span>
         </div>
-        <button
-          onClick={onAddBlock}
-          className="rounded-lg p-1 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95"
-        >
-          <Plus className="h-4 w-4" />
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowTypePicker(!showTypePicker)}
+            className="rounded-lg p-1 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95"
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+          {showTypePicker && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowTypePicker(false)} />
+              <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(11,13,16,0.98)] p-1.5 shadow-xl backdrop-blur-xl">
+                <p className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Add Block
+                </p>
+                <div className="mt-1 space-y-0.5">
+                  {blockRegistry.getByScope("page").map(([type, entry]) => (
+                    <button
+                      key={type}
+                      onClick={() => {
+                        setShowTypePicker(false);
+                        onAddBlock?.(type);
+                      }}
+                      className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-medium text-foreground transition-colors hover:bg-glass"
+                    >
+                      <LayoutTemplate className="h-3.5 w-3.5 text-muted-foreground" />
+                      {entry.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="px-4 py-3">
