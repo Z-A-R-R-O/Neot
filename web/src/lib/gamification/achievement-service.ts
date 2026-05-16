@@ -45,9 +45,10 @@ export async function checkAndAwardAchievements(
 
   const profile = await tx.profile.findUnique({ where: { id: userId } });
 
-  const [completedLessons, completedCourses, earned] = await Promise.all([
+  const [completedLessons, completedCourses, perfectQuizzes, earned] = await Promise.all([
     tx.lessonProgress.count({ where: { userId, status: "completed" } }),
     tx.enrollment.count({ where: { userId, completed: true } }),
+    tx.lessonProgress.count({ where: { userId, score: 100 } }),
     tx.userAchievement.findMany({ where: { userId }, select: { achievementId: true } }),
   ]);
 
@@ -61,6 +62,7 @@ export async function checkAndAwardAchievements(
     { id: "hundred_lessons", condition: completedLessons >= 100 },
     { id: "seven_day_streak", condition: (profile?.longestStreak ?? 0) >= 7 },
     { id: "thirty_day_streak", condition: (profile?.longestStreak ?? 0) >= 30 },
+    { id: "perfect_quiz", condition: perfectQuizzes >= 1 },
     { id: "first_course", condition: completedCourses >= 1 },
     { id: "five_courses", condition: completedCourses >= 5 },
   ];

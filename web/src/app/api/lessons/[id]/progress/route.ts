@@ -167,6 +167,8 @@ async function awardLessonXp(userId: string, lessonId: string) {
       profile?.longestStreak ?? 0,
     );
 
+    const oldLevel = profile?.level ?? 1;
+
     await tx.profile.update({
       where: { id: userId },
       data: {
@@ -177,6 +179,18 @@ async function awardLessonXp(userId: string, lessonId: string) {
         lastActivityDate: streakResult.lastActivityDate,
       },
     });
+
+    if (levelInfo.level > oldLevel) {
+      await tx.notification.create({
+        data: {
+          userId,
+          type: "level_up",
+          title: `Level ${levelInfo.level}!`,
+          message: `You reached Level ${levelInfo.level} — ${levelInfo.title}`,
+          link: "/dashboard",
+        },
+      });
+    }
 
     const newAchievements = await checkAndAwardAchievements(userId, tx);
 
