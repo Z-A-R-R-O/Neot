@@ -33,12 +33,14 @@ const navItems: Record<Role, NavItem[]> = {
     { label: "My Courses", href: "/dashboard/courses", icon: BookOpen },
     { label: "Achievements", href: "/dashboard/achievements", icon: Award },
     { label: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
+    { label: "Settings", href: "/dashboard/settings", icon: Settings },
   ],
   teacher: [
     { label: "Dashboard", href: "/teacher", icon: LayoutDashboard },
     { label: "My Courses", href: "/teacher/courses", icon: BookOpen },
     { label: "Analytics", href: "/teacher/analytics", icon: BarChart3 },
     { label: "Students", href: "/teacher/students", icon: Users },
+    { label: "Settings", href: "/dashboard/settings", icon: Settings },
   ],
   parent: [
     { label: "Overview", href: "/dashboard", icon: Eye },
