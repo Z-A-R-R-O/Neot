@@ -30,23 +30,58 @@ async function seed() {
   console.log("  hero section added");
 
   await prisma.pageSection.upsert({
-    where: { id: "seed-home-features" },
-    update: { content: JSON.stringify({ columns: 3, cards: [{ icon: "BookOpen", title: "Interactive Lessons", description: "Learn by doing with quizzes and hands-on exercises." }, { icon: "BarChart3", title: "Track Progress", description: "Monitor your learning journey with detailed analytics." }, { icon: "School", title: "Expert Teachers", description: "Courses created by experienced educators." }] }) },
-    create: { id: "seed-home-features", pageId: home.id, blockType: "feature-grid", sortOrder: 1, content: JSON.stringify({ columns: 3, cards: [{ icon: "BookOpen", title: "Interactive Lessons", description: "Learn by doing with quizzes and hands-on exercises." }, { icon: "BarChart3", title: "Track Progress", description: "Monitor your learning journey with detailed analytics." }, { icon: "School", title: "Expert Teachers", description: "Courses created by experienced educators." }] }), settings: "{}" },
+    where: { id: "seed-home-knowledge-constellation" },
+    update: { content: "{}" },
+    create: { id: "seed-home-knowledge-constellation", pageId: home.id, blockType: "knowledge-constellation", sortOrder: 1, content: "{}", settings: "{}" },
   });
-  console.log("  features section added");
+  console.log("  knowledge constellation section added");
 
   await prisma.pageSection.upsert({
-    where: { id: "seed-home-stats" },
-    update: { content: JSON.stringify({ items: [{ number: "10,000+", label: "Active Students" }, { number: "500+", label: "Courses" }, { number: "50+", label: "Expert Teachers" }, { number: "95%", label: "Satisfaction Rate" }] }) },
-    create: { id: "seed-home-stats", pageId: home.id, blockType: "stats-bar", sortOrder: 2, content: JSON.stringify({ items: [{ number: "10,000+", label: "Active Students" }, { number: "500+", label: "Courses" }, { number: "50+", label: "Expert Teachers" }, { number: "95%", label: "Satisfaction Rate" }] }), settings: "{}" },
+    where: { id: "seed-home-adaptive-stream" },
+    update: { content: "{}" },
+    create: { id: "seed-home-adaptive-stream", pageId: home.id, blockType: "adaptive-stream", sortOrder: 2, content: "{}", settings: "{}" },
   });
-  console.log("  stats section added");
+  console.log("  adaptive stream section added");
+
+  await prisma.pageSection.upsert({
+    where: { id: "seed-home-adaptive-timeline" },
+    update: { content: "{}" },
+    create: { id: "seed-home-adaptive-timeline", pageId: home.id, blockType: "adaptive-timeline", sortOrder: 3, content: "{}", settings: "{}" },
+  });
+  console.log("  adaptive timeline section added");
+
+  await prisma.pageSection.upsert({
+    where: { id: "seed-home-achievement-ecosystem" },
+    update: { content: "{}" },
+    create: { id: "seed-home-achievement-ecosystem", pageId: home.id, blockType: "achievement-ecosystem", sortOrder: 4, content: "{}", settings: "{}" },
+  });
+  console.log("  achievement ecosystem section added");
+
+  await prisma.pageSection.upsert({
+    where: { id: "seed-home-live-ecosystem" },
+    update: { content: "{}" },
+    create: { id: "seed-home-live-ecosystem", pageId: home.id, blockType: "live-ecosystem", sortOrder: 5, content: "{}", settings: "{}" },
+  });
+  console.log("  live ecosystem section added");
+
+  await prisma.pageSection.upsert({
+    where: { id: "seed-home-learning-dna" },
+    update: { content: "{}" },
+    create: { id: "seed-home-learning-dna", pageId: home.id, blockType: "learning-dna", sortOrder: 6, content: "{}", settings: "{}" },
+  });
+  console.log("  learning dna section added");
+
+  await prisma.pageSection.upsert({
+    where: { id: "seed-home-future-self" },
+    update: { content: "{}" },
+    create: { id: "seed-home-future-self", pageId: home.id, blockType: "future-self", sortOrder: 7, content: "{}", settings: "{}" },
+  });
+  console.log("  future self section added");
 
   await prisma.pageSection.upsert({
     where: { id: "seed-home-cta" },
     update: { content: JSON.stringify({ text: "Ready to start your learning journey?", buttonText: "Get Started Free", buttonLink: "/signup", background: "primary" }) },
-    create: { id: "seed-home-cta", pageId: home.id, blockType: "cta-banner", sortOrder: 3, content: JSON.stringify({ text: "Ready to start your learning journey?", buttonText: "Get Started Free", buttonLink: "/signup", background: "primary" }), settings: "{}" },
+    create: { id: "seed-home-cta", pageId: home.id, blockType: "cta-banner", sortOrder: 8, content: JSON.stringify({ text: "Ready to start your learning journey?", buttonText: "Get Started Free", buttonLink: "/signup", background: "primary" }), settings: "{}" },
   });
   console.log("  CTA section added");
 

@@ -23,6 +23,12 @@ import {
   CourseCarouselSection,
   TestimonialsSection,
   CustomHtmlSection,
+  KnowledgeConstellationSection,
+  AdaptiveTimelineSection,
+  LiveEcosystemSection,
+  FutureSelfSection,
+  AchievementEcosystemSection,
+  LearningDnaSection,
 } from "@/components/blocks/sections";
 
 blockRegistry.register("hero", { component: HeroSection, label: "Hero", scope: "page" });
@@ -36,6 +42,12 @@ blockRegistry.register("pricing-table", { component: PricingTableSection, label:
 blockRegistry.register("course-carousel", { component: CourseCarouselSection, label: "Course Carousel", scope: "page" });
 blockRegistry.register("testimonials", { component: TestimonialsSection, label: "Testimonials", scope: "page" });
 blockRegistry.register("custom-html", { component: CustomHtmlSection, label: "Custom HTML", scope: "page" });
+blockRegistry.register("knowledge-constellation", { component: KnowledgeConstellationSection, label: "Knowledge Constellation", scope: "page" });
+blockRegistry.register("adaptive-timeline", { component: AdaptiveTimelineSection, label: "Adaptive Timeline", scope: "page" });
+blockRegistry.register("live-ecosystem", { component: LiveEcosystemSection, label: "Live Ecosystem", scope: "page" });
+blockRegistry.register("future-self", { component: FutureSelfSection, label: "Future Self", scope: "page" });
+blockRegistry.register("achievement-ecosystem", { component: AchievementEcosystemSection, label: "Achievement Ecosystem", scope: "page" });
+blockRegistry.register("learning-dna", { component: LearningDnaSection, label: "Learning DNA", scope: "page" });
 
 // Page section editors
 import { HeroEditor } from "@/components/admin/pages/section-editors/hero-editor";
