@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { ErrorState } from "@/components/ui/error-state";
 import { ThemeEditor } from "@/components/admin/themes/theme-editor";
 
 export default function EditThemePage() {
+  const queryClient = useQueryClient();
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
@@ -45,6 +47,7 @@ export default function EditThemePage() {
       throw new Error(typeof data.error === "string" ? data.error : "Failed to save");
     }
     setThemeData({ name, tokens });
+    queryClient.invalidateQueries({ queryKey: ["activeTheme"] });
   }
 
   if (isLoading) return <LoadingScreen message="Loading theme..." />;

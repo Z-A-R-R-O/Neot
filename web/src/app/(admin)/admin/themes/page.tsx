@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Plus, Palette, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ interface ThemeRecord {
 }
 
 export default function AdminThemesPage() {
+  const queryClient = useQueryClient();
   const [themes, setThemes] = useState<ThemeRecord[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +82,7 @@ export default function AdminThemesPage() {
       setThemes((prev) =>
         prev?.map((t) => ({ ...t, isActive: t.id === id })) ?? null,
       );
+      queryClient.invalidateQueries({ queryKey: ["activeTheme"] });
     } catch {
       alert("Failed to activate theme");
     }

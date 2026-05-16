@@ -21,7 +21,7 @@ export function useTheme() {
       }
       return res.json();
     },
-    staleTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 5,
     retry: 1,
   });
 
