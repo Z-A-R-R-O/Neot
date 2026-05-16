@@ -14,6 +14,7 @@ import {
   FileText,
   Palette,
   Puzzle,
+  GraduationCap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -50,10 +51,11 @@ const navItems: Record<Role, NavItem[]> = {
   ],
   admin: [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { label: "Users", href: "/admin/users", icon: Users },
+    { label: "Teachers", href: "/admin/teachers", icon: GraduationCap },
     { label: "Pages", href: "/admin/pages", icon: FileText },
     { label: "Themes", href: "/admin/themes", icon: Palette },
     { label: "Blocks", href: "/admin/blocks", icon: Puzzle },
-    { label: "Users", href: "/admin/users", icon: Users },
     { label: "Settings", href: "/admin/settings", icon: Settings },
   ],
 };
