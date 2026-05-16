@@ -7,6 +7,9 @@ import { StructureTree } from "./StructureTree";
 import { PropertiesPanel } from "./PropertiesPanel";
 import { PresetPicker } from "./PresetPicker";
 import { saveUserPreset } from "@/lib/block-presets";
+import { ResponsiveBar } from "./ResponsiveBar";
+import { HistoryPanel } from "./HistoryPanel";
+import { DevModeToggle } from "./DevModeToggle";
 
 interface DevModeShellProps {
   children: ReactNode;
@@ -55,9 +58,25 @@ export function DevModeShell({ children }: DevModeShellProps) {
   }));
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background dark">
-      {/* Left Sidebar: Layers */}
-      <div className="w-64 shrink-0 border-r border-border bg-background/50 backdrop-blur-xl">
+    <div className="flex h-screen w-screen flex-col bg-background dark">
+      {/* Top Toolbar */}
+      <div className="flex h-10 shrink-0 items-center border-b border-border bg-background/80 backdrop-blur-xl px-4">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">Dev Mode</span>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <ResponsiveBar />
+        </div>
+        <div className="flex items-center gap-2">
+          <HistoryPanel />
+          <DevModeToggle />
+        </div>
+      </div>
+
+      {/* Three-panel layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar: Layers */}
+        <div className="w-64 shrink-0 border-r border-border bg-background/50 backdrop-blur-xl">
         <StructureTree
           blocks={treeNodes}
           onSelect={(id) => selectSection(id)}
@@ -156,6 +175,7 @@ export function DevModeShell({ children }: DevModeShellProps) {
             }
             onContentChange={(id, content) => updateSection(id, { content })}
           />
+        </div>
         </div>
       </div>
     </div>
