@@ -51,6 +51,7 @@ const navItems: Record<Role, NavItem[]> = {
   ],
   admin: [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
     { label: "Users", href: "/admin/users", icon: Users },
     { label: "Teachers", href: "/admin/teachers", icon: GraduationCap },
     { label: "Courses", href: "/admin/courses", icon: BookOpen },
