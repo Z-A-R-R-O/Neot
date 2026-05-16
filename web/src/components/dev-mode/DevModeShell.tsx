@@ -12,7 +12,10 @@ interface DevModeShellProps {
 
 export function DevModeShell({ children }: DevModeShellProps) {
   const enabled = useDevModeStore((s) => s.enabled);
+  const deviceMode = useDevModeStore((s) => s.deviceMode);
   const { sections, selectedId, updateSection, selectSection, removeSection, addSection } = usePageBuilderStore();
+
+  const canvasMaxWidth = deviceMode === "mobile" ? "375px" : deviceMode === "tablet" ? "768px" : "1440px";
 
   if (!enabled) {
     return <>{children}</>;
@@ -66,7 +69,7 @@ export function DevModeShell({ children }: DevModeShellProps) {
              style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
         
         <div className="relative z-10 flex-1 overflow-y-auto custom-scrollbar">
-          <div className="mx-auto min-h-full w-full max-w-[1440px] bg-background shadow-[0_0_100px_rgba(0,0,0,0.5)] transition-all duration-500">
+          <div className="mx-auto min-h-full w-full bg-background shadow-[0_0_100px_rgba(0,0,0,0.5)] transition-all duration-500" style={{ maxWidth: canvasMaxWidth }}>
             {children}
           </div>
         </div>
