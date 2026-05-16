@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { useHistoryStore } from "@/stores/historyStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
-import { initHistoryMiddleware, setUndoing, setInitialized } from "@/stores/history-middleware";
+import { initHistoryMiddleware, setUndoing } from "@/stores/history-middleware";
 import { DevModeShell } from "./DevModeShell";
 
 interface DevModeProviderProps {
@@ -27,19 +27,7 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
 
   useEffect(() => {
     initHistoryMiddleware();
-    setInitialized(false);
-    return () => {
-      setInitialized(false);
-    };
   }, []);
-
-  useEffect(() => {
-    if (enabled) {
-      setTimeout(() => setInitialized(true), 100);
-    } else {
-      setInitialized(false);
-    }
-  }, [enabled]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {

@@ -63,15 +63,15 @@ export function SettingsPage() {
   }, [settings]);
 
   if (isLoading) {
-    return <div className="py-8 text-center text-sm text-gray-400">Loading settings...</div>;
+    return <div className="py-8 text-center text-sm text-tertiary-foreground">Loading settings...</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Configure platform-wide settings.
           </p>
         </div>

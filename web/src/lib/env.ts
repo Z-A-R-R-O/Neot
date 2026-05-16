@@ -9,10 +9,13 @@ export function validateEnv() {
   const parsed = envSchema.safeParse(process.env);
 
   if (!parsed.success) {
-    console.warn(
-      "Environment variable validation warnings:",
-      parsed.error.flatten().fieldErrors,
-    );
+    const errors = parsed.error.flatten().fieldErrors;
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        `Missing required environment variables: ${Object.keys(errors).join(", ")}`,
+      );
+    }
+    console.warn("Environment variable validation warnings:", errors);
   }
 
   return parsed.data;

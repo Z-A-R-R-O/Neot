@@ -48,7 +48,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
             type="button"
             onClick={() => wrapSelection("**", "**")}
             title="Bold"
-            className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <Bold className="h-4 w-4" />
           </button>
@@ -56,7 +56,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
             type="button"
             onClick={() => wrapSelection("_", "_")}
             title="Italic"
-            className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <Italic className="h-4 w-4" />
           </button>
@@ -64,7 +64,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
             type="button"
             onClick={() => insertAtCursor("## ")}
             title="Heading"
-            className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <Heading className="h-4 w-4" />
           </button>
@@ -72,7 +72,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
             type="button"
             onClick={() => insertAtCursor("- ")}
             title="List"
-            className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <List className="h-4 w-4" />
           </button>
@@ -84,7 +84,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
             "flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors",
             preview
               ? "bg-primary-100 text-primary-700"
-              : "text-gray-500 hover:bg-gray-100",
+              : "text-muted-foreground hover:bg-muted",
           )}
         >
           {preview ? <Edit3 className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
@@ -93,7 +93,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
       </div>
 
       {preview ? (
-        <div className="prose prose-sm max-w-none min-h-[160px] rounded-lg border border-gray-200 bg-white p-3">
+        <div className="prose prose-sm max-w-none min-h-[160px] rounded-lg border border-border bg-white p-3">
           {content.split("\n").map((line, i) => {
             if (line.startsWith("## ")) {
               return <h2 key={i} className="text-lg font-semibold">{line.slice(3)}</h2>;
@@ -105,7 +105,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
               return <li key={i} className="ml-4 list-disc">{line.slice(2)}</li>;
             }
             if (line.startsWith("> ")) {
-              return <blockquote key={i} className="border-l-4 border-gray-300 pl-3 italic">{line.slice(2)}</blockquote>;
+              return <blockquote key={i} className="border-l-4 border-border pl-3 italic">{line.slice(2)}</blockquote>;
             }
             if (line.trim() === "") {
               return <div key={i} className="h-3" />;
@@ -124,7 +124,7 @@ export function TextEditor({ content, onChange }: TextEditorProps) {
           placeholder="Write your content in markdown..."
           rows={8}
           className={cn(
-            "min-h-[160px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
+            "min-h-[160px] w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-foreground placeholder:text-tertiary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
           )}
         />
       )}

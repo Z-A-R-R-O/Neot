@@ -29,7 +29,7 @@ export function TextBlock({ content }: TextBlockProps) {
 
   if (!text) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center text-gray-400">
+      <div className="rounded-lg border border-dashed border-border p-6 text-center text-tertiary-foreground">
         Empty text block
       </div>
     );
@@ -58,7 +58,7 @@ export function TextBlock({ content }: TextBlockProps) {
         }
         if (line.startsWith("> ")) {
           return (
-            <blockquote key={i} className="border-l-4 border-gray-300 pl-4 italic text-gray-600">
+            <blockquote key={i} className="border-l-4 border-border pl-4 italic text-muted-foreground">
               {line.slice(2)}
             </blockquote>
           );

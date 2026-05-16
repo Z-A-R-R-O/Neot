@@ -16,8 +16,8 @@ export function EnrollmentChart({ data }: { data: { month: string; count: number
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
-          <XAxis dataKey="month" className="text-xs text-gray-500" />
-          <YAxis allowDecimals={false} className="text-xs text-gray-500" />
+          <XAxis dataKey="month" className="text-xs text-muted-foreground" />
+          <YAxis allowDecimals={false} className="text-xs text-muted-foreground" />
           <Tooltip />
           <Line
             type="monotone"

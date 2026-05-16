@@ -33,7 +33,7 @@ export function UserFilters({
       <div className="space-y-1.5">
         <Label htmlFor="search" className="text-xs">Search</Label>
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-tertiary-foreground" />
           <Input
             id="search"
             value={search}

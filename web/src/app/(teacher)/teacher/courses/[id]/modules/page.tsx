@@ -122,8 +122,8 @@ export default function CourseModulesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">{course.title}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Manage modules for this course.
           </p>
         </div>
@@ -184,12 +184,12 @@ export default function CourseModulesPage() {
           {modules.map((mod: { id: string; title: string; description: string | null; sortOrder: number; lessons?: { id: string }[] }, idx: number) => (
             <Card key={mod.id} size="sm">
               <div className="flex items-center gap-3">
-                <div className="flex flex-col gap-0.5 text-gray-400">
+                <div className="flex flex-col gap-0.5 text-tertiary-foreground">
                   <button
                     type="button"
                     disabled={idx === 0}
                     onClick={() => handleReorder(mod.id, "up")}
-                    className="disabled:opacity-30 hover:text-gray-600"
+                    className="disabled:opacity-30 hover:text-muted-foreground"
                   >
                     <ArrowUp className="h-3 w-3" />
                   </button>
@@ -197,20 +197,20 @@ export default function CourseModulesPage() {
                     type="button"
                     disabled={idx === modules.length - 1}
                     onClick={() => handleReorder(mod.id, "down")}
-                    className="disabled:opacity-30 hover:text-gray-600"
+                    className="disabled:opacity-30 hover:text-muted-foreground"
                   >
                     <ArrowDown className="h-3 w-3" />
                   </button>
                 </div>
-                <GripVertical className="h-5 w-5 shrink-0 text-gray-400" />
+                <GripVertical className="h-5 w-5 shrink-0 text-tertiary-foreground" />
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900">{mod.title}</p>
+                  <p className="font-medium text-foreground">{mod.title}</p>
                   {mod.description && (
-                    <p className="text-sm text-gray-500 truncate">
+                    <p className="text-sm text-muted-foreground truncate">
                       {mod.description}
                     </p>
                   )}
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-tertiary-foreground">
                     {mod.lessons?.length ?? 0} lessons
                   </p>
                 </div>

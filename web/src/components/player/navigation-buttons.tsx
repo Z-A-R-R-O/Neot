@@ -78,7 +78,7 @@ export function NavigationButtons({
         {previousLesson ? (
           <Link
             href={`/lessons/${previousLesson.id}`}
-            className="flex items-center gap-1 text-gray-500 hover:text-gray-900"
+            className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
           >
             <ChevronLeft className="h-3 w-3" />
             {previousLesson.title}
@@ -90,7 +90,7 @@ export function NavigationButtons({
         {nextLesson && isCompleted && (
           <Link
             href={`/lessons/${nextLesson.id}`}
-            className="flex items-center gap-1 text-gray-500 hover:text-gray-900"
+            className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
           >
             {nextLesson.title}
             <ChevronRight className="h-3 w-3" />

@@ -21,18 +21,18 @@ const blockTypes = [
 export function BlockPalette({ onAddBlock }: BlockPaletteProps) {
   return (
     <Card size="sm">
-      <h3 className="mb-3 text-sm font-semibold text-gray-900">Add Block</h3>
+      <h3 className="mb-3 text-sm font-semibold text-foreground">Add Block</h3>
       <div className="grid grid-cols-2 gap-2">
         {blockTypes.map(({ type, label, icon: Icon }) => (
           <button
             key={type}
             onClick={() => onAddBlock(type)}
             className={cn(
-              "flex flex-col items-center gap-1 rounded-lg border border-gray-200 p-3 transition-colors hover:border-primary-300 hover:bg-primary-50",
+              "flex flex-col items-center gap-1 rounded-lg border border-border p-3 transition-colors hover:border-primary-300 hover:bg-primary-50",
             )}
           >
-            <Icon className="h-5 w-5 text-gray-600" />
-            <span className="text-xs font-medium text-gray-700">{label}</span>
+            <Icon className="h-5 w-5 text-muted-foreground" />
+            <span className="text-xs font-medium text-foreground">{label}</span>
           </button>
         ))}
       </div>

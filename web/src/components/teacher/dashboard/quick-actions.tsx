@@ -40,13 +40,13 @@ export function QuickActions() {
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center gap-2 rounded-lg border border-gray-200 p-4 transition-colors hover:border-gray-300 hover:bg-gray-50",
+                "flex flex-col items-center gap-2 rounded-lg border border-border p-4 transition-colors hover:border-border hover:bg-muted",
               )}
             >
               <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", color)}>
                 <Icon className="h-5 w-5" />
               </div>
-              <span className="text-sm font-medium text-gray-700">{label}</span>
+              <span className="text-sm font-medium text-foreground">{label}</span>
             </Link>
           ))}
         </div>

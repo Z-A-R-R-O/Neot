@@ -91,6 +91,8 @@ const config: Config = {
         "shimmer": "shimmer 3s linear infinite",
         "aurora-drift": "aurora-drift 12s ease-in-out infinite",
         "count-up": "count-up 0.6s ease-out forwards",
+        "data-sweep": "data-sweep 4s ease-in-out infinite",
+        "ambient-float": "ambient-float 20s ease-in-out infinite",
       },
       keyframes: {
         "gradient-shift": {
@@ -121,6 +123,18 @@ const config: Config = {
         "count-up": {
           from: { opacity: "0", transform: "translateY(10px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "data-sweep": {
+          "0%": { transform: "translateX(-100%) scaleX(1)", opacity: "0" },
+          "20%": { opacity: "1" },
+          "80%": { opacity: "1" },
+          "100%": { transform: "translateX(200%) scaleX(1.5)", opacity: "0" },
+        },
+        "ambient-float": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(8px, -12px) scale(1.02)" },
+          "50%": { transform: "translate(-4px, -20px) scale(0.98)" },
+          "75%": { transform: "translate(-12px, -4px) scale(1.01)" },
         },
       },
       backgroundImage: {

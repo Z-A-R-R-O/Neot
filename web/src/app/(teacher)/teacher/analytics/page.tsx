@@ -26,9 +26,9 @@ function StatCard({
       <CardHeader>
         <div className="flex items-center gap-2">
           <Icon className={`h-4 w-4 ${color}`} />
-          <CardTitle className="text-sm font-medium text-gray-500">{label}</CardTitle>
+          <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
         </div>
-        <p className="mt-2 text-2xl font-bold text-gray-900">{value}</p>
+        <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
       </CardHeader>
     </Card>
   );
@@ -48,8 +48,8 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Analytics</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Course and student performance metrics.
         </p>
       </div>
@@ -104,7 +104,7 @@ export default function AnalyticsPage() {
               {data?.enrollmentTrend.length ? (
                 <EnrollmentChart data={data.enrollmentTrend} />
               ) : (
-                <p className="py-16 text-center text-sm text-gray-400">No enrollment data yet.</p>
+                <p className="py-16 text-center text-sm text-tertiary-foreground">No enrollment data yet.</p>
               )}
             </CardContent>
           </Card>
@@ -117,7 +117,7 @@ export default function AnalyticsPage() {
               {data?.funnel[0]?.enrolled ? (
                 <CompletionFunnel data={data.funnel} />
               ) : (
-                <p className="py-16 text-center text-sm text-gray-400">No student progress yet.</p>
+                <p className="py-16 text-center text-sm text-tertiary-foreground">No student progress yet.</p>
               )}
             </CardContent>
           </Card>
@@ -130,7 +130,7 @@ export default function AnalyticsPage() {
               {data?.scoreDistribution.some((d) => d.count > 0) ? (
                 <ScoreDistribution data={data.scoreDistribution} />
               ) : (
-                <p className="py-16 text-center text-sm text-gray-400">No quiz scores yet.</p>
+                <p className="py-16 text-center text-sm text-tertiary-foreground">No quiz scores yet.</p>
               )}
             </CardContent>
           </Card>
@@ -143,7 +143,7 @@ export default function AnalyticsPage() {
               {data?.dropOffPoints.length ? (
                 <DropOffChart data={data.dropOffPoints} />
               ) : (
-                <p className="py-16 text-center text-sm text-gray-400">No drop-off data yet.</p>
+                <p className="py-16 text-center text-sm text-tertiary-foreground">No drop-off data yet.</p>
               )}
             </CardContent>
           </Card>

@@ -55,10 +55,10 @@ export function OverviewStats({ stats }: OverviewStatsProps) {
               <Icon className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-foreground">
                 {format(stats[value as keyof typeof stats])}
               </p>
-              <p className="text-sm text-gray-500">{label}</p>
+              <p className="text-sm text-muted-foreground">{label}</p>
             </div>
           </CardContent>
         </Card>

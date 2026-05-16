@@ -107,8 +107,8 @@ export default function PublishCoursePage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Publish Course</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Publish Course</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Review and publish your course.
           </p>
         </div>
@@ -124,7 +124,7 @@ export default function PublishCoursePage() {
             <CardDescription>{course.description}</CardDescription>
           )}
         </CardHeader>
-        <div className="space-y-2 px-6 pb-4 text-sm text-gray-500">
+        <div className="space-y-2 px-6 pb-4 text-sm text-muted-foreground">
           <p>Difficulty: {course.difficulty ?? "Not set"}</p>
           <p>Modules: {modules.length}</p>
           <p>Lessons: {totalLessons}</p>
@@ -158,7 +158,7 @@ export default function PublishCoursePage() {
               <div>
                 <p
                   className={`text-sm font-medium ${
-                    item.passed ? "text-gray-900" : "text-gray-700"
+                    item.passed ? "text-foreground" : "text-foreground"
                   }`}
                 >
                   {item.label}

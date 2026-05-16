@@ -83,7 +83,7 @@ export function LessonPlayer({
   if (blocks.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center p-8">
-        <p className="text-gray-500">No content in this lesson yet.</p>
+        <p className="text-muted-foreground">No content in this lesson yet.</p>
       </div>
     );
   }

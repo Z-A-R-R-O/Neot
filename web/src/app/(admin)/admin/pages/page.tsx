@@ -144,8 +144,8 @@ export default function AdminPagesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pages</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Pages</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Manage landing pages and site content.
           </p>
         </div>
@@ -184,13 +184,13 @@ export default function AdminPagesPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-1 text-sm text-gray-500">
+                <div className="space-y-1 text-sm text-muted-foreground">
                   <p>Slug: {page.slug}</p>
                   <p>Layout: {page.layout}</p>
                   <p>{page._count.sections} sections</p>
                 </div>
               </CardContent>
-              <div className="flex gap-2 border-t border-gray-100 px-6 py-3">
+              <div className="flex gap-2 border-t border-border px-6 py-3">
                 <Button
                   variant="ghost"
                   size="sm"

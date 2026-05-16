@@ -63,8 +63,8 @@ export default function TeacherCoursesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Courses</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">My Courses</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Manage your courses and content.
           </p>
         </div>
@@ -106,12 +106,12 @@ export default function TeacherCoursesPage() {
                   </Badge>
                 </div>
               </CardHeader>
-              <div className="space-y-1 px-6 pb-4 text-sm text-gray-500">
+              <div className="space-y-1 px-6 pb-4 text-sm text-muted-foreground">
                 <p>{course._count.modules} modules</p>
                 <p>{course._count.enrollments} enrollments</p>
                 {course.subject && <p>Subject: {course.subject}</p>}
               </div>
-              <div className="flex gap-2 border-t border-gray-100 px-6 py-3">
+              <div className="flex gap-2 border-t border-border px-6 py-3">
                 <Link href={`/teacher/courses/${course.id}/modules`}>
                   <Button variant="ghost" size="sm">
                     <Edit className="h-4 w-4" />

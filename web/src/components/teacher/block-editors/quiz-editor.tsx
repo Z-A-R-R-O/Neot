@@ -62,7 +62,7 @@ export function QuizEditor({ content, onChange }: QuizEditorProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-foreground">
           {questions.length} {questions.length === 1 ? "question" : "questions"}
         </span>
         <Button type="button" size="sm" onClick={addQuestion}>
@@ -132,7 +132,7 @@ export function QuizEditor({ content, onChange }: QuizEditorProps) {
       </div>
 
       {!questions.length && (
-        <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center text-sm text-gray-400">
+        <div className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-tertiary-foreground">
           No questions yet. Click &ldquo;Add Question&rdquo; to create one.
         </div>
       )}

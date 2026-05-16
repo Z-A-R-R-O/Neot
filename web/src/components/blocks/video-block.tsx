@@ -53,7 +53,7 @@ export function VideoBlock({ content }: VideoBlockProps) {
 
   if (!url) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-200 p-8 text-center text-gray-400">
+      <div className="rounded-lg border border-dashed border-border p-8 text-center text-tertiary-foreground">
         No video URL provided
       </div>
     );
@@ -70,7 +70,7 @@ export function VideoBlock({ content }: VideoBlockProps) {
           <source src={url} />
         </video>
         {caption && (
-          <p className="text-center text-sm text-gray-500">{caption}</p>
+          <p className="text-center text-sm text-muted-foreground">{caption}</p>
         )}
       </div>
     );
@@ -93,14 +93,14 @@ export function VideoBlock({ content }: VideoBlockProps) {
         )}
       </div>
       {caption && (
-        <p className="text-center text-sm text-gray-500">{caption}</p>
+        <p className="text-center text-sm text-muted-foreground">{caption}</p>
       )}
       {transcript && (
         <details className="group">
-          <summary className="cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">
+          <summary className="cursor-pointer text-sm font-medium text-foreground hover:text-foreground">
             Show transcript
           </summary>
-          <div className="mt-2 rounded-lg bg-gray-50 p-4 text-sm text-gray-600">
+          <div className="mt-2 rounded-lg bg-muted p-4 text-sm text-muted-foreground">
             {transcript}
           </div>
         </details>

@@ -59,7 +59,7 @@ export default function EditThemePage() {
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
-      <div className="flex items-center gap-4 border-b border-gray-200 px-6 py-3">
+      <div className="flex items-center gap-4 border-b border-border px-6 py-3">
         <Button
           variant="ghost"
           size="sm"
@@ -68,7 +68,7 @@ export default function EditThemePage() {
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <h1 className="text-lg font-semibold text-gray-900">
+        <h1 className="text-lg font-semibold text-foreground">
           Edit Theme
         </h1>
       </div>

@@ -89,7 +89,7 @@ export function BlockLibrary({ blocks }: BlockLibraryProps) {
                 </div>
               </div>
             </CardHeader>
-            <div className="border-t border-gray-100 px-6 py-2 text-xs text-gray-500">
+            <div className="border-t border-border px-6 py-2 text-xs text-muted-foreground">
               {totalFields > 0
                 ? `${requiredFields} required · ${totalFields} total fields`
                 : "No configurable fields"}

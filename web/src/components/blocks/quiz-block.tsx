@@ -111,7 +111,7 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
 
   if (!questions.length) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-200 p-8 text-center text-gray-400">
+      <div className="rounded-lg border border-dashed border-border p-8 text-center text-tertiary-foreground">
         No questions in this quiz
       </div>
     );
@@ -139,7 +139,7 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-muted-foreground">
           Question {currentQuestion + 1} of {questions.length}
         </div>
         {config.timeLimit && (
@@ -169,7 +169,7 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
                   "w-full rounded-lg border p-3 text-left transition-colors",
                   currentAnswer === option.id
                     ? "border-primary bg-primary/5"
-                    : "border-gray-200 hover:border-gray-300",
+                    : "border-border hover:border-border",
                   submitted && "cursor-default",
                 )}
                 disabled={submitted}
@@ -203,7 +203,7 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
                     "w-full rounded-lg border p-3 text-left transition-colors",
                     selected
                       ? "border-primary bg-primary/5"
-                      : "border-gray-200 hover:border-gray-300",
+                      : "border-border hover:border-border",
                     submitted && "cursor-default",
                   )}
                   disabled={submitted}
@@ -227,7 +227,7 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
                   "flex-1 rounded-lg border p-4 text-center font-medium transition-colors",
                   currentAnswer === option.toLowerCase()
                     ? "border-primary bg-primary/5"
-                    : "border-gray-200 hover:border-gray-300",
+                    : "border-border hover:border-border",
                   submitted && "cursor-default",
                 )}
                 disabled={submitted}
@@ -246,7 +246,7 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
               if (!submitted) setCurrentAnswer(e.target.value);
             }}
             placeholder="Type your answer..."
-            className="w-full rounded-lg border border-gray-200 p-3 focus:border-primary focus:outline-none"
+            className="w-full rounded-lg border border-border p-3 focus:border-primary focus:outline-none"
             disabled={submitted}
           />
         )}

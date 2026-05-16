@@ -37,7 +37,7 @@ export const ToastViewport = forwardRef<
 ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
 const variantStyles: Record<ToastVariant, string> = {
-  default: "border-gray-200 bg-white",
+  default: "border-border bg-white",
   success: "border-green-200 bg-green-50",
   error: "border-red-200 bg-red-50",
   warning: "border-amber-200 bg-amber-50",
@@ -71,7 +71,7 @@ export const ToastTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Title
     ref={ref}
-    className={cn("text-sm font-semibold text-gray-900", className)}
+    className={cn("text-sm font-semibold text-foreground", className)}
     {...props}
   />
 ));
@@ -83,7 +83,7 @@ export const ToastDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-gray-500", className)}
+    className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -96,7 +96,7 @@ export const ToastClose = forwardRef<
   <ToastPrimitive.Close
     ref={ref}
     className={cn(
-      "shrink-0 rounded-md p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500",
+      "shrink-0 rounded-md p-1 text-tertiary-foreground hover:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500",
       className,
     )}
     toast-close=""

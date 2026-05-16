@@ -78,7 +78,7 @@ export function VideoEditor({ content, onChange }: VideoEditorProps) {
           placeholder="Paste video transcript here..."
           rows={4}
           className={cn(
-            "w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
+            "w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-foreground placeholder:text-tertiary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
           )}
         />
       </div>

@@ -18,7 +18,7 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
           type="color"
           value={value || "#000000"}
           onChange={(e) => onChange(e.target.value)}
-          className="h-8 w-8 cursor-pointer rounded border border-gray-300 bg-transparent p-0.5"
+          className="h-8 w-8 cursor-pointer rounded border border-border bg-transparent p-0.5"
         />
         <Input
           value={value || ""}

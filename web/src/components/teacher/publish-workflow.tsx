@@ -83,7 +83,7 @@ export function PublishWorkflow({ courseId, onPublished }: PublishWorkflowProps)
     return (
       <Card>
         <CardContent className="flex items-center justify-center p-6">
-          <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+          <Loader2 className="h-6 w-6 animate-spin text-tertiary-foreground" />
         </CardContent>
       </Card>
     );
@@ -113,7 +113,7 @@ export function PublishWorkflow({ courseId, onPublished }: PublishWorkflowProps)
               ) : (
                 <X className="h-4 w-4 shrink-0 text-red-500" />
               )}
-              <span className={check.pass ? "text-gray-700" : "text-gray-500"}>
+              <span className={check.pass ? "text-foreground" : "text-muted-foreground"}>
                 {check.label}
               </span>
             </div>

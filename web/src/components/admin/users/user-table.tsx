@@ -38,39 +38,39 @@ export function UserTable({ users, onUserUpdated, onUserDeleted }: UserTableProp
 
   if (users.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-sm text-gray-400">
+      <div className="flex items-center justify-center py-12 text-sm text-tertiary-foreground">
         No users found.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200">
+    <div className="overflow-x-auto rounded-lg border border-border">
       <table className="w-full text-left text-sm">
-        <thead className="border-b border-gray-200 bg-gray-50">
+        <thead className="border-b border-border bg-muted">
           <tr>
-            <th className="px-4 py-3 font-medium text-gray-600">User</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Role</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Age Group</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Courses</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Enrolled</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Joined</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Actions</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">User</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Role</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Age Group</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Courses</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Enrolled</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Joined</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-border">
           {users.map((u) => (
             <tr
               key={u.id}
-              className="cursor-pointer transition-colors hover:bg-gray-50"
+              className="cursor-pointer transition-colors hover:bg-muted"
               onClick={() => router.push(`/admin/users/${u.id}`)}
             >
               <td className="px-4 py-3">
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-foreground">
                     {u.fullName || "Unnamed"}
                   </p>
-                  <p className="text-xs text-gray-400">{u.email || "—"}</p>
+                  <p className="text-xs text-tertiary-foreground">{u.email || "—"}</p>
                 </div>
               </td>
               <td className="px-4 py-3">
@@ -78,16 +78,16 @@ export function UserTable({ users, onUserUpdated, onUserDeleted }: UserTableProp
                   {u.role}
                 </Badge>
               </td>
-              <td className="px-4 py-3 text-gray-600">
+              <td className="px-4 py-3 text-muted-foreground">
                 {u.ageGroup || "—"}
               </td>
-              <td className="px-4 py-3 text-gray-600">
+              <td className="px-4 py-3 text-muted-foreground">
                 {u._count.courses}
               </td>
-              <td className="px-4 py-3 text-gray-600">
+              <td className="px-4 py-3 text-muted-foreground">
                 {u._count.enrollments}
               </td>
-              <td className="px-4 py-3 text-gray-500">
+              <td className="px-4 py-3 text-muted-foreground">
                 {format(new Date(u.createdAt), "MMM d, yyyy")}
               </td>
               <td className="px-4 py-3">

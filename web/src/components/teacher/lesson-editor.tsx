@@ -143,23 +143,23 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
         );
       case "image":
         return (
-          <div className="rounded-lg border border-dashed border-gray-200 p-4 text-center text-sm text-gray-400">
+          <div className="rounded-lg border border-dashed border-border p-4 text-center text-sm text-tertiary-foreground">
             Image block editor (URL, alt text, caption inputs)
           </div>
         );
       case "code":
         return (
-          <div className="rounded-lg border border-dashed border-gray-200 p-4 text-center text-sm text-gray-400">
+          <div className="rounded-lg border border-dashed border-border p-4 text-center text-sm text-tertiary-foreground">
             Code block editor (language + code editor)
           </div>
         );
       case "divider":
         return (
-          <div className="py-2 text-center text-sm text-gray-400">Divider block</div>
+          <div className="py-2 text-center text-sm text-tertiary-foreground">Divider block</div>
         );
       default:
         return (
-          <div className="rounded-lg border border-dashed border-gray-200 p-4 text-center text-sm text-gray-400">
+          <div className="rounded-lg border border-dashed border-border p-4 text-center text-sm text-tertiary-foreground">
             Unknown block type: {block.type}
           </div>
         );
@@ -197,7 +197,7 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
               placeholder="Lesson description"
               rows={3}
               className={cn(
-                "flex min-h-[80px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
+                "flex min-h-[80px] w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-foreground placeholder:text-tertiary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
               )}
             />
           </div>
@@ -210,7 +210,7 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
             <Card key={block.id}>
               <CardContent className="p-4">
                 <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-500">
+                  <span className="text-sm font-medium text-muted-foreground">
                     Block {index + 1} &mdash; {block.type}
                   </span>
                   <button
@@ -226,7 +226,7 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
           ))}
 
           {!blocks.length && (
-            <div className="rounded-lg border border-dashed border-gray-200 p-8 text-center text-gray-400">
+            <div className="rounded-lg border border-dashed border-border p-8 text-center text-tertiary-foreground">
               No blocks yet. Use the palette on the right to add content blocks.
             </div>
           )}

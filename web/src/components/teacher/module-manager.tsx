@@ -126,11 +126,11 @@ export function ModuleManager({ courseId }: ModuleManagerProps) {
                 key={mod.id}
                 className="flex items-center gap-3 rounded-lg border p-3"
               >
-                <GripVertical className="h-5 w-5 shrink-0 text-gray-400" />
+                <GripVertical className="h-5 w-5 shrink-0 text-tertiary-foreground" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-gray-900">{mod.title}</p>
+                  <p className="truncate font-medium text-foreground">{mod.title}</p>
                   {mod.description && (
-                    <p className="truncate text-sm text-gray-500">{mod.description}</p>
+                    <p className="truncate text-sm text-muted-foreground">{mod.description}</p>
                   )}
                 </div>
                 <Badge variant="secondary">
@@ -138,7 +138,7 @@ export function ModuleManager({ courseId }: ModuleManagerProps) {
                 </Badge>
                 <button
                   onClick={() => deleteMutation.mutate(mod.id)}
-                  className="shrink-0 rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                  className="shrink-0 rounded p-1 text-tertiary-foreground hover:bg-red-50 hover:text-red-500"
                   disabled={deleteMutation.isPending}
                 >
                   <Trash2 className="h-4 w-4" />

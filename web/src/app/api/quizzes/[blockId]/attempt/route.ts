@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { createClient } from "@/lib/supabase/server";
-import { saveQuizAttempt } from "@/lib/supabase/queries/quizzes";
+import { getUserId } from "@/lib/auth";
+import { saveQuizAttempt } from "@/lib/quizzes";
 
 const attemptSchema = z.object({
   lessonId: z.string().uuid(),
@@ -18,14 +18,7 @@ export async function POST(
 ) {
   const { blockId } = await params;
 
-  let userId: string | undefined;
-  try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    userId = user?.id;
-  } catch {
-    // Supabase not configured
-  }
+  const userId = await getUserId();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

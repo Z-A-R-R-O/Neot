@@ -22,8 +22,8 @@ export function CompletionFunnel({
     <div className="h-64">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={items} layout="vertical">
-          <XAxis type="number" className="text-xs text-gray-500" />
-          <YAxis dataKey="stage" type="category" className="text-xs text-gray-500" />
+          <XAxis type="number" className="text-xs text-muted-foreground" />
+          <YAxis dataKey="stage" type="category" className="text-xs text-muted-foreground" />
           <Tooltip />
           <Bar dataKey="count" radius={[0, 4, 4, 0]}>
             {items.map((_, i) => (

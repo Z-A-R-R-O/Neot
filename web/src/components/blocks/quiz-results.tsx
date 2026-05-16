@@ -49,10 +49,10 @@ export function QuizResults({
     <div className="space-y-6">
       <div className="rounded-lg border bg-white p-6 text-center">
         <div className="mb-2 text-5xl font-bold">{percentage}%</div>
-        <p className="text-lg text-gray-600">
+        <p className="text-lg text-muted-foreground">
           {correctCount} of {total} correct
         </p>
-        <div className="mt-4 flex items-center justify-center gap-6 text-sm text-gray-500">
+        <div className="mt-4 flex items-center justify-center gap-6 text-sm text-muted-foreground">
           <span>
             Time: {minutes}:{seconds.toString().padStart(2, "0")}
           </span>

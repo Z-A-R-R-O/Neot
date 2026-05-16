@@ -20,7 +20,7 @@ interface Props {
 
 const rankStyles = [
   { border: "border-yellow-500/30", bg: "bg-yellow-500/10", icon: "text-yellow-400", label: "1st" },
-  { border: "border-gray-300/30", bg: "bg-gray-300/10", icon: "text-gray-300", label: "2nd" },
+  { border: "border-border/30", bg: "bg-muted/10", icon: "text-tertiary-foreground", label: "2nd" },
   { border: "border-amber-600/30", bg: "bg-amber-600/10", icon: "text-amber-500", label: "3rd" },
 ];
 

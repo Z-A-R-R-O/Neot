@@ -127,8 +127,8 @@ function LessonEditorForm({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Lesson</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Edit Lesson</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Build your lesson content.
           </p>
         </div>
@@ -178,16 +178,16 @@ function LessonEditorForm({
       <div className="flex gap-6">
         <div className="flex-1 space-y-4">
           {blocks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 p-12 text-center">
-              <p className="text-sm text-gray-500">
+            <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border p-12 text-center">
+              <p className="text-sm text-muted-foreground">
                 No content blocks yet. Add one from the palette.
               </p>
             </div>
           ) : (
             blocks.map((block) => (
               <Card key={block.id}>
-                <div className="flex items-center justify-between border-b border-gray-100 px-6 py-2">
-                  <span className="text-xs font-medium uppercase text-gray-500">
+                <div className="flex items-center justify-between border-b border-border px-6 py-2">
+                  <span className="text-xs font-medium uppercase text-muted-foreground">
                     {block.type}
                   </span>
                   <Button
@@ -314,7 +314,7 @@ function BlockEditor({
         />
       );
     default:
-      return <p className="text-sm text-gray-400">Unknown block type</p>;
+      return <p className="text-sm text-tertiary-foreground">Unknown block type</p>;
   }
 }
 

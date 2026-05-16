@@ -1,37 +1,34 @@
-import { usePageBuilderStore, type PageSection } from "./pageBuilderStore";
+import { usePageBuilderStore } from "./pageBuilderStore";
 import { useHistoryStore } from "./historyStore";
 
-let initialized = false;
-let undoing = false;
-let previousSections: PageSection[] | null = null;
-
-export function setUndoing(value: boolean) {
-  undoing = value;
-}
-
-export function setInitialized(value: boolean) {
-  initialized = value;
-}
-
 export function initHistoryMiddleware() {
+  let previousSections: string | null = null;
+
   usePageBuilderStore.subscribe((state) => {
+    const serialized = JSON.stringify(state.sections);
+
     if (previousSections === null) {
-      previousSections = state.sections;
+      previousSections = serialized;
       return;
     }
 
     const prev = previousSections;
-    previousSections = state.sections;
+    previousSections = serialized;
 
-    if (!initialized || undoing) return;
+    if (prev === serialized) return;
+    if (useHistoryStore.getState().isUndoing) return;
 
     const snapshot = {
       id: crypto.randomUUID(),
       timestamp: Date.now(),
       label: "Auto-save",
-      data: JSON.stringify(prev),
+      data: prev,
     };
 
     useHistoryStore.getState().pushSnapshot(snapshot);
   });
+}
+
+export function setUndoing(value: boolean) {
+  useHistoryStore.getState().setUndoing(value);
 }

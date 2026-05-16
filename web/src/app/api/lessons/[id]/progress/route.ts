@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { createClient } from "@/lib/supabase/server";
+import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 const upsertProgressSchema = z.object({
@@ -17,14 +17,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  let userId: string | undefined;
-  try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    userId = user?.id;
-  } catch {
-    // Supabase not configured
-  }
+  const userId = await getUserId();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -43,14 +36,7 @@ export async function POST(
 ) {
   const { id } = await params;
 
-  let userId: string | undefined;
-  try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    userId = user?.id;
-  } catch {
-    // Supabase not configured
-  }
+  const userId = await getUserId();
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

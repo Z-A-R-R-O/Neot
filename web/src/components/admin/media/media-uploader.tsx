@@ -55,7 +55,7 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
         className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
           isDragging
             ? "border-primary-500 bg-primary-50"
-            : "border-gray-300 hover:border-gray-400"
+            : "border-border hover:border-border"
         }`}
         onDragOver={(e) => {
           e.preventDefault();
@@ -72,7 +72,7 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
         {isUploading ? (
           <div className="flex flex-col items-center gap-2">
             <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
-            <p className="text-sm text-gray-500">Uploading...</p>
+            <p className="text-sm text-muted-foreground">Uploading...</p>
           </div>
         ) : preview ? (
           <div className="relative">
@@ -83,7 +83,7 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
                 className="max-h-32 rounded object-contain"
               />
             ) : (
-              <p className="text-sm text-gray-500">File selected</p>
+              <p className="text-sm text-muted-foreground">File selected</p>
             )}
             <button
               className="absolute -right-2 -top-2 rounded-full bg-red-500 p-0.5 text-white"
@@ -94,12 +94,12 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
-            <Upload className="h-8 w-8 text-gray-400" />
+            <Upload className="h-8 w-8 text-tertiary-foreground" />
             <div>
-              <p className="text-sm font-medium text-gray-700">
+              <p className="text-sm font-medium text-foreground">
                 Drop a file here or click to browse
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-tertiary-foreground">
                 PNG, JPG, GIF, WebP, SVG, PDF — max 10MB
               </p>
             </div>

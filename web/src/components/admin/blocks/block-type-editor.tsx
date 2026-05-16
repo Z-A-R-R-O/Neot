@@ -44,8 +44,8 @@ export function BlockTypeEditor({ block, onSave }: BlockTypeEditorProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">{block.name}</h2>
-          <p className="text-sm text-gray-500">{block.description}</p>
+          <h2 className="text-lg font-semibold text-foreground">{block.name}</h2>
+          <p className="text-sm text-muted-foreground">{block.description}</p>
         </div>
         <Button size="sm" onClick={handleSave} disabled={isSaving}>
           {isSaving ? (
@@ -63,21 +63,21 @@ export function BlockTypeEditor({ block, onSave }: BlockTypeEditorProps) {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xs font-medium uppercase tracking-wider text-gray-500">
+        <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Field Definitions ({block.fields.length})
         </h3>
         {block.fields.length === 0 ? (
-          <p className="text-sm text-gray-400">No configurable fields.</p>
+          <p className="text-sm text-tertiary-foreground">No configurable fields.</p>
         ) : (
           <div className="space-y-3">
             {block.fields.map((field) => (
               <div
                 key={field.key}
-                className="rounded-lg border border-gray-200 p-3"
+                className="rounded-lg border border-border p-3"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-foreground">
                       {field.label}
                     </span>
                     {field.required && (
@@ -93,7 +93,7 @@ export function BlockTypeEditor({ block, onSave }: BlockTypeEditorProps) {
                     </SelectContent>
                   </Select>
                 </div>
-                <p className="mt-1 font-mono text-xs text-gray-400">
+                <p className="mt-1 font-mono text-xs text-tertiary-foreground">
                   {field.key}
                 </p>
               </div>

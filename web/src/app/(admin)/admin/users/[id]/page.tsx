@@ -89,10 +89,10 @@ export default function UserDetailPage() {
             Back
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-foreground">
               {user.fullName || "Unnamed User"}
             </h1>
-            <p className="text-sm text-gray-500">{user.email || "No email"}</p>
+            <p className="text-sm text-muted-foreground">{user.email || "No email"}</p>
           </div>
           <Badge variant={user.role === "admin" ? "default" : "secondary"}>
             {user.role}
@@ -128,22 +128,22 @@ export default function UserDetailPage() {
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-semibold text-gray-900">
+        <h2 className="mb-3 text-lg font-semibold text-foreground">
           Recent Enrollments
         </h2>
         {user.enrollments.length === 0 ? (
-          <p className="text-sm text-gray-400">No enrollments.</p>
+          <p className="text-sm text-tertiary-foreground">No enrollments.</p>
         ) : (
           <div className="space-y-2">
             {user.enrollments.map((enrollment) => (
               <div
                 key={enrollment.id}
-                className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3"
+                className="flex items-center justify-between rounded-lg border border-border px-4 py-3"
               >
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-foreground">
                   {enrollment.course.title}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {format(new Date(enrollment.createdAt), "MMM d, yyyy")}
                 </p>
               </div>
@@ -159,19 +159,19 @@ export default function UserDetailPage() {
         <CardContent>
           <dl className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <dt className="text-gray-500">ID</dt>
-              <dd className="font-mono text-xs text-gray-900">{user.id}</dd>
+              <dt className="text-muted-foreground">ID</dt>
+              <dd className="font-mono text-xs text-foreground">{user.id}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Age Group</dt>
+              <dt className="text-muted-foreground">Age Group</dt>
               <dd>{user.ageGroup || "—"}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Onboarding</dt>
+              <dt className="text-muted-foreground">Onboarding</dt>
               <dd>{user.onboardingCompleted ? "✅ Complete" : "❌ Incomplete"}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Joined</dt>
+              <dt className="text-muted-foreground">Joined</dt>
               <dd>{format(new Date(user.createdAt), "MMM d, yyyy")}</dd>
             </div>
           </dl>

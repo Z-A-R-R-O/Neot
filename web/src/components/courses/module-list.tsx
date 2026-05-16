@@ -31,45 +31,45 @@ export function ModuleList({ modules }: ModuleListProps) {
       {modules.map((mod) => (
         <div
           key={mod.id}
-          className="overflow-hidden rounded-lg border border-gray-200"
+          className="overflow-hidden rounded-lg border border-border"
         >
           <button
             onClick={() => setExpanded(expanded === mod.id ? null : mod.id)}
-            className="flex w-full items-center justify-between bg-gray-50 px-4 py-3 text-left hover:bg-gray-100"
+            className="flex w-full items-center justify-between bg-muted px-4 py-3 text-left hover:bg-muted"
           >
             <div>
-              <span className="text-xs font-medium text-gray-400">
+              <span className="text-xs font-medium text-tertiary-foreground">
                 Module {mod.sortOrder}
               </span>
-              <h3 className="font-medium text-gray-900">{mod.title}</h3>
+              <h3 className="font-medium text-foreground">{mod.title}</h3>
             </div>
             <ChevronDown
               className={cn(
-                "h-4 w-4 text-gray-400 transition-transform",
+                "h-4 w-4 text-tertiary-foreground transition-transform",
                 expanded === mod.id && "rotate-180",
               )}
             />
           </button>
 
           {expanded === mod.id && (
-            <div className="divide-y divide-gray-100 border-t border-gray-200">
+            <div className="divide-y divide-border border-t border-border">
               {mod.lessons.map((lesson) => (
                 <Link
                   key={lesson.id}
                   href={`/lessons/${lesson.id}`}
-                  className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50"
+                  className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted"
                 >
-                  <FileText className="h-4 w-4 shrink-0 text-gray-400" />
-                  <span className="flex-1 text-gray-700">{lesson.title}</span>
+                  <FileText className="h-4 w-4 shrink-0 text-tertiary-foreground" />
+                  <span className="flex-1 text-foreground">{lesson.title}</span>
                   {lesson.estimatedMinutes && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-tertiary-foreground">
                       {lesson.estimatedMinutes} min
                     </span>
                   )}
                 </Link>
               ))}
               {mod.lessons.length === 0 && (
-                <p className="px-4 py-3 text-sm text-gray-400">
+                <p className="px-4 py-3 text-sm text-tertiary-foreground">
                   No lessons yet
                 </p>
               )}

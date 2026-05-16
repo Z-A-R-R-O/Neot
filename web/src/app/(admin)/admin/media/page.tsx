@@ -63,8 +63,8 @@ export default function AdminMediaPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Media Library</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Media Library</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Upload and manage media files.
         </p>
       </div>

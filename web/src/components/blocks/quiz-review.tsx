@@ -18,7 +18,7 @@ interface QuizReviewProps {
 export function QuizReview({ answers, questions }: QuizReviewProps) {
   return (
     <div className="space-y-4">
-      <h3 className="font-medium text-gray-900">Review Answers</h3>
+      <h3 className="font-medium text-foreground">Review Answers</h3>
 
       {answers.map((answer, index) => {
         const question = questions.find((q) => q.id === answer.questionId);
@@ -51,12 +51,12 @@ export function QuizReview({ answers, questions }: QuizReviewProps) {
               )}
 
               <div className="flex-1">
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-foreground">
                   Question {index + 1}: {question.text}
                 </p>
 
                 <div className="mt-2 space-y-1 text-sm">
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     <span className="font-medium">Your answer:</span>{" "}
                     {Array.isArray(answer.selected)
                       ? answer.selected.join(", ")
@@ -71,7 +71,7 @@ export function QuizReview({ answers, questions }: QuizReviewProps) {
                   )}
                 </div>
 
-                <p className="mt-2 text-sm text-gray-500">
+                <p className="mt-2 text-sm text-muted-foreground">
                   {question.explanation}
                 </p>
               </div>

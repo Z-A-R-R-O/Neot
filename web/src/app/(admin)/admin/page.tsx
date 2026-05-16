@@ -58,8 +58,8 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-        <p className="mt-1 text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Admin Dashboard</h1>
+        <p className="mt-1 text-muted-foreground">
           Platform overview and management.
         </p>
       </div>
@@ -77,7 +77,7 @@ export default async function AdminDashboardPage() {
                   <CardDescription>{stat.label}</CardDescription>
                   <CardTitle className="mt-0 text-2xl">{stat.value}</CardTitle>
                   {stat.sub && (
-                    <p className="mt-0.5 truncate text-xs text-gray-400">
+                    <p className="mt-0.5 truncate text-xs text-tertiary-foreground">
                       {stat.sub}
                     </p>
                   )}

@@ -5,7 +5,7 @@ export interface Snapshot {
   id: string;
   timestamp: number;
   label: string;
-  data: string; // JSON stringified block tree
+  data: string;
 }
 
 const MAX_HISTORY = 50;
@@ -14,10 +14,12 @@ interface HistoryState {
   past: Snapshot[];
   future: Snapshot[];
   snapshots: Snapshot[];
+  isUndoing: boolean;
 
   pushSnapshot: (snapshot: Snapshot) => void;
   undo: () => Snapshot | null;
   redo: () => Snapshot | null;
+  setUndoing: (value: boolean) => void;
   saveSnapshot: (label: string, data: string) => void;
   restoreSnapshot: (id: string) => Snapshot | undefined;
   deleteSnapshot: (id: string) => void;
@@ -40,6 +42,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   past: [],
   future: [],
   snapshots: [],
+  isUndoing: false,
 
   pushSnapshot: (snapshot) =>
     set((state) => ({
@@ -109,6 +112,8 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
     })),
 
   clear: () => set({ past: [], future: [] }),
+
+  setUndoing: (value) => set({ isUndoing: value }),
 
   canUndo: () => get().past.length > 0,
 

@@ -35,7 +35,7 @@ export function QuizFeedback({ isCorrect, explanation, hint }: QuizFeedbackProps
           >
             {isCorrect ? "Correct!" : "Incorrect"}
           </p>
-          <p className="mt-1 text-sm text-gray-600">{explanation}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{explanation}</p>
           {hint && !isCorrect && (
             <div className="mt-2 flex items-start gap-2 rounded-md bg-amber-50 p-3">
               <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />

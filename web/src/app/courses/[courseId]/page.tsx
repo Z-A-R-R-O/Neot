@@ -33,13 +33,13 @@ export default function CourseDetailPage({
     <div className="mx-auto max-w-4xl space-y-8">
       <Link
         href="/courses"
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to courses
       </Link>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-border bg-white">
         <div className="aspect-video bg-gradient-to-br from-primary-100 to-primary-50">
           {course.thumbnailUrl && (
             <img
@@ -62,15 +62,15 @@ export default function CourseDetailPage({
                 )}
               </div>
 
-              <h1 className="mt-3 text-2xl font-bold text-gray-900">
+              <h1 className="mt-3 text-2xl font-bold text-foreground">
                 {course.title}
               </h1>
 
               {course.description && (
-                <p className="mt-2 text-gray-600">{course.description}</p>
+                <p className="mt-2 text-muted-foreground">{course.description}</p>
               )}
 
-              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 {course.estimatedMinutes && (
                   <span className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
@@ -86,7 +86,7 @@ export default function CourseDetailPage({
                   {course._count?.enrollments ?? 0} enrolled
                 </span>
                 {course.teacher && (
-                  <span className="text-gray-400">
+                  <span className="text-tertiary-foreground">
                     by {course.teacher.fullName ?? "Unknown"}
                   </span>
                 )}
@@ -100,7 +100,7 @@ export default function CourseDetailPage({
 
       {course.modules && course.modules.length > 0 && (
         <div>
-          <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          <h2 className="mb-4 text-xl font-semibold text-foreground">
             Course Content
           </h2>
           <ModuleList modules={course.modules} />

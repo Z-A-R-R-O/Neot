@@ -42,7 +42,7 @@ export function QuizTimer({ timeLimit, onTimeUp, onTick }: QuizTimerProps) {
     <div
       className={cn(
         "flex items-center gap-1 text-sm font-medium",
-        isLow ? "text-red-600" : "text-gray-500",
+        isLow ? "text-red-600" : "text-muted-foreground",
       )}
     >
       <Clock className="h-4 w-4" />

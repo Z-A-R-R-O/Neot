@@ -29,7 +29,7 @@ export function AnimationConfig({
 }: AnimationConfigProps) {
   return (
     <div className="space-y-3">
-      <h4 className="text-xs font-medium uppercase tracking-wider text-gray-500">
+      <h4 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         Animations
       </h4>
       <div className="space-y-1.5">

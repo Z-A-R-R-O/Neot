@@ -66,7 +66,7 @@ export function MediaGrid({ items, onDeleted }: MediaGridProps) {
 
   if (items.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-sm text-gray-400">
+      <div className="flex items-center justify-center py-12 text-sm text-tertiary-foreground">
         No media files yet. Upload one above.
       </div>
     );
@@ -77,9 +77,9 @@ export function MediaGrid({ items, onDeleted }: MediaGridProps) {
       {items.map((item) => (
         <div
           key={item.id}
-          className="group relative overflow-hidden rounded-lg border border-gray-200 transition-shadow hover:shadow-md"
+          className="group relative overflow-hidden rounded-lg border border-border transition-shadow hover:shadow-md"
         >
-          <div className="flex aspect-square items-center justify-center bg-gray-50">
+          <div className="flex aspect-square items-center justify-center bg-muted">
             {item.mimeType.startsWith("image/") ? (
               <img
                 src={item.url}
@@ -89,7 +89,7 @@ export function MediaGrid({ items, onDeleted }: MediaGridProps) {
             ) : (
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-3xl">{getFileIcon(item.mimeType)}</span>
-                <span className="max-w-[120px] truncate px-2 text-xs text-gray-500">
+                <span className="max-w-[120px] truncate px-2 text-xs text-muted-foreground">
                   {item.originalName}
                 </span>
               </div>
@@ -97,10 +97,10 @@ export function MediaGrid({ items, onDeleted }: MediaGridProps) {
           </div>
 
           <div className="space-y-1 p-2">
-            <p className="truncate text-xs font-medium text-gray-900">
+            <p className="truncate text-xs font-medium text-foreground">
               {item.originalName}
             </p>
-            <p className="text-[10px] text-gray-400">{formatSize(item.sizeBytes)}</p>
+            <p className="text-[10px] text-tertiary-foreground">{formatSize(item.sizeBytes)}</p>
           </div>
 
           <div

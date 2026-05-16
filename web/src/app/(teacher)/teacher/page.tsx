@@ -1,23 +1,13 @@
 import { BookOpen, Users, GraduationCap } from "lucide-react";
 
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default async function TeacherDashboardPage() {
-  let userId: string | undefined;
-  let email: string | undefined;
-
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    userId = user?.id;
-    email = user?.email ?? undefined;
-  } catch {
-    // Supabase not configured
-  }
+  const authUser = await getUser();
+  const userId = authUser?.id;
+  const email = authUser?.email ?? undefined;
 
   const name = email ? email.split("@")[0] : "there";
 
@@ -57,10 +47,10 @@ export default async function TeacherDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Welcome back, {name}!
         </h1>
-        <p className="mt-1 text-gray-500">
+        <p className="mt-1 text-muted-foreground">
           Here&apos;s an overview of your teaching.
         </p>
       </div>
