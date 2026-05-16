@@ -5,10 +5,10 @@
 ```
 ASSIST/S-IMPL/
 ├── README.md
-├── 01-track-a-core/checklist.md       ← Dev A
-├── 02-track-b-pages/checklist.md      ← Dev B
-├── 03-merge/checklist.md              ← Together
-└── 04-validation/checklist.md         ← Sign-off
+├── 01-track-a/checklist.md       ← Dev A
+├── 02-track-b/checklist.md       ← Dev B
+├── 03-merge/checklist.md         ← Together
+└── 04-validation/checklist.md    ← Sign-off
 ```
 
 ### Track Isolation

@@ -8,10 +8,9 @@
 
 ```
 Files to create:
-  web/supabase/migrations/007_adaptive.sql
+  web/prisma/schema.prisma             ← Add AdaptiveProfile model (or extend Profile)
   web/src/app/api/adaptive/profile/route.ts
   web/src/app/api/adaptive/profile/[studentId]/route.ts
-  web/src/lib/supabase/queries/adaptive.ts
   web/src/types/adaptive.ts
 ```
 
@@ -170,15 +169,13 @@ async function mutateLesson(
 ## Task 2.5 — Gamification Database
 
 ```
-Files to create:
-  web/supabase/migrations/008_gamification.sql
+Files to modify:
+  web/prisma/schema.prisma             ← Add xp_transactions, achievements, streaks, levels
 ```
 
-Tables:
-- `xp_events` (user_id, amount, reason, source)
-- `achievements` (user_id, achievement_key, unlocked_at)
-- `streaks` (user_id, current_streak, longest_streak, last_activity_date)
-- `user_levels` (user_id, level, total_xp)
+Tables (add to Prisma schema):
+- `xp_transactions` (already exists — add streak/level fields if needed)
+- Additional models for streaks, user_levels
 
 **Write:** All gamification tables exist with proper indexes and RLS.
 **Test:** Insert XP event → triggers level calculation.
@@ -374,4 +371,4 @@ Admin can:
 - [ ] Admin can edit adaptive rules and XP settings
 - [ ] Dashboard adapts differently per student profile
 
-> **Phase 2 Complete** ✅ → Move to `05-phase-3-ai-mobile.md`
+> **Phase 2 Complete** ✅ → Move to `06-phase-3-ai-mobile.md`

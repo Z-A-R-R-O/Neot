@@ -6,14 +6,16 @@
 
 ## Task 1.1 — Database Models (Prisma Schema)
 
-> **Status: ✅ Complete** (deviated from plan — used Prisma schema instead of Supabase SQL migration)
+> **Status: ✅ Complete** (used Prisma schema → SQLite via LibSQL adapter)
 
 ```
 Files created:
-  web/prisma/schema.prisma         ← All 13 models defined
+  web/prisma/schema.prisma         ← All 17 models defined
 ```
 
 Tables (via Prisma schema → SQLite):
+- `Profile` — user accounts with role (student/teacher/parent/admin)
+- `Session` — auth sessions with HttpOnly cookie tokens
 - `Category` — name, slug, description, icon, sort_order
 - `Course` — title, description, thumbnail, category, teacher, difficulty, age_range, status, etc.
 - `Module` — course_id, title, description, sort_order (cascade delete)
@@ -24,17 +26,20 @@ Tables (via Prisma schema → SQLite):
 - `Achievement` / `UserAchievement` — achievement definitions + user unlocks
 - `SiteTheme` — named theme with JSON tokens
 - `CustomPage` / `PageSection` — CMS page builder models
+- `BlockDefinition` — registry of block types with field schemas
+- `Media` — uploaded files metadata
+- `PlatformSetting` — key-value platform settings
 
-**Write:** `prisma db push` creates SQLite DB with all tables. Relations with cascade deletes.
-**Test:** `npx ts-node prisma/seed.ts` inserts sample data. Schema introspection passes.
+**Write:** `npx prisma db push` creates SQLite DB with all tables. Relations with cascade deletes.
+**Test:** `npx prisma db push` + `npx prisma generate` succeed. Schema introspection passes.
 
-> **Note:** RLS not applicable to SQLite. Access control is handled in API route handlers instead.
+> **Note:** Access control is handled in API route handlers (no RLS with SQLite).
 
 ---
 
 ## Task 1.2 — Course CRUD API
 
-> **Status: ✅ Complete** (implemented via Prisma API routes, not Supabase queries)
+> **Status: ✅ Complete**
 
 ```
 Files created:
@@ -42,7 +47,7 @@ Files created:
   web/src/app/api/courses/[id]/route.ts
   web/src/app/api/courses/[id]/modules/route.ts
   web/src/app/api/courses/[id]/modules/editor/route.ts   ← extra: POST/DELETE modules
-  web/src/lib/db.ts                                        ← Prisma client singleton
+  web/src/lib/db.ts                                        ← Prisma client singleton (LibSQL)
 ```
 
 ```typescript

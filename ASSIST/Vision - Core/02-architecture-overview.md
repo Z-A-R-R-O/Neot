@@ -2,6 +2,12 @@
 
 ## High-Level Architecture
 
+> **Note:** The architecture diagram below reflects the *planned* architecture with Supabase/PostgreSQL/Redis. The **current implementation** uses:
+> - **SQLite via Prisma** (instead of PostgreSQL) — zero-config local dev
+> - **Local auth** via bcrypt + session cookies (instead of Supabase Auth)
+> - **In-memory rate limiter** (instead of Redis)
+> - **Custom API routes** in Next.js App Router (all backend logic lives in `web/src/app/api/`)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     FRONTEND APPS                           │
@@ -12,37 +18,35 @@
 │       │             │             │             │          │
 │       └─────────────┴─────────────┴─────────────┘          │
 │                         │                                   │
-│                    API Layer (REST + GraphQL)               │
+│              API Layer (Next.js App Router)                 │
 └─────────────────────────┬───────────────────────────────────┘
                           │
 ┌─────────────────────────▼───────────────────────────────────┐
-│                    API GATEWAY                               │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
-│  │   Auth   │  │  Rate    │  │  Cache   │  │  Load    │    │
-│  │  Service │  │  Limit   │  │  Layer   │  │  Balance │    │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
+│                    API LAYER                                  │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐                  │
+│  │ Local    │  │  Rate    │  │  CSRF    │                  │
+│  │ Auth     │  │  Limit   │  │  Guard   │                  │
+│  └──────────┘  └──────────┘  └──────────┘                  │
 └─────────────────────────┬───────────────────────────────────┘
                           │
 ┌─────────────────────────▼───────────────────────────────────┐
-│                    BACKEND CORE                              │
+│                    BACKEND CORE (Next.js API Routes)         │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
-│  │  User    │  │  Course  │  │ Learning │  │ Analytics│    │
-│  │ Service  │  │  Service │  │  Engine  │  │ Service  │    │
+│  │  Auth    │  │  Course  │  │  Lesson  │  │ Analytics│    │
+│  │  Routes  │  │  Routes  │  │  Routes  │  │  Routes  │    │
 │  ├──────────┤  ├──────────┤  ├──────────┤  ├──────────┤    │
-│  │  Quiz    │  │  Content │  │  AI      │  │ Gamifica-│    │
-│  │  Service │  │  Service │  │  Service │  │ tion Svc │    │
-│  ├──────────┤  ├──────────┤  ├──────────┤  ├──────────┤    │
-│  │Notificat │  │  Payment │  │  Search  │  │  Media   │    │
-│  │ Service  │  │  Service │  │  Service │  │  Service │    │
+│  │  Admin   │  │  Media   │  │  Enroll  │  │  Quiz   │    │
+│  │  Routes  │  │  Routes  │  │  Routes  │  │  Routes  │    │
 │  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
-└──────────┬──────────┬──────────┬────────────────────────────┘
-           │          │          │
-┌──────────▼──────────▼──────────▼────────────────────────────┐
+└──────────┬──────────────────────────────────────────────────┘
+           │
+┌──────────▼──────────────────────────────────────────────────┐
 │                   DATA LAYER                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐   │
-│  │  PostgreSQL   │  │    Redis     │  │  Object Storage  │   │
-│  │  (Primary DB) │  │   (Cache)   │  │ (Media/Files)    │   │
-│  └──────────────┘  └──────────────┘  └──────────────────┘   │
+│  ┌──────────────────────────────────────────────────┐       │
+│  │  SQLite (via Prisma + LibSQL adapter)             │       │
+│  │  - 17 models covering all features                │       │
+│  │  - Single-file local DB (web/dev.db)              │       │
+│  └──────────────────────────────────────────────────┘       │
 └──────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────┐
@@ -170,15 +174,16 @@ User Action → Frontend → API Gateway → Backend Service → Database
 
 ## Key Architectural Decisions
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Frontend Framework | Next.js | SSR for SEO, app-like experience, huge ecosystem |
-| Mobile | Flutter | Smoother animations for kids, single codebase |
-| Backend Platform | Supabase | Auth, DB, storage, realtime — all in one |
-| Admin CMS | Directus | Self-hosted, fully customizable, extensible |
-| AI | OpenAI API + Custom | Fast integration, plus custom for specific needs |
-| Database | PostgreSQL | Reliable, scalable, JSONB for flexible schemas |
-| Cache | Redis | In-memory speed for adaptive engine |
-| State Management | Zustand (web) / Riverpod (mobile) | Lightweight, performant |
-| Data Fetching | React Query | Caching, deduplication, background sync |
-| Styling | Tailwind CSS | Utility-first, fast development, small bundles |
+| Decision | Current Implementation | Notes |
+|----------|----------------------|-------|
+| Frontend Framework | Next.js 16 + React 19 | App Router, server components by default |
+| Mobile | Web-first (Flutter planned) | No mobile app yet |
+| Backend DB | SQLite via Prisma + LibSQL adapter | Zero-config local dev |
+| Auth | Local: bcryptjs + session cookies | No external auth dependency |
+| Admin CMS | Custom Prisma-based admin panel | Directus container available but not active |
+| AI | OpenAI API (planned) | Not yet integrated |
+| Database | SQLite → PostgreSQL later | LibSQL adapter makes migration straightforward |
+| Cache | In-memory (Redis planned) | Simple for single-process dev |
+| State Management | Zustand (web) | Lightweight, no boilerplate |
+| Data Fetching | TanStack Query | Caching, deduplication, background sync |
+| Styling | Tailwind CSS + shadcn/ui | Utility-first, dark premium theme |

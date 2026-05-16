@@ -8,14 +8,14 @@
 
 ```
 Files to create:
-  web/supabase/migrations/010_marketplace.sql
+  web/prisma/schema.prisma             ← Add marketplace models
   web/src/app/api/marketplace/courses/route.ts
   web/src/app/api/marketplace/categories/route.ts
   web/src/app/api/marketplace/search/route.ts
   web/src/lib/marketplace/listing-service.ts
 ```
 
-Tables:
+Tables (add to Prisma schema):
 - `marketplace_courses` (course_id, price, status, featured_until, revenue_share)
 - `marketplace_reviews` (course_id, user_id, rating, review, created_at)
 - `marketplace_payouts` (teacher_id, amount, status, period)
@@ -197,7 +197,7 @@ Files to create:
 On course completion:
 1. Generate certificate PDF with student name, course name, date, completion score
 2. Unique certificate ID for verification
-3. Store in Supabase Storage
+3. Store in filesystem/S3 (via Media model)
 4. Email to student
 5. Shareable link
 6. Printable version

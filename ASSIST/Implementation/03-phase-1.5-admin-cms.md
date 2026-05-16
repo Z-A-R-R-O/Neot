@@ -8,11 +8,10 @@
 
 ```
 Files to create:
-  web/supabase/migrations/005_admin_cms.sql
   web/src/app/api/admin/pages/route.ts
-  web/src/app/api/admin/pages/[key]/route.ts
-  web/src/app/api/admin/pages/[key]/sections/route.ts
-  web/src/lib/supabase/queries/admin/pages.ts
+  web/src/app/api/admin/pages/[slug]/route.ts
+  web/src/app/api/admin/pages/[slug]/sections/route.ts
+  web/prisma/schema.prisma           ← CustomPage + PageSection models already in schema
 ```
 
 Tables:
@@ -94,11 +93,10 @@ Files to create:
 
 ```
 Files to create:
-  web/supabase/migrations/006_themes.sql
   web/src/app/api/admin/themes/route.ts
   web/src/app/api/admin/themes/[id]/route.ts
   web/src/app/api/admin/themes/active/route.ts
-  web/src/lib/supabase/queries/admin/themes.ts
+  web/prisma/schema.prisma           ← SiteTheme model already in schema
 ```
 
 ```typescript
@@ -282,4 +280,4 @@ Settings stored in `platform_settings` (key-value JSONB): General, Auth, Email, 
 - [x] Admin dashboard shows real analytics
 - [x] All admin pages load under 2s
 
-> **Phase 1.5 Complete** ✅ → Move to `04-phase-2-adaptive-gamification.md`
+> **Phase 1.5 Complete** ✅ → Move to `04-phase-1.75-dynamic-renderer.md`

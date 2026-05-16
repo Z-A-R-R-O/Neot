@@ -41,13 +41,14 @@ Open http://localhost:3000 — you'll see the landing page.
 ```
 web/
 ├── prisma/
-│   └── schema.prisma          ← Database models (source of truth)
+│   └── schema.prisma          ← Database models (17 models, source of truth)
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/             ← Login, signup, forgot-password
 │   │   ├── (dashboard)/        ← Student/parent dashboards
 │   │   ├── (teacher)/          ← Teacher tools
 │   │   ├── (admin)/            ← Admin panel (Phase 1.5)
+│   │   ├── (public)/           ← Catch-all public page renderer
 │   │   ├── courses/            ← Course listing + detail
 │   │   ├── lessons/            ← Lesson player
 │   │   └── api/                ← Route handlers
@@ -55,20 +56,32 @@ web/
 │   │   ├── ui/                 ← shadcn/ui primitives (button, card, dialog...)
 │   │   ├── layout/             ← Sidebar, header, shell, offline-banner
 │   │   ├── admin/              ← Admin components (pages, themes, blocks, users, media, settings)
-│   │   ├── blocks/             ← Lesson block renderers (text, video, quiz)
-│   │   └── gamification/       ← XP, streaks, badges (Phase 2)
+│   │   ├── blocks/             ← Lesson blocks + 17 page sections (registry-based)
+│   │   ├── dev-mode/           ← Visual Experience Engine overlay (13 components)
+│   │   └── teacher/            ← Teacher course builder + analytics
 │   ├── hooks/                  ← Custom React hooks
 │   ├── lib/                    ← Core logic
-│   │   ├── auth.ts             ← Session management (bcrypt + SQLite cookies)
-│   │   ├── db.ts               ← Prisma client singleton
+│   │   ├── auth.ts             ← Local auth: bcrypt + session cookies (no Supabase)
+│   │   ├── db.ts               ← Prisma client singleton (LibSQL adapter)
+│   │   ├── block-registry.ts   ← Component registry (Map-based, no switch/case)
+│   │   ├── editor-registry.ts  ← Section editor registry
+│   │   ├── block-definitions.ts← 10 block type definitions
+│   │   ├── block-presets.ts    ← Visual presets for sections
+│   │   ├── responsive-engine.ts← Breakpoint system (desktop/tablet/mobile)
+│   │   ├── registrations.ts    ← Central wiring of all blocks + editors
 │   │   ├── csrf.ts             ← CSRF origin validation
 │   │   ├── rate-limit.ts       ← In-memory rate limiter
 │   │   ├── theme/              ← Theme engine (provider, converter, resolver)
-│   │   └── supabase/           ← Legacy naming — not used
+│   │   └── quizzes.ts          ← Quiz engine logic
 │   ├── stores/                 ← Zustand stores
+│   │   ├── authStore.ts
+│   │   ├── devModeStore.ts
+│   │   ├── historyStore.ts
+│   │   ├── pageBuilderStore.ts
+│   │   └── lessonStore.ts
 │   └── types/                  ← TypeScript type definitions
-├── ASSIST/                     ← Build operating system (see below)
-└── directus/                   ← Directus CMS config (not in use yet)
+├── ASSIST/                     ← Build operating system
+└── directus/                   ← Directus CMS (Docker-based, Supabase Postgres backend)
 ```
 
 ---
@@ -77,8 +90,9 @@ web/
 
 | Choice | Why |
 |--------|-----|
-| **Prisma + SQLite** | Zero-config, fast iteration, no external DB needed |
+| **Prisma + SQLite** (LibSQL adapter) | Zero-config, fast iteration, no external DB needed |
 | **Local auth** (bcrypt + session cookies) | Fully offline, no external service dependency |
+| **Next.js 16 + React 19** | Latest features, Turbopack, server components |
 | **Zustand** for UI state | Lightweight, no boilerplate |
 | **TanStack Query** for server state | Caching, deduplication, background sync |
 | **shadcn/ui** (Radix Nova) | Accessible, styled, registry-managed |
@@ -101,7 +115,7 @@ ASSIST/
 ├── README.md              ← Operating manual
 ├── GUIDE.md               ← This file
 ├── Vision - Core/         ← Product specs (architecture, UX, data models)
-│   └── 01-vision-overview.md ... 15-tech-stack-details.md
+│   └── 01-vision-overview.md ... 16-visual-experience-engine.md
 ├── Implementation/        ← Phased build plans
 │   ├── 00-master-index.md ← Phase map, dependency graph, shipped inventory
 │   ├── 01-phase-0-foundation.md (✅ done)
@@ -109,13 +123,14 @@ ASSIST/
 │   ├── 03-phase-1.5-admin-cms.md (✅ done)
 │   ├── 04-phase-1.75-dynamic-renderer.md (✅ done)
 │   ├── 11-phase-ui-transformation.md (✅ done)
-│   ├── 12-phase-2.5-dev-mode.md (🚧 in-progress)
-│   ├── 13-phase-dev-mode-e2e.md (🚧 in-progress)
-│   ├── 05-phase-2-adaptive-gamification.md
+│   ├── 12-phase-2.5-dev-mode.md (✅ done)
+│   ├── 13-phase-dev-mode-e2e.md (✅ done)
+│   ├── 05-phase-2-adaptive-gamification.md (🔲 next)
 │   ├── 06-phase-3-ai-mobile.md
 │   ├── 07-phase-4-parent-school.md
 │   ├── 08-phase-5-scale-marketplace.md
 │   └── 10-engineering-standards.md
+├── S-IMPL/                ← Split implementation tracks
 ├── Log/                   ← One .md file per work session
 └── Tools/
     └── git-helper.ps1     ← Auto-numbered commits
@@ -158,8 +173,8 @@ Read the relevant spec in `Vision - Core/` for context. Follow conventions in `0
 | 1.5 Admin CMS | ✅ Complete |
 | 1.75 Dynamic Renderer | ✅ Complete |
 | UI Transformation | ✅ Complete |
-| 2.5 Dev Mode | 🚧 In Progress |
-| 2 Adaptive + Gamification | 🔲 Not started |
+| 2.5 Dev Mode | ✅ Complete |
+| 2 Adaptive + Gamification | 🔲 Next up |
 | 3 AI + Mobile | 🔲 Not started |
 | 4 Parent + School | 🔲 Not started |
 | 5 Scale + Marketplace | 🔲 Not started |

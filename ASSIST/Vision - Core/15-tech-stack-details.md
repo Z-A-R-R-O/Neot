@@ -1,83 +1,70 @@
 # Technology Stack — Detailed Specification
 
+> **Note:** This document describes the *planned* technology stack. The **current implementation** uses:
+> - **Next.js 16 + React 19** (not Next.js 14 + React 18)
+> - **Prisma + SQLite** (LibSQL adapter) instead of Supabase PostgreSQL
+> - **Local auth** (bcryptjs + session cookies) instead of Supabase Auth
+> - **In-memory rate limiter** instead of Redis
+> - **Custom API routes** instead of Supabase backend
+> - **No Flutter mobile app** yet (web-first)
+> See `ASSIST/Implementation/00-master-index.md` for the shipped inventory.
+
 ## Complete Stack Overview
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│                    FRONTEND (Web)                          │
-│  Next.js 14 (App Router)  +  TypeScript 5                  │
-│  Tailwind CSS 3  +  Framer Motion 10                      │
-│  Zustand (state)  +  React Query/TanStack Query 5         │
-│  React Hook Form  +  Zod (validation)                     │
-│  Lucide React (icons)  +  Radix UI (headless primitives)  │
-└────────────────────────┬───────────────────────────────────┘
-                         │
-┌────────────────────────▼───────────────────────────────────┐
-│                    MOBILE (Flutter)                         │
-│  Flutter 3.16  +  Dart 3                                   │
-│  Riverpod (state)  +  Dio (HTTP)                           │
-│  Hive/Isar (local DB)  +  GoRouter (routing)              │
-│  Lottie (animations)  +  flutter_tts (text-to-speech)      │
-└────────────────────────┬───────────────────────────────────┘
-                         │
-┌────────────────────────▼───────────────────────────────────┐
-│                    BACKEND (Supabase)                       │
-│  PostgreSQL 15  +  pgvector (embeddings)                   │
-│  Supabase Auth  +  Row Level Security                      │
-│  Supabase Storage (S3-compatible)                          │
-│  Supabase Realtime (WebSockets)                            │
-│  pg_cron (scheduled jobs)                                  │
-└────────────────────────┬───────────────────────────────────┘
-                         │
-┌────────────────────────▼───────────────────────────────────┐
-│                    ADMIN CMS (Directus)                     │
-│  Directus 10 (self-hosted or cloud)                        │
-│  Custom extensions (blocks, theme engine)                  │
-│  REST + GraphQL API                                        │
-│  Role-based access control                                 │
-└────────────────────────┬───────────────────────────────────┘
-                         │
-┌────────────────────────▼───────────────────────────────────┐
-│                    AI LAYER                                 │
-│  OpenAI GPT-4o + GPT-4o-mini (main models)                 │
-│  OpenAI Whisper (speech-to-text)                           │
-│  OpenAI TTS (text-to-speech)                               │
-│  pgvector (embeddings for RAG)                             │
-│  Custom moderation layer (content safety)                  │
-└────────────────────────┬───────────────────────────────────┘
-                         │
-┌────────────────────────▼───────────────────────────────────┐
-│                    HOSTING & INFRA                          │
-│  Vercel (web frontend + serverless functions)              │
-│  Supabase Cloud (database + auth + storage)                │
-│  Redis Cloud / Upstash (caching)                           │
-│  Cloudflare (DNS + CDN + DDoS protection)                  │
-│  Sentry (error tracking)                                   │
-│  PostHog (product analytics)                               │
+│              CURRENT IMPLEMENTATION                        │
+├────────────────────────────────────────────────────────────┤
+│  Web:  Next.js 16 + React 19 + TypeScript 5               │
+│        Tailwind CSS 3 + shadcn/ui + Framer Motion         │
+│        Zustand + TanStack Query + React Hook Form + Zod   │
+│        Lucide + Radix UI headless primitives              │
+├────────────────────────────────────────────────────────────┤
+│  DB:   SQLite via Prisma 7 (LibSQL adapter)                │
+│  Auth: Local auth – bcryptjs + session cookies             │
+│  Admin: Custom Prisma-based admin panel                    │
+│  CMS:  Directus 11.6 container (Docker, inactive)          │
+├────────────────────────────────────────────────────────────┤
+│  Deploy: Vercel (web frontend)                             │
+│          Docker Compose (Directus, optional)               │
+└────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────┐
+│                    PLANNED STACK (Future)                   │
+├────────────────────────────────────────────────────────────┤
+│  Mobile:  Flutter + Dart (Riverpod, Dio, Hive, GoRouter)   │
+│  DB:      PostgreSQL 15 + pgvector (via Supabase)          │
+│  Auth:    Supabase Auth + RLS                              │
+│  Storage: Supabase S3-compatible                           │
+│  Cache:   Redis Cloud / Upstash                            │
+│  AI:      OpenAI GPT-4o + Whisper + pgvector embeddings    │
+│  Monitor: Sentry + PostHog                                 │
+│  Infra:   Cloudflare DNS/CDN                               │
 └────────────────────────────────────────────────────────────┘
 ```
 
 ## Frontend (Web) — Detailed
 
-### Dependencies
+### Dependencies (Current)
 
 ```json
 {
   "dependencies": {
-    "next": "^14.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "^5.3.0",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "typescript": "^5",
     
-    "@supabase/supabase-js": "^2.39.0",
-    "@supabase/ssr": "^0.1.0",
+    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-libsql": "^7.8.0",
+    "@libsql/client": "^0.17.3",
+    "bcryptjs": "^3.0.3",
     
-    "@tanstack/react-query": "^5.17.0",
-    "zustand": "^4.4.0",
+    "@tanstack/react-query": "^5",
+    "zustand": "^5.0.13",
     
-    "framer-motion": "^10.18.0",
-    "tailwindcss": "^3.4.0",
-    "@tailwindcss/typography": "^0.5.0",
+    "framer-motion": "^11",
+    "tailwindcss": "^3.4.1",
     
     "react-hook-form": "^7.49.0",
     "zod": "^3.22.0",

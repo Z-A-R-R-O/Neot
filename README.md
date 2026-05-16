@@ -21,12 +21,12 @@ NEOT is an end-to-end learning platform with four main interfaces:
 
 | Layer | Technology |
 |-------|-----------|
-| Web Frontend | Next.js 14 + TypeScript + Tailwind CSS |
-| Mobile | Flutter + Dart |
-| Backend | Supabase (PostgreSQL, Auth, Storage, Realtime) |
-| Admin CMS | Directus |
-| AI | OpenAI GPT-4o / GPT-4o-mini |
-| Hosting | Vercel + Supabase Cloud |
+| Web Frontend | Next.js 16 + React 19 + TypeScript + Tailwind CSS |
+| Mobile | Web-first (Flutter planned) |
+| Backend | Prisma + SQLite (LibSQL adapter), local auth (bcrypt sessions) |
+| Admin CMS | Custom Prisma-based panel + Directus container |
+| AI | OpenAI (planned) |
+| Hosting | Vercel |
 
 ## Build Plan
 

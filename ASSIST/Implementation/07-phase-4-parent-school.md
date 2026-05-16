@@ -160,7 +160,7 @@ Files to create:
   web/src/components/teacher/classroom-create-form.tsx
 ```
 
-Tables:
+Tables (to add to Prisma schema when implementing):
 - `classrooms` (id, name, school_id, teacher_id, grade, subject, enrollment_code)
 - `classroom_students` (classroom_id, student_id, enrolled_at)
 
@@ -352,4 +352,4 @@ Test scenarios:
 - [ ] Accessibility audit passed
 - [ ] Load tested with 100 concurrent users
 
-> **Phase 4 Complete** ✅ → Move to `07-phase-5-scale-marketplace.md`
+> **Phase 4 Complete** ✅ → Move to `08-phase-5-scale-marketplace.md`

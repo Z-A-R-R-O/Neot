@@ -170,7 +170,7 @@ Files to modify:
 - [x] Double-click text on canvas → inline editor activates → type → blur saves
 - [x] Ctrl+Z undoes last edit → Ctrl+Shift+Z redoes
 - [x] Save named snapshot → restore it → blocks revert
-- [ ] Switch to tablet/mobile → canvas resizes preview
-- [ ] Delete block from tree → removed from canvas
+- [x] Switch to tablet/mobile → canvas resizes preview
+- [x] Delete block from tree → removed from canvas
 - [x] Publish → saves to DB → exits Dev Mode → shows "Published!" toast
 - [x] `typecheck` + `next build` pass with zero errors

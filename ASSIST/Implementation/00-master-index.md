@@ -9,14 +9,14 @@
 
 | # | Phase | Primary Output | Status |
 |--:|-------|----------------|--------|
-| 0 | **Foundation** | Deployed Next.js + Prisma/SQLite + Auth UI | ✅ Complete |
-| 1 | **Core Learning** | Course player + Teacher builder + Quiz | ✅ Complete |
-| 1.5 | **Admin CMS** | Page builder + Theme engine + User mgmt | ✅ Complete |
-| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + schema-driven homepage | ✅ Complete |
+| 0 | **Foundation** | Next.js 16 + Prisma/SQLite + Local auth (bcrypt sessions) | ✅ Complete |
+| 1 | **Core Learning** | Course player + Teacher builder + Quiz engine | ✅ Complete |
+| 1.5 | **Admin CMS** | Page builder + Theme engine + User/Media mgmt | ✅ Complete |
+| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + 17 schema-driven sections | ✅ Complete |
 | UI | **UI Transformation** | Premium dark palette, cinematic hero, glass design system | ✅ Complete |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Not started |
 | 2.5 | **Dev Mode — Visual Experience Engine** | Dual-mode overlay editor, inline editing, properties panel, structure tree, responsive system | ✅ Complete |
-| 3 | **AI + Mobile** | AI Tutor + Content Gen + Flutter app | 🔲 Not started |
+| 3 | **AI + Mobile** | AI Tutor + Content Gen | 🔲 Not started |
 | 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
 | 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
 
@@ -33,18 +33,20 @@ ASSIST/
 │   ├── 03-phase-1.5-admin-cms.md
 │   ├── 04-phase-1.75-dynamic-renderer.md
 │   ├── 05-phase-2-adaptive-gamification.md
-│   ├── 06-phase-2.5-dev-mode.md
-│   ├── 07-phase-3-ai-mobile.md
-│   ├── 08-phase-4-parent-school.md
-│   ├── 09-phase-5-scale-marketplace.md
+│   ├── 06-phase-3-ai-mobile.md
+│   ├── 07-phase-4-parent-school.md
+│   ├── 08-phase-5-scale-marketplace.md
 │   ├── 10-engineering-standards.md
-│   └── 11-phase-ui-transformation.md
+│   ├── 11-phase-ui-transformation.md
+│   ├── 12-phase-2.5-dev-mode.md
+│   └── 13-phase-dev-mode-e2e.md
+├── S-IMPL/
 ├── Log/
 ├── Tools/
 └── Vision - Core/
     ├── 01-vision-overview.md
     ├── ...
-    └── 16-visual-experience-engine.md   ← NEW: Dev Mode / Visual Experience Engine
+    ├── 16-visual-experience-engine.md
 ```
 
 ---
@@ -103,19 +105,19 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 
 ### Phase 0 — Foundation (✅ Complete)
 - Next.js 16 + TypeScript + Tailwind scaffolding
-- Prisma/SQLite with 14 models (Profile → Session → CustomPage)
-- **Local auth**: bcrypt password hashing, session tokens in SQLite, HTTP-only cookies
+- Prisma/SQLite with **17 models** (Profile → Session → CustomPage → BlockDefinition → Media → PlatformSetting)
+- **Local auth**: bcrypt password hashing (bcryptjs), session tokens in SQLite, HTTP-only cookies — **NOT Supabase**
 - Auth UI: login, signup (age-gated), forgot-password, onboarding
 - Role management: student, teacher, parent, admin
-- Auth API routes: `POST /api/auth/login`, `POST /api/auth/signup`, `POST /api/auth/logout`, `GET /api/auth/me`
+- Auth API routes: `POST /api/auth/login`, `POST /api/auth/signup`, `POST /api/auth/logout`, `GET /api/auth/me`, `POST /api/auth/role`
 - Rate limiting on login (5 req/min per IP)
 - CSRF origin validation on mutation endpoints
 - 14 shadcn/ui components (button, card, dialog, dropdown-menu, input, label, select, skeleton, tabs, tooltip, avatar, badge, progress, textarea)
 - Layout shell: role-based sidebar, header, mobile nav
 - Auth proxy (`src/proxy.ts`) — session-based route protection
 - Error/loading/empty/offline states
-- TanStack Query + Zustand stores
-- Vitest test runner + 3 passing tests
+- TanStack Query + 5 Zustand stores (auth, dev-mode, history, lesson, page-builder)
+- Vitest test runner + passing tests
 - Prisma Client generated at `src/generated/prisma/`
 
 ### Phase 1 — Core Learning (✅ Complete)
@@ -144,18 +146,20 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - 4 Prisma models: `CustomPage`, `PageSection`, `SiteTheme`, `Media`, `PlatformSetting`
 
 ### Phase 1.75 — Dynamic Renderer (✅ Complete)
-- `BlockRegistry` singleton at `lib/block-registry.ts` with `register()`/`getComponent()`/`getEditor()`/`getByScope()`
+- `BlockRegistry` singleton at `lib/block-registry.ts` with `register()`/`getComponent()`/`getEditor()`/`getByScope()`/`getKeys()`/`getAll()`
 - `EditorRegistry` singleton at `lib/editor-registry.ts` for admin section editors
 - Shared types at `types/registry.ts`: `BlockComponentProps`, `EditorComponentProps`, `RegistryEntry`
 - Central `registrations.ts` — single import in `providers.tsx` registers all blocks + editors
 - `PageRenderer` component — render any array of sections via registry lookup
 - `BlockRenderer` rewritten — zero `switch/case`, uses `blockRegistry.getComponent()`
-- 9 page section render components (hero, feature-grid, stats-bar, cta-banner, faq, pricing, course-carousel, testimonials, custom-html)
-- 6 page section editors registered in `editorRegistry`
-- Homepage (`/`) — schema-driven: fetches `CustomPage` where `slug="home"`, falls back to welcome Hero
-- Catch-all `[...slug]` route — renders any published `CustomPage` by path
+- **17 page section render components** registered (hero, adaptive-stream, feature-grid, stats-bar, how-it-works, cta-banner, faq, pricing-table, course-carousel, testimonials, custom-html, knowledge-constellation, adaptive-timeline, live-ecosystem, future-self, achievement-ecosystem, learning-dna) + 5 additional files (ai-mentor-presence, breathing-interlude, intelligence-corridor, invisible-continuity)
+- **7 page section editors** registered in `editorRegistry` (hero, feature-grid, stats-bar, cta-banner, faq, pricing-table, testimonials)
+- `block-presets.ts` — preset definitions for hero, feature-grid, cta-banner
+- `responsive-engine.ts` — breakpoint system (desktop 1025+, tablet 768-1024, mobile 320-767)
+- Homepage (`/`) — schema-driven: fetches `CustomPage` where `slug="home"`, falls back to minimal fallback
+- Catch-all `(public)/[...slug]` route — renders any published `CustomPage` by path
 - `LivePreview` — uses `blockRegistry.getComponent()` instead of 150-line inline `switch/case`
-- `BlockDefinition` model added to Prisma schema
+- `BlockDefinition` model added to Prisma schema (+ 10 block type definitions in `block-definitions.ts`)
 - `typecheck` + `next build` — both pass with zero errors
 
 ### Phase UI Transformation — Premium Redesign (✅ Complete)
@@ -170,23 +174,27 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - Admin editors updated for new fields (secondary CTA, prefix/suffix, testimonials)
 - `typecheck` + `next build` — zero errors
 
-### Phase 2.5 — Dev Mode (✅ Complete)
+### Phase 2.5 — Dev Mode / Visual Experience Engine (✅ Complete)
+- 13 components: `BlockOverlay`, `DevModeProvider`, `DevModeShell`, `DevModeToggle`, `HistoryPanel`, `InlineEditor`, `OverlaySystem`, `PresetPicker`, `PropertiesPanel`, `PublishButton`, `ResponsiveBar`, `StructureTree`, `TreeNode`
 - `devModeStore` — handles overlay state, device mode, hovered/selected IDs
 - `historyStore` — undo/redo stack with snapshots and persistence
 - `history-middleware` — automatic snapshot capture on `pageBuilderStore` changes
+- `pageBuilderStore` — manages section tree (add, remove, reorder, duplicate, update)
 - `DevModeProvider` — keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z, Del, Esc) and history initialization
-- `BlockOverlay` — hover/selection outlines, type labels, dimension indicators, distance guides
-- `StructureTree` — layer hierarchy with search/filter, delete, duplicate, add actions
+- `BlockOverlay` — hover/selection outlines, type labels, dimension indicators
+- `StructureTree` + `TreeNode` — layer hierarchy with search/filter, delete, duplicate, add actions
 - `PropertiesPanel` — contextual property editors for content and styles
 - `InlineEditor` — contentEditable wrapper for real-time text editing on canvas
 - `ResponsiveBar` — breakpoint switcher with canvas resize (Desktop/Tablet/Mobile)
 - `DevModeToggle` — global switch to enter/exit visual editing mode
 - `PublishButton` — saves all changes to DB and exits Dev Mode
 - `DevModeShell` — full editor layout (layers sidebar, canvas, properties panel)
+- `PresetPicker` — visual preset swapper for block types
 - Bidirectional selection sync between `devModeStore` and `pageBuilderStore`
 - Inline editing wired in all 7 section types (hero, feature-grid, cta-banner, faq, pricing, stats-bar, testimonials)
 - Undo/redo keyboard shortcuts with snapshot restore
 - Publish flow auto-exits Dev Mode with success toast
+- `typecheck` + `next build` — both pass with zero errors
 
 ### Gaps / Next Up
 - **Phase 2 — Adaptive + Gamification** — XP/streaks/badges UI, adaptive engine, recs
@@ -203,30 +211,55 @@ src/
 │   ├── (dashboard)/         ← Route group: student dash
 │   ├── (teacher)/           ← Route group: teacher tools
 │   ├── (admin)/             ← Route group: admin panel
+│   ├── (public)/            ← Route group: public pages (catch-all)
+│   ├── about/               ← Static pages
 │   ├── courses/             ← Course listing + detail
+│   ├── features/
 │   ├── lessons/             ← Lesson player
 │   └── api/                 ← Route handlers / server actions
 ├── components/
 │   ├── ui/                  ← Primitive UI (button, card, dialog)
-│   ├── blocks/              ← Learning block renderers
-│   ├── dev-mode/            ← Dev Mode overlay system (NEW)
+│   ├── blocks/              ← Learning block renderers + page sections
+│   │   └── sections/        ← 17+ page section render components
+│   ├── dev-mode/            ← Dev Mode overlay system (13 components)
 │   ├── layout/              ← Shell: header, sidebar, footer
-│   ├── gamification/        ← XP display, streak, badges
-│   └── ai/                  ← AI tutor, content generator
+│   ├── admin/               ← Admin panel components
+│   │   ├── pages/           ← Section builder, editors, live preview
+│   │   ├── themes/          ← Theme editor
+│   │   ├── blocks/          ← Block library
+│   │   ├── media/           ← Media library
+│   │   ├── users/           ← User management
+│   │   └── settings/        ← Platform settings
+│   ├── auth/                ← Auth forms
+│   ├── courses/             ← Course cards, detail
+│   ├── dashboard/           ← Student dashboard components
+│   ├── teacher/             ← Teacher tools + block editors + analytics
+│   ├── player/              ← Lesson player shell
+│   └── pricing/             ← Pricing components
 ├── hooks/                   ← Custom React hooks
 ├── lib/                     ← Core logic, clients, utils
-│   ├── db.ts                ← Prisma client singleton
-│   ├── block-registry.ts    ← Component registry
-│   ├── editor-registry.ts   ← Editor registry
-│   ├── block-presets.ts     ← Component presets (NEW)
-│   ├── responsive-engine.ts ← Breakpoint logic (NEW)
-│   ├── api/                 ← External API integrations
-│   └── ai/                  ← AI service wrappers
+│   ├── auth.ts              ← Local auth (bcrypt + sessions)
+│   ├── db.ts                ← Prisma client singleton (LibSQL)
+│   ├── block-registry.ts    ← Component registry (Map-based)
+│   ├── editor-registry.ts   ← Section editor registry
+│   ├── block-definitions.ts ← Block type definitions (10 types)
+│   ├── block-presets.ts     ← Visual presets
+│   ├── responsive-engine.ts ← Breakpoint logic
+│   ├── registrations.ts     ← Central block/editor registration
+│   ├── csrf.ts              ← CSRF origin validation
+│   ├── rate-limit.ts        ← In-memory rate limiter
+│   ├── quizzes.ts           ← Quiz engine logic
+│   ├── utils.ts             ← cn() utility
+│   ├── providers.tsx        ← React providers
+│   ├── env.ts               ← Env var validation
+│   └── theme/               ← Theme engine (provider, converter, resolver)
 ├── generated/prisma/        ← Prisma generated client (gitignored)
 ├── stores/                  ← Zustand state stores
-│   ├── pageStore.ts         ← Block tree (NEW)
-│   ├── selectionStore.ts    ← Selection state (NEW)
-│   ├── historyStore.ts      ← Undo/redo (NEW)
-│   └── devModeStore.ts      ← Dev Mode UI (NEW)
+│   ├── authStore.ts         ← Auth state
+│   ├── pageBuilderStore.ts  ← Section tree management
+│   ├── devModeStore.ts      ← Dev Mode overlay state
+│   ├── historyStore.ts      ← Undo/redo
+│   ├── history-middleware.ts← Snapshot middleware
+│   └── lessonStore.ts       ← Lesson player state
 └── types/                   ← TypeScript type definitions
 ```

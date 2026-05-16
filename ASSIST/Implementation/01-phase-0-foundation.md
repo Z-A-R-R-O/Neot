@@ -25,7 +25,6 @@ Files to create:
 Setup:
 ```bash
 npx create-next-app@latest web --typescript --tailwind --eslint --app --src-dir
-npm install @supabase/supabase-js @supabase/ssr
 npm install @tanstack/react-query zustand
 npm install framer-motion lucide-react clsx tailwind-merge
 npm install @radix-ui/react-dialog @radix-ui/react-dropdown-menu
@@ -67,26 +66,24 @@ fontFamily: {
 
 ---
 
-## Task 0.3 — Supabase Project Setup
+## Task 0.3 — Local Auth + Prisma Database Setup
 
 ```
 Files to create:
-  web/supabase/config.toml
-  web/supabase/migrations/001_core_schema.sql
-  web/supabase/seed.sql
-  web/src/lib/supabase/client.ts      ← Browser client
-  web/src/lib/supabase/server.ts      ← Server client (App Router)
-  web/src/lib/supabase/middleware.ts   ← Auth middleware
+  web/prisma/schema.prisma           ← Database schema (17 models)
+  web/prisma.config.ts               ← Prisma 7 config
+  web/src/lib/auth.ts                 ← bcrypt + session cookie auth
+  web/src/lib/db.ts                   ← Prisma client singleton
+  web/src/lib/csrf.ts                 ← CSRF origin validation
+  web/src/lib/rate-limit.ts           ← In-memory rate limiter
   web/src/middleware.ts               ← Next.js middleware for auth
+  web/src/proxy.ts                    ← Session-based route protection
 ```
 
-Schema per `Vision - Core/07-backend-infrastructure.md`:
-- `profiles` table (extends `auth.users`)
-- RLS policies for profiles
-- Storage bucket: `avatars`, `thumbnails`, `videos`, `uploads`
+**Note:** Unlike the original plan (which specified Supabase Auth), NEOT uses **local auth** — bcryptjs password hashing + HTTP-only session cookies stored in SQLite. This gives zero external dependencies, full offline capability, and complete control over the auth flow. Access control is handled in API route handlers (no RLS since we use SQLite).
 
-**Write:** Supabase project linked. `profiles` table exists with RLS. Storage buckets created.
-**Test:** `npx supabase db dump` shows core tables.
+**Write:** Local auth fully functional. Prisma schema defined with 17 models. Auth middleware protects routes.
+**Test:** `npm run dev` → register → login → session cookie set → protected routes accessible.
 
 ---
 
@@ -143,20 +140,19 @@ Files to create:
   web/src/app/(auth)/login/page.tsx
   web/src/app/(auth)/signup/page.tsx
   web/src/app/(auth)/forgot-password/page.tsx
-  web/src/app/(auth)/callback/route.ts        ← OAuth callback
   web/src/components/ui/input.tsx
   web/src/components/ui/label.tsx
   web/src/components/ui/button.tsx
   web/src/components/ui/card.tsx
   web/src/components/auth/login-form.tsx
   web/src/components/auth/signup-form.tsx     ← Age-gated: <13, 13-18, 18+
-  web/src/components/auth/social-buttons.tsx  ← Google OAuth button
+  web/src/components/auth/social-buttons.tsx  ← Social login buttons
   web/src/hooks/useAuth.ts
   web/src/stores/authStore.ts
 ```
 
-**Write:** User can register, confirm email, login, and logout. Profiles auto-created.
-**Test:** Cypress: signup → confirm → login → see profile. Google OAuth works.
+**Write:** User can register, login, and logout. Profiles auto-created on signup.
+**Test:** `npm run dev` → signup → login → see profile. Auth persists across page reload.
 
 ---
 
@@ -165,7 +161,7 @@ Files to create:
 ```
 Files to modify:
   web/src/middleware.ts               ← Redirect unauthenticated users
-  web/src/lib/supabase/middleware.ts   ← Session refresh
+  web/src/proxy.ts                    ← Session-based route protection
 ```
 
 Protected routes: `/(dashboard)/*`, `/(teacher)/*`, `/(admin)/*`.
@@ -260,23 +256,18 @@ Files to create:
 
 ---
 
-## Task 0.12 — Supabase Types + Query Layer
+## Task 0.12 — TypeScript Types
 
 ```
 Files to create:
-  web/src/types/database.ts         ← Generated Supabase types
   web/src/types/blocks.ts           ← Block schema types
   web/src/types/gamification.ts
   web/src/types/admin.ts
-  web/src/lib/supabase/queries.ts   ← Typed query helpers
-  web/src/lib/supabase/admin-client.ts
+  web/src/types/registry.ts
+  web/src/types/quiz-block.ts
 ```
 
-```bash
-npx supabase gen types typescript --local > src/types/database.ts
-```
-
-**Write:** All DB queries are fully typed. No raw SQL outside queries file.
+**Write:** All types are fully typed. No raw SQL outside API handlers.
 **Test:** TypeScript compilation passes with `--strict`.
 
 ---
@@ -331,7 +322,7 @@ const envSchema = z.object({
 
 - [x] `npm run dev` starts without errors
 - [x] Homepage loads at localhost:3000
-- [x] Prisma SQLite schema defined (13 models)
+- [x] Prisma SQLite schema defined (17 models)
 - [x] Auth UI renders (login/signup/forgot-password pages)
 - [x] Role-based onboarding flow works
 - [x] Role-based sidebar navigation
@@ -339,7 +330,7 @@ const envSchema = z.object({
 - [x] Mobile-responsive layout
 - [x] Loading/empty/error states visible
 - [x] Offline banner appears when disconnected
-- [x] Supabase Auth works (env vars needed at runtime)
+- [x] Local auth works (bcrypt sessions, no external dependency)
 
 > **Phase 0 Complete** ✅ → Continue to `02-phase-1-core-learning.md`
 

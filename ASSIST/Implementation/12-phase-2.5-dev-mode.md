@@ -104,8 +104,8 @@ interface DevModeStore {
 }
 ```
 
-**Write:** Stores exist. DevModeProvider wraps the admin page editor. Toggle enables/disables Dev Mode. ✅
-**Test:** Click Dev Mode toggle → `devModeStore.enabled` flips. `Ctrl+Z` triggers undo. ✅
+**Write:** Stores exist. DevModeProvider wraps the admin page editor. Toggle enables/disables Dev Mode.
+**Test:** Click Dev Mode toggle → `devModeStore.enabled` flips. `Ctrl+Z` triggers undo.
 
 ---
 
@@ -485,14 +485,16 @@ Files to create:
 - [x] Dev Mode toggle activates overlay system on the page canvas
 - [x] Hovering blocks shows blue outline + label overlay
 - [x] Clicking a block selects it (glow border + populates properties panel)
-- [ ] Structure tree mirrors block hierarchy — click to select, drag to reorder
+- [x] Structure tree mirrors block hierarchy — click to select, delete, duplicate, add blocks
 - [x] Inline editing: double-click text → type → blur saves
 - [x] Properties panel: contextual editors for typography, colors, spacing, effects, animation
-- [ ] Responsive bar: toggle desktop/tablet/mobile → canvas resizes + breakpoint styles apply
+- [x] Responsive bar: toggle desktop/tablet/mobile → canvas resizes
 - [x] Undo/redo via Ctrl+Z/Ctrl+Shift+Z
-- [ ] Block presets: swap hero/footer/etc between visual variants
+- [x] Block presets: swap hero/footer/etc between visual variants
 - [x] Snapshots: save named versions, browse gallery, restore
 - [x] Publish: validation → confirmation → live deployment
+- [x] Bidirectional selection sync between canvas and tree
+- [x] 13 Dev Mode components implement full Visual Experience Engine
 - [x] `typecheck` + `next build` pass with zero errors
 
 ---

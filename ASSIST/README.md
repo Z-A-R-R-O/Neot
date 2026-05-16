@@ -10,26 +10,29 @@
 ```
 ASSIST/
 ├── README.md                  ← THIS FILE — operating manual
-├── Vision - Core/             ← Product specs (15 files: architecture, UX, data models)
-│   ├── 01-vision-overview.md
-│   ├── 02-architecture-overview.md
-│   ├── 03-frontend-student.md
-│   ├── ... (15 files total)
-│   └── 15-tech-stack-details.md
+├── GUIDE.md                   ← Contributor quick-start guide
+├── Vision - Core/             ← Product specs (16 files: architecture, UX, data models)
+│   ├── 01-vision-overview.md  → 16-visual-experience-engine.md
 ├── Implementation/            ← Phased build plans (tasks with files + acceptance criteria)
 │   ├── 00-master-index.md     ← Phase map, dependency graph, naming conventions
 │   ├── 01-phase-0-foundation.md
 │   ├── 02-phase-1-core-learning.md
 │   ├── 03-phase-1.5-admin-cms.md
 │   ├── 04-phase-1.75-dynamic-renderer.md
-│   ├── 11-phase-ui-transformation.md
-│   ├── 12-phase-2.5-dev-mode.md
-│   ├── 13-phase-dev-mode-e2e.md
 │   ├── 05-phase-2-adaptive-gamification.md
 │   ├── 06-phase-3-ai-mobile.md
 │   ├── 07-phase-4-parent-school.md
 │   ├── 08-phase-5-scale-marketplace.md
-│   └── 10-engineering-standards.md
+│   ├── 10-engineering-standards.md
+│   ├── 11-phase-ui-transformation.md
+│   ├── 12-phase-2.5-dev-mode.md
+│   └── 13-phase-dev-mode-e2e.md
+├── S-IMPL/                    ← Split implementation (parallel dev tracks)
+│   ├── README.md
+│   ├── 01-track-a/
+│   ├── 02-track-b/
+│   ├── 03-merge/
+│   └── 04-validation/
 ├── Tools/                     ← Automation scripts for the build workflow
 │   └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <description>"
 └── Log/                       ← Change journal — one .md file per work session
@@ -163,6 +166,8 @@ The commit format is: `XX -- NEOT -- <description>` where `XX` auto-increments.
 | **3** AI + Mobile | Phase 2 + 1.5 done | Adaptive profiles + CMS settings ready |
 | **4** Parent + School | Phase 1 done | Student/teacher data populated |
 | **5** Scale + Marketplace | All prior phases | Everything stable |
+
+**Shipped:** ✅ Phases 0, 1, 1.5, 1.75, UI, 2.5 complete. Phase 2 (Adaptive + Gamification) is the next active phase.
 
 ---
 

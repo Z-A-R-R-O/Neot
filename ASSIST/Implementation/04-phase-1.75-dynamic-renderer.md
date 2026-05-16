@@ -23,6 +23,8 @@ const Component = registry.get(block.type);
 return Component ? <Component {...block.props} /> : <FallbackBlock />;
 ```
 
+**Note:** The implementation grew beyond the original 9-section plan. There are now **17 registered section types** + 5 additional section files, plus `block-presets.ts`, `responsive-engine.ts`, and 7 registered editors.
+
 ---
 
 ## Task 1.75.1 — Component Registry
@@ -430,14 +432,19 @@ function renderEditor() {
 
 ## Phase 1.75 Validation Gate
 
-- [x] `blockRegistry` singleton exists with `register()` / `get()` / `has()`
-- [x] All existing blocks (text, video, quiz) self-register via barrel import
+- [x] `blockRegistry` singleton exists with `register()` / `getComponent()` / `getEditor()` / `has()` / `getAll()` / `getKeys()` / `getByScope()`
+- [x] All existing blocks (text, video, quiz) self-register via `registrations.ts`
 - [x] `PageRenderer` renders any section array via registry lookup
 - [x] `BlockRenderer` rewritten — zero `switch/case` statements
-- [x] Catch-all `/[slug]` route fetches and renders published pages from DB
+- [x] `editorRegistry` singleton — section editors register via `registrations.ts`
+- [x] 17 page section render components registered (hero, feature-grid, stats-bar, cta-banner, faq, pricing-table, course-carousel, testimonials, custom-html, adaptive-stream, how-it-works, knowledge-constellation, adaptive-timeline, live-ecosystem, future-self, achievement-ecosystem, learning-dna)
+- [x] 7 page section editors registered (hero, feature-grid, stats-bar, cta-banner, faq, pricing-table, testimonials)
+- [x] Catch-all `(public)/[...slug]` route fetches and renders published pages from DB
 - [x] Homepage (`/`) fetches schema from DB — admin edits update it instantly
 - [x] `LivePreview` uses `blockRegistry` instead of inline switch/case
-- [x] `BlockDefinition` model added to Prisma schema
+- [x] `BlockDefinition` model added to Prisma schema + 10 block type definitions in `block-definitions.ts`
+- [x] `block-presets.ts` — visual presets for hero, feature-grid, cta-banner
+- [x] `responsive-engine.ts` — breakpoint system (desktop/tablet/mobile)
 - [x] Section editors use `editorRegistry` — no switch/case
 - [x] All existing functionality preserved (`typecheck` + `next build` pass)
 
