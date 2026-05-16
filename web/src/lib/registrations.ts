@@ -13,6 +13,7 @@ blockRegistry.register("quiz", { component: QuizBlock, label: "Quiz", scope: "le
 // Page section renders
 import {
   HeroSection,
+  AdaptiveStreamSection,
   FeatureGridSection,
   StatsBarSection,
   HowItWorksSection,
@@ -25,6 +26,7 @@ import {
 } from "@/components/blocks/sections";
 
 blockRegistry.register("hero", { component: HeroSection, label: "Hero", scope: "page" });
+blockRegistry.register("adaptive-stream", { component: AdaptiveStreamSection, label: "Adaptive Stream", scope: "page" });
 blockRegistry.register("feature-grid", { component: FeatureGridSection, label: "Feature Grid", scope: "page" });
 blockRegistry.register("stats-bar", { component: StatsBarSection, label: "Stats Bar", scope: "page" });
 blockRegistry.register("how-it-works", { component: HowItWorksSection, label: "How It Works", scope: "page" });

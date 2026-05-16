@@ -1,4 +1,5 @@
 export { HeroSection } from "./hero-section";
+export { AdaptiveStreamSection } from "./adaptive-stream-section";
 export { FeatureGridSection } from "./feature-grid-section";
 export { StatsBarSection } from "./stats-bar-section";
 export { HowItWorksSection } from "./how-it-works-section";

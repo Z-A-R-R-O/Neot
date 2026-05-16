@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { PageRenderer } from "@/components/blocks/page-renderer";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { HeroSection } from "@/components/blocks/sections/hero-section";
+import { AdaptiveStreamSection } from "@/components/blocks/sections/adaptive-stream-section";
 import { StatsBarSection } from "@/components/blocks/sections/stats-bar-section";
 import { FeatureGridSection } from "@/components/blocks/sections/feature-grid-section";
 import { HowItWorksSection } from "@/components/blocks/sections/how-it-works-section";
@@ -116,10 +117,7 @@ export default async function Home() {
 
             <div className="section-bridge -mt-16" />
 
-            <FeatureGridSection
-              content={defaultContent.features}
-              blockId="fallback-features"
-            />
+            <AdaptiveStreamSection />
 
             <div className="section-bridge -mt-16" />
 
