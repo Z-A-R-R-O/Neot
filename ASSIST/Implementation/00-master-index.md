@@ -167,11 +167,11 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - Central `registrations.ts` — single import in `providers.tsx` registers all blocks + editors
 - `PageRenderer` component — render any array of sections via registry lookup
 - `BlockRenderer` rewritten — zero `switch/case`, uses `blockRegistry.getComponent()`
-- **17 page section render components** registered (hero, adaptive-stream, feature-grid, stats-bar, how-it-works, cta-banner, faq, pricing-table, course-carousel, testimonials, custom-html, knowledge-constellation, adaptive-timeline, live-ecosystem, future-self, achievement-ecosystem, learning-dna) + 5 additional files (ai-mentor-presence, breathing-interlude, intelligence-corridor, invisible-continuity)
+- **17 page section render components** registered (hero, adaptive-stream, feature-grid, stats-bar, how-it-works, cta-banner, faq, pricing-table, course-carousel, testimonials, custom-html, knowledge-constellation, adaptive-timeline, live-ecosystem, future-self, achievement-ecosystem, learning-dna) + 6 additional files (future-self-dna-section, ai-mentor-presence, breathing-interlude, intelligence-corridor, invisible-continuity)
 - **7 page section editors** registered in `editorRegistry` (hero, feature-grid, stats-bar, cta-banner, faq, pricing-table, testimonials)
 - `block-presets.ts` — preset definitions for hero, feature-grid, cta-banner
 - `responsive-engine.ts` — breakpoint system (desktop 1025+, tablet 768-1024, mobile 320-767)
-- Homepage (`/`) — schema-driven: fetches `CustomPage` where `slug="home"`, falls back to minimal fallback
+- Homepage (`/`) — schema-driven: fetches `CustomPage` where `slug="home"`, falls back to 6-section cinematic arc (Hero → Adaptive Journey → Adaptive Stream → Live Ecosystem → FutureSelf+DNA → CTA)
 - Catch-all `(public)/[...slug]` route — renders any published `CustomPage` by path
 - `LivePreview` — uses `blockRegistry.getComponent()` instead of 150-line inline `switch/case`
 - `BlockDefinition` model added to Prisma schema (+ 10 block type definitions in `block-definitions.ts`)

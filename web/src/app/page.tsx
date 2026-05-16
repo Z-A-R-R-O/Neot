@@ -4,12 +4,9 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { HeroSection } from "@/components/blocks/sections/hero-section";
 import { AdaptiveStreamSection } from "@/components/blocks/sections/adaptive-stream-section";
 import { CtaBannerSection } from "@/components/blocks/sections/cta-banner-section";
-import { KnowledgeConstellationSection } from "@/components/blocks/sections/knowledge-constellation-section";
 import { AdaptiveTimelineSection } from "@/components/blocks/sections/adaptive-timeline-section";
 import { LiveEcosystemSection } from "@/components/blocks/sections/live-ecosystem-section";
-import { FutureSelfSection } from "@/components/blocks/sections/future-self-section";
-import { AchievementEcosystemSection } from "@/components/blocks/sections/achievement-ecosystem-section";
-import { LearningDnaSection } from "@/components/blocks/sections/learning-dna-section";
+import { FutureSelfDnaSection } from "@/components/blocks/sections/future-self-dna-section";
 import { IntelligenceCorridor } from "@/components/blocks/sections/intelligence-corridor";
 import { AiMentorPresence } from "@/components/blocks/sections/ai-mentor-presence";
 import { BreathingInterlude } from "@/components/blocks/sections/breathing-interlude";
@@ -65,51 +62,39 @@ export default async function Home() {
                 Emotional tone: Awe, curiosity
                 ════════════════════════════════════════ */}
 
-            {/* 1. HERO — Adaptive intelligence awakens */}
+            {/* 1. HERO — Cinematic adaptive AI */}
             <HeroSection content={{}} />
 
             <IntelligenceCorridor scene="cosmic" variant="default" />
 
-            {/* 2. KNOWLEDGE CONSTELLATION — Explore the universe
-                  Motion: orbital/network. Layout: left-heavy */}
-            <KnowledgeConstellationSection />
-
-            <IntelligenceCorridor scene="system" variant="dense" />
-
             {/* ════════════════════════════════════════
-                ACT II: INTELLIGENCE
-                Emotional tone: Comprehension, power
+                ACT II: JOURNEY
+                Emotional tone: Comprehension, direction
                 ════════════════════════════════════════ */}
 
-            {/* 3. AI LEARNING ENGINE — System intelligence visualization
-                  Motion: pulse/data transfer. Layout: centered */}
-            <AdaptiveStreamSection />
-
-            <IntelligenceCorridor scene="system" variant="light" />
-
-            {/* 4. ADAPTIVE JOURNEY — Path evolves dynamically
+            {/* 2. YOUR ADAPTIVE JOURNEY — Path evolves dynamically
                   Motion: flowing directional energy. Layout: right-heavy */}
             <AdaptiveTimelineSection />
 
             {/* BREATHING INTERLUDE — Pause. Minimal. Atmospheric.
-                Creates rhythm after the dense journey section */}
+                Creates rhythm after the journey section */}
             <BreathingInterlude
               line="Intelligence is not static. Neither are you."
               variant="cosmic"
             />
 
-            {/* 5. ACHIEVEMENT ECOSYSTEM — Growth visualization
-                  Motion: progressive unlocks. Layout: asymmetric */}
-            <AchievementEcosystemSection />
+            {/* 3. ADAPTIVE INTELLIGENCE STREAM — System intelligence visualization
+                  Motion: pulse/data transfer. Layout: centered */}
+            <AdaptiveStreamSection />
 
-            <IntelligenceCorridor scene="growth" variant="dense" />
+            <IntelligenceCorridor scene="system" variant="dense" />
 
             {/* ════════════════════════════════════════
                 ACT III: COLLECTIVE
                 Emotional tone: Connection, energy
                 ════════════════════════════════════════ */}
 
-            {/* 6. LIVE ECOSYSTEM — Collective learning alive in real time
+            {/* 4. LIVE LEARNING ECOSYSTEM — Collective learning alive in real time
                   Motion: live feed energy. Layout: full-width */}
             <LiveEcosystemSection />
 
@@ -120,15 +105,8 @@ export default async function Home() {
                 Emotional tone: Self-discovery, personalization
                 ════════════════════════════════════════ */}
 
-            {/* 7. COGNITIVE FINGERPRINT — Personalized intelligence identity
-                  Motion: organic morphing. Layout: left-heavy with organic visuals */}
-            <LearningDnaSection />
-
-            <IntelligenceCorridor scene="cosmic" variant="default" />
-
-            {/* 8. FUTURE SELF PROJECTION — Transformation visualized
-                  Motion: evolving identity. Layout: timeline */}
-            <FutureSelfSection />
+            {/* 5. FUTURE SELF + YOUR LEARNING DNA — Combined identity and transformation */}
+            <FutureSelfDnaSection />
 
             {/* BREATHING INTERLUDE — Transition into climax
                 Creates anticipation before the final CTA */}
@@ -144,7 +122,7 @@ export default async function Home() {
                 Emotional tone: Climax, future self
                 ════════════════════════════════════════ */}
 
-            {/* 9. EMOTIONAL CLIMAX CTA — Not a card. An environment.
+            {/* 7. IMMERSIVE CTA — Final conversion moment
                   Full-width immersive. Transformation moment. */}
             <CtaBannerSection
               content={{}}

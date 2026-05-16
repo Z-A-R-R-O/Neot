@@ -23,7 +23,7 @@ const Component = registry.get(block.type);
 return Component ? <Component {...block.props} /> : <FallbackBlock />;
 ```
 
-**Note:** The implementation grew beyond the original 9-section plan. There are now **17 registered section types** + 5 additional section files, plus `block-presets.ts`, `responsive-engine.ts`, and 7 registered editors.
+**Note:** The implementation grew beyond the original 9-section plan. There are now **17 registered section types** + 6 additional section files (including the composite `future-self-dna-section`), plus `block-presets.ts`, `responsive-engine.ts`, and 7 registered editors.
 
 ---
 
@@ -437,7 +437,7 @@ function renderEditor() {
 - [x] `PageRenderer` renders any section array via registry lookup
 - [x] `BlockRenderer` rewritten — zero `switch/case` statements
 - [x] `editorRegistry` singleton — section editors register via `registrations.ts`
-- [x] 17 page section render components registered (hero, feature-grid, stats-bar, cta-banner, faq, pricing-table, course-carousel, testimonials, custom-html, adaptive-stream, how-it-works, knowledge-constellation, adaptive-timeline, live-ecosystem, future-self, achievement-ecosystem, learning-dna)
+- [x] 17 page section render components registered + 1 composite wrapper (future-self-dna-section combining learning-dna + future-self)
 - [x] 7 page section editors registered (hero, feature-grid, stats-bar, cta-banner, faq, pricing-table, testimonials)
 - [x] Catch-all `(public)/[...slug]` route fetches and renders published pages from DB
 - [x] Homepage (`/`) fetches schema from DB — admin edits update it instantly
