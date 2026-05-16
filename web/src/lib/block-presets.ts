@@ -119,15 +119,43 @@ export const CTA_PRESETS: Preset[] = [
   },
 ];
 
-export function getPresets(type: string): Preset[] {
-  switch (type) {
-    case "hero":
-      return HERO_PRESETS;
-    case "feature-grid":
-      return FEATURE_GRID_PRESETS;
-    case "cta-banner":
-      return CTA_PRESETS;
-    default:
-      return [];
+const STORAGE_KEY = "neot_user_presets";
+
+export function getUserPresets(): Preset[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  } catch {
+    return [];
   }
+}
+
+export function saveUserPreset(preset: Preset): void {
+  if (typeof window === "undefined") return;
+  const existing = getUserPresets().filter((p) => p.id !== preset.id);
+  existing.push(preset);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+}
+
+export function deleteUserPreset(id: string): void {
+  if (typeof window === "undefined") return;
+  const existing = getUserPresets().filter((p) => p.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+}
+
+export function getPresets(type: string): Preset[] {
+  const builtIn: Preset[] = (() => {
+    switch (type) {
+      case "hero":
+        return HERO_PRESETS;
+      case "feature-grid":
+        return FEATURE_GRID_PRESETS;
+      case "cta-banner":
+        return CTA_PRESETS;
+      default:
+        return [];
+    }
+  })();
+  const userPresets = getUserPresets().filter((p) => p.type === type);
+  return [...builtIn, ...userPresets];
 }

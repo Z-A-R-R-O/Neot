@@ -1,16 +1,20 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore, type PageSection, type SectionType } from "@/stores/pageBuilderStore";
 import { StructureTree } from "./StructureTree";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { PresetPicker } from "./PresetPicker";
+import { saveUserPreset } from "@/lib/block-presets";
 
 interface DevModeShellProps {
   children: ReactNode;
 }
 
 export function DevModeShell({ children }: DevModeShellProps) {
+  const [presetName, setPresetName] = useState("");
+  const [showSavePreset, setShowSavePreset] = useState(false);
   const enabled = useDevModeStore((s) => s.enabled);
   const deviceMode = useDevModeStore((s) => s.deviceMode);
   const { sections, selectedId, updateSection, selectSection, removeSection, addSection } = usePageBuilderStore();
@@ -22,6 +26,26 @@ export function DevModeShell({ children }: DevModeShellProps) {
   }
 
   const selectedSection = sections.find((s) => s.id === selectedId);
+
+  function handleApplyPreset(preset: { type: string; schema: { content: Record<string, unknown> } }) {
+    if (!selectedSection) return;
+    updateSection(selectedSection.id, { content: preset.schema.content });
+  }
+
+  function handleSavePreset() {
+    if (!selectedSection || !presetName.trim()) return;
+    saveUserPreset({
+      id: `user-${Date.now()}`,
+      name: presetName.trim(),
+      description: `Custom ${selectedSection.blockType} preset`,
+      type: selectedSection.blockType,
+      schema: {
+        content: selectedSection.content,
+      },
+    });
+    setPresetName("");
+    setShowSavePreset(false);
+  }
 
   const treeNodes = sections.map((s) => ({
     id: s.id,
@@ -41,7 +65,7 @@ export function DevModeShell({ children }: DevModeShellProps) {
           onAddBlock={() => {
             const newSection: PageSection = {
               id: crypto.randomUUID(),
-              pageId: "current", // Fallback
+              pageId: "current",
               blockType: "hero" as SectionType,
               sortOrder: sections.length,
               content: {},
@@ -64,7 +88,6 @@ export function DevModeShell({ children }: DevModeShellProps) {
 
       {/* Main Canvas */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-[#0F1115]">
-        {/* Canvas Background Grid */}
         <div className="absolute inset-0 z-0 opacity-[0.03]" 
              style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
         
@@ -76,21 +99,64 @@ export function DevModeShell({ children }: DevModeShellProps) {
       </div>
 
       {/* Right Sidebar: Properties */}
-      <div className="w-80 shrink-0 border-l border-border bg-background/50 backdrop-blur-xl overflow-y-auto custom-scrollbar">
-        <PropertiesPanel
-          selectedBlock={
-            selectedSection
-              ? {
-                  id: selectedSection.id,
-                  type: selectedSection.blockType,
-                  label: selectedSection.blockType,
-                  content: selectedSection.content,
-                  styles: selectedSection.settings.styles as Record<string, unknown> | undefined,
-                }
-              : null
-          }
-          onContentChange={(id, content) => updateSection(id, { content })}
-        />
+      <div className="flex w-80 shrink-0 flex-col border-l border-border bg-background/50 backdrop-blur-xl">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          <span className="text-xs font-semibold text-foreground">
+            {selectedSection ? selectedSection.blockType : "Properties"}
+          </span>
+          {selectedSection && (
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setShowSavePreset(!showSavePreset)}
+                className="rounded-lg px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground hover:bg-glass transition-colors"
+                title="Save as preset"
+              >
+                +Save
+              </button>
+              <PresetPicker
+                blockType={selectedSection.blockType}
+                onApply={handleApplyPreset}
+              />
+            </div>
+          )}
+        </div>
+        {showSavePreset && selectedSection && (
+          <div className="border-b border-border px-4 py-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={presetName}
+                onChange={(e) => setPresetName(e.target.value)}
+                placeholder="Preset name..."
+                className="flex-1 rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] outline-none ring-1 ring-border/50 focus:ring-primary-500/40"
+                autoFocus
+                onKeyDown={(e) => e.key === "Enter" && handleSavePreset()}
+              />
+              <button
+                onClick={handleSavePreset}
+                className="rounded-lg bg-primary-500 px-2.5 py-1.5 text-[10px] font-bold text-white hover:bg-primary-400 transition-colors"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        )}
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <PropertiesPanel
+            selectedBlock={
+              selectedSection
+                ? {
+                    id: selectedSection.id,
+                    type: selectedSection.blockType,
+                    label: selectedSection.blockType,
+                    content: selectedSection.content,
+                    styles: selectedSection.settings.styles as Record<string, unknown> | undefined,
+                  }
+                : null
+            }
+            onContentChange={(id, content) => updateSection(id, { content })}
+          />
+        </div>
       </div>
     </div>
   );
