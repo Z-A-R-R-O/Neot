@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { editorRegistry } from "@/lib/editor-registry";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -99,37 +100,54 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
       <div className="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-8">
         {activeTab === "content" && (
           <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
-            <Section title="Main Content">
-              {Object.entries(selectedBlock.content).map(([key, val]) => (
-                <PropertyRow key={key} label={key}>
-                  {typeof val === "boolean" ? (
-                    <input
-                      type="checkbox"
-                      checked={val}
-                      onChange={(e) => {
-                        onContentChange?.(selectedBlock.id, {
-                          ...selectedBlock.content,
-                          [key]: e.target.checked,
-                        });
-                      }}
-                      className="h-4 w-4 rounded border-border bg-muted/30 text-primary-500"
-                    />
+            {(() => {
+              const SectionEditor = editorRegistry.get(selectedBlock.type);
+              if (SectionEditor) {
+                return (
+                  <SectionEditor
+                    content={selectedBlock.content}
+                    onChange={(newContent) => onContentChange?.(selectedBlock.id, newContent)}
+                  />
+                );
+              }
+              return (
+                <Section title="Main Content">
+                  {Object.entries(selectedBlock.content).length === 0 ? (
+                    <p className="text-xs text-muted-foreground">No content fields</p>
                   ) : (
-                    <input
-                      type="text"
-                      value={String(val ?? "")}
-                      onChange={(e) => {
-                        onContentChange?.(selectedBlock.id, {
-                          ...selectedBlock.content,
-                          [key]: e.target.value,
-                        });
-                      }}
-                      className="w-full rounded-lg bg-muted/30 px-3 py-2 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50 transition-all focus:ring-primary-500/40 focus:bg-background"
-                    />
+                    Object.entries(selectedBlock.content).map(([key, val]) => (
+                      <PropertyRow key={key} label={key}>
+                        {typeof val === "boolean" ? (
+                          <input
+                            type="checkbox"
+                            checked={val}
+                            onChange={(e) => {
+                              onContentChange?.(selectedBlock.id, {
+                                ...selectedBlock.content,
+                                [key]: e.target.checked,
+                              });
+                            }}
+                            className="h-4 w-4 rounded border-border bg-muted/30 text-primary-500"
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={String(val ?? "")}
+                            onChange={(e) => {
+                              onContentChange?.(selectedBlock.id, {
+                                ...selectedBlock.content,
+                                [key]: e.target.value,
+                              });
+                            }}
+                            className="w-full rounded-lg bg-muted/30 px-3 py-2 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50 transition-all focus:ring-primary-500/40 focus:bg-background"
+                          />
+                        )}
+                      </PropertyRow>
+                    ))
                   )}
-                </PropertyRow>
-              ))}
-            </Section>
+                </Section>
+              );
+            })()}
           </div>
         )}
 
