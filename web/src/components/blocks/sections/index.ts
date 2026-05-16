@@ -1,6 +1,7 @@
 export { HeroSection } from "./hero-section";
 export { FeatureGridSection } from "./feature-grid-section";
 export { StatsBarSection } from "./stats-bar-section";
+export { HowItWorksSection } from "./how-it-works-section";
 export { CtaBannerSection } from "./cta-banner-section";
 export { FaqSection } from "./faq-section";
 export { PricingTableSection } from "./pricing-table-section";

@@ -93,6 +93,9 @@ const config: Config = {
         "count-up": "count-up 0.6s ease-out forwards",
         "data-sweep": "data-sweep 4s ease-in-out infinite",
         "ambient-float": "ambient-float 20s ease-in-out infinite",
+        "pulse-line": "pulse-line 3s ease-in-out infinite",
+        "count-in": "count-in 0.6s ease-out forwards",
+        "node-pulse": "node-pulse 2s ease-in-out infinite",
       },
       keyframes: {
         "gradient-shift": {

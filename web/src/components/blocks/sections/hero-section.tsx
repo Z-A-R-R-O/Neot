@@ -151,40 +151,41 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
           style={{ x: bgOffset.x, y: bgOffset.y }}
           className="absolute inset-0"
         >
-          <div className="absolute -left-1/4 -top-1/4 h-[800px] w-[800px] rounded-full bg-blue-200/15 dark:bg-blue-500/8 blur-[160px] animate-pulse-glow" />
-          <div className="absolute -bottom-1/4 -right-1/4 h-[700px] w-[700px] rounded-full bg-purple-200/12 dark:bg-purple-500/6 blur-[160px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
-          <div className="absolute left-1/3 top-1/2 h-[500px] w-[500px] rounded-full bg-cyan-200/10 dark:bg-cyan-500/5 blur-[140px] animate-pulse-glow" style={{ animationDelay: "4s" }} />
-          <div className="absolute right-1/3 bottom-1/3 h-[400px] w-[400px] rounded-full bg-pink-200/8 dark:bg-pink-500/4 blur-[120px] animate-pulse-glow" style={{ animationDelay: "1s" }} />
+          <div className="absolute -left-1/4 -top-1/4 h-[800px] w-[800px] rounded-full bg-blue-200/20 dark:bg-blue-500/8 blur-[160px] animate-ambient-float" />
+          <div className="absolute -bottom-1/4 -right-1/4 h-[700px] w-[700px] rounded-full bg-purple-200/18 dark:bg-purple-500/6 blur-[160px] animate-ambient-float" style={{ animationDelay: "-5s" }} />
+          <div className="absolute left-1/3 top-1/2 h-[500px] w-[500px] rounded-full bg-cyan-200/14 dark:bg-cyan-500/5 blur-[140px] animate-ambient-float" style={{ animationDelay: "-10s" }} />
+          <div className="absolute right-1/3 bottom-1/3 h-[400px] w-[400px] rounded-full bg-pink-200/12 dark:bg-pink-500/4 blur-[120px] animate-ambient-float" style={{ animationDelay: "-3s" }} />
+          <div className="absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-200/12 dark:bg-primary-500/6 blur-[160px] animate-ambient-float" style={{ animationDelay: "-7s" }} />
         </motion.div>
 
         {/* Radial lighting behind key focus zones */}
         <motion.div
           style={{ x: glowOffset.x, y: glowOffset.y }}
-          className="absolute left-[55%] top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-400/10 dark:bg-primary-500/15 blur-[100px]"
+          className="absolute left-[55%] top-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-400/12 dark:bg-primary-500/18 blur-[100px]"
         />
         <motion.div
           style={{ x: glowOffset.x, y: glowOffset.y }}
-          className="absolute left-[60%] top-[30%] h-[200px] w-[200px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-400/8 dark:bg-accent-500/10 blur-[80px]"
+          className="absolute left-[60%] top-[30%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-400/10 dark:bg-accent-500/12 blur-[80px]"
         />
 
         {/* Existing glowing orbs (preserved) */}
         <div className="absolute -left-1/4 -top-1/4 h-[1000px] w-[1000px] rounded-full bg-secondary-500/10 blur-[180px] animate-pulse-glow" />
         <div className="absolute -right-1/4 -bottom-1/4 h-[1000px] w-[1000px] rounded-full bg-accent-500/10 blur-[180px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
 
-        {/* Floating Particles (enhanced) */}
-        <div className="absolute inset-0 opacity-20">
+        {/* Floating Particles (enhanced with glow) */}
+        <div className="absolute inset-0 opacity-25">
           {[...Array(PARTICLE_COUNT)].map((_, i) => (
             <motion.div
               key={i}
               style={{ x: particleOffset.x, y: particleOffset.y }}
             >
               <motion.div
-                className="absolute h-1 w-1 rounded-full bg-primary-400"
+                className="absolute h-1 w-1 rounded-full bg-primary-400 shadow-[0_0_6px_rgba(79,124,255,0.6)]"
                 animate={{
                   y: [0, -120 + i * 10, 0],
                   x: [0, Math.sin(i * 2) * 60, 0],
-                  opacity: [0, 0.8, 0],
-                  scale: [0, 1, 0],
+                  opacity: [0, 1, 0],
+                  scale: [0, 1.5, 0],
                 }}
                 transition={{
                   duration: 12 + i * 2,
@@ -202,19 +203,19 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
         </div>
 
         {/* Ambient Nodes */}
-        <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 opacity-35">
           {[...Array(NODE_COUNT)].map((_, i) => (
             <motion.div
               key={`node-${i}`}
               style={{ x: particleOffset.x, y: particleOffset.y }}
             >
               <motion.div
-                className="absolute h-1.5 w-1.5 rounded-full bg-primary-300/60 dark:bg-primary-400/40"
+                className="absolute h-1.5 w-1.5 rounded-full bg-primary-300/70 dark:bg-primary-400/50 shadow-[0_0_8px_rgba(79,124,255,0.4)]"
                 animate={{
                   y: [0, -60 + i * 15, 0],
                   x: [0, 30 + i * 10, 0],
-                  opacity: [0.2, 0.7, 0.2],
-                  scale: [0.5, 1.2, 0.5],
+                  opacity: [0.2, 0.8, 0.2],
+                  scale: [0.5, 1.3, 0.5],
                 }}
                 transition={{
                   duration: 15 + i * 3,
@@ -243,43 +244,49 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
         }}
       />
 
-      {/* Data flow lines */}
+      {/* Data flow lines — adaptive network */}
       <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
-        <svg className="absolute left-[52%] top-0 h-full w-[48%] opacity-20" viewBox="0 0 400 800" preserveAspectRatio="none">
+        <svg className="absolute left-[52%] top-0 h-full w-[48%]" viewBox="0 0 400 800" preserveAspectRatio="none">
           <defs>
             <linearGradient id="line1" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="transparent" />
-              <stop offset="30%" stopColor="var(--color-primary)" stopOpacity="0.15" />
-              <stop offset="70%" stopColor="var(--color-accent)" stopOpacity="0.15" />
+              <stop offset="25%" stopColor="var(--color-primary)" stopOpacity="0.12" />
+              <stop offset="60%" stopColor="var(--color-accent)" stopOpacity="0.10" />
+              <stop offset="100%" stopColor="transparent" />
+            </linearGradient>
+            <linearGradient id="line2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="transparent" />
+              <stop offset="30%" stopColor="var(--color-primary)" stopOpacity="0.06" />
+              <stop offset="70%" stopColor="var(--color-accent)" stopOpacity="0.08" />
               <stop offset="100%" stopColor="transparent" />
             </linearGradient>
           </defs>
           <motion.path
-            d="M 200 0 Q 250 300 180 800"
+            d="M 200 0 Q 260 200 180 400 Q 100 600 200 800"
             stroke="url(#line1)"
-            strokeWidth="1"
+            strokeWidth="0.75"
             fill="none"
-            strokeDasharray="6 12"
-            animate={{ strokeDashoffset: [0, -200] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            strokeDasharray="4 8"
+            animate={{ strokeDashoffset: [0, -120] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           />
           <motion.path
-            d="M 250 0 Q 150 400 220 800"
-            stroke="url(#line1)"
+            d="M 240 0 Q 160 250 220 500 Q 280 650 180 800"
+            stroke="url(#line2)"
             strokeWidth="0.5"
             fill="none"
-            strokeDasharray="3 9"
-            animate={{ strokeDashoffset: [0, -200] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "linear", delay: 2 }}
+            strokeDasharray="3 10"
+            animate={{ strokeDashoffset: [0, -130] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1.5 }}
           />
           <motion.path
-            d="M 180 0 Q 300 200 160 800"
-            stroke="url(#line1)"
-            strokeWidth="0.5"
+            d="M 170 0 Q 200 150 250 300 Q 150 500 200 700 Q 220 780 170 800"
+            stroke="url(#line2)"
+            strokeWidth="0.4"
             fill="none"
             strokeDasharray="2 6"
-            animate={{ strokeDashoffset: [0, -150] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear", delay: 4 }}
+            animate={{ strokeDashoffset: [0, -80] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "linear", delay: 3 }}
           />
         </svg>
       </div>
@@ -368,6 +375,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
             className="glass-hero-panel relative h-[480px] w-[560px] overflow-hidden rounded-[40px]"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-bl from-white/40 via-transparent to-transparent opacity-70 dark:from-white/5" />
             <div className="flex h-full flex-col p-10">
               <div className="flex items-center justify-between mb-10">
                 <div className="flex gap-2">
@@ -375,15 +383,15 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
                   <div className="h-3 w-3 rounded-full bg-yellow-500/40" />
                   <div className="h-3 w-3 rounded-full bg-green-500/40" />
                 </div>
-                <div className="h-7 w-36 rounded-full bg-white/5 border border-white/5" />
+                <div className="h-7 w-36 rounded-full bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5" />
               </div>
               
               <div className="space-y-6">
-                <div className="h-10 w-2/3 rounded-xl bg-white/10 dark:bg-white/10 bg-black/5" />
+                <div className="h-10 w-2/3 rounded-2xl bg-white/15 dark:bg-white/8" />
                 <div className="grid grid-cols-2 gap-6">
-                  <div className="group relative h-40 rounded-[24px] bg-primary-500/10 border border-primary-500/20 overflow-hidden">
+                  <div className="group relative h-40 rounded-2xl bg-primary-500/15 dark:bg-primary-500/10 border border-primary-500/20 overflow-hidden">
                     <motion.div 
-                      animate={{ opacity: [0.3, 0.6, 0.3] }}
+                      animate={{ opacity: [0.2, 0.5, 0.2] }}
                       transition={{ duration: 4, repeat: Infinity }}
                       className="absolute inset-0 bg-primary-500/5" 
                     />
@@ -392,13 +400,13 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
                       <div className="h-4 w-12 rounded-full bg-primary-400/50" />
                     </div>
                   </div>
-                  <div className="h-40 rounded-[24px] bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5" />
+                  <div className="h-40 rounded-2xl bg-white/15 dark:bg-white/8" />
                 </div>
-                <div className="h-28 w-full rounded-[24px] bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/5 flex items-center px-8 gap-4">
-                  <div className="h-12 w-12 rounded-full bg-accent-500/10 border border-accent-500/20" />
+                <div className="h-28 w-full rounded-2xl bg-white/15 dark:bg-white/8 flex items-center px-8 gap-4">
+                  <div className="h-12 w-12 rounded-full bg-accent-500/15 dark:bg-accent-500/10 border border-accent-500/20" />
                   <div className="space-y-2 flex-1">
-                    <div className="h-3 w-1/2 rounded-full bg-white/20 dark:bg-white/10" />
-                    <div className="h-2 w-1/3 rounded-full bg-white/10 dark:bg-white/5" />
+                    <div className="h-3 w-1/2 rounded-full bg-white/25 dark:bg-white/10" />
+                    <div className="h-2 w-1/3 rounded-full bg-white/15 dark:bg-white/5" />
                   </div>
                 </div>
               </div>
@@ -422,7 +430,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="glass-hero-panel absolute -left-4 top-12 h-36 w-36 rounded-[32px] p-8 flex flex-col items-center justify-center gap-3"
+              className="glass-hero-card absolute -left-4 top-12 h-36 w-36 rounded-[32px] p-8 flex flex-col items-center justify-center gap-3"
             >
               <div className="h-12 w-12 rounded-2xl bg-accent-500/20 flex items-center justify-center border border-accent-500/30 relative">
                 <div className="absolute inset-0 rounded-2xl bg-accent-400/20 blur-lg animate-pulse" />
@@ -447,7 +455,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
                 ease: "easeInOut",
                 delay: 1
               }}
-              className="glass-hero-panel absolute -right-6 bottom-24 h-44 w-48 rounded-[32px] p-8"
+              className="glass-hero-card absolute -right-6 bottom-24 h-44 w-48 rounded-[32px] p-8"
             >
               <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Adaptive Path</div>
               <div className="h-2.5 w-full rounded-full bg-white/10 dark:bg-white/5 mb-6 overflow-hidden border border-white/10 dark:border-white/5">
@@ -480,7 +488,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
                 ease: "easeInOut",
                 delay: 0.5
               }}
-              className="glass-hero-panel absolute left-12 -bottom-4 h-28 w-56 rounded-[24px] px-8 py-6 flex items-center gap-6"
+              className="glass-hero-card absolute left-12 -bottom-4 h-28 w-56 rounded-[24px] px-8 py-6 flex items-center gap-6"
             >
               <div className="relative h-12 w-2">
                 <div className="absolute inset-0 bg-white/20 dark:bg-white/10 rounded-full" />

@@ -15,6 +15,7 @@ import {
   HeroSection,
   FeatureGridSection,
   StatsBarSection,
+  HowItWorksSection,
   CtaBannerSection,
   FaqSection,
   PricingTableSection,
@@ -26,6 +27,7 @@ import {
 blockRegistry.register("hero", { component: HeroSection, label: "Hero", scope: "page" });
 blockRegistry.register("feature-grid", { component: FeatureGridSection, label: "Feature Grid", scope: "page" });
 blockRegistry.register("stats-bar", { component: StatsBarSection, label: "Stats Bar", scope: "page" });
+blockRegistry.register("how-it-works", { component: HowItWorksSection, label: "How It Works", scope: "page" });
 blockRegistry.register("cta-banner", { component: CtaBannerSection, label: "CTA Banner", scope: "page" });
 blockRegistry.register("faq", { component: FaqSection, label: "FAQ", scope: "page" });
 blockRegistry.register("pricing-table", { component: PricingTableSection, label: "Pricing Table", scope: "page" });
