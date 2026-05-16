@@ -2,7 +2,21 @@
 
 import { Layers, Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { TreeNode } from "./TreeNode";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableTreeNode } from "./sortable-tree-node";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 
@@ -12,9 +26,10 @@ interface StructureTreeProps {
   onSelect?: (id: string) => void;
   onDelete?: (id: string) => void;
   onDuplicate?: (id: string) => void;
+  onReorder?: (activeId: string, overId: string) => void;
 }
 
-interface TreeNodeData {
+export interface TreeNodeData {
   id: string;
   type: string;
   label: string;
@@ -22,13 +37,23 @@ interface TreeNodeData {
   visible?: boolean;
 }
 
-export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplicate }: StructureTreeProps) {
+export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplicate, onReorder }: StructureTreeProps) {
   const [search, setSearch] = useState("");
 
   const enabled = useDevModeStore((s) => s.enabled);
-  const selectedId = useDevModeStore((s) => s.selectedId);
 
   if (!enabled) return null;
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    onReorder?.(active.id as string, over.id as string);
+  }
 
   function filterTree(nodes: TreeNodeData[], query: string): TreeNodeData[] {
     if (!query) return nodes;
@@ -46,6 +71,42 @@ export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplic
   }
 
   const filtered = search ? filterTree(blocks, search) : blocks;
+
+  function renderSortableNode(node: TreeNodeData, depth: number) {
+    const hasChildren = node.children && node.children.length > 0;
+    return (
+      <div key={node.id}>
+        <SortableTreeNode
+          node={node}
+          depth={depth}
+          onSelect={(id) => {
+            useDevModeStore.getState().select(id);
+            usePageBuilderStore.getState().selectSection(id);
+            onSelect?.(id);
+          }}
+          onToggleVisibility={() => {}}
+          onDuplicate={(id) => onDuplicate?.(id)}
+          onDelete={(id) => onDelete?.(id)}
+        />
+        {hasChildren && (
+          <div>
+            {node.children!.map((child) => renderSortableNode(child, depth + 1))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function getAllIds(nodes: TreeNodeData[]): string[] {
+    const ids: string[] = [];
+    for (const n of nodes) {
+      ids.push(n.id);
+      if (n.children) ids.push(...getAllIds(n.children));
+    }
+    return ids;
+  }
+
+  const allIds = getAllIds(blocks);
 
   return (
     <div className="flex h-full flex-col bg-background/50 backdrop-blur-xl">
@@ -84,29 +145,13 @@ export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplic
             </p>
           </div>
         ) : (
-          <div className="space-y-0.5">
-            {filtered.map((node) => (
-              <TreeNode
-                key={node.id}
-                node={node}
-                depth={0}
-                onSelect={(id) => {
-                  useDevModeStore.getState().select(id);
-                  usePageBuilderStore.getState().selectSection(id);
-                  onSelect?.(id);
-                }}
-                onToggleVisibility={(id) => {
-                  // Toggle visibility - would update page store
-                }}
-                onDuplicate={(id) => {
-                  onDuplicate?.(id);
-                }}
-                onDelete={(id) => {
-                  onDelete?.(id);
-                }}
-              />
-            ))}
-          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={allIds} strategy={verticalListSortingStrategy}>
+              <div className="space-y-0.5">
+                {filtered.map((node) => renderSortableNode(node, 0))}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
     </div>

@@ -43,6 +43,7 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
     markClean,
     removeSection,
     selectSection,
+    reorderSections,
   } = usePageBuilderStore();
   const devModeEnabled = useDevModeStore((s) => s.enabled);
   const devSelectedId = useDevModeStore((s) => s.selectedId);
@@ -151,6 +152,15 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
               sortOrder: sections.length,
             };
             addSection(copy);
+          }}
+          onReorder={(activeId, overId) => {
+            const ordered = [...sections];
+            const activeIdx = ordered.findIndex((s) => s.id === activeId);
+            const overIdx = ordered.findIndex((s) => s.id === overId);
+            if (activeIdx === -1 || overIdx === -1) return;
+            const [moved] = ordered.splice(activeIdx, 1);
+            ordered.splice(overIdx, 0, moved);
+            reorderSections(ordered.map((s, i) => ({ ...s, sortOrder: i })));
           }}
         />
       </div>
