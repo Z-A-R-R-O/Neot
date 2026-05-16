@@ -8,6 +8,7 @@ import { BlockRenderer } from "@/components/blocks/block-renderer";
 import { PlayerHeader } from "@/components/player/player-header";
 import { NavigationButtons } from "@/components/player/navigation-buttons";
 import { XpPopup } from "@/components/gamification/xp-popup";
+import { AchievementPopup } from "@/components/gamification/achievement-popup";
 
 interface LessonBlock {
   id: string;
@@ -48,6 +49,8 @@ export function LessonPlayer({
 }: PlayerShellProps) {
   const router = useRouter();
   const [xpPopup, setXpPopup] = useState<{ amount: number; courseCompleted?: boolean } | null>(null);
+  const [achievementQueue, setAchievementQueue] = useState<{ name: string; description: string; xpReward: number }[]>([]);
+  const [currentAchievement, setCurrentAchievement] = useState<{ name: string; description: string; xpReward: number } | null>(null);
 
   const {
     currentBlockIndex,
@@ -77,6 +80,25 @@ export function LessonPlayer({
     };
   }, [lesson.id, blocks.length, reset, setTotalBlocks, saveProgress]);
 
+  const handleXpPopupComplete = useCallback(() => {
+    setXpPopup(null);
+    if (achievementQueue.length > 0) {
+      setCurrentAchievement(achievementQueue[0]);
+    }
+  }, [achievementQueue]);
+
+  const handleAchievementComplete = useCallback(() => {
+    setAchievementQueue((prev) => {
+      const [_, ...rest] = prev;
+      if (rest.length > 0) {
+        setCurrentAchievement(rest[0]);
+      } else {
+        setCurrentAchievement(null);
+      }
+      return rest;
+    });
+  }, []);
+
   const handleComplete = useCallback(async () => {
     markCompleted();
     const result = await saveProgress({
@@ -86,8 +108,12 @@ export function LessonPlayer({
     if (result.xpAwarded > 0) {
       setXpPopup({ amount: result.xpAwarded, courseCompleted: result.courseCompleted });
     }
+    const achievements = result.newAchievements;
+    if (achievements && achievements.length > 0) {
+      setAchievementQueue(achievements);
+    }
     if (result.courseCompleted) {
-      setTimeout(() => router.push(`/courses/${lesson.module.courseId}`), 3000);
+      setTimeout(() => router.push(`/courses/${lesson.module.courseId}/certificate`), 3000);
     }
   }, [markCompleted, saveProgress]);
 
@@ -108,7 +134,15 @@ export function LessonPlayer({
         <XpPopup
           xp={xpPopup.amount}
           reason={xpPopup.courseCompleted ? "Course completed! 🎉" : "Lesson completed"}
-          onComplete={() => setXpPopup(null)}
+          onComplete={handleXpPopupComplete}
+        />
+      )}
+      {currentAchievement && (
+        <AchievementPopup
+          name={currentAchievement.name}
+          description={currentAchievement.description}
+          xpReward={currentAchievement.xpReward}
+          onComplete={handleAchievementComplete}
         />
       )}
 

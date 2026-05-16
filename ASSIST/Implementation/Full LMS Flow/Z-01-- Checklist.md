@@ -76,9 +76,9 @@
 | Continue Learning | ✅ | From Enrollment.lastLessonId, shows lesson title + course + resume CTA |
 | Achievements page | ✅ | /dashboard/achievements with earned/locked, summary count |
 | Leaderboard page | ✅ | /dashboard/leaderboard with top 50, current rank, XP |
-| Certificates | 🔲 | Course completion detected but certificate generation not implemented |
+| Certificates | ✅ | Auto-issued on course completion, certificate page with print-to-PDF |
 | Settings | 🔲 | No settings page |
-| Notifications | 🔲 | Not implemented |
+| Notifications | ✅ | Bell icon in header with unread badge, dropdown with auto-poll, mark read/all-read |
 
 ### Student Experience Flow
 
@@ -101,7 +101,7 @@
 | Levels | ✅ | getLevelInfo() with 50 levels, XP thresholds, titles |
 | Streaks | ✅ | Profile fields (currentStreak, longestStreak, lastActivityDate), calculateStreak() |
 | Badges | 🔲 | Planned in achievements.ts but not DB-backed |
-| Achievements | 🚧 | achievements.ts defines categories but no auto-unlock logic or DB storage |
+| Achievements | ✅ | Auto-unlock on lesson completion (XP/streak/course milestones). AchievementPopup + DB persistence via checkAndAwardAchievements() |
 | Seasonal events | 🔲 | Not implemented |
 
 ### Social (Future)
@@ -131,7 +131,7 @@
 |---|---|---|
 | Draft | ✅ | Default state on creation |
 | Published | ✅ | Published courses visible to students |
-| Archived | 🔲 | No archive/unpublish flow |
+| Archived | 🚧 | Student enrollment archiving via API + dashboard. Teacher course archive still TBD. |
 | Deleted (soft) | 🔲 | Cascade deletes, no soft-delete |
 
 ### Course Builder Features
@@ -174,7 +174,7 @@
 | Timed quizzes | 🔲 | Not implemented |
 | Attempts tracking | ✅ | QuizAttempt model |
 | Pass score (80%) | ✅ | Bonus XP on pass |
-| Quiz flow: attempt → grade → save score → award bonus XP → unlock achievement | 🚧 | First 3 steps done. Achievement unlock NOT wired. |
+| Quiz flow: attempt → grade → save score → award bonus XP → unlock achievement | 🚧 | Score saved + bonus XP awarded. Achievement unlock for perfect_quiz still needs wiring into quiz attempt route. |
 
 ## 11. TEACHER SYSTEM FLOW (§TEACHER SYSTEM FLOW)
 
@@ -220,7 +220,7 @@
 | Pages | ✅ | Page builder with Dev Mode |
 | Themes | ✅ | Theme editor (color pickers, font selector, animation config, live preview) |
 | Analytics | 🔲 | No admin-level platform analytics |
-| Notifications | 🔲 | Not implemented |
+| Notifications | 🔲 | Student notification system exists, admin not yet wired |
 | Settings | ✅ | Platform settings (General/Auth/Email tabs) |
 | Dev Mode | ✅ | Visual experience engine overlay |
 
@@ -276,10 +276,10 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| XP Lifecycle: Lesson Complete → XP Awarded → Level Updated → Achievement Check → Streak Updated → Leaderboard Refresh | 🚧 | XP+Level+Streak done. Achievement check NOT wired. Leaderboard uses periodic query, no real-time refresh. |
+| XP Lifecycle: Lesson Complete → XP Awarded → Level Updated → Achievement Check → Streak Updated → Leaderboard Refresh | ✅ | Full lifecycle wired in awardLessonXp transaction. Achievement XP also awarded atomically. |
 | Achievement categories: Progress, Streak, Quiz, Social, Mastery | 🔲 | Defined in achievements.ts, no auto-unlock or DB persistence |
 | Leaderboard types: global, friends, course-specific, weekly, seasonal | 🚧 | Global leaderboard only, no friends/weekly/seasonal |
-| Notification system: XP gained, course published, assignment graded, teacher message, achievement unlocked, streak reminder | 🔲 | Not implemented |
+| Notification system: XP gained, course published, assignment graded, teacher message, achievement unlocked, streak reminder | 🚧 | In-app notifications for achievement unlock + course completion. Still needed: XP level-up, streak reminders, course publish, grading alerts. |
 
 ## 15. MEDIA SYSTEM (§MEDIA SYSTEM)
 
@@ -297,9 +297,9 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Course search | ✅ | By title/description |
+| Course search | ✅ | By title/description/subject + teacher name, debounced 250ms, dropdown in header |
 | Lesson search | 🔲 | Not implemented |
-| Teacher search | 🔲 | Not implemented |
+| Teacher search | ✅ | Included in search API + dropdown results |
 | Category search | 🔲 | Not implemented |
 | Filters | ✅ | By category, level |
 | Tags | 🔲 | Not implemented |
@@ -340,14 +340,14 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Course completed → validate → generate PDF → store → share/download | 🔲 | Not implemented. Course completion is detected but no certificate flow exists. |
+| Course completed → validate → generate → store → view/download | ✅ | Certificate model + service + API route + premium HTML certificate page with print-to-PDF. Auto-issued on course completion. |
 
 ## 19. RECOMMENDATION ENGINE (§RECOMMENDATION ENGINE)
 
 | Requirement | Status | Notes |
 |---|---|---|
 | Inputs: interests, enrollments, progress, category affinity, trending | 🔲 | Not implemented |
-| Outputs: continue learning, suggested courses, personalized homepage | 🔲 | Continue learning is manual (last lesson), no personalization for homepage |
+| Outputs: continue learning, suggested courses, personalized homepage | 🚧 | Continue learning + recommendations (by category affinity + popular) done. Personalized homepage TBD. |
 
 ## 20. DEV MODE SYSTEM (§DEV MODE SYSTEM)
 
@@ -428,7 +428,7 @@
 | Parents monitor children | 🚧 | Basic monitoring exists, full reports TBD |
 | All progress is server-driven | ✅ | Server-side progress calculation |
 | Gamification is transactional | ✅ | Atomic XP transactions |
-| Course lifecycle uses states | 🚧 | Draft/Published exist, Archived/Deleted missing |
+| Course lifecycle uses states | 🚧 | Draft/Published exist. Student enrollment archiving done. Teacher course archive still TBD. |
 | Dev Mode powers dynamic content | 🚧 | Core works, overlay/responsive/structure gaps |
 | All dashboards use live data | ✅ | Server-side fetches for all dashboards |
 | Every feature must support scale | 🚧 | No caching, no CDN, SQLite limits |
@@ -440,7 +440,7 @@
 | 1 | Core auth + RBAC | ✅ |
 | 2 | Course architecture | ✅ |
 | 3 | Lesson/progress system | ✅ |
-| 4 | Gamification | 🚧 | Core done (XP, level, streak). Achievements, badges, seasonal events TBD |
+| 4 | Gamification | 🚧 | Achievements auto-unlock wired. Seasonal events + badges still TBD |
 | 5 | Teacher analytics | ✅ | Basic analytics implemented |
 | 6 | Admin governance | 🚧 | Users + Settings done. Teachers, Moderation, Categories, Analytics TBD |
 | 7 | Parent monitoring | 🚧 | Basic dashboard done. Reports, alerts, communication TBD |

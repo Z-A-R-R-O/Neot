@@ -43,6 +43,7 @@ export function useUpdateProgress(lessonId: string) {
         longestStreak: number;
         level: number;
         courseCompleted: boolean;
+        newAchievements?: { id: string; name: string; description: string; xpReward: number }[];
       }>;
     },
     onSuccess: () => {

@@ -12,6 +12,9 @@ const roleSchema = z.object({
       interests: z.array(z.string()).optional(),
       subjects: z.array(z.string()).optional(),
       grade_levels: z.array(z.string()).optional(),
+      bio: z.string().optional(),
+      child_name: z.string().optional(),
+      child_interests: z.array(z.string()).optional(),
     })
     .optional(),
 });

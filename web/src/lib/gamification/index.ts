@@ -8,6 +8,8 @@ export { getLevelTitle } from "./level-system";
 
 export { ACHIEVEMENTS, checkAchievements } from "./achievements";
 export type { AchievementDefinition } from "./achievements";
+export { checkAndAwardAchievements, ensureAchievementsSeeded } from "./achievement-service";
+export type { NewAchievement } from "./achievement-service";
 
 export { REWARDS, getUnlockedRewards, getLockedRewards } from "./rewards";
 export type { RewardDefinition } from "./rewards";

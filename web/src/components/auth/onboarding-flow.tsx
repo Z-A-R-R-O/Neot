@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
+import {
+  Loader2, ArrowRight, ArrowLeft, Check, Sparkles,
+  X, BookOpen, Beaker, Code, Palette, Music, Globe,
+  History, Calculator, FlaskConical, Languages, Brain,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { RoleSelector } from "@/components/auth/role-selector";
 
 type Role = "student" | "teacher" | "parent";
@@ -25,15 +30,29 @@ const steps = [
 
 type StepId = (typeof steps)[number]["id"];
 
+const INTEREST_OPTIONS = [
+  { value: "math", label: "Math", icon: Calculator },
+  { value: "science", label: "Science", icon: FlaskConical },
+  { value: "programming", label: "Programming", icon: Code },
+  { value: "art", label: "Art", icon: Palette },
+  { value: "music", label: "Music", icon: Music },
+  { value: "languages", label: "Languages", icon: Languages },
+  { value: "history", label: "History", icon: History },
+  { value: "geography", label: "Geography", icon: Globe },
+  { value: "biology", label: "Biology", icon: Beaker },
+  { value: "reading", label: "Reading", icon: BookOpen },
+  { value: "logic", label: "Logic", icon: Brain },
+] as const;
+
 const studentSchema = z.object({
   ageGroup: z.enum(["child", "teen", "adult"]),
   grade: z.string().optional(),
-  interests: z.string().optional(),
 });
 
 const teacherSchema = z.object({
   subjects: z.string().min(1, "Enter at least one subject"),
   gradeLevels: z.string().min(1, "Enter at least one grade level"),
+  bio: z.string().max(500, "Bio must be under 500 characters").optional(),
 });
 
 export function OnboardingFlow() {
@@ -41,18 +60,32 @@ export function OnboardingFlow() {
   const [step, setStep] = useState<StepId>("role");
   const [role, setRole] = useState<Role | null>(null);
   const [childName, setChildName] = useState("");
+  const [interests, setInterests] = useState<string[]>([]);
+  const [childInterests, setChildInterests] = useState<string[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setSubmitting] = useState(false);
 
   const studentForm = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
-    defaultValues: { ageGroup: "teen", interests: "", grade: "" },
+    defaultValues: { ageGroup: "teen", grade: "" },
   });
 
   const teacherForm = useForm<z.infer<typeof teacherSchema>>({
     resolver: zodResolver(teacherSchema),
-    defaultValues: { subjects: "", gradeLevels: "" },
+    defaultValues: { subjects: "", gradeLevels: "", bio: "" },
   });
+
+  const toggleInterest = useCallback((value: string) => {
+    setInterests((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
+    );
+  }, []);
+
+  const toggleChildInterest = useCallback((value: string) => {
+    setChildInterests((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
+    );
+  }, []);
 
   const currentIdx = steps.findIndex((s) => s.id === step);
 
@@ -67,15 +100,19 @@ export function OnboardingFlow() {
       const data = studentForm.getValues();
       metadata.age_group = data.ageGroup;
       if (data.grade) metadata.grade = data.grade;
-      if (data.interests) {
-        metadata.interests = data.interests.split(",").map((s) => s.trim()).filter(Boolean);
-      }
+      metadata.interests = interests;
     }
 
     if (role === "teacher") {
       const data = teacherForm.getValues();
       metadata.subjects = data.subjects.split(",").map((s) => s.trim()).filter(Boolean);
       metadata.grade_levels = data.gradeLevels.split(",").map((s) => s.trim()).filter(Boolean);
+      if (data.bio) metadata.bio = data.bio;
+    }
+
+    if (role === "parent") {
+      if (childName) metadata.child_name = childName;
+      if (childInterests.length > 0) metadata.child_interests = childInterests;
     }
 
     const res = await fetch("/api/auth/role", {
@@ -285,14 +322,30 @@ export function OnboardingFlow() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="interests">Interests (optional, comma-separated)</Label>
-                    <Input
-                      id="interests"
-                      placeholder="math, science, art"
-                      className="bg-[rgba(255,255,255,0.02)] border-[rgba(255,255,255,0.08)]"
-                      {...studentForm.register("interests")}
-                    />
+                  <div className="space-y-3">
+                    <Label>Interests (optional)</Label>
+                    <div className="flex flex-wrap gap-2">
+                      {INTEREST_OPTIONS.map((opt) => {
+                        const selected = interests.includes(opt.value);
+                        const Icon = opt.icon;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => toggleInterest(opt.value)}
+                            className={`group inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
+                              selected
+                                ? "border-primary-500/40 bg-primary-500/15 text-primary-300 shadow-sm"
+                                : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] text-muted-foreground hover:border-[rgba(255,255,255,0.18)] hover:text-foreground"
+                            }`}
+                          >
+                            <Icon className="h-3.5 w-3.5" />
+                            {opt.label}
+                            {selected && <X className="h-3 w-3 ml-0.5 text-primary-400" />}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="flex gap-3 pt-2">
@@ -348,6 +401,20 @@ export function OnboardingFlow() {
                     <p className="text-xs text-muted-foreground">Comma-separated</p>
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="bio">Short bio (optional)</Label>
+                    <Textarea
+                      id="bio"
+                      placeholder="Tell students a bit about yourself and your teaching style..."
+                      rows={3}
+                      maxLength={500}
+                      className="bg-[rgba(255,255,255,0.02)] border-[rgba(255,255,255,0.08)] resize-none"
+                      error={teacherForm.formState.errors.bio?.message}
+                      {...teacherForm.register("bio")}
+                    />
+                    <p className="text-xs text-muted-foreground">Up to 500 characters</p>
+                  </div>
+
                   <div className="flex gap-3 pt-2">
                     <button
                       onClick={prevStep}
@@ -382,6 +449,32 @@ export function OnboardingFlow() {
                       placeholder="Enter your child's name"
                       className="bg-[rgba(255,255,255,0.02)] border-[rgba(255,255,255,0.08)]"
                     />
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label>Child&apos;s interests (optional)</Label>
+                    <div className="flex flex-wrap gap-2">
+                      {INTEREST_OPTIONS.map((opt) => {
+                        const selected = childInterests.includes(opt.value);
+                        const Icon = opt.icon;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => toggleChildInterest(opt.value)}
+                            className={`group inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
+                              selected
+                                ? "border-primary-500/40 bg-primary-500/15 text-primary-300 shadow-sm"
+                                : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] text-muted-foreground hover:border-[rgba(255,255,255,0.18)] hover:text-foreground"
+                            }`}
+                          >
+                            <Icon className="h-3.5 w-3.5" />
+                            {opt.label}
+                            {selected && <X className="h-3 w-3 ml-0.5 text-primary-400" />}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="flex gap-3 pt-2">
@@ -434,6 +527,14 @@ export function OnboardingFlow() {
                                 <dd className="font-semibold text-foreground">{sv.grade}</dd>
                               </div>
                             )}
+                            {interests.length > 0 && (
+                              <div className="flex items-center justify-between">
+                                <dt className="text-muted-foreground">Interests</dt>
+                                <dd className="font-semibold text-foreground">
+                                  {interests.map((i) => INTEREST_OPTIONS.find((o) => o.value === i)?.label ?? i).join(", ")}
+                                </dd>
+                              </div>
+                            )}
                           </>
                         );
                       })()}
@@ -449,9 +550,33 @@ export function OnboardingFlow() {
                               <dt className="text-muted-foreground">Grade Levels</dt>
                               <dd className="font-semibold text-foreground">{tv.gradeLevels}</dd>
                             </div>
+                            {tv.bio && (
+                              <div className="flex items-start justify-between">
+                                <dt className="text-muted-foreground">Bio</dt>
+                                <dd className="max-w-[200px] text-right font-medium text-foreground">{tv.bio}</dd>
+                              </div>
+                            )}
                           </>
                         );
                       })()}
+                      {role === "parent" && (() => (
+                        <>
+                          {childName && (
+                            <div className="flex items-center justify-between">
+                              <dt className="text-muted-foreground">Child&apos;s Name</dt>
+                              <dd className="font-semibold text-foreground">{childName}</dd>
+                            </div>
+                          )}
+                          {childInterests.length > 0 && (
+                            <div className="flex items-center justify-between">
+                              <dt className="text-muted-foreground">Child&apos;s Interests</dt>
+                              <dd className="font-semibold text-foreground">
+                                {childInterests.map((i) => INTEREST_OPTIONS.find((o) => o.value === i)?.label ?? i).join(", ")}
+                              </dd>
+                            </div>
+                          )}
+                        </>
+                      ))()}
                     </dl>
                   </div>
 

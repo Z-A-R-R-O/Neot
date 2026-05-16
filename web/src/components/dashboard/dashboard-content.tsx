@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock } from "lucide-react";
+import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock, Archive, X } from "lucide-react";
 import Link from "next/link";
 import { LevelProgress } from "@/components/gamification/level-progress";
 import { StreakFlame } from "@/components/gamification/streak-flame";
@@ -30,6 +31,16 @@ interface ContinueLesson {
   estimatedMinutes: number | null;
 }
 
+interface RecommendedCourse {
+  id: string;
+  title: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  difficulty: string;
+  category: { name: string } | null;
+  teacher: { fullName: string | null } | null;
+}
+
 interface DashboardContentProps {
   name: string;
   stats: {
@@ -40,9 +51,11 @@ interface DashboardContentProps {
     level: number;
     levelTitle: string;
     levelProgress: number;
+    certificates: number;
   };
   enrollments: EnrollmentCourse[];
   continueLesson: ContinueLesson | null;
+  recommendations?: RecommendedCourse[];
 }
 
 interface StatCard {
@@ -59,7 +72,7 @@ const difficultyColors: Record<string, string> = {
   advanced: "bg-red-500/20 text-red-400 border-red-500/30",
 };
 
-export function DashboardContent({ name, stats, enrollments, continueLesson }: DashboardContentProps) {
+export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations }: DashboardContentProps) {
   return (
     <div className="space-y-10">
       <motion.div
@@ -75,11 +88,12 @@ export function DashboardContent({ name, stats, enrollments, continueLesson }: D
         </p>
       </motion.div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {([
           { label: "Enrolled Courses", value: stats.courses, icon: BookOpen, gradient: "from-primary-500/20 via-primary-500/5 to-transparent", delay: 0 },
           { label: "Completed Lessons", value: stats.lessons, icon: CheckCircle, gradient: "from-accent-500/20 via-accent-500/5 to-transparent", delay: 0.1 },
           { label: "XP Points", value: stats.xp, icon: Zap, gradient: "from-secondary-500/20 via-secondary-500/5 to-transparent", delay: 0.2 },
+          { label: "Certificates", value: stats.certificates, icon: TrendingUp, gradient: "from-emerald-500/20 via-emerald-500/5 to-transparent", delay: 0.3 },
         ] as StatCard[]).map((card) => {
           const Icon = card.icon;
           return (
@@ -184,63 +198,132 @@ export function DashboardContent({ name, stats, enrollments, continueLesson }: D
               const course = enrollment.course;
               const diffColor = difficultyColors[course.difficulty] ?? "bg-gray-500/20 text-gray-400 border-gray-500/30";
               return (
-                <Link key={enrollment.id} href={`/courses/${course.id}`}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.05 * i, ease: easing }}
-                    whileHover={{ y: -4, transition: { duration: 0.3 } }}
-                    className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-5 shadow-xl transition-all duration-500 hover:border-[rgba(255,255,255,0.12)] hover:shadow-primary-500/10"
-                  >
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div key={enrollment.id} className="group relative">
+                  <Link href={`/courses/${course.id}`}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.05 * i, ease: easing }}
+                      whileHover={{ y: -4, transition: { duration: 0.3 } }}
+                      className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-5 shadow-xl transition-all duration-500 hover:border-[rgba(255,255,255,0.12)] hover:shadow-primary-500/10"
+                    >
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                    {course.thumbnailUrl && (
-                      <div className="relative z-10 mb-3 h-32 w-full overflow-hidden rounded-xl">
-                        <img src={course.thumbnailUrl} alt={course.title} className="h-full w-full object-cover" />
-                      </div>
-                    )}
-
-                    <div className="relative z-10 flex flex-wrap items-center gap-2 mb-2">
-                      {course.category && (
-                        <span className="rounded-full bg-primary-500/15 px-2.5 py-0.5 text-[10px] font-medium text-primary-400 ring-1 ring-inset ring-primary-500/25">
-                          {course.category.name}
-                        </span>
+                      {course.thumbnailUrl && (
+                        <div className="relative z-10 mb-3 h-32 w-full overflow-hidden rounded-xl">
+                          <img src={course.thumbnailUrl} alt={course.title} className="h-full w-full object-cover" />
+                        </div>
                       )}
-                      <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ring-1 ring-inset ${diffColor}`}>
-                        {course.difficulty}
-                      </span>
-                    </div>
 
-                    <h3 className="relative z-10 font-heading text-sm font-bold text-foreground line-clamp-1">{course.title}</h3>
-
-                    {course.description && (
-                      <p className="relative z-10 mt-1 text-xs text-muted-foreground line-clamp-2">{course.description}</p>
-                    )}
-
-                    <div className="relative z-10 mt-3 space-y-2">
-                      <div className="flex h-1.5 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-500"
-                          style={{ width: `${Math.min(enrollment.progress, 100)}%` }}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-muted-foreground">{Math.round(enrollment.progress)}% complete</span>
-                        {course.estimatedMinutes && (
-                          <span className="flex items-center gap-1 text-muted-foreground/60">
-                            <Clock className="h-3 w-3" />
-                            {course.estimatedMinutes} min
+                      <div className="relative z-10 flex flex-wrap items-center gap-2 mb-2">
+                        {course.category && (
+                          <span className="rounded-full bg-primary-500/15 px-2.5 py-0.5 text-[10px] font-medium text-primary-400 ring-1 ring-inset ring-primary-500/25">
+                            {course.category.name}
                           </span>
                         )}
+                        <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ring-1 ring-inset ${diffColor}`}>
+                          {course.difficulty}
+                        </span>
                       </div>
-                    </div>
-                  </motion.div>
-                </Link>
+
+                      <h3 className="relative z-10 font-heading text-sm font-bold text-foreground line-clamp-1">{course.title}</h3>
+
+                      {course.description && (
+                        <p className="relative z-10 mt-1 text-xs text-muted-foreground line-clamp-2">{course.description}</p>
+                      )}
+
+                      <div className="relative z-10 mt-3 space-y-2">
+                        <div className="flex h-1.5 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-500"
+                            style={{ width: `${Math.min(enrollment.progress, 100)}%` }}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-muted-foreground">{Math.round(enrollment.progress)}% complete</span>
+                          {course.estimatedMinutes && (
+                            <span className="flex items-center gap-1 text-muted-foreground/60">
+                              <Clock className="h-3 w-3" />
+                              {course.estimatedMinutes} min
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      await fetch(`/api/enrollments/${enrollment.id}`, {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ archived: true }),
+                      });
+                      window.location.reload();
+                    }}
+                    className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-lg bg-[rgba(0,0,0,0.6)] text-muted-foreground/50 opacity-0 transition-all hover:bg-red-500/20 hover:text-red-400 group-hover:opacity-100"
+                    title="Archive course"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               );
             })}
           </div>
         )}
       </motion.div>
+
+      {recommendations && recommendations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.35, ease: easing }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="font-heading text-xl font-bold tracking-tight text-foreground">Recommended For You</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Based on your learning interests</p>
+            </div>
+            <Link href="/courses" className="group flex items-center gap-1 text-sm font-medium text-primary-400 transition-colors hover:text-primary-300">
+              Browse all
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {recommendations.map((course, i) => {
+              const diffColor = difficultyColors[course.difficulty] ?? "bg-gray-500/20 text-gray-400 border-gray-500/30";
+              return (
+                <Link key={course.id} href={`/courses/${course.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.05 * i, ease: easing }}
+                    whileHover={{ y: -3, transition: { duration: 0.3 } }}
+                    className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4 shadow-xl transition-all duration-500 hover:border-[rgba(255,255,255,0.12)] hover:shadow-primary-500/10"
+                  >
+                    <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                      {course.category && (
+                        <span className="rounded-full bg-primary-500/15 px-2 py-0.5 text-[9px] font-medium text-primary-400 ring-1 ring-inset ring-primary-500/25">
+                          {course.category.name}
+                        </span>
+                      )}
+                      <span className={`rounded-full px-2 py-0.5 text-[9px] font-medium ring-1 ring-inset ${diffColor}`}>
+                        {course.difficulty}
+                      </span>
+                    </div>
+                    <h3 className="font-heading text-sm font-bold text-foreground line-clamp-1">{course.title}</h3>
+                    {course.teacher?.fullName && (
+                      <p className="mt-1 text-[11px] text-muted-foreground/60">{course.teacher.fullName}</p>
+                    )}
+                    {course.description && (
+                      <p className="mt-1 text-xs text-muted-foreground/70 line-clamp-2">{course.description}</p>
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

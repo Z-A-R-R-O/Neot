@@ -3,12 +3,13 @@ import { prisma } from "@/lib/db";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { getLevelInfo } from "@/lib/gamification/xp-calculator";
 import { getLevelTitle } from "@/lib/gamification/level-system";
+import { getRecommendations } from "@/lib/courses/recommendations";
 
 export default async function DashboardPage() {
   const user = await getUser();
   const name = user?.email ? user.email.split("@")[0] : "there";
 
-  let stats = { courses: 0, lessons: 0, xp: 0, streak: 0, level: 1, levelTitle: "Beginner", levelProgress: 0 };
+  let stats = { courses: 0, lessons: 0, xp: 0, streak: 0, level: 1, levelTitle: "Beginner", levelProgress: 0, certificates: 0 };
   let enrollments: {
     id: string;
     progress: number;
@@ -30,16 +31,26 @@ export default async function DashboardPage() {
     estimatedMinutes: number | null;
   } | null = null;
 
+  let recommendations: {
+    id: string;
+    title: string;
+    description: string | null;
+    thumbnailUrl: string | null;
+    difficulty: string;
+    category: { name: string } | null;
+    teacher: { fullName: string | null } | null;
+  }[] = [];
+
   try {
-    const [profile, courseCount, lessonCount, enrolled, lastProgress] = await Promise.all([
+    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs] = await Promise.all([
       prisma.profile.findUnique({
         where: { id: user!.id },
         select: { xp: true, level: true, currentStreak: true },
       }),
-      prisma.enrollment.count({ where: { userId: user!.id } }),
+      prisma.enrollment.count({ where: { userId: user!.id, archived: false } }),
       prisma.lessonProgress.count({ where: { userId: user!.id, status: "completed" } }),
       prisma.enrollment.findMany({
-        where: { userId: user!.id },
+        where: { userId: user!.id, archived: false },
         include: {
           course: { include: { category: true } },
         },
@@ -55,7 +66,10 @@ export default async function DashboardPage() {
           course: { select: { title: true } },
         },
       }),
+      prisma.certificate.count({ where: { userId: user!.id } }),
+      getRecommendations(user!.id),
     ]);
+    recommendations = recs;
 
     const xp = profile?.xp ?? 0;
     const level = profile?.level ?? 1;
@@ -69,6 +83,7 @@ export default async function DashboardPage() {
       level,
       levelTitle: getLevelTitle(level),
       levelProgress: levelInfo.progress,
+      certificates: certCount,
     };
     enrollments = enrolled;
 
@@ -91,5 +106,5 @@ export default async function DashboardPage() {
     // Dashboard data not available
   }
 
-  return <DashboardContent name={name} stats={stats} enrollments={enrollments} continueLesson={continueLesson} />;
+  return <DashboardContent name={name} stats={stats} enrollments={enrollments} continueLesson={continueLesson} recommendations={recommendations} />;
 }

@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { NotificationBell } from "@/components/notifications/notification-bell";
+import { SearchInput } from "@/components/search/search-input";
 import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
@@ -36,6 +38,8 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
       <div className="flex-1" />
 
+      <SearchInput />
+      <NotificationBell />
       <ThemeToggle />
 
       <DropdownMenu>

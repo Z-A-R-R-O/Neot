@@ -35,6 +35,8 @@ model Profile {
   lessonProgress LessonProgress[]
   xpTransactions XPTransaction[]
   userAchievements UserAchievement[]
+  certificates Certificate[]
+  notifications Notification[]
   sessions Session[]
   mediaUploads Media[]
 
@@ -77,6 +79,7 @@ model Course {
   teacher   Profile    @relation(fields: [teacherId], references: [id])
   modules   Module[]
   enrollments Enrollment[]
+  certificates Certificate[]
 
   @@map("courses")
 }
@@ -142,6 +145,7 @@ model Enrollment {
   courseId    String    @map("course_id")
   progress    Float     @default(0)
   completed   Boolean   @default(false)
+  archived    Boolean   @default(false)
   startedAt   DateTime  @default(now()) @map("started_at")
   completedAt DateTime? @map("completed_at")
   lastLessonId String?  @map("last_lesson_id")
@@ -186,7 +190,7 @@ model Session {
 }
 
 model Achievement {
-  id          String   @id @default(uuid())
+  id          String   @id
   name        String
   description String
   iconUrl     String?  @map("icon_url")
@@ -283,6 +287,36 @@ model Media {
   uploadedBy Profile @relation(fields: [uploadedById], references: [id])
 
   @@map("media")
+}
+
+model Certificate {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  courseId  String   @map("course_id")
+  serial    String   @unique
+  issuedAt  DateTime @default(now()) @map("issued_at")
+
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("certificates")
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  type      String    @default("info")
+  title     String
+  message   String
+  link      String?
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@map("notifications")
 }
 
 model PlatformSetting {

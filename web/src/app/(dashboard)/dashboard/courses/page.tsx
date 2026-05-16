@@ -9,6 +9,7 @@ export default async function DashboardCoursesPage() {
   let enrollments: {
     id: string;
     progress: number;
+    archived: boolean;
     course: { id: string; title: string; description: string | null; thumbnailUrl: string | null; difficulty: string; estimatedMinutes: number | null; category: { name: string } | null };
   }[] = [];
 

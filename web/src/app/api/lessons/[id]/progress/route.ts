@@ -5,6 +5,8 @@ import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { calculateStreak } from "@/lib/gamification/streak-tracker";
 import { getLevelInfo, XP_REWARDS } from "@/lib/gamification/xp-calculator";
+import { checkAndAwardAchievements } from "@/lib/gamification/achievement-service";
+import type { NewAchievement } from "@/lib/gamification/achievement-service";
 import { recalculateEnrollmentProgress } from "@/lib/courses/enrollment-service";
 import { awardCourseCompletion } from "@/lib/courses/completion-service";
 import { updateContinueLearning } from "@/lib/courses/continue-learning";
@@ -92,6 +94,7 @@ export async function POST(
   let longestStreak = 0;
   let level = 0;
   let courseCompleted = false;
+  let newAchievements: NewAchievement[] = [];
 
   if (isNewCompletion) {
     const result = await awardLessonXp(userId, id);
@@ -99,6 +102,7 @@ export async function POST(
     streak = result.streak;
     longestStreak = result.longestStreak;
     level = result.level;
+    newAchievements = result.newAchievements;
 
     const lesson = await prisma.lesson.findUnique({
       where: { id },
@@ -123,6 +127,7 @@ export async function POST(
     longestStreak,
     level,
     courseCompleted,
+    newAchievements: newAchievements.length > 0 ? newAchievements : undefined,
   });
 }
 
@@ -139,6 +144,7 @@ async function awardLessonXp(userId: string, lessonId: string) {
         streak: profile?.currentStreak ?? 0,
         longestStreak: profile?.longestStreak ?? 0,
         level: profile?.level ?? 1,
+        newAchievements: [] as NewAchievement[],
       };
     }
 
@@ -172,11 +178,14 @@ async function awardLessonXp(userId: string, lessonId: string) {
       },
     });
 
+    const newAchievements = await checkAndAwardAchievements(userId, tx);
+
     return {
       xpAwarded: XP_REWARDS.LESSON_COMPLETE,
       streak: streakResult.streak,
       longestStreak: streakResult.longestStreak,
       level: levelInfo.level,
+      newAchievements,
     };
   });
 }
