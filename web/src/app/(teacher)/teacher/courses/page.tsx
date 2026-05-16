@@ -30,7 +30,7 @@ export default function TeacherCoursesPage() {
     refetch,
   } = useCourses({
     teacherId: user?.id,
-    status: undefined,
+    status: "all",
   });
 
   if (authLoading || isLoading) {
@@ -41,15 +41,18 @@ export default function TeacherCoursesPage() {
     return <ErrorState message="Failed to load courses" onRetry={() => refetch()} />;
   }
 
-  async function handleAction(courseId: string, action: "publish" | "archive") {
+  async function handleAction(courseId: string, action: "publish" | "archive" | "draft") {
     setActionLoading(courseId);
     try {
+      const statusMap: Record<string, string> = {
+        publish: "published",
+        archive: "archived",
+        draft: "draft",
+      };
       await fetch(`/api/courses/${courseId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: action === "publish" ? "published" : "archived",
-        }),
+        body: JSON.stringify({ status: statusMap[action] }),
       });
       refetch();
     } catch {
@@ -87,7 +90,7 @@ export default function TeacherCoursesPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <Card key={course.id}>
+            <Card key={course.id} className={course.status === "archived" ? "opacity-60" : ""}>
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -131,6 +134,36 @@ export default function TeacherCoursesPage() {
                       <Eye className="h-4 w-4" />
                     )}
                     Publish
+                  </Button>
+                )}
+                {course.status === "published" && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={actionLoading === course.id}
+                    onClick={() => handleAction(course.id, "draft")}
+                  >
+                    {actionLoading === course.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                    Unpublish
+                  </Button>
+                )}
+                {course.status === "archived" && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={actionLoading === course.id}
+                    onClick={() => handleAction(course.id, "draft")}
+                  >
+                    {actionLoading === course.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Archive className="h-4 w-4" />
+                    )}
+                    Unarchive
                   </Button>
                 )}
                 {course.status !== "archived" && (

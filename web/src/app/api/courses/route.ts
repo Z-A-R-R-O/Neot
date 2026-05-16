@@ -23,7 +23,7 @@ export async function GET(request: Request) {
   const where: Record<string, unknown> = {};
 
   if (categoryId) where.categoryId = categoryId;
-  if (status) where.status = status;
+  if (status && status !== "all") where.status = status;
   if (teacherId) where.teacherId = teacherId;
 
   const courses = await prisma.course.findMany({
