@@ -1,42 +1,43 @@
-import { Inbox, type LucideIcon } from "lucide-react";
+"use client";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { BookOpen, type LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 interface EmptyStateProps {
   icon?: LucideIcon;
-  title?: string;
+  title: string;
   description?: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
-  className?: string;
 }
 
-export function EmptyState({
-  icon: Icon = Inbox,
-  title = "Nothing here yet",
-  description = "Get started by creating your first item.",
-  actionLabel,
-  onAction,
-  className,
-}: EmptyStateProps) {
+export function EmptyState({ icon: Icon = BookOpen, title, description, actionLabel, actionHref, onAction }: EmptyStateProps) {
   return (
-    <div
-      className={cn(
-        "flex flex-col items-center justify-center gap-4 p-8 text-center",
-        className,
-      )}
-    >
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-        <Icon className="h-8 w-8 text-tertiary-foreground" />
+    <div className="glass-card flex items-center justify-center py-16">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <Icon className="h-10 w-10 text-muted-foreground/40" />
+        <div>
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          {description && <p className="mt-1 text-xs text-muted-foreground/60">{description}</p>}
+        </div>
+        {actionLabel && actionHref && (
+          <Link
+            href={actionHref}
+            className="group relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-xl bg-foreground px-6 text-sm font-semibold text-background transition-all hover:shadow-glow-sm"
+          >
+            {actionLabel}
+          </Link>
+        )}
+        {actionLabel && onAction && (
+          <button
+            onClick={onAction}
+            className="group relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-xl bg-foreground px-6 text-sm font-semibold text-background transition-all hover:shadow-glow-sm"
+          >
+            {actionLabel}
+          </button>
+        )}
       </div>
-      <div>
-        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-      </div>
-      {actionLabel && onAction && (
-        <Button onClick={onAction}>{actionLabel}</Button>
-      )}
     </div>
   );
 }

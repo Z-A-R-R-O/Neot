@@ -1,6 +1,8 @@
 # Phase 2.5: Dev Mode — Visual Experience Engine
 
 > **Goal:** Transform the admin page builder into a dual-mode Visual Experience Engine. Admins edit the **live frontend directly** via an overlay (Dev Mode), not a separate CMS panel.
+>
+> **Status: 🚧 7/10 Complete** — Core infrastructure is solid but several integration gaps remain. See Phase D (Dashboard Completion) task D.11 to close them.
 
 **Prerequisites:** Phase 1.75 (Dynamic Renderer — block registry, PageRenderer, schema-driven pages)
 **Concept spec:** `Vision - Core/16-visual-experience-engine.md`
@@ -512,3 +514,15 @@ Phase 3 (AI + Mobile) ◄──────────────────�
 ```
 
 Phase 2.5 can run **in parallel** with Phase 2. It depends only on Phase 1.75 (block registry, PageRenderer, schema-driven pages).
+
+---
+
+## Known Gaps (to close in Phase D)
+
+| Gap | File | Issue |
+|-----|------|-------|
+| Stub overlay system | `OverlaySystem.tsx` | Pass-through wrapper (14 lines), no overlay management |
+| Unwired responsive engine | `responsive-engine.ts` | Defined but not imported by PropertiesPanel or LivePreview |
+| No drag-to-reorder | `StructureTree.tsx` | Grip icon is decorative only, no dnd-kit integration |
+| No toast system | `edit/page.tsx` | Uses inline state-based toasts, no toast provider |
+| Presets not fully wired | `PresetPicker.tsx` | `onApply` callback not connected in section-builder |

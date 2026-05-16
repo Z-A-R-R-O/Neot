@@ -37,8 +37,10 @@ export default function RootLayout({
                   var mode = localStorage.getItem('neot-theme-mode');
                   if (mode === 'light') {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
                   } else {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.style.colorScheme = 'dark';
                   }
                 } catch(e) {}
               })();

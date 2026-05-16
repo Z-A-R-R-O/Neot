@@ -2,23 +2,31 @@
 
 > Structured build plan for NEOT Learning Platform.
 > Every phase produces deployable, testable output.
+>
+> **⚠️ MASTER PLAN ADAPTATION:** The old phase-based system is now superseded by two comprehensive master plans:
+> - **Z-01 (LMS Flow):** Full LMS role architecture — student, teacher, parent, gamification, courses, lessons, certificates
+> - **Z-02 (Admin Flow):** Full admin dashboard + Developer Mode visual experience engine
+>
+> See `15-adaptation-bridge.md` for the mapping & gap analysis.
+> Detailed checklists in `Full LMS Flow/Z-01-- Checklist.md` and `Full LMS Flow/Z-02-- Checklist.md`.
 
 ---
 
-## Phase Map
+## Phase Map (Legacy Reference — See Z Checklists for True Status)
 
-| # | Phase | Primary Output | Status |
-|--:|-------|----------------|--------|
-| 0 | **Foundation** | Next.js 16 + Prisma/SQLite + Local auth (bcrypt sessions) | ✅ Complete |
-| 1 | **Core Learning** | Course player + Teacher builder + Quiz engine | ✅ Complete |
-| 1.5 | **Admin CMS** | Page builder + Theme engine + User/Media mgmt | ✅ Complete |
-| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + 17 schema-driven sections | ✅ Complete |
-| UI | **UI Transformation** | Premium dark palette, cinematic hero, glass design system | ✅ Complete |
-| 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks + Recs | 🔲 Not started |
-| 2.5 | **Dev Mode — Visual Experience Engine** | Dual-mode overlay editor, inline editing, properties panel, structure tree, responsive system | ✅ Complete |
-| 3 | **AI + Mobile** | AI Tutor + Content Gen | 🔲 Not started |
-| 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started |
-| 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started |
+| # | Phase | Primary Output | Status | Z-01/Z-02 Coverage |
+|--:|-------|----------------|--------|--------------------|
+| 0 | **Foundation** | Next.js 16 + Prisma/SQLite + Local auth (bcrypt sessions) | ✅ Complete | Z-01: Auth + RBAC + DB |
+| 1 | **Core Learning** | Course player + Teacher builder + Quiz engine | ✅ Complete | Z-01: Course + Lesson + Quiz |
+| 1.5 | **Admin CMS** | Page builder + Theme engine + User/Media mgmt | ✅ Complete | Z-02: Admin Pages + CMS |
+| 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + 17 schema-driven sections | ✅ Complete | Z-02: Registry + Rendering |
+| UI | **UI Transformation** | Premium dark palette, cinematic hero, glass design system | ✅ Complete | Z-02: Theme System |
+| 2.5 | **Dev Mode — Visual Experience Engine** | Core overlay system (7/10 — gaps: OverlaySystem stub, responsive engine unwired, no drag-reorder) | 🚧 Gaps remain | Z-02: Dev Mode (partial) |
+| D | **Dashboard Completion** | All dashboards fully functional, gamification UI, Dev Mode gaps closed | 🔲 Active | Z-01: Dashboards + Z-02: Dev Mode |
+| 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks/Recs | 🔲 Not started | Z-01: Gamification |
+| 3 | **AI + Mobile** | AI Tutor + Content Gen | 🔲 Not started | Z-01: AI Features |
+| 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started | Z-01: Parent System |
+| 5 | **Scale + Marketplace** | Marketplace + Launch + Full blocks | 🔲 Not started | Z-01: Monetization + Community |
 
 ---
 
@@ -27,26 +35,32 @@
 ```
 ASSIST/
 ├── Implementation/
-│   ├── 00-master-index.md
-│   ├── 01-phase-0-foundation.md
-│   ├── 02-phase-1-core-learning.md
-│   ├── 03-phase-1.5-admin-cms.md
-│   ├── 04-phase-1.75-dynamic-renderer.md
-│   ├── 05-phase-2-adaptive-gamification.md
-│   ├── 06-phase-3-ai-mobile.md
-│   ├── 07-phase-4-parent-school.md
-│   ├── 08-phase-5-scale-marketplace.md
-│   ├── 10-engineering-standards.md
-│   ├── 11-phase-ui-transformation.md
-│   ├── 12-phase-2.5-dev-mode.md
-│   └── 13-phase-dev-mode-e2e.md
+│   ├── 00-master-index.md                         ← THIS FILE — entry point
+│   ├── 15-adaptation-bridge.md                    ← Phase → Z-01/Z-02 mapping + gap priorities
+│   ├── Full LMS Flow/                             ← Master plan checklists (NEW PRIMARY REFERENCE)
+│   │   ├── Z-01-- Checklist.md                    ← 209-item LMS flow checklist (51.7% complete)
+│   │   └── Z-02-- Checklist.md                    ← 265-item admin flow checklist (22.6% complete)
+│   ├── 01-phase-0-foundation.md                   ← Legacy
+│   ├── 02-phase-1-core-learning.md                ← Legacy
+│   ├── 03-phase-1.5-admin-cms.md                  ← Legacy
+│   ├── 04-phase-1.75-dynamic-renderer.md          ← Legacy
+│   ├── 05-phase-2-adaptive-gamification.md        ← Legacy
+│   ├── 06-phase-3-ai-mobile.md                    ← Legacy
+│   ├── 07-phase-4-parent-school.md                ← Legacy
+│   ├── 08-phase-5-scale-marketplace.md            ← Legacy
+│   ├── 10-engineering-standards.md                ← Still valid
+│   ├── 11-phase-ui-transformation.md              ← Legacy
+│   ├── 12-phase-2.5-dev-mode.md                   ← Legacy
+│   └── 13-phase-dev-mode-e2e.md                   ← Legacy
 ├── S-IMPL/
 ├── Log/
 ├── Tools/
 └── Vision - Core/
+    ├── Master LMS Flow.md                         ← Z-01 source document
+    ├── Master Admin Flow.md                       ← Z-02 source document
     ├── 01-vision-overview.md
     ├── ...
-    ├── 16-visual-experience-engine.md
+    └── 16-visual-experience-engine.md
 ```
 
 ---
@@ -67,21 +81,22 @@ ASSIST/
 ## Dependency Graph
 
 ```
-Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5
-                                                           │
-                    Phase 1.75 ──► Phase 2.5 (Dev Mode) ───┘
-                                        │
-                                        └──► Phase 3 AI
+Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Phase D ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5
+                                                            │
+                     Phase 1.75 ──► Phase 2.5 (Dev Mode) ───┤
+                                         │                   │
+                                         └──► Phase D task D.11 (close Dev Mode gaps)
 ```
 
 - Phase 1.5 requires Phase 1 course/lesson CRUD stable
 - **Phase 1.75 requires Phase 1.5** (page builder + theme engine + block definitions exist)
 - Phase 2 requires Phase 1.75 (dynamic renderer enables adaptive lesson mutation)
 - **Phase 2.5 requires Phase 1.75** (block registry, PageRenderer, schema-driven pages)
-- Phase 2.5 can run **in parallel** with Phase 2 — they share no file conflicts
+- **Phase D (Dashboard)** requires Phase 1.75 + closes remaining Phase 2.5 gaps
 - Phase 3 requires Phase 2 adaptive profiles + Phase 1.5 settings
 - Phase 4 requires Phase 1 student/teacher data
 - Phase 5 requires everything prior
+- **Z-01 and Z-02 checklists supersede all phase docs** — see `15-adaptation-bridge.md` for migration guidance
 
 ---
 
@@ -174,31 +189,52 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - Admin editors updated for new fields (secondary CTA, prefix/suffix, testimonials)
 - `typecheck` + `next build` — zero errors
 
-### Phase 2.5 — Dev Mode / Visual Experience Engine (✅ Complete)
+### Phase 2.5 — Dev Mode / Visual Experience Engine (🚧 Gaps Remain)
 - 13 components: `BlockOverlay`, `DevModeProvider`, `DevModeShell`, `DevModeToggle`, `HistoryPanel`, `InlineEditor`, `OverlaySystem`, `PresetPicker`, `PropertiesPanel`, `PublishButton`, `ResponsiveBar`, `StructureTree`, `TreeNode`
 - `devModeStore` — handles overlay state, device mode, hovered/selected IDs
 - `historyStore` — undo/redo stack with snapshots and persistence
 - `history-middleware` — automatic snapshot capture on `pageBuilderStore` changes
 - `pageBuilderStore` — manages section tree (add, remove, reorder, duplicate, update)
 - `DevModeProvider` — keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z, Del, Esc) and history initialization
-- `BlockOverlay` — hover/selection outlines, type labels, dimension indicators
-- `StructureTree` + `TreeNode` — layer hierarchy with search/filter, delete, duplicate, add actions
-- `PropertiesPanel` — contextual property editors for content and styles
+- `BlockOverlay` — hover/selection outlines, type labels, dimension indicators, corner handles, guide lines
+- `StructureTree` + `TreeNode` — layer hierarchy with search/filter, delete, duplicate, add actions (no drag-reorder)
+- `PropertiesPanel` — 4-tab property editor (Content, Style, Motion, Effects) with sliders, color pickers
 - `InlineEditor` — contentEditable wrapper for real-time text editing on canvas
 - `ResponsiveBar` — breakpoint switcher with canvas resize (Desktop/Tablet/Mobile)
 - `DevModeToggle` — global switch to enter/exit visual editing mode
-- `PublishButton` — saves all changes to DB and exits Dev Mode
-- `DevModeShell` — full editor layout (layers sidebar, canvas, properties panel)
-- `PresetPicker` — visual preset swapper for block types
+- `PublishButton` — saves all changes to DB and exits Dev Mode (with confirmation modal)
+- `DevModeShell` — full 3-panel editor layout (layers sidebar, canvas, properties panel)
+- `PresetPicker` — visual preset swapper for block types (hero, feature-grid, cta)
 - Bidirectional selection sync between `devModeStore` and `pageBuilderStore`
-- Inline editing wired in all 7 section types (hero, feature-grid, cta-banner, faq, pricing, stats-bar, testimonials)
+- Inline editing wired in 7 section types (hero, feature-grid, cta-banner, faq, pricing, stats-bar, testimonials)
 - Undo/redo keyboard shortcuts with snapshot restore
 - Publish flow auto-exits Dev Mode with success toast
-- `typecheck` + `next build` — both pass with zero errors
 
-### Gaps / Next Up
-- **Phase 2 — Adaptive + Gamification** — XP/streaks/badges UI, adaptive engine, recs
-- **Password reset** — needs email service integration
+**Known Gaps (see Phase D task D.11):**
+- ❌ `OverlaySystem.tsx` is a pass-through stub (14 lines, renders children only)
+- ❌ `responsive-engine.ts` defined but NOT wired into PropertiesPanel or LivePreview
+- ❌ `StructureTree` — no actual drag-to-reorder (grip icon is decorative only)
+- ❌ No proper toast system — uses inline state-based toasts
+- ❌ Presets defined but not fully connected to section creation flow
+
+### Master Plan Completion Status
+
+| Master Plan | Items | ✅ Done | 🚧 Partial | 🔲 Not Started | Progress |
+|---|---|---|---|---|---|
+| **Z-01 — LMS Flow** | 209 | 108 | 26 | 76 | **51.7%** |
+| **Z-02 — Admin Flow** | 265 | 60 | 41 | 142 | **22.6%** |
+| **Combined** | **474** | **168** | **67** | **218** | **35.4%** |
+
+> See `Full LMS Flow/Z-01-- Checklist.md` and `Full LMS Flow/Z-02-- Checklist.md` for full itemized tracking.
+
+### Gaps / Next Up (from Z-01/Z-02 analysis)
+- **Phase D — Dashboard Completion** (active) — Active Courses on dashboard, learning streak, XP popup, level progress, teacher students page, parent dashboard scaffold, Dev Mode gaps
+- **Z-02: Dev Mode gaps** — OverlaySystem stub, responsive engine unwired, no drag-reorder, no toast system (Phase D task D.11)
+- **Z-01: Achievement auto-unlock** — XP/streak/quiz milestones not wired to achievement system
+- **Z-01: Certificate generation** — Course completion detected but no PDF/share flow
+- **Z-01: Notification system** — In-app notifications not implemented (XP, achievements, course publish, grading)
+- **Z-02: Admin pages** — 21 of 27 admin pages not started (teachers, courses, analytics, moderation, etc.)
+- **Z-01: Password reset** — needs email service integration
 
 ---
 

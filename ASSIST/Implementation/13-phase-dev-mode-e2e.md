@@ -1,6 +1,8 @@
 # Phase 2.5 E2E: Real-Time Dev Mode — End-to-End Integration
 
 > **Goal:** Make Dev Mode fully functional. Click a block → edit properties → see instant live preview updates → undo → publish. All without page reload.
+>
+> **Status: 🚧 7/10** — Core data flow works (selection, editing, undo/redo, publish) but integration gaps remain (responsive engine, drag-reorder, overlay system).
 
 ---
 

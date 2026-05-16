@@ -36,7 +36,14 @@ export function useUpdateProgress(lessonId: string) {
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Failed to update progress");
-      return res.json();
+      return res.json() as Promise<{
+        progress: { status: string; timeSpent: number };
+        xpAwarded: number;
+        streak: number;
+        longestStreak: number;
+        level: number;
+        courseCompleted: boolean;
+      }>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["lessonProgress", lessonId] });

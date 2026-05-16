@@ -7,7 +7,7 @@ import Link from "next/link";
 export function CtaBannerSection({ content, blockId }: { content: Record<string, unknown>; blockId?: string }) {
   const text = "This is what adaptive intelligence feels like.";
   const buttonText = "Enter Your Future Self";
-  const buttonLink = "/signup";
+  const buttonLink = "/login";
 
   return (
     <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden px-6 py-32">
@@ -125,17 +125,10 @@ export function CtaBannerSection({ content, blockId }: { content: Record<string,
         >
           <Link
             href={buttonLink}
-            className="group relative inline-flex h-16 items-center gap-3 overflow-hidden rounded-2xl bg-foreground px-10 text-lg font-bold text-background transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(79,124,255,0.25)] shadow-2xl active:scale-[0.98]"
+            className="group relative inline-flex h-16 cursor-pointer items-center gap-3 rounded-2xl bg-foreground px-10 text-lg font-bold text-background shadow-lg transition-transform duration-500 will-change-transform hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-            <span className="relative z-10">{buttonText}</span>
-            <motion.div
-              animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10"
-            >
-              <ArrowRight className="h-5 w-5" />
-            </motion.div>
+            <span>{buttonText}</span>
+            <ArrowRight className="h-5 w-5 animate-[arrow-bounce_1.5s_ease-in-out_infinite] group-hover:[animation-play-state:paused]" />
           </Link>
 
           {/* Trust line */}

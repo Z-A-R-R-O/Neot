@@ -1,28 +1,67 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight } from "lucide-react";
+import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
+import { LevelProgress } from "@/components/gamification/level-progress";
+import { StreakFlame } from "@/components/gamification/streak-flame";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
+interface EnrollmentCourse {
+  id: string;
+  progress: number;
+  course: {
+    id: string;
+    title: string;
+    description: string | null;
+    thumbnailUrl: string | null;
+    difficulty: string;
+    estimatedMinutes: number | null;
+    category: { name: string } | null;
+  };
+}
+
+interface ContinueLesson {
+  id: string;
+  title: string;
+  courseId: string;
+  courseTitle: string;
+  estimatedMinutes: number | null;
+}
+
 interface DashboardContentProps {
   name: string;
-  stats: { courses: number; lessons: number; xp: number };
+  stats: {
+    courses: number;
+    lessons: number;
+    xp: number;
+    streak: number;
+    level: number;
+    levelTitle: string;
+    levelProgress: number;
+  };
+  enrollments: EnrollmentCourse[];
+  continueLesson: ContinueLesson | null;
 }
 
 interface StatCard {
   label: string;
-  value: number;
+  value: number | string;
   icon: typeof BookOpen;
   gradient: string;
   delay: number;
 }
 
-export function DashboardContent({ name, stats }: DashboardContentProps) {
+const difficultyColors: Record<string, string> = {
+  beginner: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  intermediate: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  advanced: "bg-red-500/20 text-red-400 border-red-500/30",
+};
+
+export function DashboardContent({ name, stats, enrollments, continueLesson }: DashboardContentProps) {
   return (
     <div className="space-y-10">
-      {/* Welcome */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -36,7 +75,6 @@ export function DashboardContent({ name, stats }: DashboardContentProps) {
         </p>
       </motion.div>
 
-      {/* Stats Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {([
           { label: "Enrolled Courses", value: stats.courses, icon: BookOpen, gradient: "from-primary-500/20 via-primary-500/5 to-transparent", delay: 0 },
@@ -55,13 +93,10 @@ export function DashboardContent({ name, stats }: DashboardContentProps) {
             >
               <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
               <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary-500/5 blur-[60px] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
               <div className="relative z-10 flex items-start justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{card.label}</p>
-                  <p className="mt-2 font-heading text-4xl font-bold tracking-tight text-foreground">
-                    {card.value}
-                  </p>
+                  <p className="mt-2 font-heading text-4xl font-bold tracking-tight text-foreground">{card.value}</p>
                 </div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] text-primary-400">
                   <Icon className="h-5 w-5" />
@@ -72,7 +107,41 @@ export function DashboardContent({ name, stats }: DashboardContentProps) {
         })}
       </div>
 
-      {/* Active Courses Section */}
+      {continueLesson && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.25, ease: easing }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading text-xl font-bold tracking-tight text-foreground">Continue Learning</h2>
+          </div>
+          <Link href={`/courses/${continueLesson.courseId}/lessons/${continueLesson.id}`}>
+            <motion.div
+              whileHover={{ y: -2, transition: { duration: 0.3 } }}
+              className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-gradient-to-br from-accent-500/5 to-transparent p-5 shadow-xl transition-all duration-500 hover:border-[rgba(255,255,255,0.12)]"
+            >
+              <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-accent-500/10 blur-[60px]" />
+              <div className="relative z-10 flex items-center justify-between">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium text-accent-400">{continueLesson.courseTitle}</p>
+                  <p className="font-heading text-base font-bold text-foreground">{continueLesson.title}</p>
+                  {continueLesson.estimatedMinutes && (
+                    <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      {continueLesson.estimatedMinutes} min
+                    </p>
+                  )}
+                </div>
+                <div className="flex h-9 items-center gap-1.5 rounded-lg bg-accent-500/15 px-4 text-sm font-medium text-accent-400 transition-colors group-hover:bg-accent-500/25">
+                  Resume <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
+            </motion.div>
+          </Link>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -80,15 +149,11 @@ export function DashboardContent({ name, stats }: DashboardContentProps) {
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-xl font-bold tracking-tight text-foreground">
-              Active Courses
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Continue where you left off
-            </p>
+            <h2 className="font-heading text-xl font-bold tracking-tight text-foreground">Active Courses</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Continue where you left off</p>
           </div>
           <Link
-            href="/courses"
+            href="/dashboard/courses"
             className="group flex items-center gap-1 text-sm font-medium text-primary-400 transition-colors hover:text-primary-300"
           >
             View all
@@ -96,34 +161,93 @@ export function DashboardContent({ name, stats }: DashboardContentProps) {
           </Link>
         </div>
 
-        <div className="glass-card flex items-center justify-center py-16">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <BookOpen className="h-10 w-10 text-muted-foreground/40" />
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">No active courses yet</p>
-              <p className="mt-1 text-xs text-muted-foreground/60">Enroll in a course to get started</p>
+        {enrollments.length === 0 ? (
+          <div className="glass-card flex items-center justify-center py-16">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <BookOpen className="h-10 w-10 text-muted-foreground/40" />
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">No active courses yet</p>
+                <p className="mt-1 text-xs text-muted-foreground/60">Enroll in a course to get started</p>
+              </div>
+              <Link
+                href="/courses"
+                className="group relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-xl bg-foreground px-6 text-sm font-semibold text-background transition-all hover:shadow-glow-sm"
+              >
+                Browse Courses
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
             </div>
-            <Link
-              href="/courses"
-              className="group relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-xl bg-foreground px-6 text-sm font-semibold text-background transition-all hover:shadow-glow-sm"
-            >
-              Browse Courses
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
           </div>
-        </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {enrollments.map((enrollment, i) => {
+              const course = enrollment.course;
+              const diffColor = difficultyColors[course.difficulty] ?? "bg-gray-500/20 text-gray-400 border-gray-500/30";
+              return (
+                <Link key={enrollment.id} href={`/courses/${course.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.05 * i, ease: easing }}
+                    whileHover={{ y: -4, transition: { duration: 0.3 } }}
+                    className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-5 shadow-xl transition-all duration-500 hover:border-[rgba(255,255,255,0.12)] hover:shadow-primary-500/10"
+                  >
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                    {course.thumbnailUrl && (
+                      <div className="relative z-10 mb-3 h-32 w-full overflow-hidden rounded-xl">
+                        <img src={course.thumbnailUrl} alt={course.title} className="h-full w-full object-cover" />
+                      </div>
+                    )}
+
+                    <div className="relative z-10 flex flex-wrap items-center gap-2 mb-2">
+                      {course.category && (
+                        <span className="rounded-full bg-primary-500/15 px-2.5 py-0.5 text-[10px] font-medium text-primary-400 ring-1 ring-inset ring-primary-500/25">
+                          {course.category.name}
+                        </span>
+                      )}
+                      <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ring-1 ring-inset ${diffColor}`}>
+                        {course.difficulty}
+                      </span>
+                    </div>
+
+                    <h3 className="relative z-10 font-heading text-sm font-bold text-foreground line-clamp-1">{course.title}</h3>
+
+                    {course.description && (
+                      <p className="relative z-10 mt-1 text-xs text-muted-foreground line-clamp-2">{course.description}</p>
+                    )}
+
+                    <div className="relative z-10 mt-3 space-y-2">
+                      <div className="flex h-1.5 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-500"
+                          style={{ width: `${Math.min(enrollment.progress, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-muted-foreground">{Math.round(enrollment.progress)}% complete</span>
+                        {course.estimatedMinutes && (
+                          <span className="flex items-center gap-1 text-muted-foreground/60">
+                            <Clock className="h-3 w-3" />
+                            {course.estimatedMinutes} min
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
 
-      {/* Quick Insights */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4, ease: easing }}
       >
-        <h2 className="font-heading text-xl font-bold tracking-tight text-foreground mb-6">
-          Insights
-        </h2>
-
+        <h2 className="font-heading text-xl font-bold tracking-tight text-foreground mb-6">Insights</h2>
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl">
             <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary-500/10 blur-[60px]" />
@@ -131,25 +255,22 @@ export function DashboardContent({ name, stats }: DashboardContentProps) {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-400">
                 <TrendingUp className="h-5 w-5" />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">Learning Streak</p>
-                <p className="mt-1 text-2xl font-bold text-foreground">0 days</p>
-                <p className="mt-1 text-xs text-muted-foreground">Start a streak by completing a lesson today</p>
+                <div className="mt-1 flex items-center gap-2">
+                  <StreakFlame streak={stats.streak} />
+                  <span className="text-xs text-muted-foreground">
+                    {stats.streak === 0 ? "Complete a lesson to start your streak" : "Keep going!"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl">
             <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-accent-500/10 blur-[60px]" />
-            <div className="relative z-10 flex items-start gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500/10 text-accent-400">
-                <Zap className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">Total XP</p>
-                <p className="mt-1 text-2xl font-bold text-foreground">{stats.xp}</p>
-                <p className="mt-1 text-xs text-muted-foreground">Complete lessons to earn more XP</p>
-              </div>
+            <div className="relative z-10">
+              <LevelProgress xp={stats.xp} />
             </div>
           </div>
         </div>

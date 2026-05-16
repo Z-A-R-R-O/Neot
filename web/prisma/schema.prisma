@@ -8,18 +8,24 @@ datasource db {
 }
 
 model Profile {
-  id                  String   @id
+  id                  String    @id
   email               String?
-  fullName            String?  @map("full_name")
-  avatarUrl           String?  @map("avatar_url")
-  role                String   @default("student")
-  passwordHash        String?  @map("password_hash")
-  ageGroup            String?  @map("age_group")
-  parentId            String?  @map("parent_id")
-  onboardingCompleted Boolean  @default(false) @map("onboarding_completed")
-  metadata            String   @default("{}")
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  fullName            String?   @map("full_name")
+  avatarUrl           String?   @map("avatar_url")
+  role                String    @default("student")
+  passwordHash        String?   @map("password_hash")
+  ageGroup            String?   @map("age_group")
+  parentId            String?   @map("parent_id")
+  onboardingCompleted Boolean   @default(false) @map("onboarding_completed")
+  metadata            String    @default("{}")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  xp               Int       @default(0)
+  level            Int       @default(1)
+  currentStreak    Int       @default(0) @map("current_streak")
+  longestStreak    Int       @default(0) @map("longest_streak")
+  lastActivityDate DateTime? @map("last_activity_date")
 
   parent  Profile?  @relation("ParentChild", fields: [parentId], references: [id])
   children Profile[] @relation("ParentChild")
@@ -116,6 +122,7 @@ model LessonProgress {
   status    String   @default("not_started")
   timeSpent Int      @default(0) @map("time_spent")
   score     Float?
+  lastBlockIndex Int @default(0) @map("last_block_index")
   metadata  String   @default("{}")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -124,6 +131,8 @@ model LessonProgress {
   lesson Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
   @@map("lesson_progress")
 }
 
@@ -132,8 +141,11 @@ model Enrollment {
   userId      String    @map("user_id")
   courseId    String    @map("course_id")
   progress    Float     @default(0)
+  completed   Boolean   @default(false)
   startedAt   DateTime  @default(now()) @map("started_at")
   completedAt DateTime? @map("completed_at")
+  lastLessonId String?  @map("last_lesson_id")
+  lastAccessedAt DateTime? @map("last_accessed_at")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
@@ -141,6 +153,8 @@ model Enrollment {
   course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
   @@map("enrollments")
 }
 
@@ -150,10 +164,13 @@ model XPTransaction {
   amount      Int
   reason      String
   referenceId String?  @map("reference_id")
+  lessonId    String?  @map("lesson_id")
+  quizId      String?  @map("quiz_id")
   createdAt   DateTime @default(now()) @map("created_at")
 
   user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@map("xp_transactions")
 }
 

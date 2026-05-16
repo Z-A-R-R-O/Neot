@@ -4,6 +4,23 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, Brain, Zap, Target, BarChart3, Gem, Compass } from "lucide-react";
 
+function HydratedCounter({ cycleStep }: { cycleStep: number }) {
+  const [value, setValue] = useState("000");
+
+  useEffect(() => {
+    setValue(String(Math.floor(Math.random() * 900 + 100) + cycleStep * 7).slice(0, 3));
+  }, [cycleStep]);
+
+  return (
+    <motion.span
+      animate={{ opacity: [0.3, 1, 0.3] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      {value}
+    </motion.span>
+  );
+}
+
 const nodes = [
   { id: 0, label: "Analyze", desc: "Scanning knowledge gaps across your learning history", icon: Brain, color: "from-primary-500/25 to-primary-400/10", textColor: "text-primary-400", angle: -90 },
   { id: 1, label: "Map", desc: "Building a personalized knowledge graph of your strengths", icon: Compass, color: "from-secondary-500/25 to-secondary-400/10", textColor: "text-secondary-400", angle: -30 },
@@ -182,6 +199,7 @@ export function AdaptiveStreamSection() {
 
             return (
               <div
+                key={node.id}
                 className="absolute cursor-pointer"
                 style={{
                   left: `${(pos.x / dimensions.w) * 100}%`,
@@ -190,7 +208,6 @@ export function AdaptiveStreamSection() {
                 }}
               >
               <motion.div
-                key={node.id}
                 initial={{ scale: 0, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
@@ -304,12 +321,7 @@ export function AdaptiveStreamSection() {
               >
                 ~
               </motion.span>
-              <motion.span
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                {String(Math.floor(Math.random() * 900 + 100) + cycleStep * 7).slice(0, 3)}
-              </motion.span>
+              <HydratedCounter cycleStep={cycleStep} />
               <span>ops/s</span>
             </div>
           </motion.div>

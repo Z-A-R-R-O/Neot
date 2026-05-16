@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLessonStore } from "@/stores/lessonStore";
 import { useUpdateProgress } from "@/hooks/useLessonProgress";
 import { BlockRenderer } from "@/components/blocks/block-renderer";
 import { PlayerHeader } from "@/components/player/player-header";
 import { NavigationButtons } from "@/components/player/navigation-buttons";
+import { XpPopup } from "@/components/gamification/xp-popup";
 
 interface LessonBlock {
   id: string;
@@ -44,6 +46,9 @@ export function LessonPlayer({
   allLessons,
   currentLessonIndex,
 }: PlayerShellProps) {
+  const router = useRouter();
+  const [xpPopup, setXpPopup] = useState<{ amount: number; courseCompleted?: boolean } | null>(null);
+
   const {
     currentBlockIndex,
     setCurrentBlock,
@@ -54,7 +59,7 @@ export function LessonPlayer({
     reset,
   } = useLessonStore();
 
-  const { mutate: saveProgress } = useUpdateProgress(lesson.id);
+  const { mutateAsync: saveProgress } = useUpdateProgress(lesson.id);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeSpentRef = useRef(0);
 
@@ -72,12 +77,18 @@ export function LessonPlayer({
     };
   }, [lesson.id, blocks.length, reset, setTotalBlocks, saveProgress]);
 
-  const handleComplete = useCallback(() => {
+  const handleComplete = useCallback(async () => {
     markCompleted();
-    saveProgress({
+    const result = await saveProgress({
       status: "completed",
       timeSpent: timeSpentRef.current,
     });
+    if (result.xpAwarded > 0) {
+      setXpPopup({ amount: result.xpAwarded, courseCompleted: result.courseCompleted });
+    }
+    if (result.courseCompleted) {
+      setTimeout(() => router.push(`/courses/${lesson.module.courseId}`), 3000);
+    }
   }, [markCompleted, saveProgress]);
 
   if (blocks.length === 0) {
@@ -93,6 +104,14 @@ export function LessonPlayer({
 
   return (
     <div className="flex flex-1 flex-col">
+      {xpPopup && (
+        <XpPopup
+          xp={xpPopup.amount}
+          reason={xpPopup.courseCompleted ? "Course completed! 🎉" : "Lesson completed"}
+          onComplete={() => setXpPopup(null)}
+        />
+      )}
+
       <PlayerHeader
         title={lesson.title}
         estimatedMinutes={lesson.estimatedMinutes}
@@ -112,10 +131,10 @@ export function LessonPlayer({
             isLastBlock={isLastBlock}
             isCompleted={isCompleted}
             onPrevious={() => setCurrentBlock(currentBlockIndex - 1)}
-            onNext={() => {
+            onNext={async () => {
               markBlockComplete(currentBlockIndex);
               if (isLastBlock) {
-                handleComplete();
+                await handleComplete();
               } else {
                 setCurrentBlock(currentBlockIndex + 1);
               }
