@@ -30,6 +30,8 @@ import {
   Plug,
   Code,
   Accessibility,
+  Layers,
+  Webhook,
   type LucideIcon,
 } from "lucide-react";
 
@@ -67,6 +69,8 @@ const iconMap: Record<string, LucideIcon> = {
   Plug,
   Code,
   Accessibility,
+  Layers,
+  Webhook,
 };
 
 const fallbackNavItems: Record<Role, NavItemData[]> = {
@@ -112,6 +116,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "admin-version-history", label: "Version History", href: "/admin/version-history", icon: "History", children: [] },
     { id: "admin-components", label: "Components", href: "/admin/components", icon: "Box", children: [] },
     { id: "admin-dashboard-builder", label: "Dashboard Builder", href: "/admin/dashboard-builder", icon: "LayoutDashboard", children: [] },
+    { id: "admin-layout-builder", label: "Layout Builder", href: "/admin/layout-builder", icon: "Layers", children: [] },
     { id: "admin-automation", label: "Automation", href: "/admin/automation", icon: "Zap", children: [] },
     { id: "admin-localization", label: "Localization", href: "/admin/localization", icon: "Languages", children: [] },
     { id: "admin-integrations", label: "Integrations", href: "/admin/integrations", icon: "Plug", children: [] },

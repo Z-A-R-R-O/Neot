@@ -265,11 +265,13 @@ model CustomPage {
   path      String   @unique
   status    String   @default("draft")
   layout    String   @default("default")
+  layoutTemplateId String? @map("layout_template_id")
   seo       String   @default("{}")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  sections PageSection[]
+  sections       PageSection[]
+  layoutTemplate LayoutTemplate? @relation(fields: [layoutTemplateId], references: [id])
 
   @@map("custom_pages")
 }
@@ -279,6 +281,7 @@ model PageSection {
   pageId    String   @map("page_id")
   blockType String   @map("block_type")
   sortOrder Int      @map("sort_order")
+  slot      String   @default("main")
   content   String   @default("{}")
   settings  String   @default("{}")
   createdAt DateTime @default(now()) @map("created_at")
@@ -580,4 +583,18 @@ model Webhook {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("webhooks")
+}
+
+model LayoutTemplate {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  slug        String   @unique
+  slots       String   @default("[]")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  pages CustomPage[]
+
+  @@map("layout_templates")
 }
