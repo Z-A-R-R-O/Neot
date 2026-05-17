@@ -77,22 +77,30 @@ export function NotificationBell() {
   }, [router]);
 
   const typeColors: Record<string, string> = {
-    achievement: "bg-primary-500/20 text-primary-400",
-    course_complete: "bg-emerald-500/20 text-emerald-400",
+    achievement_unlocked: "bg-primary-500/20 text-primary-400",
+    course_completed: "bg-emerald-500/20 text-emerald-400",
     level_up: "bg-amber-500/20 text-amber-400",
     quiz_result: "bg-violet-500/20 text-violet-400",
     streak_milestone: "bg-orange-500/20 text-orange-400",
-    course_publish: "bg-sky-500/20 text-sky-400",
+    streak_reminder: "bg-orange-500/20 text-orange-400",
+    course_published: "bg-sky-500/20 text-sky-400",
+    message: "bg-blue-500/20 text-blue-400",
+    grading_alert: "bg-yellow-500/20 text-yellow-400",
+    xp_gained: "bg-green-500/20 text-green-400",
     info: "bg-accent-500/20 text-accent-400",
   };
 
   const typeIcons: Record<string, string> = {
-    achievement: "🏆",
-    course_complete: "🎓",
+    achievement_unlocked: "🏆",
+    course_completed: "🎓",
     level_up: "⬆",
     quiz_result: "📝",
     streak_milestone: "🔥",
-    course_publish: "📢",
+    streak_reminder: "⏰",
+    course_published: "📢",
+    message: "💬",
+    grading_alert: "📊",
+    xp_gained: "✨",
   };
 
   return (

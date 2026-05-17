@@ -43,6 +43,7 @@ model Profile {
   lessonNotes LessonNote[]
   userBadges UserBadge[]
   notifications Notification[]
+  passwordResetTokens PasswordResetToken[]
   sessions Session[]
   mediaUploads Media[]
 
@@ -583,6 +584,21 @@ model Webhook {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("webhooks")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
 
 model LayoutTemplate {

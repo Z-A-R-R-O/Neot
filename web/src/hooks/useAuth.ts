@@ -74,7 +74,18 @@ export function useAuth() {
   }
 
   async function resetPassword(email: string) {
-    return { error: new Error("Password reset not yet implemented") };
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { error: new Error(data.error ?? "Failed to send reset link") };
+      return { error: null };
+    } catch (e) {
+      return { error: e instanceof Error ? e : new Error("Failed to send reset link") };
+    }
   }
 
   async function fetchUser() {
