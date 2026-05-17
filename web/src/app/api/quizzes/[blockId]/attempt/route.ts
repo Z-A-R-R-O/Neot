@@ -59,6 +59,19 @@ export async function POST(
     newAchievements = result.newAchievements;
   }
 
+  const passed = percentage >= 80;
+  await prisma.notification.create({
+    data: {
+      userId,
+      type: "quiz_result",
+      title: passed ? "Quiz Passed!" : "Quiz Attempted",
+      message: passed
+        ? `You scored ${parsed.data.score}/${parsed.data.total} (${Math.round(percentage)}%) — +${xpAwarded} XP!`
+        : `You scored ${parsed.data.score}/${parsed.data.total} (${Math.round(percentage)}%)`,
+      link: `/lessons/${parsed.data.lessonId}`,
+    },
+  });
+
   return NextResponse.json(
     { ...attempt, xpAwarded, level, newAchievements: newAchievements.length > 0 ? newAchievements : undefined },
     { status: 201 },

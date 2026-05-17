@@ -56,10 +56,29 @@ export async function PATCH(
   }
 
   const body = await request.json();
+  const wasDraft = existing.status !== "published";
   const course = await prisma.course.update({
     where: { id },
     data: body,
   });
+
+  if (wasDraft && course.status === "published") {
+    const enrollments = await prisma.enrollment.findMany({
+      where: { courseId: id },
+      select: { userId: true },
+    });
+    if (enrollments.length > 0) {
+      await prisma.notification.createMany({
+        data: enrollments.map((e) => ({
+          userId: e.userId,
+          type: "course_publish",
+          title: `Course Published: ${course.title}`,
+          message: `${course.title} is now available. Start learning!`,
+          link: `/courses/${id}`,
+        })),
+      });
+    }
+  }
 
   return NextResponse.json(course);
 }

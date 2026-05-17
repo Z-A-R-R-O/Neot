@@ -252,7 +252,7 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - ✅ **Z-01: Achievement auto-unlock** — All 9 achievements wired with XP rewards + notifications
 - ✅ **Z-01: Quiz pass bonus XP** — +50 XP awarded on quiz pass (≥80%) + perfect_quiz achievement check
 - ✅ **Z-01: Certificate generation** — Auto-issued on course completion with serial + notification
-- **Z-01: Notification system expansion** — XP level-up, streak reminders, course publish, grading alerts
+- **Z-01: Notification system** — quiz results, streak milestones (3/7/14/30/50/100), course publish alerts now done. Missing: teacher messages, grading alerts.
 - **Z-02: Admin pages** — 20 of 27 not started (teachers, courses, moderation, etc.) — analytics done
 - **Z-01: Password reset** — needs email service integration
 - **Z-02: Properties Panel expansion** — Layout, Spacing, Typography, Colors, Borders categories not started

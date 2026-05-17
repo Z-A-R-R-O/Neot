@@ -192,6 +192,22 @@ async function awardLessonXp(userId: string, lessonId: string) {
       });
     }
 
+    const STREAK_MILESTONES = [3, 7, 14, 30, 50, 100];
+    if (
+      streakResult.streak > (profile?.currentStreak ?? 0)
+      && STREAK_MILESTONES.includes(streakResult.streak)
+    ) {
+      await tx.notification.create({
+        data: {
+          userId,
+          type: "streak_milestone",
+          title: `🔥 ${streakResult.streak}-Day Streak!`,
+          message: `You're on a ${streakResult.streak}-day learning streak. Keep going!`,
+          link: "/dashboard",
+        },
+      });
+    }
+
     const newAchievements = await checkAndAwardAchievements(userId, tx);
 
     return {

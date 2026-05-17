@@ -279,7 +279,7 @@
 | XP Lifecycle: Lesson Complete → XP Awarded → Level Updated → Achievement Check → Streak Updated → Leaderboard Refresh | ✅ | Full lifecycle wired in awardLessonXp transaction. Achievement XP also awarded atomically. |
 | Achievement categories: Progress, Streak, Quiz, Social, Mastery | 🚧 | 9 achievements defined in achievement-service.ts with auto-unlock + DB persistence + XP rewards + notifications. Progress, Streak, Quiz, and Course categories active. Social and Mastery not implemented. |
 | Leaderboard types: global, friends, course-specific, weekly, seasonal | 🚧 | Global leaderboard only, no friends/weekly/seasonal |
-| Notification system: XP gained, course published, assignment graded, teacher message, achievement unlocked, streak reminder | 🚧 | In-app notifications for achievement unlock + course completion. Still needed: XP level-up, streak reminders, course publish, grading alerts. |
+| Notification system: XP gained, course published, assignment graded, teacher message, achievement unlocked, streak reminder | 🚧 | In-app notifications for achievement unlock, course completion, level-up, quiz results, streak milestones, and course publish alerts. Still needed: teacher messages, assignment grading alerts. |
 
 ## 15. MEDIA SYSTEM (§MEDIA SYSTEM)
 

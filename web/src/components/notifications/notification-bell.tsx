@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Bell, CheckCheck, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 interface NotificationItem {
   id: string;
@@ -15,6 +16,7 @@ interface NotificationItem {
 }
 
 export function NotificationBell() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -62,10 +64,35 @@ export function NotificationBell() {
     setUnreadCount(0);
   };
 
+  const handleNotificationClick = useCallback(async (n: NotificationItem) => {
+    if (!n.readAt) {
+      await fetch(`/api/notifications/${n.id}/read`, { method: "POST" });
+      setNotifications((prev) =>
+        prev.map((x) => (x.id === n.id ? { ...x, readAt: new Date().toISOString() } : x)),
+      );
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    }
+    setOpen(false);
+    if (n.link) router.push(n.link);
+  }, [router]);
+
   const typeColors: Record<string, string> = {
     achievement: "bg-primary-500/20 text-primary-400",
     course_complete: "bg-emerald-500/20 text-emerald-400",
+    level_up: "bg-amber-500/20 text-amber-400",
+    quiz_result: "bg-violet-500/20 text-violet-400",
+    streak_milestone: "bg-orange-500/20 text-orange-400",
+    course_publish: "bg-sky-500/20 text-sky-400",
     info: "bg-accent-500/20 text-accent-400",
+  };
+
+  const typeIcons: Record<string, string> = {
+    achievement: "🏆",
+    course_complete: "🎓",
+    level_up: "⬆",
+    quiz_result: "📝",
+    streak_milestone: "🔥",
+    course_publish: "📢",
   };
 
   return (
@@ -114,12 +141,16 @@ export function NotificationBell() {
                 notifications.map((n) => (
                   <div
                     key={n.id}
-                    className={`group flex items-start gap-3 border-b border-[rgba(255,255,255,0.04)] px-4 py-3 transition-colors hover:bg-[rgba(255,255,255,0.03)] ${!n.readAt ? "bg-[rgba(79,124,255,0.03)]" : ""}`}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleNotificationClick(n)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleNotificationClick(n); }}
+                    className={`group flex cursor-pointer items-start gap-3 border-b border-[rgba(255,255,255,0.04)] px-4 py-3 transition-colors hover:bg-[rgba(255,255,255,0.03)] ${!n.readAt ? "bg-[rgba(79,124,255,0.03)]" : ""}`}
                   >
                     <div
                       className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[11px] ${typeColors[n.type] || typeColors.info}`}
                     >
-                      {n.type === "achievement" ? "🏆" : n.type === "course_complete" ? "🎓" : "ℹ"}
+                      {typeIcons[n.type] || "ℹ"}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-foreground">{n.title}</p>
@@ -130,7 +161,7 @@ export function NotificationBell() {
                     </div>
                     {!n.readAt && (
                       <button
-                        onClick={() => handleMarkRead(n.id)}
+                        onClick={(e) => { e.stopPropagation(); handleMarkRead(n.id); }}
                         className="mt-1 shrink-0 rounded-md p-1 text-muted-foreground/40 opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
                       >
                         <X className="h-3 w-3" />
