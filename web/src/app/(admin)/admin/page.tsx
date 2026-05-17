@@ -1,10 +1,29 @@
-import { Users, BookOpen, GraduationCap, FileText } from "lucide-react";
+import { Users, BookOpen, GraduationCap, FileText, Activity, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 import { prisma } from "@/lib/db";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 
+interface AuditEntry {
+  id: string;
+  action: string;
+  resource: string;
+  resourceId: string | null;
+  details: string;
+  createdAt: Date;
+}
+
+const ACTION_LABELS: Record<string, string> = {
+  create: "Created",
+  update: "Updated",
+  delete: "Deleted",
+  publish: "Published",
+  permission_change: "Changed permissions",
+  theme_change: "Changed theme",
+};
+
 export default async function AdminDashboardPage() {
-  const [totalUsers, roleCounts, totalCourses, totalEnrollments, pageCounts] =
+  const [totalUsers, roleCounts, totalCourses, totalEnrollments, pageCounts, sectionCount, recentAuditLogs] =
     await Promise.all([
       prisma.profile.count(),
       prisma.profile.groupBy({
@@ -16,6 +35,11 @@ export default async function AdminDashboardPage() {
       prisma.customPage.groupBy({
         by: ["status"],
         _count: { id: true },
+      }),
+      prisma.pageSection.count(),
+      prisma.auditLog.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 5,
       }),
     ]);
 
@@ -51,9 +75,18 @@ export default async function AdminDashboardPage() {
       icon: FileText,
       label: "Custom Pages",
       value: (pageMap["published"] ?? 0) + (pageMap["draft"] ?? 0),
-      sub: `${pageMap["published"] ?? 0} published · ${pageMap["draft"] ?? 0} drafts`,
+      sub: `${pageMap["published"] ?? 0} published · ${pageMap["draft"] ?? 0} drafts · ${sectionCount} sections`,
     },
   ];
+
+  function parseDetails(details: string): string {
+    try {
+      const d = JSON.parse(details);
+      return d.title || d.name || d.slug || "";
+    } catch {
+      return "";
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -87,6 +120,52 @@ export default async function AdminDashboardPage() {
           );
         })}
       </div>
+
+      {/* Recent Activity */}
+      {recentAuditLogs.length > 0 && (
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-foreground">Recent Activity</h2>
+            <Link
+              href="/admin/audit-logs"
+              className="inline-flex items-center gap-1 text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              View all <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="space-y-2">
+            {recentAuditLogs.map((log: AuditEntry) => (
+              <div
+                key={log.id}
+                className="flex items-center gap-3 rounded-lg border border-border/50 bg-muted/5 px-4 py-2.5"
+              >
+                <Activity className="h-3.5 w-3.5 text-muted-foreground/40" />
+                <span className="text-xs text-foreground">
+                  <span className="font-medium">{ACTION_LABELS[log.action] ?? log.action}</span>
+                  {" "}{log.resource}
+                  {parseDetails(log.details) && (
+                    <span className="text-muted-foreground"> — {parseDetails(log.details)}</span>
+                  )}
+                </span>
+                <span className="ml-auto text-[10px] text-muted-foreground/60">
+                  {formatRelativeTime(log.createdAt)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
+}
+
+function formatRelativeTime(date: Date): string {
+  const diff = Date.now() - new Date(date).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }
