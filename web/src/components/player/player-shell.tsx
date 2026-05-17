@@ -9,6 +9,9 @@ import { PlayerHeader } from "@/components/player/player-header";
 import { NavigationButtons } from "@/components/player/navigation-buttons";
 import { XpPopup } from "@/components/gamification/xp-popup";
 import { AchievementPopup } from "@/components/gamification/achievement-popup";
+import { BookmarkToggle } from "@/components/player/bookmark-toggle";
+import { NotesPanel } from "@/components/player/notes-panel";
+import { FileText, CheckCircle2 } from "lucide-react";
 
 interface LessonBlock {
   id: string;
@@ -51,6 +54,7 @@ export function LessonPlayer({
   const [xpPopup, setXpPopup] = useState<{ amount: number; courseCompleted?: boolean } | null>(null);
   const [achievementQueue, setAchievementQueue] = useState<{ name: string; description: string; xpReward: number }[]>([]);
   const [currentAchievement, setCurrentAchievement] = useState<{ name: string; description: string; xpReward: number } | null>(null);
+  const [notesOpen, setNotesOpen] = useState(false);
 
   const {
     currentBlockIndex,
@@ -148,35 +152,68 @@ export function LessonPlayer({
         />
       )}
 
-      <PlayerHeader
-        title={lesson.title}
-        estimatedMinutes={lesson.estimatedMinutes}
-        currentBlock={currentBlockIndex + 1}
-        totalBlocks={blocks.length}
-        isCompleted={isCompleted}
-      />
+      <div className="flex items-center justify-between border-b bg-white px-6 py-4">
+        <div className="flex items-center gap-3">
+          <h1 className="text-lg font-semibold text-foreground">{lesson.title}</h1>
+          {isCompleted && (
+            <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+              <CheckCircle2 className="h-3 w-3" />
+              Completed
+            </span>
+          )}
+        </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="mx-auto max-w-3xl">
-          <BlockRenderer block={currentBlock} lessonId={lesson.id} />
+        <div className="flex items-center gap-2">
+          <BookmarkToggle lessonId={lesson.id} />
+          <button
+            onClick={() => setNotesOpen(!notesOpen)}
+            className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-colors ${
+              notesOpen
+                ? "border-primary/30 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+            }`}
+            title="Lesson notes"
+          >
+            <FileText className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
 
-          <NavigationButtons
-            currentIndex={currentBlockIndex}
-            allLessons={allLessons}
-            currentLessonIndex={currentLessonIndex}
-            isLastBlock={isLastBlock}
-            isCompleted={isCompleted}
-            onPrevious={() => setCurrentBlock(currentBlockIndex - 1)}
-            onNext={async () => {
-              markBlockComplete(currentBlockIndex);
-              if (isLastBlock) {
-                await handleComplete();
-              } else {
-                setCurrentBlock(currentBlockIndex + 1);
-              }
-            }}
-            onComplete={handleComplete}
-          />
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="mx-auto max-w-3xl">
+              <BlockRenderer block={currentBlock} lessonId={lesson.id} />
+
+              <NavigationButtons
+                currentIndex={currentBlockIndex}
+                allLessons={allLessons}
+                currentLessonIndex={currentLessonIndex}
+                isLastBlock={isLastBlock}
+                isCompleted={isCompleted}
+                onPrevious={() => setCurrentBlock(currentBlockIndex - 1)}
+                onNext={async () => {
+                  markBlockComplete(currentBlockIndex);
+                  if (isLastBlock) {
+                    await handleComplete();
+                  } else {
+                    setCurrentBlock(currentBlockIndex + 1);
+                  }
+                }}
+                onComplete={handleComplete}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className={`transition-all duration-200 ${notesOpen ? "w-80" : "w-0"}`}>
+          {notesOpen && (
+            <NotesPanel
+              lessonId={lesson.id}
+              open={notesOpen}
+              onClose={() => setNotesOpen(false)}
+            />
+          )}
         </div>
       </div>
     </div>

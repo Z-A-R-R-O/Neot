@@ -32,6 +32,7 @@ import {
   Accessibility,
   Layers,
   Webhook,
+  Bookmark,
   type LucideIcon,
 } from "lucide-react";
 
@@ -71,12 +72,15 @@ const iconMap: Record<string, LucideIcon> = {
   Accessibility,
   Layers,
   Webhook,
+  Bookmark,
 };
 
 const fallbackNavItems: Record<Role, NavItemData[]> = {
   student: [
     { id: "student-home", label: "Home", href: "/dashboard", icon: "LayoutDashboard", children: [] },
     { id: "student-courses", label: "My Courses", href: "/dashboard/courses", icon: "BookOpen", children: [] },
+    { id: "student-bookmarks", label: "Bookmarks", href: "/dashboard/bookmarks", icon: "Bookmark", children: [] },
+    { id: "student-notes", label: "Notes", href: "/dashboard/notes", icon: "FileText", children: [] },
     { id: "student-achievements", label: "Achievements", href: "/dashboard/achievements", icon: "Award", children: [] },
     { id: "student-leaderboard", label: "Leaderboard", href: "/dashboard/leaderboard", icon: "Trophy", children: [] },
     { id: "student-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
