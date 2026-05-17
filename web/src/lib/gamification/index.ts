@@ -18,3 +18,8 @@ export { BADGES, BADGE_CATEGORIES } from "./badges";
 export type { BadgeDefinition } from "./badges";
 export { checkAndAwardBadges, ensureBadgesSeeded } from "./badge-service";
 export type { NewBadge } from "./badge-service";
+
+export { getActiveEvents, getUpcomingEvents, SEASONAL_EVENTS } from "./seasonal-events";
+export type { SeasonalEventDefinition } from "./seasonal-events";
+export { getActiveEventsForUser, trackSeasonalProgress, getActiveMultiplier, ensureSeasonalEventsSeeded } from "./seasonal-event-service";
+export type { ActiveEvent } from "./seasonal-event-service";

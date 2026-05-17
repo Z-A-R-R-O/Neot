@@ -102,7 +102,7 @@
 | Streaks | ✅ | Profile fields (currentStreak, longestStreak, lastActivityDate), calculateStreak() |
 | Badges | ✅ | DB-backed Badge model + 20 badge definitions across 5 categories (progress, quiz, streak, mastery, social) + checkAndAwardBadges service + BadgePopup + achievements page tab |
 | Achievements | ✅ | Auto-unlock on lesson completion (XP/streak/course milestones). AchievementPopup + DB persistence via checkAndAwardAchievements() |
-| Seasonal events | 🔲 | Not implemented |
+| Seasonal events | ✅ | 6 seasonal events with XP multipliers (1.5x-3x), bonus XP per lesson, progress tracking, dashboard UI with challenge progress bars |
 
 ### Social (Future)
 
@@ -463,7 +463,7 @@
 | Teacher System | 17 | 11 | 2 | 4 | 0 |
 | Admin System | 14 | 10 | 2 | 2 | 0 |
 | Parent System | 10 | 2 | 1 | 7 | 0 |
-| Gamification | 7 | 5 | 1 | 1 | 0 |
+| Gamification | 7 | 6 | 0 | 1 | 0 |
 | Media | 6 | 3 | 0 | 3 | 0 |
 | Search | 8 | 6 | 0 | 2 | 0 |
 | Analytics | 9 | 5 | 2 | 2 | 0 |
@@ -477,6 +477,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **210** | **125** | **24** | **54** | **0** |
+| **TOTAL** | **210** | **126** | **23** | **54** | **0** |
 
-> **Completion: 59.5%** — Core infrastructure and learning flow are solid. Badges system (20 badges, 5 categories) + DB-backed awarding. Quiz pass XP + perfect_quiz achievement wired. Admin moderation + analytics added. Key gaps: parent communication, seasonal events, notifications, AI features, scaling.
+> **Completion: 60.0%** — Core infrastructure and learning flow are solid. Badges system (20 badges, 5 categories) + DB-backed awarding. Seasonal events (6 events with XP multipliers 1.5x-3x, bonus XP, progress tracking). Quiz pass XP + perfect_quiz achievement wired. Admin moderation + analytics added. Key gaps: parent communication, notifications, AI features, scaling.

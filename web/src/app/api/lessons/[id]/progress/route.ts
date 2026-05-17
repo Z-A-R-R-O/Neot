@@ -9,6 +9,7 @@ import { checkAndAwardAchievements } from "@/lib/gamification/achievement-servic
 import type { NewAchievement } from "@/lib/gamification/achievement-service";
 import { checkAndAwardBadges } from "@/lib/gamification/badge-service";
 import type { NewBadge } from "@/lib/gamification/badge-service";
+import { getActiveMultiplier, trackSeasonalProgress } from "@/lib/gamification/seasonal-event-service";
 import { recalculateEnrollmentProgress } from "@/lib/courses/enrollment-service";
 import { awardCourseCompletion } from "@/lib/courses/completion-service";
 import { updateContinueLearning } from "@/lib/courses/continue-learning";
@@ -98,6 +99,8 @@ export async function POST(
   let courseCompleted = false;
   let newAchievements: NewAchievement[] = [];
   let newBadges: NewBadge[] = [];
+  let seasonalBonus = 0;
+  let activeSeasonalEvent: string | undefined;
 
   if (isNewCompletion) {
     const result = await awardLessonXp(userId, id);
@@ -107,6 +110,8 @@ export async function POST(
     level = result.level;
     newAchievements = result.newAchievements;
     newBadges = result.newBadges;
+    seasonalBonus = result.seasonalBonus;
+    activeSeasonalEvent = result.activeSeasonalEvent;
 
     const lesson = await prisma.lesson.findUnique({
       where: { id },
@@ -133,6 +138,8 @@ export async function POST(
     courseCompleted,
     newAchievements: newAchievements.length > 0 ? newAchievements : undefined,
     newBadges: newBadges.length > 0 ? newBadges : undefined,
+    seasonalBonus: seasonalBonus > 0 ? seasonalBonus : undefined,
+    activeSeasonalEvent,
   });
 }
 
@@ -151,20 +158,26 @@ async function awardLessonXp(userId: string, lessonId: string) {
         level: profile?.level ?? 1,
         newAchievements: [] as NewAchievement[],
         newBadges: [] as NewBadge[],
+        seasonalBonus: 0,
+        activeSeasonalEvent: undefined,
       };
     }
+
+    const multiplier = getActiveMultiplier();
+    const baseXp = XP_REWARDS.LESSON_COMPLETE;
+    const multipliedXp = Math.round(baseXp * multiplier);
 
     await tx.xPTransaction.create({
       data: {
         userId,
-        amount: XP_REWARDS.LESSON_COMPLETE,
+        amount: multipliedXp,
         reason: "lesson_completed",
         lessonId,
       },
     });
 
     const profile = await tx.profile.findUnique({ where: { id: userId } });
-    const newXp = (profile?.xp ?? 0) + XP_REWARDS.LESSON_COMPLETE;
+    const newXp = (profile?.xp ?? 0) + multipliedXp;
     const levelInfo = getLevelInfo(newXp);
 
     const streakResult = calculateStreak(
@@ -216,14 +229,19 @@ async function awardLessonXp(userId: string, lessonId: string) {
 
     const newAchievements = await checkAndAwardAchievements(userId, tx);
     const newBadges = await checkAndAwardBadges(userId, tx);
+    const seasonalBonuses = await trackSeasonalProgress(userId, tx);
+    const totalSeasonalBonus = seasonalBonuses.reduce((sum, b) => sum + b.xpBonus, 0);
+    const activeEventName = seasonalBonuses.length > 0 ? seasonalBonuses[0].event : undefined;
 
     return {
-      xpAwarded: XP_REWARDS.LESSON_COMPLETE,
+      xpAwarded: multipliedXp,
       streak: streakResult.streak,
       longestStreak: streakResult.longestStreak,
       level: levelInfo.level,
       newAchievements,
       newBadges,
+      seasonalBonus: totalSeasonalBonus,
+      activeSeasonalEvent: activeEventName,
     };
   });
 }

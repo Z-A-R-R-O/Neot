@@ -4,6 +4,7 @@ import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { getLevelInfo } from "@/lib/gamification/xp-calculator";
 import { getLevelTitle } from "@/lib/gamification/level-system";
 import { getRecommendations } from "@/lib/courses/recommendations";
+import { getActiveEventsForUser } from "@/lib/gamification/seasonal-event-service";
 
 export default async function DashboardPage() {
   const user = await getUser();
@@ -41,8 +42,10 @@ export default async function DashboardPage() {
     teacher: { fullName: string | null } | null;
   }[] = [];
 
+  let seasonalEvents: Awaited<ReturnType<typeof getActiveEventsForUser>> = [];
+
   try {
-    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, timeAgg] = await Promise.all([
+    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, timeAgg, events] = await Promise.all([
       prisma.profile.findUnique({
         where: { id: user!.id },
         select: { xp: true, level: true, currentStreak: true },
@@ -72,8 +75,10 @@ export default async function DashboardPage() {
         where: { userId: user!.id },
         _sum: { timeSpent: true },
       }),
+      getActiveEventsForUser(user!.id),
     ]);
     recommendations = recs;
+    seasonalEvents = events;
 
     const xp = profile?.xp ?? 0;
     const level = profile?.level ?? 1;
@@ -111,5 +116,5 @@ export default async function DashboardPage() {
     // Dashboard data not available
   }
 
-  return <DashboardContent name={name} stats={stats} enrollments={enrollments} continueLesson={continueLesson} recommendations={recommendations} />;
+  return <DashboardContent name={name} stats={stats} enrollments={enrollments} continueLesson={continueLesson} recommendations={recommendations} seasonalEvents={seasonalEvents} />;
 }

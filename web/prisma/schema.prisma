@@ -614,3 +614,34 @@ model LayoutTemplate {
 
   @@map("layout_templates")
 }
+
+model SeasonalEvent {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  icon        String?
+  multiplier  Float    @default(1.0)
+  startsAt    DateTime @map("starts_at")
+  endsAt      DateTime @map("ends_at")
+  active      Boolean  @default(true)
+  xpBonus     Int      @default(0) @map("xp_bonus")
+  badgeId     String?  @map("badge_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("seasonal_events")
+}
+
+model UserSeasonalProgress {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  eventId     String   @map("event_id")
+  lessonsDone Int      @default(0) @map("lessons_done")
+  xpEarned    Int      @default(0) @map("xp_earned")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@map("user_seasonal_progress")
+}

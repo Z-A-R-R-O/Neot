@@ -6,6 +6,7 @@ import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock, Archive, X, 
 import Link from "next/link";
 import { LevelProgress } from "@/components/gamification/level-progress";
 import { StreakFlame } from "@/components/gamification/streak-flame";
+import { SeasonalEventsContent } from "@/components/dashboard/seasonal-events-content";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -41,6 +42,18 @@ interface RecommendedCourse {
   teacher: { fullName: string | null } | null;
 }
 
+interface ActiveEvent {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  multiplier: number;
+  xpBonus: number;
+  challenge: { type: string; target: number; label: string };
+  endsAt: string;
+  progress: number;
+}
+
 interface DashboardContentProps {
   name: string;
   stats: {
@@ -57,6 +70,7 @@ interface DashboardContentProps {
   enrollments: EnrollmentCourse[];
   continueLesson: ContinueLesson | null;
   recommendations?: RecommendedCourse[];
+  seasonalEvents?: ActiveEvent[];
 }
 
 interface StatCard {
@@ -80,7 +94,7 @@ function formatTime(seconds: number): string {
   return `${minutes}m`;
 }
 
-export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations }: DashboardContentProps) {
+export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations, seasonalEvents }: DashboardContentProps) {
   return (
     <div className="space-y-10">
       <motion.div
@@ -95,6 +109,16 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
           Here&apos;s an overview of your learning journey.
         </p>
       </motion.div>
+
+      {seasonalEvents && seasonalEvents.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: easing }}
+        >
+          <SeasonalEventsContent events={seasonalEvents} />
+        </motion.div>
+      )}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {([
