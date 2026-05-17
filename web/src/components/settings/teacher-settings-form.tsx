@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Loader2, Check, X, Calculator, FlaskConical, Code, Palette, Music, Languages, History, Globe, Beaker, Brain, BookOpen, User, Atom, Dna, PenTool, GraduationCap, Baby, School, University, Users } from "lucide-react";
+import { Save, Loader2, Check, X, Calculator, FlaskConical, Code, Palette, Music, Languages, History, Globe, Beaker, Brain, BookOpen, User, Atom, Dna, PenTool, GraduationCap, Baby, School, University, Users, Bell, Mail, MessageSquare, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Input } from "@/components/ui/input";
@@ -44,6 +44,10 @@ interface InitialData {
   subjectExpertise: string[];
   gradeLevels: string[];
   bio: string;
+  notifyEnrollments?: boolean;
+  notifyCourseComplete?: boolean;
+  notifyStudentMessages?: boolean;
+  notifyWeeklyReport?: boolean;
 }
 
 interface Props {
@@ -58,6 +62,10 @@ export function TeacherSettingsForm({ initialData }: Props) {
   const [subjectExpertise, setSubjectExpertise] = useState<string[]>(initialData.subjectExpertise);
   const [gradeLevels, setGradeLevels] = useState<string[]>(initialData.gradeLevels);
   const [bio, setBio] = useState(initialData.bio);
+  const [notifyEnrollments, setNotifyEnrollments] = useState(initialData.notifyEnrollments ?? true);
+  const [notifyCourseComplete, setNotifyCourseComplete] = useState(initialData.notifyCourseComplete ?? true);
+  const [notifyStudentMessages, setNotifyStudentMessages] = useState(initialData.notifyStudentMessages ?? true);
+  const [notifyWeeklyReport, setNotifyWeeklyReport] = useState(initialData.notifyWeeklyReport ?? true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +94,10 @@ export function TeacherSettingsForm({ initialData }: Props) {
       subjectExpertise,
       gradeLevels,
       bio: bio || null,
+      notifyEnrollments,
+      notifyCourseComplete,
+      notifyStudentMessages,
+      notifyWeeklyReport,
     };
 
     const res = await fetch("/api/auth/profile", {
@@ -273,6 +285,46 @@ export function TeacherSettingsForm({ initialData }: Props) {
             className="bg-[rgba(255,255,255,0.02)] border-[rgba(255,255,255,0.08)] resize-none"
           />
           <p className="text-xs text-muted-foreground">Up to 500 characters</p>
+        </div>
+      </motion.section>
+
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15, ease: easing }}
+        className="space-y-5 rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6"
+      >
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-500/10">
+            <Bell className="h-5 w-5 text-primary-400" />
+          </div>
+          <h2 className="font-heading text-lg font-bold text-foreground">Notification Preferences</h2>
+        </div>
+
+        <div className="space-y-3">
+          {[
+            { key: "notifyEnrollments", label: "New enrollments", desc: "Get notified when a student enrolls in your course", icon: TrendingUp, value: notifyEnrollments, setter: setNotifyEnrollments },
+            { key: "notifyCourseComplete", label: "Course completions", desc: "Get notified when a student completes your course", icon: GraduationCap, value: notifyCourseComplete, setter: setNotifyCourseComplete },
+            { key: "notifyStudentMessages", label: "Student messages", desc: "Get notified when a student sends you a message", icon: MessageSquare, value: notifyStudentMessages, setter: setNotifyStudentMessages },
+            { key: "notifyWeeklyReport", label: "Weekly summary", desc: "Receive a weekly report on student progress", icon: Mail, value: notifyWeeklyReport, setter: setNotifyWeeklyReport },
+          ].map(({ label, desc, icon: Icon, value, setter }) => (
+            <div key={label} className="flex items-center justify-between rounded-xl bg-[rgba(255,255,255,0.03)] p-4">
+              <div className="flex items-start gap-3">
+                <Icon className="h-5 w-5 text-muted-foreground mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-foreground">{label}</p>
+                  <p className="text-xs text-muted-foreground">{desc}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setter(!value)}
+                className={`h-6 w-11 shrink-0 rounded-full transition-colors ${value ? "bg-primary-500" : "bg-[rgba(255,255,255,0.1)]"}`}
+              >
+                <span className={`block h-5 w-5 rounded-full bg-white transition-transform ${value ? "translate-x-5" : "translate-x-0.5"}`} />
+              </button>
+            </div>
+          ))}
         </div>
       </motion.section>
 

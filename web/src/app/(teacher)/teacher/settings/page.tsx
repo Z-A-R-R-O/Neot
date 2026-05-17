@@ -43,6 +43,10 @@ export default async function TeacherSettingsPage() {
     subjectExpertise: metadata.subject_expertise ?? [],
     gradeLevels: metadata.grade_levels ?? [],
     bio: metadata.bio ?? "",
+    notifyEnrollments: (metadata.notifyEnrollments as boolean) ?? true,
+    notifyCourseComplete: (metadata.notifyCourseComplete as boolean) ?? true,
+    notifyStudentMessages: (metadata.notifyStudentMessages as boolean) ?? true,
+    notifyWeeklyReport: (metadata.notifyWeeklyReport as boolean) ?? true,
   };
 
   return <TeacherSettingsForm initialData={initialData} />;
