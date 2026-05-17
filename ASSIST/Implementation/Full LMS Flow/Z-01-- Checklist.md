@@ -270,7 +270,7 @@
 | XP visibility | ✅ | Shows XP for each child |
 | Completed lessons | ✅ | Aggregated from lesson progress |
 | Weak subjects | ✅ | Analyzed in parent reports based on quiz scores per subject |
-| Teacher communication | ✅ | Teacher messaging system with student inbox and notifications |
+| Teacher communication | ✅ | Parent-to-teacher messaging: inbox, compose UI, teacher selection, reply, read/unread states |
 | Alerts | ✅ | Automated alerts system with configurable preferences |
 | Progress summaries | ✅ | Weekly XP chart, on-track status, course details with time and quiz averages |
 
@@ -445,7 +445,7 @@
 | 4 | Gamification | ✅ | Badges (20), seasonal events (6), achievements, XP, levels, streaks |
 | 5 | Teacher analytics | ✅ | Enrollment trends, completion funnel, score distribution, drop-off points, retention cohorts, engagement scoring |
 | 6 | Admin governance | 🚧 | Users + Settings done. Teachers, Moderation, Categories, Analytics TBD |
-| 7 | Parent monitoring | 🚧 | Basic dashboard done. Reports, alerts, communication TBD |
+| 7 | Parent monitoring | ✅ | Full dashboard, reports, alerts, teacher communication |
 | 8 | Dev Mode completion | 🚧 | Gaps: OverlaySystem stub, responsive unwired, no drag-reorder |
 | 9 | Optimization & scaling | 🔲 | Caching, CDN, performance optimization not started |
 
@@ -464,7 +464,7 @@
 | Quiz System | 7 | 6 | 0 | 1 | 0 |
 | Teacher System | 17 | 14 | 2 | 1 | 0 |
 | Admin System | 14 | 11 | 1 | 2 | 0 |
-| Parent System | 10 | 7 | 1 | 2 | 0 |
+| Parent System | 10 | 8 | 1 | 1 | 0 |
 | Gamification | 7 | 6 | 0 | 1 | 0 |
 | Media | 6 | 5 | 0 | 1 | 0 |
 | Search | 8 | 7 | 0 | 1 | 0 |
@@ -479,6 +479,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **145** | **16** | **43** | **0** |
+| **TOTAL** | **211** | **146** | **16** | **42** | **0** |
 
-> **Completion: 68.7%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Analytics category fully complete. Key gaps: parent communication, AI features, scaling.
+> **Completion: 69.2%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Analytics category fully complete. Key gaps: AI features, scaling.

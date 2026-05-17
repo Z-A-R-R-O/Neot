@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { Users, BookOpen, Trophy, ArrowRight, Bell } from "lucide-react";
+import { Users, BookOpen, Trophy, ArrowRight, Bell, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ParentAlertSettings } from "@/components/parent/parent-alert-settings";
@@ -90,9 +90,17 @@ export default async function ParentDashboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 p-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">Welcome, {name}</h1>
-        <p className="mt-1 text-muted-foreground">Track your child&apos;s learning progress.</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">Welcome, {name}</h1>
+          <p className="mt-1 text-muted-foreground">Track your child&apos;s learning progress.</p>
+        </div>
+        <Button asChild className="gap-2">
+          <Link href="/parent/messages">
+            <Mail className="h-4 w-4" />
+            Messages
+          </Link>
+        </Button>
       </div>
 
       {childrenData.length === 0 ? (

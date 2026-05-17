@@ -43,8 +43,17 @@ export async function POST(request: Request) {
     select: { id: true, fullName: true, role: true },
   });
 
-  if (sender?.role !== "teacher" && sender?.role !== "admin") {
-    return NextResponse.json({ error: "Only teachers and admins can send messages" }, { status: 403 });
+  // Allow parents to message teachers, teachers to message students, admins to message anyone
+  if (sender?.role === "parent") {
+    if (recipient.role !== "teacher" && recipient.role !== "admin") {
+      return NextResponse.json({ error: "Parents can only message teachers and admins" }, { status: 403 });
+    }
+  } else if (sender?.role === "teacher") {
+    if (recipient.role !== "student" && recipient.role !== "parent" && recipient.role !== "admin") {
+      return NextResponse.json({ error: "Teachers can only message students, parents, and admins" }, { status: 403 });
+    }
+  } else if (sender?.role !== "admin") {
+    return NextResponse.json({ error: "Only teachers, parents, and admins can send messages" }, { status: 403 });
   }
 
   const message = await prisma.message.create({
