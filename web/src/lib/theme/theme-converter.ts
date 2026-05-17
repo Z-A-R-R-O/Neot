@@ -123,6 +123,40 @@ export function tokensToCssVars(tokens: ThemeTokens): Record<string, string> {
   };
 }
 
+export function overridesToCssVars(
+  overrides: Record<string, unknown> | undefined | null,
+): Record<string, string> {
+  const vars: Record<string, string> = {};
+  if (!overrides) return vars;
+
+  const themeOverrides = overrides as {
+    colors?: Record<string, string>;
+    typography?: Record<string, string>;
+    radii?: Record<string, string>;
+  };
+
+  if (themeOverrides.colors) {
+    for (const [key, val] of Object.entries(themeOverrides.colors)) {
+      if (val) {
+        const k = key.replace(/([A-Z])/g, "-$1").toLowerCase();
+        vars[`--color-${k}`] = val;
+      }
+    }
+  }
+  if (themeOverrides.typography) {
+    if (themeOverrides.typography.headingFont) vars["--font-heading"] = themeOverrides.typography.headingFont;
+    if (themeOverrides.typography.bodyFont) vars["--font-body"] = themeOverrides.typography.bodyFont;
+    if (themeOverrides.typography.baseSize) vars["--font-size-base"] = `${themeOverrides.typography.baseSize}px`;
+  }
+  if (themeOverrides.radii) {
+    for (const [key, val] of Object.entries(themeOverrides.radii)) {
+      if (val) vars[`--radius-${key}`] = val;
+    }
+  }
+
+  return vars;
+}
+
 export function tokensToCssString(tokens: ThemeTokens): string {
   const vars = tokensToCssVars(tokens);
   return Object.entries(vars)

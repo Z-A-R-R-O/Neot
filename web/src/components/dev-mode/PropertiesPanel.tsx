@@ -12,6 +12,7 @@ import { DataBindingTab } from "./section-editors/data-binding-tab";
 import { AccessibilityTab } from "./section-editors/accessibility-tab";
 import { SEOTab } from "./section-editors/seo-tab";
 import { VisibilityRulesTab } from "./section-editors/visibility-rules-tab";
+import { GlobalStylesTab } from "./section-editors/global-styles-tab";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -25,7 +26,7 @@ interface PropertiesPanelProps {
   onStyleChange?: (id: string, styles: Record<string, unknown>) => void;
 }
 
-type Tab = "content" | "style" | "motion" | "effects" | "interactions" | "data" | "a11y" | "seo" | "rules";
+type Tab = "content" | "style" | "motion" | "effects" | "interactions" | "data" | "a11y" | "seo" | "rules" | "theme";
 
 const allTabs: { key: Tab; label: string }[] = [
   { key: "content", label: "content" },
@@ -37,6 +38,7 @@ const allTabs: { key: Tab; label: string }[] = [
   { key: "a11y", label: "a11y" },
   { key: "seo", label: "seo" },
   { key: "rules", label: "rules" },
+  { key: "theme", label: "theme" },
 ];
 
 export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange }: PropertiesPanelProps) {
@@ -174,6 +176,10 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
 
         {activeTab === "rules" && (
           <VisibilityRulesTab sectionId={selectedBlock.id} />
+        )}
+
+        {activeTab === "theme" && (
+          <GlobalStylesTab sectionId={selectedBlock.id} />
         )}
       </div>
     </div>

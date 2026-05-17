@@ -5,6 +5,7 @@ import { useDevModeStore, type DeviceMode } from "@/stores/devModeStore";
 import { BlockOverlay } from "@/components/dev-mode/BlockOverlay";
 import { PublicHeader } from "@/components/layout/public-header";
 import { DataBoundRenderer } from "@/components/blocks/data-bound-renderer";
+import { overridesToCssVars } from "@/lib/theme/theme-converter";
 
 const deviceWidths: Record<DeviceMode, string> = {
   desktop: "100%",
@@ -40,7 +41,9 @@ export function LivePreview() {
               label={section.blockType}
               path={`Page > ${section.blockType}`}
             >
-              <DataBoundRenderer section={section} />
+              <div style={overridesToCssVars(section.settings.themeOverrides as Record<string, unknown> | undefined)}>
+                <DataBoundRenderer section={section} />
+              </div>
             </BlockOverlay>
           ))}
           {sections.length === 0 && (
