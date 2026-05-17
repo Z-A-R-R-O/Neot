@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { SettingsForm } from "@/components/settings/settings-form";
+import { SettingsTabs } from "@/components/settings/settings-tabs";
 
 interface Metadata {
   interests?: string[];
@@ -12,6 +12,12 @@ interface Metadata {
   child_interests?: string[];
   grade?: string;
   age_group?: string;
+  notifyXp?: boolean;
+  notifyAchievements?: boolean;
+  notifyStreaks?: boolean;
+  notifyCourseUpdates?: boolean;
+  notifyMessages?: boolean;
+  notifyGrading?: boolean;
 }
 
 export default async function SettingsPage() {
@@ -55,5 +61,28 @@ export default async function SettingsPage() {
     childInterests: metadata.child_interests ?? [],
   };
 
-  return <SettingsForm initialData={initialData} />;
+  const defaults = {
+    notifyXp: true,
+    notifyAchievements: true,
+    notifyStreaks: true,
+    notifyCourseUpdates: true,
+    notifyMessages: true,
+    notifyGrading: true,
+  };
+
+  const notificationPreferences = {
+    notifyXp: metadata.notifyXp ?? defaults.notifyXp,
+    notifyAchievements: metadata.notifyAchievements ?? defaults.notifyAchievements,
+    notifyStreaks: metadata.notifyStreaks ?? defaults.notifyStreaks,
+    notifyCourseUpdates: metadata.notifyCourseUpdates ?? defaults.notifyCourseUpdates,
+    notifyMessages: metadata.notifyMessages ?? defaults.notifyMessages,
+    notifyGrading: metadata.notifyGrading ?? defaults.notifyGrading,
+  };
+
+  return (
+    <SettingsTabs
+      initialData={initialData}
+      notificationPreferences={notificationPreferences}
+    />
+  );
 }
