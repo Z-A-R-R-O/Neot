@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useDevModeStore, type DeviceMode } from "@/stores/devModeStore";
-import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useDevModeStore } from "@/stores/devModeStore";
 import { editorRegistry } from "@/lib/editor-registry";
 import { MotionTab } from "./section-editors/motion-tab";
 import { InteractionsTab } from "./section-editors/interactions-tab";
+import { StyleTab } from "./section-editors/style-tab";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -22,9 +22,6 @@ interface PropertiesPanelProps {
 export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange }: PropertiesPanelProps) {
   const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects" | "interactions">("content");
   const enabled = useDevModeStore((s) => s.enabled);
-  const deviceMode = useDevModeStore((s) => s.deviceMode);
-  const setDeviceMode = useDevModeStore((s) => s.setDeviceMode);
-  const updateSection = usePageBuilderStore((s) => s.updateSection);
 
   if (!enabled) return null;
 
@@ -38,59 +35,6 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
       </div>
     );
   }
-
-  const handleStyleChange = (key: string, value: string | number | boolean) => {
-    if (!selectedBlock) return;
-    if (deviceMode !== "desktop") {
-      handleResponsiveStyleChange(key, value);
-      return;
-    }
-    const newStyles = { ...(selectedBlock.styles || {}), [key]: value };
-    const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
-    if (section) {
-      updateSection(selectedBlock.id, {
-        settings: {
-          ...section.settings,
-          styles: newStyles
-        }
-      });
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSettingsChange = (key: string, value: string | number | boolean) => {
-    if (!selectedBlock) return;
-    const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
-    if (section) {
-      updateSection(selectedBlock.id, {
-        settings: {
-          ...(section.settings || {}),
-          [key]: value
-        }
-      });
-    }
-  };
-
-  const handleResponsiveStyleChange = (key: string, value: string | number | boolean) => {
-    if (!selectedBlock) return;
-    if (deviceMode === "desktop") {
-      handleStyleChange(key, value);
-      return;
-    }
-    const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
-    if (section) {
-      const existing = (section.settings.responsiveStyles as Record<string, Record<string, unknown>> | undefined) ?? {};
-      updateSection(selectedBlock.id, {
-        settings: {
-          ...section.settings,
-          responsiveStyles: {
-            ...existing,
-            [deviceMode]: { ...(existing[deviceMode] ?? {}), [key]: value },
-          },
-        },
-      });
-    }
-  };
 
   return (
     <div className="flex h-full flex-col bg-background/50 backdrop-blur-xl">
@@ -181,67 +125,7 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
         )}
 
         {activeTab === "style" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
-            <Section title="Layout">
-              <PropertyRow label="Padding Y">
-                <Slider
-                  value={String(selectedBlock.styles?.paddingY || "64px")}
-                  onChange={(v) => handleStyleChange("paddingY", v)}
-                />
-              </PropertyRow>
-              <PropertyRow label="Max Width">
-                <select
-                  value={String(selectedBlock.styles?.maxWidth || "max-w-6xl")}
-                  onChange={(e) => handleStyleChange("maxWidth", e.target.value)}
-                  className="w-full rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50"
-                >
-                  <option value="max-w-4xl">4xl</option>
-                  <option value="max-w-5xl">5xl</option>
-                  <option value="max-w-6xl">6xl</option>
-                  <option value="max-w-7xl">7xl</option>
-                  <option value="max-w-full">Full</option>
-                </select>
-              </PropertyRow>
-            </Section>
-
-            <Section title="Background">
-              <PropertyRow label="Color">
-                <div className="flex gap-2">
-                  <input
-                    type="color"
-                    value={String(selectedBlock.styles?.backgroundColor || "#0B0D10")}
-                    onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
-                    className="h-8 w-12 cursor-pointer rounded-lg border-0 bg-muted/30 p-1"
-                  />
-                  <input
-                    type="text"
-                    value={String(selectedBlock.styles?.backgroundColor || "#0B0D10")}
-                    onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
-                    className="flex-1 rounded-lg bg-muted/30 px-2 text-[10px] font-mono"
-                  />
-                </div>
-              </PropertyRow>
-            </Section>
-
-            <Section title="Responsive">
-              <PropertyRow label="Breakpoint">
-                <select
-                  value={deviceMode}
-                  onChange={(e) => setDeviceMode(e.target.value as DeviceMode)}
-                  className="w-full rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50"
-                >
-                  <option value="desktop">Desktop (1025px+)</option>
-                  <option value="tablet">Tablet (768\u20131024px)</option>
-                  <option value="mobile">Mobile (320\u2013767px)</option>
-                </select>
-              </PropertyRow>
-              {deviceMode !== "desktop" && (
-                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-[10px] text-amber-400">
-                  Editing {deviceMode} overrides &mdash; values set here apply only at this breakpoint.
-                </div>
-              )}
-            </Section>
-          </div>
+          <StyleTab sectionId={selectedBlock.id} />
         )}
 
         {activeTab === "motion" && (

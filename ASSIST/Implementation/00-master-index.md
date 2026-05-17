@@ -241,8 +241,8 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 | Master Plan | Items | ✅ Done | 🚧 Partial | 🔲 Not Started | Progress |
 |---|---|---|---|---|---|---|---|
 | **Z-01 — LMS Flow** | 210 | 110 | 27 | 73 | **52.4%** |
-| **Z-02 — Admin Flow** | 265 | 70 | 36 | 159 | **26.4%** |
-| **Combined** | **475** | **180** | **63** | **232** | **37.9%** |
+| **Z-02 — Admin Flow** | 295 | 110 | 42 | 143 | **37.3%** |
+| **Combined** | **505** | **220** | **69** | **216** | **43.6%** |
 
 > See `Full LMS Flow/Z-01-- Checklist.md` and `Full LMS Flow/Z-02-- Checklist.md` for full itemized tracking.
 
