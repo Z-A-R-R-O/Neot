@@ -8,6 +8,7 @@ import {
   Loader2,
   ChevronRight,
   Calendar,
+  Tag,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
@@ -42,6 +44,7 @@ interface VersionSnapshot {
   id: string;
   pageId: string;
   sections: string;
+  versionTag: string | null;
   createdAt: string;
 }
 
@@ -143,6 +146,24 @@ export default function VersionHistoryPage() {
     pages ?? [],
   );
 
+  const TAG_LABELS: Record<string, { label: string; color: string }> = {
+    publish: { label: "Published", color: "bg-violet-500/10 text-violet-400 border-violet-500/20" },
+    before_publish: { label: "Before Publish", color: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+    manual: { label: "Manual", color: "bg-blue-500/10 text-blue-400 border-blue-500/20" },
+  };
+
+  function VersionTagBadge({ tag }: { tag: string | null }) {
+    if (!tag) return null;
+    const meta = TAG_LABELS[tag];
+    if (!meta) return null;
+    return (
+      <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${meta.color}`}>
+        <Tag className="h-2.5 w-2.5" />
+        {meta.label}
+      </span>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {toast && (
@@ -193,6 +214,9 @@ export default function VersionHistoryPage() {
                     {new Date(pageVersions[0].createdAt).toLocaleDateString()}
                   </p>
                   <p>Status: {page.status}</p>
+                  <div className="flex items-center gap-2 pt-1">
+                    <VersionTagBadge tag={pageVersions[0].versionTag} />
+                  </div>
                 </div>
               </CardContent>
               <div className="flex gap-2 border-t border-border px-6 py-3">
@@ -238,9 +262,12 @@ export default function VersionHistoryPage() {
                     <p className="text-sm font-medium text-foreground">
                       {new Date(v.createdAt).toLocaleString()}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {JSON.parse(v.sections).length} sections
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs text-muted-foreground">
+                        {JSON.parse(v.sections).length} sections
+                      </p>
+                      <VersionTagBadge tag={v.versionTag} />
+                    </div>
                   </div>
                 </div>
                 <Button
