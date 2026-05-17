@@ -94,6 +94,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "admin-dashboard", label: "Dashboard", href: "/admin", icon: "LayoutDashboard", children: [] },
     { id: "admin-analytics", label: "Analytics", href: "/admin/analytics", icon: "BarChart3", children: [] },
     { id: "admin-users", label: "Users", href: "/admin/users", icon: "Users", children: [] },
+    { id: "admin-roles", label: "Roles", href: "/admin/roles", icon: "Shield", children: [] },
     { id: "admin-teachers", label: "Teachers", href: "/admin/teachers", icon: "GraduationCap", children: [] },
     { id: "admin-students", label: "Students", href: "/admin/students", icon: "UserCheck", children: [] },
     { id: "admin-parents", label: "Parents", href: "/admin/parents", icon: "Heart", children: [] },
