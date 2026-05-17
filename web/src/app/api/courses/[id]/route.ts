@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { notifyCourseSubmitted } from "@/lib/notifications";
 
 export async function GET(
   _request: Request,
@@ -78,6 +79,8 @@ export async function PATCH(
         })),
       });
     }
+
+    await notifyCourseSubmitted(id, course.title, existing.teacherId ? (await prisma.profile.findUnique({ where: { id: existing.teacherId }, select: { fullName: true } }))?.fullName ?? null : null);
   }
 
   return NextResponse.json(course);

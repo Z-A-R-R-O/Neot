@@ -133,7 +133,7 @@
 | Draft | ✅ | Default state on creation |
 | Published | ✅ | Published courses visible to students |
 | Archived | 🚧 | Student enrollment archiving via API + dashboard. Teacher course archive still TBD. |
-| Deleted (soft) | 🔲 | Cascade deletes, no soft-delete |
+| Deleted (soft) | ✅ | Soft-delete via deletedAt field, archive/restore API, teacher UI with archive/unarchive buttons |
 
 ### Course Builder Features
 
@@ -221,7 +221,7 @@
 | Pages | ✅ | Page builder with Dev Mode |
 | Themes | ✅ | Theme editor (color pickers, font selector, animation config, live preview) |
 | Analytics | 🚧 | Basic admin analytics page with DAU, signups, user roles, top courses charts |
-| Notifications | 🔲 | Student notification system exists, admin not yet wired |
+| Notifications | ✅ | Admin notifications wired: new user signup, course publish, report flagged, platform alerts via notifyAdmins() |
 | Settings | ✅ | Platform settings (General/Auth/Email tabs) |
 | Dev Mode | ✅ | Visual experience engine overlay |
 
@@ -444,7 +444,7 @@
 | 3 | Lesson/progress system | ✅ |
 | 4 | Gamification | ✅ | Badges (20), seasonal events (6), achievements, XP, levels, streaks |
 | 5 | Teacher analytics | ✅ | Enrollment trends, completion funnel, score distribution, drop-off points, retention cohorts, engagement scoring |
-| 6 | Admin governance | 🚧 | Users + Settings done. Teachers, Moderation, Categories, Analytics TBD |
+| 6 | Admin governance | ✅ | Users, Settings, Teachers, Moderation, Categories, Analytics, Notifications all wired |
 | 7 | Parent monitoring | ✅ | Full dashboard, reports, alerts, teacher communication |
 | 8 | Dev Mode completion | 🚧 | Gaps: OverlaySystem stub, responsive unwired, no drag-reorder |
 | 9 | Optimization & scaling | 🔲 | Caching, CDN, performance optimization not started |
@@ -459,11 +459,11 @@
 | DB & Site Structure | 8 | 8 | 0 | 0 | 0 |
 | Public Site & Auth Flow | 8 | 7 | 1 | 0 | 0 |
 | Student System | 27 | 19 | 2 | 6 | 0 |
-| Course System | 15 | 12 | 1 | 2 | 0 |
+| Course System | 15 | 13 | 1 | 1 | 0 |
 | Lesson System | 9 | 7 | 1 | 1 | 0 |
 | Quiz System | 7 | 6 | 0 | 1 | 0 |
 | Teacher System | 17 | 14 | 2 | 1 | 0 |
-| Admin System | 14 | 11 | 1 | 2 | 0 |
+| Admin System | 14 | 12 | 1 | 1 | 0 |
 | Parent System | 10 | 8 | 1 | 1 | 0 |
 | Gamification | 7 | 6 | 0 | 1 | 0 |
 | Media | 6 | 5 | 0 | 1 | 0 |
@@ -479,6 +479,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **146** | **16** | **42** | **0** |
+| **TOTAL** | **211** | **148** | **16** | **40** | **0** |
 
-> **Completion: 69.2%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Analytics category fully complete. Key gaps: AI features, scaling.
+> **Completion: 70.1%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Analytics category fully complete. Key gaps: AI features, scaling.

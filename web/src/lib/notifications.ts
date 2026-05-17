@@ -12,6 +12,11 @@ export const NOTIFICATION_TYPES = {
   MESSAGE: "message",
   GRADING_ALERT: "grading_alert",
   STREAK_REMINDER: "streak_reminder",
+  NEW_USER: "new_user",
+  COURSE_SUBMITTED: "course_submitted",
+  REPORT_FLAGGED: "report_flagged",
+  PLATFORM_ALERT: "platform_alert",
+  SYSTEM_ALERT: "system_alert",
 } as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[keyof typeof NOTIFICATION_TYPES];
@@ -117,4 +122,64 @@ export async function deleteOldNotifications(olderThanDays = 30) {
       readAt: { not: null },
     },
   });
+}
+
+export async function notifyAdmins(
+  type: NotificationType,
+  title: string,
+  message: string,
+  link?: string,
+) {
+  const admins = await prisma.profile.findMany({
+    where: { role: "admin" },
+    select: { id: true },
+  });
+
+  if (admins.length === 0) return { count: 0 };
+
+  const notifications = admins.map((admin) => ({
+    userId: admin.id,
+    type,
+    title,
+    message,
+    link: link ?? "/admin",
+  }));
+
+  return prisma.notification.createMany({ data: notifications });
+}
+
+export async function notifyNewUser(userId: string, fullName: string | null, role: string) {
+  return notifyAdmins(
+    NOTIFICATION_TYPES.NEW_USER,
+    "New user registered",
+    `${fullName ?? "A new user"} signed up as ${role}`,
+    `/admin/users`,
+  );
+}
+
+export async function notifyCourseSubmitted(courseId: string, title: string, teacherName: string | null) {
+  return notifyAdmins(
+    NOTIFICATION_TYPES.COURSE_SUBMITTED,
+    "Course submitted for review",
+    `${teacherName ?? "A teacher"} submitted "${title}" for review`,
+    `/admin/courses`,
+  );
+}
+
+export async function notifyReportFlagged(reportId: string, reason: string, reporterName: string | null) {
+  return notifyAdmins(
+    NOTIFICATION_TYPES.REPORT_FLAGGED,
+    "Content flagged",
+    `${reporterName ?? "A user"} flagged content: ${reason}`,
+    `/admin/moderation`,
+  );
+}
+
+export async function notifyPlatformAlert(title: string, message: string, link?: string) {
+  return notifyAdmins(
+    NOTIFICATION_TYPES.PLATFORM_ALERT,
+    title,
+    message,
+    link,
+  );
 }

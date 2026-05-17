@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { hashPassword, createSession, getSessionCookieName } from "@/lib/auth";
 import { csrfGuard } from "@/lib/csrf";
+import { notifyNewUser } from "@/lib/notifications";
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -44,6 +45,8 @@ export async function POST(request: Request) {
       verificationToken,
     },
   });
+
+  await notifyNewUser(id, fullName ?? null, role);
 
   const token = await createSession(id);
   const response = NextResponse.json({ success: true, verificationToken });
