@@ -16,6 +16,7 @@ import { PreviewToggle } from "./preview-toggle";
 import { AnimationTimeline } from "./animation-timeline";
 import { TemplateLibraryPanel } from "./template-library-panel";
 import { ReusableBlocksPanel } from "./reusable-blocks-panel";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface DevModeShellProps {
   children: ReactNode;
@@ -29,6 +30,8 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
   const [showSavePreset, setShowSavePreset] = useState(false);
   const [reusableName, setReusableName] = useState("");
   const [showSaveReusable, setShowSaveReusable] = useState(false);
+  const animationStudioEnabled = useFeatureFlag("animation_studio");
+  const reusableBlocksEnabled = useFeatureFlag("reusable_blocks");
   const enabled = useDevModeStore((s) => s.enabled);
   const deviceMode = useDevModeStore((s) => s.deviceMode);
   const { sections, selectedId, updateSection, selectSection, removeSection, addSection, reorderSections, setSections } = usePageBuilderStore();
@@ -111,14 +114,18 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
             </span>
           )}
           {pageId && pageSlug && <PreviewToggle pageId={pageId} pageSlug={pageSlug} />}
-          <button
-            onClick={() => setTimelineOpen(!timelineOpen)}
-            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
-            title="Animation Timeline"
-          >
-            <Timer className="h-3.5 w-3.5" />
-          </button>
-          <AnimationTimeline open={timelineOpen} onClose={() => setTimelineOpen(false)} />
+          {animationStudioEnabled && (
+            <>
+              <button
+                onClick={() => setTimelineOpen(!timelineOpen)}
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+                title="Animation Timeline"
+              >
+                <Timer className="h-3.5 w-3.5" />
+              </button>
+              <AnimationTimeline open={timelineOpen} onClose={() => setTimelineOpen(false)} />
+            </>
+          )}
           <button
             onClick={() => setTemplateLibraryOpen(!templateLibraryOpen)}
             className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
@@ -148,17 +155,21 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
               }
             }}
           />
-          <button
-            onClick={() => setReusableBlocksOpen(!reusableBlocksOpen)}
-            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
-            title="Reusable Blocks"
-          >
-            <Layers className="h-3.5 w-3.5" />
-          </button>
-          <ReusableBlocksPanel
-            open={reusableBlocksOpen}
-            onClose={() => setReusableBlocksOpen(false)}
-          />
+          {reusableBlocksEnabled && (
+            <>
+              <button
+                onClick={() => setReusableBlocksOpen(!reusableBlocksOpen)}
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+                title="Reusable Blocks"
+              >
+                <Layers className="h-3.5 w-3.5" />
+              </button>
+              <ReusableBlocksPanel
+                open={reusableBlocksOpen}
+                onClose={() => setReusableBlocksOpen(false)}
+              />
+            </>
+          )}
           <HistoryPanel />
           <DevModeToggle />
         </div>
