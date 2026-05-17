@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef, useState } from "react";
-import { Timer } from "lucide-react";
+import { Timer, LayoutTemplate } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore, type PageSection, type SectionType } from "@/stores/pageBuilderStore";
 import { StructureTree } from "./StructureTree";
@@ -14,6 +14,7 @@ import { DevModeToggle } from "./DevModeToggle";
 import { AlignmentGuides } from "./alignment-guides";
 import { PreviewToggle } from "./preview-toggle";
 import { AnimationTimeline } from "./animation-timeline";
+import { TemplateLibraryPanel } from "./template-library-panel";
 
 interface DevModeShellProps {
   children: ReactNode;
@@ -27,9 +28,10 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
   const [showSavePreset, setShowSavePreset] = useState(false);
   const enabled = useDevModeStore((s) => s.enabled);
   const deviceMode = useDevModeStore((s) => s.deviceMode);
-  const { sections, selectedId, updateSection, selectSection, removeSection, addSection, reorderSections } = usePageBuilderStore();
+  const { sections, selectedId, updateSection, selectSection, removeSection, addSection, reorderSections, setSections } = usePageBuilderStore();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [timelineOpen, setTimelineOpen] = useState(false);
+  const [templateLibraryOpen, setTemplateLibraryOpen] = useState(false);
 
   const canvasMaxWidth = deviceMode === "mobile" ? "375px" : deviceMode === "tablet" ? "768px" : "1440px";
 
@@ -91,6 +93,35 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
             <Timer className="h-3.5 w-3.5" />
           </button>
           <AnimationTimeline open={timelineOpen} onClose={() => setTimelineOpen(false)} />
+          <button
+            onClick={() => setTemplateLibraryOpen(!templateLibraryOpen)}
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+            title="Template Library"
+          >
+            <LayoutTemplate className="h-3.5 w-3.5" />
+          </button>
+          <TemplateLibraryPanel
+            open={templateLibraryOpen}
+            onClose={() => setTemplateLibraryOpen(false)}
+            pageSlug={pageSlug}
+            onApplyTemplate={(sectionsJson) => {
+              try {
+                const data = JSON.parse(sectionsJson);
+                const incoming = Array.isArray(data) ? data : Array.isArray(data.sections) ? data.sections : [];
+                const newSections: PageSection[] = incoming.map((s: { blockType?: string; sortOrder?: number; content?: string; settings?: string }, i: number) => ({
+                  id: crypto.randomUUID(),
+                  pageId: "current",
+                  blockType: (s.blockType ?? "custom-html") as SectionType,
+                  sortOrder: i,
+                  content: typeof s.content === "string" ? JSON.parse(s.content) : (s.content ?? {}),
+                  settings: typeof s.settings === "string" ? JSON.parse(s.settings) : (s.settings ?? {}),
+                }));
+                setSections(newSections);
+              } catch {
+                alert("Failed to parse template");
+              }
+            }}
+          />
           <HistoryPanel />
           <DevModeToggle />
         </div>
