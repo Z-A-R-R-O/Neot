@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { createVersionSnapshot, getVersionSnapshots } from "@/lib/version-service";
+import { createAuditLog } from "@/lib/audit-log";
 
 export async function GET(request: Request) {
   const user = await getUser();
@@ -37,5 +38,16 @@ export async function POST(request: Request) {
   }
 
   const snapshot = await createVersionSnapshot(pageId, versionTag);
+
+  if (versionTag === "publish") {
+    await createAuditLog({
+      action: "publish",
+      resource: "page",
+      resourceId: pageId,
+      userId: user.id,
+      details: { title: page.title, slug: page.slug },
+    });
+  }
+
   return NextResponse.json(snapshot, { status: 201 });
 }

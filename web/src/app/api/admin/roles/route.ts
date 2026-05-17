@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { requirePermission } from "@/lib/permissions";
+import { createAuditLog } from "@/lib/audit-log";
 
 const createSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -156,6 +157,14 @@ export async function POST(request: Request) {
 
   const role = await prisma.role.create({
     data: { name, description, permissions, isBuiltIn },
+  });
+
+  await createAuditLog({
+    action: "create",
+    resource: "role",
+    resourceId: role.id,
+    userId: user.id,
+    details: { name: role.name },
   });
 
   return NextResponse.json(role, { status: 201 });

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit-log";
 
 const updateSchema = z.object({
   name: z.string().min(1).optional(),
@@ -59,6 +60,15 @@ export async function PUT(
   const role = await prisma.role.update({
     where: { id },
     data,
+  });
+
+  const changedFields = Object.keys(data);
+  await createAuditLog({
+    action: changedFields.includes("permissions") ? "permission_change" : "update",
+    resource: "role",
+    resourceId: role.id,
+    userId: user.id,
+    details: { name: role.name, changedFields },
   });
 
   return NextResponse.json(role);

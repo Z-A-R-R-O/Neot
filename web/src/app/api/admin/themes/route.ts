@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit-log";
 
 const createThemeSchema = z.object({
   name: z.string().min(1).max(100),
@@ -40,6 +41,14 @@ export async function POST(request: Request) {
   }
 
   const theme = await prisma.siteTheme.create({ data: parsed.data });
+
+  await createAuditLog({
+    action: "theme_change",
+    resource: "theme",
+    resourceId: theme.id,
+    userId: user.id,
+    details: { name: theme.name, isActive: theme.isActive },
+  });
 
   return NextResponse.json(theme, { status: 201 });
 }

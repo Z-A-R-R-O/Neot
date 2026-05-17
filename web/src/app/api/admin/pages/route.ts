@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { requirePermission } from "@/lib/permissions";
+import { createAuditLog } from "@/lib/audit-log";
 
 const createPageSchema = z.object({
   title: z.string().min(1).max(200),
@@ -53,6 +54,14 @@ export async function POST(request: Request) {
   }
 
   const page = await prisma.customPage.create({ data: parsed.data });
+
+  await createAuditLog({
+    action: "create",
+    resource: "page",
+    resourceId: page.id,
+    userId: user.id,
+    details: { title: page.title, slug: page.slug },
+  });
 
   return NextResponse.json(page, { status: 201 });
 }

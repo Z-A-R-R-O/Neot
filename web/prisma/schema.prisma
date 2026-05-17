@@ -404,16 +404,15 @@ model Report {
 }
 
 model AuditLog {
-  id          String   @id @default(uuid())
-  action      String
-  entityType  String   @map("entity_type")
-  entityId    String?  @map("entity_id")
-  actorId     String?  @map("actor_id")
-  metadata    String   @default("{}")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id         String   @id @default(uuid())
+  action     String
+  resource   String
+  resourceId String?  @map("resource_id")
+  userId     String?  @map("user_id")
+  details    String   @default("{}")
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  @@index([entityType, entityId])
-  @@index([actorId])
+  @@index([action, resource])
   @@index([createdAt])
   @@map("audit_logs")
 }

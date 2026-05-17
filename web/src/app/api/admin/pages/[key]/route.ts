@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit-log";
 
 const updatePageSchema = z.object({
   title: z.string().min(1).max(200).optional(),
@@ -102,6 +103,14 @@ export async function DELETE(
   }
 
   await prisma.customPage.delete({ where: { id: existing.id } });
+
+  await createAuditLog({
+    action: "delete",
+    resource: "page",
+    resourceId: existing.id,
+    userId: user.id,
+    details: { title: existing.title, slug: existing.slug },
+  });
 
   return NextResponse.json({ success: true });
 }
