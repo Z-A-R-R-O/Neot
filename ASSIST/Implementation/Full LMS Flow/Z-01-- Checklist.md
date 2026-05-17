@@ -288,8 +288,8 @@
 |---|---|---|
 | Thumbnails | ✅ | Course thumbnail upload |
 | Videos | ✅ | YouTube/Vimeo/MP4 |
-| PDFs | 🔲 | Not supported |
-| Attachments | 🔲 | Not supported |
+| PDFs | ✅ | Supported in media library (application/pdf in allowed types) |
+| Attachments | ✅ | Text, CSV, JSON files supported in media library |
 | File validation | ✅ | Upload validation |
 | Optimization | 🔲 | Not implemented |
 | CDN-ready architecture | 🔲 | Local uploads only |
@@ -381,7 +381,7 @@
 | CSRF protection | ✅ | Origin validation |
 | Rate limiting | ✅ | In-memory rate limiter |
 | Secure uploads | ✅ | File type/size validation |
-| Audit logs | 🔲 | Not implemented |
+| Audit logs | ✅ | Wired into page edits, role changes, theme changes, messages, media upload/delete |
 | Soft deletes | 🔲 | Cascade deletes only |
 
 ## 23. PERFORMANCE ARCHITECTURE (§PERFORMANCE ARCHITECTURE)
@@ -465,19 +465,19 @@
 | Admin System | 14 | 11 | 1 | 2 | 0 |
 | Parent System | 10 | 2 | 1 | 7 | 0 |
 | Gamification | 7 | 6 | 0 | 1 | 0 |
-| Media | 6 | 3 | 0 | 3 | 0 |
+| Media | 6 | 5 | 0 | 1 | 0 |
 | Search | 8 | 6 | 0 | 2 | 0 |
-| Analytics | 9 | 5 | 2 | 2 | 0 |
+| Analytics | 9 | 6 | 1 | 2 | 0 |
 | Certificates | 1 | 1 | 0 | 0 | 0 |
 | Recommendations | 2 | 1 | 1 | 0 | 0 |
 | Dev Mode | 7 | 4 | 3 | 0 | 0 |
 | CMS | 4 | 3 | 0 | 1 | 0 |
-| Security | 7 | 5 | 0 | 2 | 0 |
+| Security | 7 | 6 | 0 | 1 | 0 |
 | Performance | 6 | 3 | 0 | 3 | 0 |
 | Future Features | 13 | 0 | 0 | 13 | 0 |
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **135** | **19** | **50** | **0** |
+| **TOTAL** | **211** | **141** | **16** | **47** | **0** |
 
-> **Completion: 64.0%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Timed quizzes + short answer quizzes already implemented. Teacher course archive already implemented. Key gaps: parent communication, AI features, scaling.
+> **Completion: 66.8%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Key gaps: parent communication, AI features, scaling.
