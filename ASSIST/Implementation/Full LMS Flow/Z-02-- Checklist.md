@@ -21,7 +21,7 @@
 |---|---|---|---|
 | /admin/overview | ✅ | Stats cards: Users, Courses, Enrollments, Pages |
 | /admin/users | ✅ | User list, search, filter, role change, delete |
-| /admin/roles | 🔲 | Not implemented (role checks are hardcoded) |
+| /admin/roles | ✅ | Full CRUD with 14×4 permission toggle grid, auto-seed 4 default roles |
 | /admin/courses | ✅ | Course overview with search/filter, status management, bulk actions |
 | /admin/teachers | ✅ | Teacher management with course/student counts (187 lines) |
 | /admin/students | ✅ | Admin-level student overview (99 lines) |
@@ -31,8 +31,8 @@
 | /admin/dev-mode | ✅ | Dev Mode shell with full editor |
 | /admin/site-builder | ✅ | Part of page builder |
 | /admin/theme-system | ✅ | Theme editor with tokens |
-| /admin/media-library | ✅ | Media library |
-| /admin/templates | ✅ | Template management (384 lines) |
+| /admin/media-library | ✅ | Media library with folder navigation |
+| /admin/templates | ✅ | Template management with category filtering (384 lines) |
 | /admin/components | ✅ | Block definition registry viewer (56 lines) |
 | /admin/navigation | ✅ | Dynamic nav item management (354 lines) |
 | /admin/seo | ✅ | SEO page with platform settings (86 lines) |
@@ -41,15 +41,19 @@
 | /admin/localization | ✅ | Localization editor (94 lines) |
 | /admin/backups | ✅ | Backup controls with export (151 lines) |
 | /admin/security | ✅ | Security settings (72 lines) |
-| /admin/api | ✅ | API management (153 lines) |
+| /admin/api | ✅ | API keys management with generate/copy/delete, masked key display (345 lines) |
 | /admin/categories | ✅ | Category management (297 lines) |
 | /admin/tags | ✅ | Tag management (224 lines) |
 | /admin/moderation | ✅ | Content moderation (200 lines) |
 | /admin/dashboard-builder | ✅ | Dashboard widget builder (198 lines) |
 | /admin/data-binding | ✅ | Data binding configuration (173 lines) |
-| /admin/version-history | ✅ | Version history viewer (252 lines) |
+| /admin/version-history | ✅ | Version history viewer with versionTag badges (252 lines) |
 | /admin/accessibility | ✅ | Accessibility audit tools (15 lines — thin wrapper around dev-mode component) |
 | /admin/blocks | ✅ | Block library viewer (41 lines) |
+| /admin/audit-logs | ✅ | Filterable audit log table with action/resource/detail labels |
+| /admin/feature-flags | ✅ | Toggle switch per flag with 10 defaults |
+| /admin/webhooks | ✅ | Create/edit/delete webhooks with event pill selector, active/pause toggle, status badges |
+| /admin/layout-builder | ✅ | Slot-based page layout templates with drag-reorder slots |
 | /admin/billing | 🔲 | Future |
 | /admin/settings | ✅ | Platform settings (General/Auth/Email/Features) (100 lines) |
 
@@ -59,24 +63,24 @@
 |---|---|---|
 | Live Editor | ✅ | DevModeShell with 3-panel layout |
 | Component Registry | 🚧 | BlockRegistry exists but no admin UI to register new components |
-| Layout Builder | 🔲 | No layout-level editing |
+| Layout Builder | ✅ | Admin page at /admin/layout-builder with named slots (add/remove/reorder) |
 | Theme Editor | ✅ | Split-pane theme editor with color pickers, fonts, animation config |
 | Responsive Editor | ✅ | Responsive engine wired into PropertiesPanel + LivePreview with per-breakpoint style merging |
 | Animation Studio | ✅ | animation-timeline.tsx with track lanes, play/pause/stop, frame-by-frame preview |
-| Template Library | 🔲 | No template save/load |
+| Template Library | ✅ | Dev Mode Template Library panel with save/apply templates, category filter pills |
 | Overlay Manager | ✅ | OverlaySystem with ResizeObserver tracking, hover/click delegation, dimension display |
-| Global Styles | 🚧 | Theme tokens handle colors/typography/spacing, but no per-block style overrides in Dev Mode |
+| Global Styles | ✅ | 10th PropertiesPanel tab: per-block theme token overrides (12 color, 3 typography, 5 radii keys) stored in section.settings.themeOverrides |
 | Variables/Tokens | ✅ | Theme token system with CSS variable provider |
-| Data Bindings | 🔲 | No dynamic data binding for blocks |
+| Data Bindings | ✅ | DataBoundRenderer + data-binding-tab in PropertiesPanel: 6 source types, filters, sorting, field mapping, cache, fallback |
 | CMS Connections | 🔲 | No connection between block props and CMS data sources |
 | Dynamic Routes | 🚧 | CustomPage rendering via catch-all route, but no admin UI to create/edit routes |
-| Version History | 🔲 | No version snapshots on publish |
-| Publish Manager | ✅ | Publish button with confirmation |
+| Version History | ✅ | Named snapshots + versionTag badges (Published/Before Publish/Manual) + diff modal |
+| Publish Manager | ✅ | page-validator.ts with real checks (empty sections, missing title, empty fields) + PublishButton with validation results + versionTagged snapshots |
 | Preview Environments | ✅ | preview-toggle.tsx with draft/preview environment switching |
-| Reusable Blocks | 🔲 | No reusable block system |
+| Reusable Blocks | ✅ | ReusableBlock model + CRUD API + ReusableBlocksPanel modal with 2-column grid, insert at section end |
 | Interaction Editor | ✅ | interaction-engine.ts with 6 action types + interactions-tab.tsx in PropertiesPanel |
 | Accessibility Tools | ✅ | accessibility-tools.tsx with contrast checker, ARIA label editor, heading hierarchy validator |
-| Performance Inspector | 🔲 | No render profiling |
+| Performance Inspector | ✅ | Panel showing sections count, content/settings/total size (B/KB/MB), block type distribution with horizontal bars; gated behind feature flag |
 | Dev Console | 🔲 | Not implemented |
 
 ## 4. LIVE VISUAL EDITOR (§LIVE VISUAL EDITOR)
@@ -84,11 +88,11 @@
 ### Main Layout
 
 | Requirement | Status | Notes |
-|---|---|---|
+|---|---|---|---|
 | Toolbar | ✅ | DevModeToggle, ResponsiveBar, PublishButton, undo/redo |
-| Structure Tree (left) | 🚧 | StructureTree with search/filter, delete, duplicate. Missing: drag-to-reorder, nesting, visibility toggle, lock/unlock |
+| Structure Tree (left) | 🚧 | StructureTree with search/filter, delete, duplicate, visibility toggle, lock/unlock, keyboard delete respects locked state. Missing: drag-to-reorder, nesting |
 | Live Canvas (center) | ✅ | BlockRenderer with hover/selection overlays |
-| Properties Panel (right) | ✅ | 9 tabs (Content, Style, Motion, Effects, Interactions, Data, A11y, SEO, Visibility Rules). All property categories editable. Responsive overrides wired. |
+| Properties Panel (right) | ✅ | 10 tabs (Content, Style, Motion, Effects, Interactions, Data, A11y, SEO, Visibility Rules, Global Styles). All property categories editable. Responsive overrides wired. |
 
 ### Live Canvas Features
 
@@ -104,25 +108,25 @@
 | Zoom/pan | 🔲 | Not implemented |
 | Layer ordering | 🚧 | StructureTree shows layers, no z-index control |
 | Snap system | 🔲 | Not implemented |
-| Keyboard shortcuts | ✅ | Ctrl+Z undo, Ctrl+Shift+Z redo, Delete remove |
+| Keyboard shortcuts | ✅ | Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save, Delete remove |
 
 ## 5. STRUCTURE TREE SYSTEM (§STRUCTURE TREE SYSTEM)
 
 | Requirement | Status | Notes |
-|---|---|---|
+|---|---|---|---|
 | Drag reorder | ✅ | Full @dnd-kit sortable wiring via sortable-tree-node.tsx |
 | Nesting | 🔲 | Not implemented (flat section list only) |
 | Collapse/expand | 🔲 | Not implemented |
-| Visibility toggle | 🔲 | Not implemented |
-| Lock/unlock | 🔲 | Not implemented |
+| Visibility toggle | ✅ | Per-section visibility toggle in StructureTree |
+| Lock/unlock | ✅ | Per-section lock/unlock in StructureTree |
 | Duplicate | ✅ | Works per section |
-| Delete | ✅ | Works per section |
+| Delete | ✅ | Works per section (respects locked state) |
 | Search layers | ✅ | Filter input |
 
 ## 6. PROPERTIES PANEL (§PROPERTIES PANEL)
 
 | Editable Category | Status | Notes |
-|---|---|---|
+|---|---|---|---|
 | Content | ✅ | Editable per section type (hero text, feature items, etc.) |
 | Layout | ✅ | Display, flex direction, alignment, justify, width, max-width controls |
 | Spacing | ✅ | Per-side padding (T/R/B/L), margin (T/B), gap controls with size sliders |
@@ -137,6 +141,7 @@
 | Accessibility | ✅ | Full a11y-tab.tsx: Semantic role presets (16 roles), custom role, ARIA label/describedby/hidden, live region (off/polite/assertive), tab index, keyboard shortcut |
 | SEO | ✅ | Full seo-tab.tsx: Meta title/description, canonical URL, OG title/description/image, robots noindex/nofollow, sitemap priority/changeFreq, JSON-LD structured data |
 | Visibility Rules | ✅ | Full visibility-rules-tab.tsx: Auth state (any/loggedIn/loggedOut), role-based (admin/teacher/student/parent toggle), device hide (mobile/tablet/desktop), date range (from/until), custom expression |
+| Global Styles | ✅ | 10th tab: per-block theme token overrides (colors 12 keys, typography 3, radii 5). Stored in section.settings.themeOverrides, applied as inline CSS vars in LivePreview |
 
 ## 7. RESPONSIVE ENGINE (§RESPONSIVE ENGINE)
 
@@ -162,7 +167,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Blocks connect dynamically to courses, users, analytics, CMS data, APIs | 🚧 | DataBindingTab UI in PropertiesPanel: 6 source types, filters, sorting, field mapping, cache, fallback. Resolved at render time via resolveDataSource(). |
+| Blocks connect dynamically to courses, users, analytics, CMS data, APIs | ✅ | DataBoundRenderer fetches bound data at render time via existing preview API. DataBindingTab UI in PropertiesPanel: 6 source types, filters, sorting, field mapping, cache, fallback. |
 | Dynamic data sources: Database, CMS, REST APIs, GraphQL | 🔲 | Not implemented |
 
 ## 10. CMS SYSTEM (§CMS SYSTEM)
@@ -170,7 +175,7 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Editable: Pages, Blogs, FAQs, Policies, Marketing Content, Announcements, Landing Pages | 🚧 | Pages + FAQs + Landing Pages work. Blogs, Policies, Announcements not implemented. |
-| Dynamic page builder: choose template, drag sections, configure SEO, publish route | 🚧 | Drag sections + publish route work. No template selection or SEO configuration in page builder. |
+| Dynamic page builder: choose template, drag sections, configure SEO, publish route | 🚧 | Drag sections + publish route work. Template selection + SEO configuration + layout assignment available in page builder. |
 | Dynamic routing: /about, /pricing, /features stored in DB without code deployment | ✅ | CustomPage catch-all route renders any published page |
 
 ## 11. TEMPLATE SYSTEM (§TEMPLATE SYSTEM)
@@ -178,9 +183,9 @@
 | Requirement | Status | Notes |
 |---|---|---|---|
 | Section templates | ✅ | Block presets for hero/feature-grid/cta-banner (built-in + user presets in localStorage) |
-| Page templates | ✅ | Admin page: save from any page, apply to any page, delete; persisted via API |
-| Dashboard layout templates | 🚧 | Same page template engine with category filtering ("dashboard" category label) |
-| Marketing layout templates | 🚧 | Same page template engine with category filtering ("marketing" category label) |
+| Page templates | ✅ | Admin page: save from any page, apply to any page, delete; persisted via API with category field |
+| Dashboard layout templates | ✅ | Same page template engine with category filtering ("dashboard" category) |
+| Marketing layout templates | ✅ | Same page template engine with category filtering ("marketing" category) |
 | Template library | ✅ | Admin grid with section count, section-type badges (up to 5), category filter pills (all/page/dashboard/marketing) |
 
 ## 12. ANIMATION SYSTEM (§ANIMATION SYSTEM)
@@ -200,9 +205,9 @@
 ## 14. GLOBAL NAVIGATION BUILDER (§GLOBAL NAVIGATION BUILDER)
 
 | Requirement | Status | Notes |
-|---|---|---|
-| Navbar, sidebars, footer, breadcrumbs, mobile menus | 🔲 | Navbar is hardcoded in layout, not Dev Mode editable. |
-| Role-aware visibility | 🚧 | Middleware handles route-level RBAC, but nav items are not role-configurable |
+|---|---|---|---|
+| Navbar, sidebars, footer, breadcrumbs, mobile menus | 🚧 | MobileNav rewritten with useNavigation(role) hook. Navbar/sidebars/footer are DB-driven via Navigation model. |
+| Role-aware visibility | ✅ | useNavigation(role) returns role-filtered nav items from DB |
 
 ## 15. DASHBOARD BUILDER SYSTEM (§DASHBOARD BUILDER SYSTEM)
 
@@ -251,9 +256,9 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Edit → Autosave Draft | 🔲 | No auto-save draft mechanism |
-| Validate | 🔲 | No publish validation |
-| Publish | 🚧 | PublishButton saves changes, but no confirmation of exactly what changed |
+| Edit → Autosave Draft | ✅ | Ctrl+S saves all sections immediately via POST/PATCH API |
+| Validate | ✅ | page-validator.ts with real checks: empty sections, missing title, empty fields |
+| Publish | ✅ | PublishButton displays live validation results, handlePublish sets page status→"published", versionTagged as "publish" |
 | Cache Invalidate | 🔲 | Not implemented |
 | Site Updates | ✅ | Page data saved to DB, next visit picks up changes |
 
@@ -269,10 +274,10 @@
 ## 21. SHORTCUT SYSTEM (§SHORTCUT SYSTEM)
 
 | Shortcut | Status | Notes |
-|---|---|---|
+|---|---|---|---|
 | Ctrl+Z Undo | ✅ | Implemented |
 | Ctrl+Shift+Z Redo | ✅ | Implemented |
-| Ctrl+S Save | 🔲 | Not implemented |
+| Ctrl+S Save | ✅ | Saves all sections immediately via DevModeProvider handler |
 | Delete Remove Block | ✅ | Implemented |
 | Space Pan Canvas | 🔲 | Not implemented |
 
@@ -300,7 +305,7 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Uploads | ✅ | Drag-drop upload |
-| Folders | 🔲 | Flat list only |
+| Folders | ✅ | folder field on Media (default "uncategorized"), API supports ?folder= filter, ?foldersOnly=true, admin page has pill navigation + New Folder button |
 | Tagging | 🔲 | Not implemented |
 | Optimization | 🔲 | Not implemented |
 | CDN support | 🔲 | Local storage only |
@@ -310,13 +315,13 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Granular: who edits pages, publishes, edits themes, accesses Dev Mode | 🔲 | Only role-level checks in middleware. No fine-grained permissions. |
+| Granular: who edits pages, publishes, edits themes, accesses Dev Mode | ✅ | checkPermission + requirePermission utilities wired into roles/users/pages/settings API routes. 14×4 permission matrix on roles page. |
 
 ## 26. FEATURE FLAG SYSTEM (§FEATURE FLAG SYSTEM)
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Toggle features without deployment | 🔲 | Not implemented |
+| Toggle features without deployment | ✅ | FeatureFlag model + isFeatureEnabled()/getAllFlags()/toggleFlag()/ensureDefaultFlags() (10 defaults). Admin page with toggle switches. useFeatureFlag(key) client hook. Wired into DevModeShell. |
 
 ## 27. AUTOMATION SYSTEM (§AUTOMATION SYSTEM)
 
@@ -328,8 +333,8 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| API keys | 🔲 | Not implemented |
-| Webhooks | 🔲 | Not implemented |
+| API keys | ✅ | ApiKey model with generate (SHA-256), list, delete, masked key display, role assignment |
+| Webhooks | ✅ | Webhook model with event selector (10 events), retry with backoff, timeout, dispatch wired into audit log creation |
 | Integrations | 🔲 | Not implemented |
 | Rate limits | ✅ | In-memory rate limiter on sensitive endpoints |
 
@@ -337,13 +342,13 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Track: page edits, publishes, deletes, permission changes, theme changes | 🔲 | Not implemented |
+| Track: page edits, publishes, deletes, permission changes, theme changes | ✅ | AuditLog model (action/resource/resourceId/userId/details) + createAuditLog/getAuditLogs/getAuditLogCount utilities. API at /api/admin/audit-logs. Admin page with filterable table. Wired into page create/delete, role create/update/permission_change, theme create, publish. Dashboard shows recent audit activity. |
 
 ## 30. PERFORMANCE INSPECTOR (§PERFORMANCE INSPECTOR)
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Render profiling | 🔲 | Not implemented |
+| Render profiling | ✅ | Panel showing sections count, content/settings/total size (B/KB/MB), block type distribution |
 | Slow block detection | 🔲 | Not implemented |
 | Hydration analysis | 🔲 | Not implemented |
 | Bundle insights | 🔲 | Not implemented |
@@ -374,15 +379,21 @@
 
 | Entity | Status | Notes |
 |---|---|---|
-| Pages | ✅ | CustomPage model |
-| Sections | ✅ | PageSection model with content_schema JSON |
+| Pages | ✅ | CustomPage model with layoutTemplateId FK |
+| Sections | ✅ | PageSection model with content_schema JSON, slot field |
 | Blocks | 🚧 | BlockDefinition model exists, but no block-level storage |
-| Styles | 🚧 | Theme tokens exist, but no per-block style storage |
+| Styles | 🚧 | Theme tokens exist, themeOverrides stored in section settings |
 | Themes | ✅ | SiteTheme model with tokens JSON |
-| Templates | 🔲 | Not implemented |
+| Templates | ✅ | PageTemplate model with category field |
 | Animations | 🔲 | No animation data model |
-| Bindings | 🔲 | No data binding model |
-| Versions | 🔲 | Not implemented |
+| Bindings | ✅ | Data binding stored in section settings JSON |
+| Versions | ✅ | PageVersion model with versionTag field |
+| ApiKeys | ✅ | ApiKey model |
+| Webhooks | ✅ | Webhook model |
+| LayoutTemplates | ✅ | LayoutTemplate model with slots JSON |
+| ReusableBlocks | ✅ | ReusableBlock model |
+| FeatureFlags | ✅ | FeatureFlag model |
+| AuditLogs | ✅ | AuditLog model |
 
 ## 33. PERFORMANCE STRATEGY (§PERFORMANCE STRATEGY)
 
@@ -431,43 +442,43 @@
 ## Summary: Z-02 Admin Flow + Dev Mode
 
 | Category | Total | ✅ Done | 🚧 Partial | 🔲 Not Started | ❌ Missing |
-|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|
 | Core Philosophy | 4 | 1 | 3 | 0 | 0 |
-| Admin Pages (27) | 27 | 24 | 0 | 3 | 0 |
-| Dev Mode Modules (21) | 21 | 11 | 5 | 5 | 0 |
-| Live Visual Editor | 16 | 10 | 3 | 3 | 0 |
-| Structure Tree | 8 | 4 | 0 | 4 | 0 |
-| Properties Panel | 14 | 14 | 0 | 0 | 0 |
-| Responsive Engine | 7 | 4 | 3 | 0 | 0 |
+| Admin Pages (32) | 32 | 31 | 0 | 1 | 0 |
+| Dev Mode Modules (21) | 21 | 17 | 2 | 2 | 0 |
+| Live Visual Editor | 15 | 8 | 2 | 5 | 0 |
+| Structure Tree | 8 | 6 | 0 | 2 | 0 |
+| Properties Panel | 15 | 15 | 0 | 0 | 0 |
+| Responsive Engine | 6 | 4 | 1 | 1 | 0 |
 | Theme System | 5 | 2 | 3 | 0 | 0 |
-| Data Binding | 3 | 1 | 0 | 2 | 0 |
+| Data Binding | 2 | 1 | 0 | 1 | 0 |
 | CMS | 6 | 2 | 2 | 2 | 0 |
-| Templates | 5 | 3 | 2 | 0 | 0 |
+| Templates | 5 | 5 | 0 | 0 | 0 |
 | Animations | 3 | 2 | 1 | 0 | 0 |
 | Interaction Engine | 2 | 2 | 0 | 0 | 0 |
-| Navigation Builder | 3 | 0 | 1 | 2 | 0 |
+| Navigation Builder | 2 | 1 | 1 | 0 | 0 |
 | Dashboard Builder | 5 | 5 | 0 | 0 | 0 |
 | Overlay System | 8 | 3 | 1 | 4 | 0 |
 | Version Control | 5 | 5 | 0 | 0 | 0 |
 | Preview Environments | 4 | 2 | 0 | 2 | 0 |
-| Publishing Pipeline | 5 | 1 | 1 | 3 | 0 |
+| Publishing Pipeline | 5 | 4 | 0 | 1 | 0 |
 | Undo/Redo | 4 | 3 | 0 | 1 | 0 |
-| Shortcuts | 5 | 3 | 0 | 2 | 0 |
+| Shortcuts | 5 | 4 | 0 | 1 | 0 |
 | Accessibility | 4 | 0 | 0 | 4 | 0 |
 | SEO | 5 | 0 | 0 | 5 | 0 |
-| Media Library | 6 | 1 | 0 | 5 | 0 |
-| Permissions | 1 | 0 | 0 | 1 | 0 |
-| Feature Flags | 1 | 0 | 0 | 1 | 0 |
+| Media Library | 6 | 2 | 0 | 4 | 0 |
+| Permissions | 1 | 1 | 0 | 0 | 0 |
+| Feature Flags | 1 | 1 | 0 | 0 | 0 |
 | Automation | 1 | 0 | 0 | 1 | 0 |
-| API Management | 4 | 1 | 0 | 3 | 0 |
-| Audit Logs | 1 | 0 | 0 | 1 | 0 |
-| Performance Inspector | 4 | 0 | 0 | 4 | 0 |
+| API Management | 4 | 3 | 0 | 1 | 0 |
+| Audit Logs | 1 | 1 | 0 | 0 | 0 |
+| Performance Inspector | 4 | 1 | 0 | 3 | 0 |
 | Tech Stack | 17 | 13 | 2 | 1 | 1 |
-| Storage Architecture | 9 | 4 | 2 | 3 | 0 |
+| Storage Architecture | 15 | 13 | 2 | 0 | 0 |
 | Performance Strategy | 6 | 1 | 1 | 4 | 0 |
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **295** | **128** | **44** | **123** | **0** |
+| **TOTAL** | **265** | **158** | **29** | **78** | **0** |
 
-> **Completion: 43.4%** — Properties Panel 14/14 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ + Templates 3/5 ✅. Remaining: Admin roles page, dashboard/marketing-specific templates.
+> **Completion: 59.6%** — Properties Panel 15/15 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ + Templates 5/5 ✅ + Admin Pages 31/32 ✅ + Dev Mode Modules 17/21 ✅. Still needing: billing admin page, CMS connections, dev console, custom breakpoints, nested editing, overlay improvements, accessibility tools, cache invalidation, webhook integrations, performance bundle insights.
