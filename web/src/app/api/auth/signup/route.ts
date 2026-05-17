@@ -9,6 +9,7 @@ const signupSchema = z.object({
   password: z.string().min(6),
   ageGroup: z.enum(["under13", "13to18", "18plus"]).optional(),
   fullName: z.string().optional(),
+  role: z.enum(["student", "teacher", "parent"]).optional().default("student"),
 });
 
 export async function POST(request: Request) {
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
-  const { email, password, ageGroup, fullName } = parsed.data;
+  const { email, password, ageGroup, fullName, role } = parsed.data;
 
   const existing = await prisma.profile.findFirst({ where: { email } });
   if (existing) {
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
       fullName: fullName ?? null,
       passwordHash: hashedPassword,
       ageGroup: ageGroup ?? null,
-      role: "student",
+      role: role,
     },
   });
 

@@ -13,6 +13,8 @@ import {
   ArrowRight,
   ArrowLeft,
   Loader2,
+  Users,
+  HeartHandshake,
 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -104,7 +106,10 @@ const AGE_GROUP_OPTIONS = [
   { value: "adult", label: "Adult (18+)" },
 ];
 
+const roleStep = { id: "role", label: "Role", icon: Users };
+
 const studentSteps = [
+  roleStep,
   { id: "welcome", label: "Welcome", icon: Sparkles },
   { id: "interests", label: "Interests", icon: Heart },
   { id: "experience", label: "Experience", icon: Target },
@@ -113,6 +118,7 @@ const studentSteps = [
 ];
 
 const teacherSteps = [
+  roleStep,
   { id: "welcome", label: "Welcome", icon: GraduationCap },
   { id: "subjects", label: "Subjects", icon: BookOpen },
   { id: "grades", label: "Grades", icon: Target },
@@ -121,6 +127,7 @@ const teacherSteps = [
 ];
 
 const parentSteps = [
+  roleStep,
   { id: "welcome", label: "Welcome", icon: Heart },
   { id: "child", label: "Child", icon: Heart },
   { id: "interests", label: "Interests", icon: BookOpen },
@@ -153,11 +160,12 @@ function ChipButton({
 }
 
 export function OnboardingWizard(props: OnboardingWizardProps) {
-  const { role } = props;
+  const { role: initialRole } = props;
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [isSubmitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState(initialRole);
 
   const [data, setData] = useState<OnboardingData>({
     fullName: "",
@@ -175,9 +183,9 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
   });
 
   const steps =
-    role === "teacher"
+    selectedRole === "teacher"
       ? teacherSteps
-      : role === "parent"
+      : selectedRole === "parent"
         ? parentSteps
         : studentSteps;
 
@@ -213,22 +221,35 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
     setSubmitting(true);
     setServerError(null);
 
+    if (selectedRole !== initialRole) {
+      const roleRes = await fetch("/api/auth/role", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: selectedRole }),
+      });
+      if (!roleRes.ok) {
+        setServerError("Failed to update role");
+        setSubmitting(false);
+        return;
+      }
+    }
+
     const profileBody: Record<string, unknown> = {};
 
     if (data.fullName) profileBody.fullName = data.fullName;
 
-    if (role === "student") {
+    if (selectedRole === "student") {
       if (data.ageGroup) profileBody.ageGroup = data.ageGroup;
       if (data.interests.length > 0) profileBody.interests = data.interests;
     }
 
-    if (role === "teacher") {
+    if (selectedRole === "teacher") {
       if (data.subjects.length > 0) profileBody.subjects = data.subjects;
       if (data.gradeLevels.length > 0) profileBody.gradeLevels = data.gradeLevels;
       if (data.bio) profileBody.bio = data.bio;
     }
 
-    if (role === "parent") {
+    if (selectedRole === "parent") {
       if (data.childName) profileBody.childName = data.childName;
       if (data.childInterests.length > 0) profileBody.childInterests = data.childInterests;
     }
@@ -250,21 +271,21 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
       fullName: data.fullName || undefined,
     };
 
-    if (role === "student") {
+    if (selectedRole === "student") {
       onboardingBody.ageGroup = data.ageGroup || undefined;
       onboardingBody.interests = data.interests;
       onboardingBody.experienceLevel = data.experienceLevel || undefined;
       onboardingBody.goals = data.goals || undefined;
     }
 
-    if (role === "teacher") {
+    if (selectedRole === "teacher") {
       onboardingBody.bio = data.bio || undefined;
       onboardingBody.subjects = data.subjects;
       onboardingBody.gradeLevels = data.gradeLevels;
       onboardingBody.yearsExperience = data.yearsExperience || undefined;
     }
 
-    if (role === "parent") {
+    if (selectedRole === "parent") {
       onboardingBody.childName = data.childName || undefined;
       onboardingBody.childAgeGroup = data.childAgeGroup || undefined;
       onboardingBody.childInterests = data.childInterests;
@@ -288,19 +309,21 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
       teacher: "/teacher",
       parent: "/dashboard",
     };
-    router.push(dashboards[role] ?? "/dashboard");
+    router.push(dashboards[selectedRole] ?? "/dashboard");
   }
 
   function renderStep() {
     const stepId = steps[step].id;
 
     switch (stepId) {
+      case "role":
+        return renderRoleStep();
       case "welcome":
         return renderWelcomeStep();
       case "interests":
-        return role === "parent" ? renderChildInterestsStep() : renderInterestsStep();
+        return selectedRole === "parent" ? renderChildInterestsStep() : renderInterestsStep();
       case "experience":
-        return role === "student" ? renderExperienceLevelStep() : renderTeacherExperienceStep();
+        return selectedRole === "student" ? renderExperienceLevelStep() : renderTeacherExperienceStep();
       case "goals":
         return renderGoalsStep();
       case "subjects":
@@ -314,6 +337,69 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
       default:
         return null;
     }
+  }
+
+  function renderRoleStep() {
+    const roles = [
+      { value: "student", label: "Student", description: "I want to learn and explore", icon: GraduationCap },
+      { value: "teacher", label: "Teacher", description: "I want to create courses and teach", icon: Users },
+      { value: "parent", label: "Parent", description: "I want to guide my child's learning", icon: HeartHandshake },
+    ];
+
+    return (
+      <motion.div
+        key="role"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3, ease: easing }}
+        className="space-y-6"
+      >
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-bold text-foreground">What brings you here?</h2>
+          <p className="text-sm text-muted-foreground">Choose how you&apos;ll use NEOT</p>
+        </div>
+
+        <div className="space-y-3">
+          {roles.map((r) => {
+            const Icon = r.icon;
+            const active = selectedRole === r.value;
+            return (
+              <button
+                key={r.value}
+                type="button"
+                onClick={() => setSelectedRole(r.value)}
+                className={`relative flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all ${
+                  active
+                    ? "border-primary-500/50 bg-primary-500/10 shadow-sm"
+                    : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] hover:border-[rgba(255,255,255,0.18)]"
+                }`}
+              >
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+                  active ? "bg-primary-500/20 text-primary-400" : "bg-muted/30 text-muted-foreground"
+                }`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">{r.label}</p>
+                  <p className="text-xs text-muted-foreground">{r.description}</p>
+                </div>
+                {active && <Check className="h-5 w-5 text-primary-400" />}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          onClick={nextStep}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-500 py-3 text-sm font-semibold text-white hover:bg-primary-400 transition-colors"
+        >
+          Continue
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </motion.div>
+    );
   }
 
   function renderWelcomeStep() {
@@ -341,7 +427,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
           />
         </div>
 
-        {role === "student" && (
+        {selectedRole === "student" && (
           <div className="space-y-3">
             <Label required>Age Group</Label>
             <div className="grid grid-cols-3 gap-3">
@@ -369,7 +455,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
           </div>
         )}
 
-        {role === "teacher" && (
+        {selectedRole === "teacher" && (
           <div className="space-y-2">
             <Label htmlFor="bio">Short Bio</Label>
             <Textarea
@@ -385,7 +471,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
           </div>
         )}
 
-        {role === "parent" && (
+        {selectedRole === "parent" && (
           <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
             <p className="text-sm text-muted-foreground">
               We&apos;ll help you track your child&apos;s learning journey.
@@ -820,7 +906,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
               <dd className="font-semibold text-foreground">{data.fullName}</dd>
             </div>
 
-            {role === "student" && (
+            {selectedRole === "student" && (
               <>
                 {data.ageGroup && (
                   <div className="flex items-center justify-between">
@@ -857,7 +943,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
               </>
             )}
 
-            {role === "teacher" && (
+            {selectedRole === "teacher" && (
               <>
                 {data.bio && (
                   <div className="flex items-start justify-between">
@@ -894,7 +980,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
               </>
             )}
 
-            {role === "parent" && (
+            {selectedRole === "parent" && (
               <>
                 {data.childName && (
                   <div className="flex items-center justify-between">
@@ -949,7 +1035,7 @@ export function OnboardingWizard(props: OnboardingWizardProps) {
               </>
             ) : (
               <>
-                {role === "student" ? "Start Learning" : "Go to Dashboard"}
+                {selectedRole === "student" ? "Start Learning" : "Go to Dashboard"}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </>
             )}

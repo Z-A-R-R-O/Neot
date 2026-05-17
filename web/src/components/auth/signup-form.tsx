@@ -40,7 +40,7 @@ export function SignupForm() {
 
   async function onSubmit(data: SignupData) {
     setServerError(null);
-    const { error } = await signup(data.email, data.password);
+    const { error } = await signup(data.email, data.password, undefined, data.ageGroup);
     if (error) {
       setServerError(error.message);
     } else {
