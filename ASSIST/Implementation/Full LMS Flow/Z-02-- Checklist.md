@@ -88,7 +88,7 @@
 | Toolbar | ✅ | DevModeToggle, ResponsiveBar, PublishButton, undo/redo |
 | Structure Tree (left) | 🚧 | StructureTree with search/filter, delete, duplicate. Missing: drag-to-reorder, nesting, visibility toggle, lock/unlock |
 | Live Canvas (center) | ✅ | BlockRenderer with hover/selection overlays |
-| Properties Panel (right) | ✅ | 5 tabs (Content, Style, Motion, Effects, Interactions). Responsive overrides wired. |
+| Properties Panel (right) | ✅ | 9 tabs (Content, Style, Motion, Effects, Interactions, Data, A11y, SEO, Visibility Rules). All property categories editable. Responsive overrides wired. |
 
 ### Live Canvas Features
 
@@ -136,7 +136,7 @@
 | Data | ✅ | Full data-binding-tab.tsx: 6 source types (courses/users/categories/enrollments/lessons/analytics), filters, sorting, field mapping, cache duration, fallback display |
 | Accessibility | ✅ | Full a11y-tab.tsx: Semantic role presets (16 roles), custom role, ARIA label/describedby/hidden, live region (off/polite/assertive), tab index, keyboard shortcut |
 | SEO | ✅ | Full seo-tab.tsx: Meta title/description, canonical URL, OG title/description/image, robots noindex/nofollow, sitemap priority/changeFreq, JSON-LD structured data |
-| Visibility Rules | 🔲 | Not implemented |
+| Visibility Rules | ✅ | Full visibility-rules-tab.tsx: Auth state (any/loggedIn/loggedOut), role-based (admin/teacher/student/parent toggle), device hide (mobile/tablet/desktop), date range (from/until), custom expression |
 
 ## 7. RESPONSIVE ENGINE (§RESPONSIVE ENGINE)
 
@@ -437,7 +437,7 @@
 | Dev Mode Modules (21) | 21 | 11 | 5 | 5 | 0 |
 | Live Visual Editor | 16 | 10 | 3 | 3 | 0 |
 | Structure Tree | 8 | 4 | 0 | 4 | 0 |
-| Properties Panel | 14 | 13 | 0 | 1 | 0 |
+| Properties Panel | 14 | 14 | 0 | 0 | 0 |
 | Responsive Engine | 7 | 4 | 3 | 0 | 0 |
 | Theme System | 5 | 2 | 3 | 0 | 0 |
 | Data Binding | 3 | 1 | 0 | 2 | 0 |
@@ -468,6 +468,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **295** | **114** | **42** | **139** | **0** |
+| **TOTAL** | **295** | **115** | **42** | **138** | **0** |
 
-> **Completion: 38.6%** — Admin pages 24/27. Properties Panel has 13/14 categories (Data, A11y, SEO added). Remaining: Visibility Rules in Properties Panel; version control, dashboard builder.
+> **Completion: 39.0%** — Properties Panel 14/14 ✅ fully complete (all categories implemented: Content, Style, Motion, Effects, Interactions, Data, Accessibility, SEO, Visibility Rules). Remaining: version control, dashboard builder, template system.

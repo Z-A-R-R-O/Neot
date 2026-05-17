@@ -11,6 +11,7 @@ import { EffectsTab } from "./section-editors/effects-tab";
 import { DataBindingTab } from "./section-editors/data-binding-tab";
 import { AccessibilityTab } from "./section-editors/accessibility-tab";
 import { SEOTab } from "./section-editors/seo-tab";
+import { VisibilityRulesTab } from "./section-editors/visibility-rules-tab";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -24,8 +25,22 @@ interface PropertiesPanelProps {
   onStyleChange?: (id: string, styles: Record<string, unknown>) => void;
 }
 
+type Tab = "content" | "style" | "motion" | "effects" | "interactions" | "data" | "a11y" | "seo" | "rules";
+
+const allTabs: { key: Tab; label: string }[] = [
+  { key: "content", label: "content" },
+  { key: "style", label: "style" },
+  { key: "motion", label: "motion" },
+  { key: "effects", label: "effects" },
+  { key: "interactions", label: "int" },
+  { key: "data", label: "data" },
+  { key: "a11y", label: "a11y" },
+  { key: "seo", label: "seo" },
+  { key: "rules", label: "rules" },
+];
+
 export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange }: PropertiesPanelProps) {
-  const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects" | "interactions" | "data" | "a11y" | "seo">("content");
+  const [activeTab, setActiveTab] = useState<Tab>("content");
   const enabled = useDevModeStore((s) => s.enabled);
 
   if (!enabled) return null;
@@ -58,18 +73,18 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
           </div>
         </div>
 
-        <div className="grid grid-cols-8 gap-1 rounded-xl bg-muted/20 p-1 border border-border/50">
-          {(["content", "style", "motion", "effects", "interactions", "data", "a11y", "seo"] as const).map((tab) => (
+        <div className="flex gap-1 overflow-x-auto rounded-xl bg-muted/20 p-1 border border-border/50 custom-scrollbar">
+          {allTabs.map(({ key, label }) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`rounded-lg py-1.5 text-[9px] font-bold uppercase tracking-wider transition-all ${
-                activeTab === tab 
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`shrink-0 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase tracking-wider transition-all ${
+                activeTab === key 
                   ? "bg-background text-foreground shadow-sm ring-1 ring-black/5" 
                   : "text-muted-foreground hover:text-foreground hover:bg-white/5"
               }`}
             >
-              {tab}
+              {label}
             </button>
           ))}
         </div>
@@ -156,6 +171,10 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
         {activeTab === "seo" && (
           <SEOTab sectionId={selectedBlock.id} />
         )}
+
+        {activeTab === "rules" && (
+          <VisibilityRulesTab sectionId={selectedBlock.id} />
+        )}
       </div>
     </div>
   );
@@ -180,5 +199,3 @@ function PropertyRow({ label, children }: { label: string; children: React.React
     </div>
   );
 }
-
-
