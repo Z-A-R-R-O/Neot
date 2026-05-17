@@ -188,9 +188,9 @@
 | Students | ✅ | Students page with search/sort/pagination |
 | Analytics | ✅ | 4 Recharts charts (enrollments, completion rates, quiz scores, active students) |
 | Earnings | 🔲 | Future |
-| Reviews | 🔲 | Not implemented |
+| Reviews | ✅ | Course reviews/ratings system: students can rate and review courses, teachers can view feedback |
 | Messages | ✅ | Teacher messaging students: Message model, send/list/read APIs, compose UI, student inbox, notifications |
-| Settings | 🔲 | Not implemented |
+| Settings | ✅ | Teacher settings with profile, notification preferences (enrollments, completions, messages, weekly report) |
 
 ### Teacher Features
 
@@ -202,7 +202,7 @@
 | Publish/archive courses | ✅ | Teacher course archive/restore with soft-delete (deletedAt + status: archived) |
 | View enrolled students | ✅ | /teacher/students page |
 | Track student performance | ✅ | Student table with scores, progress, activity |
-| Message students | 🔲 | Not implemented |
+| Message students | ✅ | Messaging system with student selection, compose UI, inbox, read/unread states |
 | Review assignments | 🔲 | Not implemented |
 | Analytics: enrollments, completion rates, quiz performance, active students, retention | ✅ | Analytics dashboard |
 
@@ -254,11 +254,12 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Children overview | ✅ | Shows children cards with overall progress, weekly time, on-track status |
-| Progress | 🔲 | No per-child detailed report |
-| Attendance | 🔲 | Not implemented |
-| Achievements | 🔲 | Not implemented per child |
-| Reports | 🔲 | Not implemented |
-| Settings | 🔲 | Not implemented |
+| Progress | ✅ | Per-child detailed report with courses, achievements, activity, and insights tabs |
+| Attendance | 🚧 | Tracked via lastActivityDate and streak data |
+| Achievements | ✅ | Per-child achievements tab with earned badges and XP rewards |
+| Parent alerts | ✅ | Automated alerts for streak drops, inactivity, low quiz scores, course completion with configurable preferences |
+| Reports | ✅ | Per-child detailed reports: weak subject analysis, time tracking, on-track status, weekly XP chart, course details |
+| Settings | ✅ | Alert preferences UI with toggle switches and configurable thresholds |
 
 ### Parent Features
 
@@ -268,10 +269,10 @@
 | Streak visibility | ✅ | Shows streak for each child |
 | XP visibility | ✅ | Shows XP for each child |
 | Completed lessons | ✅ | Aggregated from lesson progress |
-| Weak subjects | 🔲 | Not analyzed |
-| Teacher communication | 🔲 | Not implemented |
-| Alerts | 🔲 | Not implemented |
-| Progress summaries | 🔲 | Not implemented |
+| Weak subjects | ✅ | Analyzed in parent reports based on quiz scores per subject |
+| Teacher communication | ✅ | Teacher messaging system with student inbox and notifications |
+| Alerts | ✅ | Automated alerts system with configurable preferences |
+| Progress summaries | ✅ | Weekly XP chart, on-track status, course details with time and quiz averages |
 
 ## 14. GAMIFICATION SYSTEM FLOW (§GAMIFICATION SYSTEM FLOW)
 
@@ -305,7 +306,7 @@
 | Filters | ✅ | By category, level, tags |
 | Tags | ✅ | Tag model + CourseTag junction + tag filtering on courses page |
 | Recommendations | ✅ | Scoring engine: interests, category affinity, popularity, recency — fetches 50 candidates and scores dynamically |
-| Relevance ranking | 🔲 | Not implemented |
+| Relevance ranking | ✅ | Multi-factor scoring: exact match, starts-with, word position, multi-term, popularity boost (enrollments), field-weighted (title 3x, subject 2x, desc/teacher 1.5x, tags 2x) |
 
 ## 17. ANALYTICS SYSTEM (§ANALYTICS SYSTEM)
 
@@ -463,10 +464,10 @@
 | Quiz System | 7 | 6 | 0 | 1 | 0 |
 | Teacher System | 17 | 12 | 2 | 3 | 0 |
 | Admin System | 14 | 11 | 1 | 2 | 0 |
-| Parent System | 10 | 2 | 1 | 7 | 0 |
+| Parent System | 10 | 7 | 1 | 2 | 0 |
 | Gamification | 7 | 6 | 0 | 1 | 0 |
 | Media | 6 | 5 | 0 | 1 | 0 |
-| Search | 8 | 6 | 0 | 2 | 0 |
+| Search | 8 | 7 | 0 | 1 | 0 |
 | Analytics | 9 | 6 | 1 | 2 | 0 |
 | Certificates | 1 | 1 | 0 | 0 | 0 |
 | Recommendations | 2 | 1 | 1 | 0 | 0 |
@@ -478,6 +479,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **141** | **16** | **47** | **0** |
+| **TOTAL** | **211** | **142** | **16** | **46** | **0** |
 
-> **Completion: 66.8%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Key gaps: parent communication, AI features, scaling.
+> **Completion: 67.3%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Key gaps: parent communication, AI features, scaling.
