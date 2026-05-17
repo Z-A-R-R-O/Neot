@@ -189,7 +189,7 @@
 | Analytics | ✅ | 4 Recharts charts (enrollments, completion rates, quiz scores, active students) |
 | Earnings | 🔲 | Future |
 | Reviews | 🔲 | Not implemented |
-| Messages | 🔲 | Not implemented |
+| Messages | ✅ | Teacher messaging students: Message model, send/list/read APIs, compose UI, student inbox, notifications |
 | Settings | 🔲 | Not implemented |
 
 ### Teacher Features
@@ -232,7 +232,7 @@
 | Manage users | ✅ | User list, search, filter, role change, delete |
 | Manage teachers | ✅ | Teacher management page with course/student counts |
 | Moderate courses | ✅ | Course status management + bulk actions |
-| Platform analytics | 🚧 | Basic admin analytics page with DAU, signups, user roles, top courses charts |
+| Platform analytics | ✅ | Admin analytics with DAU, WAU, MAU, retention rate, time spent, avg daily lessons, signups, user roles, top courses |
 | Category management | ✅ | Category management page (297 lines) |
 | Feature toggles | 🔲 | Not implemented |
 | Permissions | 🔲 | Only hardcoded role checks |
@@ -461,8 +461,8 @@
 | Course System | 15 | 11 | 2 | 2 | 0 |
 | Lesson System | 9 | 7 | 1 | 1 | 0 |
 | Quiz System | 7 | 4 | 0 | 3 | 0 |
-| Teacher System | 17 | 11 | 2 | 4 | 0 |
-| Admin System | 14 | 10 | 2 | 2 | 0 |
+| Teacher System | 17 | 12 | 2 | 3 | 0 |
+| Admin System | 14 | 11 | 1 | 2 | 0 |
 | Parent System | 10 | 2 | 1 | 7 | 0 |
 | Gamification | 7 | 6 | 0 | 1 | 0 |
 | Media | 6 | 3 | 0 | 3 | 0 |
@@ -478,6 +478,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **129** | **23** | **52** | **0** |
+| **TOTAL** | **211** | **132** | **21** | **51** | **0** |
 
-> **Completion: 61.1%** — Core infrastructure and learning flow are solid. Email verification flow complete (token-based, signup → verify → login). Badges system (20 badges, 5 categories) + DB-backed awarding. Seasonal events (6 events with XP multipliers 1.5x-3x, bonus XP, progress tracking). Quiz pass XP + perfect_quiz achievement wired. Admin moderation + analytics added. Key gaps: parent communication, notifications, AI features, scaling.
+> **Completion: 62.6%** — Core infrastructure and learning flow are solid. Email verification flow complete. Badges system (20 badges, 5 categories). Seasonal events (6 events with XP multipliers). Teacher messaging students with inbox. Parent reports with weak subject analysis, on-track status, weekly XP charts. Admin analytics with MAU/WAU/DAU, retention rate, engagement metrics. Key gaps: parent communication, AI features, scaling.
