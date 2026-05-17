@@ -20,7 +20,7 @@ export async function GET(request: Request) {
   const status = searchParams.get("status") ?? "published";
   const teacherId = searchParams.get("teacherId");
 
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = { deletedAt: null };
 
   if (categoryId) where.categoryId = categoryId;
   if (status && status !== "all") where.status = status;

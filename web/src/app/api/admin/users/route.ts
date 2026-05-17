@@ -46,6 +46,7 @@ export async function GET(request: Request) {
         fullName: true,
         avatarUrl: true,
         role: true,
+        status: true,
         ageGroup: true,
         onboardingCompleted: true,
         metadata: true,

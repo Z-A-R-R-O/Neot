@@ -44,12 +44,12 @@ export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplic
 
   const enabled = useDevModeStore((s) => s.enabled);
 
-  if (!enabled) return null;
-
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
+
+  if (!enabled) return null;
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;

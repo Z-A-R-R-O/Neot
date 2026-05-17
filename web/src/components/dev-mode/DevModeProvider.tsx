@@ -10,9 +10,12 @@ import { DevModeShell } from "./DevModeShell";
 
 interface DevModeProviderProps {
   children: ReactNode;
+  pageId?: string;
+  pageSlug?: string;
+  pageStatus?: string;
 }
 
-export function DevModeProvider({ children }: DevModeProviderProps) {
+export function DevModeProvider({ children, pageId, pageSlug, pageStatus }: DevModeProviderProps) {
   const searchParams = useSearchParams();
   const enabled = useDevModeStore((s) => s.enabled);
   const enable = useDevModeStore((s) => s.enable);
@@ -21,7 +24,7 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
 
   useEffect(() => {
     if (searchParams.get("dev") === "true") {
-      enable();
+      queueMicrotask(enable);
     }
   }, [searchParams, enable]);
 
@@ -84,7 +87,7 @@ export function DevModeProvider({ children }: DevModeProviderProps) {
   }, [handleKeyDown]);
 
   return (enabled || searchParams?.get("dev") === "true") ? (
-    <DevModeShell>{children}</DevModeShell>
+    <DevModeShell pageId={pageId} pageSlug={pageSlug} pageStatus={pageStatus}>{children}</DevModeShell>
   ) : (
     <>{children}</>
   );

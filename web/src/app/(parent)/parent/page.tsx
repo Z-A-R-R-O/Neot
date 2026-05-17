@@ -1,6 +1,9 @@
+import Link from "next/link";
 import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { Users, BookOpen, Trophy } from "lucide-react";
+import { Users, BookOpen, Trophy, ArrowRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export default async function ParentDashboardPage() {
   const user = await getUser();
@@ -113,6 +116,15 @@ export default async function ParentDashboardPage() {
                   Current streak: {child.streak} day{child.streak !== 1 ? "s" : ""}
                 </p>
               )}
+
+              <div className="mt-4 flex justify-end">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/parent/children/${child.id}`}>
+                    View Details
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           ))}
         </div>

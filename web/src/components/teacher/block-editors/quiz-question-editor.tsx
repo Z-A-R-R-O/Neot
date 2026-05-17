@@ -73,7 +73,7 @@ export function QuizQuestionEditor({ question, onChange }: QuizQuestionEditorPro
         { id: "true", text: "True" },
         { id: "false", text: "False" },
       ];
-    } else if (qType === "fill-blank") {
+    } else if (qType === "fill-blank" || qType === "short-answer") {
       updated.options = undefined;
     } else if (qType === "mcq" || qType === "msq") {
       updated.options = question.options?.length
@@ -100,6 +100,7 @@ export function QuizQuestionEditor({ question, onChange }: QuizQuestionEditorPro
               <SelectItem value="msq">MSQ</SelectItem>
               <SelectItem value="true-false">True/False</SelectItem>
               <SelectItem value="fill-blank">Fill Blank</SelectItem>
+              <SelectItem value="short-answer">Short Answer</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -202,6 +203,18 @@ export function QuizQuestionEditor({ question, onChange }: QuizQuestionEditorPro
       )}
 
       {question.type === "fill-blank" && (
+        <div className="space-y-1">
+          <Label className="text-xs">Correct Answer</Label>
+          <Input
+            value={typeof question.correctAnswer === "string" ? question.correctAnswer : ""}
+            onChange={(e) => updateField("correctAnswer", e.target.value as string & string[])}
+            placeholder="The correct answer"
+            className="h-8 text-xs"
+          />
+        </div>
+      )}
+
+      {question.type === "short-answer" && (
         <div className="space-y-1">
           <Label className="text-xs">Correct Answer</Label>
           <Input

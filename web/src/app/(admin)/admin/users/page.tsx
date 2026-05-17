@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
@@ -20,30 +20,26 @@ export default function AdminUsersPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("all");
-
-  const fetchUsers = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-      if (role && role !== "all") params.set("role", role);
-
-      const res = await fetch(`/api/admin/users?${params}`);
-      if (!res.ok) throw new Error("Failed to load users");
-      setData(await res.json());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load users");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [search, role]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (role && role !== "all") params.set("role", role);
+
+    fetch(`/api/admin/users?${params}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load users");
+        return res.json();
+      })
+      .then(setData)
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load users"))
+      .finally(() => setIsLoading(false));
+  }, [search, role, refreshKey]);
 
   function handleUserUpdated() {
-    fetchUsers();
+    setIsLoading(true);
+    setRefreshKey((k) => k + 1);
   }
 
   function handleUserDeleted(userId: string) {
@@ -77,7 +73,7 @@ export default function AdminUsersPage() {
       {isLoading ? (
         <LoadingScreen fullScreen={false} message="Loading users..." />
       ) : error ? (
-        <ErrorState message={error} onRetry={fetchUsers} />
+        <ErrorState message={error} onRetry={() => { setIsLoading(true); setRefreshKey((k) => k + 1); }} />
       ) : data ? (
         <>
           <p className="text-xs text-muted-foreground">

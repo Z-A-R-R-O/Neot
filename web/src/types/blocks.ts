@@ -8,7 +8,8 @@ export type BlockType =
   | "embed"
   | "code"
   | "file"
-  | "divider";
+  | "divider"
+  | "pdf";
 
 export interface BaseBlock {
   id: string;
@@ -104,6 +105,14 @@ export interface DividerBlock extends BaseBlock {
   content: Record<string, never>;
 }
 
+export interface PdfBlock extends BaseBlock {
+  type: "pdf";
+  content: {
+    url: string;
+    title?: string;
+  };
+}
+
 export type LessonBlock =
   | TextBlock
   | VideoBlock
@@ -114,4 +123,5 @@ export type LessonBlock =
   | EmbedBlock
   | CodeBlock
   | FileBlock
-  | DividerBlock;
+  | DividerBlock
+  | PdfBlock;

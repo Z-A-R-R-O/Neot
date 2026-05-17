@@ -1,6 +1,6 @@
 "use client";
 
-import { Type, Video, HelpCircle, Image, Code, Minus } from "lucide-react";
+import { Type, Video, HelpCircle, Image, Code, Minus, FileText } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,7 @@ const blockTypes = [
   { type: "text", label: "Text", icon: Type },
   { type: "video", label: "Video", icon: Video },
   { type: "quiz", label: "Quiz", icon: HelpCircle },
+  { type: "pdf", label: "PDF", icon: FileText },
   { type: "image", label: "Image", icon: Image },
   { type: "code", label: "Code", icon: Code },
   { type: "divider", label: "Divider", icon: Minus },

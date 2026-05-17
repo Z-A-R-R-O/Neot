@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -68,32 +68,25 @@ interface ReportData {
 }
 
 interface Props {
-  children: ChildItem[];
+  childItems: ChildItem[];
 }
 
-export function ParentReportsContent({ children }: Props) {
-  const [selectedChildId, setSelectedChildId] = useState(children[0]?.id ?? "");
+export function ParentReportsContent({ childItems }: Props) {
+  const [selectedChildId, setSelectedChildId] = useState(childItems[0]?.id ?? "");
   const [data, setData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchReports = useCallback(async () => {
+  useEffect(() => {
     if (!selectedChildId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/parent/reports?childId=${selectedChildId}`);
-      if (res.ok) setData(await res.json());
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false);
-    }
+    fetch(`/api/parent/reports?childId=${selectedChildId}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json) setData(json as ReportData);
+      })
+      .catch(() => {});
   }, [selectedChildId]);
 
-  useEffect(() => {
-    fetchReports();
-  }, [fetchReports]);
-
-  if (children.length === 0) {
+  if (childItems.length === 0) {
     return (
       <div className="mx-auto max-w-5xl space-y-8">
         <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground">Reports</h1>
@@ -105,7 +98,7 @@ export function ParentReportsContent({ children }: Props) {
     );
   }
 
-  const selectedChild = children.find((c) => c.id === selectedChildId);
+  const selectedChild = childItems.find((c) => c.id === selectedChildId);
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -127,7 +120,7 @@ export function ParentReportsContent({ children }: Props) {
               <SelectValue placeholder="Select child..." />
             </SelectTrigger>
             <SelectContent>
-              {children.map((c) => (
+              {childItems.map((c) => (
                 <SelectItem key={c.id} value={c.id}>
                   {c.fullName ?? c.email ?? "Child"}
                 </SelectItem>

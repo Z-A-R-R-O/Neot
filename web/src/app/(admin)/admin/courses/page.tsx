@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { Search, BookOpen, Trash2, Eye, EyeOff, Archive, Users, Layers } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Trash2, Eye, EyeOff, Archive, Users, Layers } from "lucide-react";
 import { format } from "date-fns";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";
@@ -51,33 +50,38 @@ const statusBadge: Record<string, "default" | "secondary" | "outline" | "destruc
 };
 
 export default function AdminCoursesPage() {
-  const router = useRouter();
   const [data, setData] = useState<CoursesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
 
-  const fetchCourses = useCallback(async () => {
+  const refetch = () => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (status && status !== "all") params.set("status", status);
+    const url = `/api/admin/courses?${params}`;
     setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-      if (status && status !== "all") params.set("status", status);
-
-      const res = await fetch(`/api/admin/courses?${params}`);
-      if (!res.ok) throw new Error("Failed to load courses");
-      setData(await res.json());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load courses");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [search, status]);
+    fetch(url)
+      .then((res) => { if (!res.ok) throw new Error("Failed to load courses"); return res.json(); })
+      .then(setData)
+      .catch((err) => setError(err.message))
+      .finally(() => setIsLoading(false));
+  };
 
   useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (status && status !== "all") params.set("status", status);
+    const url = `/api/admin/courses?${params}`;
+    const controller = new AbortController();
+    fetch(url, { signal: controller.signal })
+      .then((res) => { if (!res.ok) throw new Error("Failed to load courses"); return res.json(); })
+      .then(setData)
+      .catch((err) => { if (err.name !== "AbortError") setError(err.message); })
+      .finally(() => setIsLoading(false));
+    return () => controller.abort();
+  }, [search, status]);
 
   async function changeStatus(courseId: string, newStatus: string) {
     const res = await fetch(`/api/admin/courses/${courseId}`, {
@@ -166,7 +170,7 @@ export default function AdminCoursesPage() {
       {isLoading ? (
         <LoadingScreen fullScreen={false} message="Loading courses..." />
       ) : error ? (
-        <ErrorState message={error} onRetry={fetchCourses} />
+        <ErrorState message={error} onRetry={refetch} />
       ) : data ? (
         <>
           <p className="text-xs text-muted-foreground">

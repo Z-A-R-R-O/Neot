@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useDevModeStore } from "@/stores/devModeStore";
+import { useDevModeStore, type DeviceMode } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 import { editorRegistry } from "@/lib/editor-registry";
+import { MotionTab } from "./section-editors/motion-tab";
+import { InteractionsTab } from "./section-editors/interactions-tab";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -18,8 +20,10 @@ interface PropertiesPanelProps {
 }
 
 export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange }: PropertiesPanelProps) {
-  const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects">("content");
+  const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects" | "interactions">("content");
   const enabled = useDevModeStore((s) => s.enabled);
+  const deviceMode = useDevModeStore((s) => s.deviceMode);
+  const setDeviceMode = useDevModeStore((s) => s.setDeviceMode);
   const updateSection = usePageBuilderStore((s) => s.updateSection);
 
   if (!enabled) return null;
@@ -37,6 +41,10 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
 
   const handleStyleChange = (key: string, value: string | number | boolean) => {
     if (!selectedBlock) return;
+    if (deviceMode !== "desktop") {
+      handleResponsiveStyleChange(key, value);
+      return;
+    }
     const newStyles = { ...(selectedBlock.styles || {}), [key]: value };
     const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
     if (section) {
@@ -63,6 +71,27 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
     }
   };
 
+  const handleResponsiveStyleChange = (key: string, value: string | number | boolean) => {
+    if (!selectedBlock) return;
+    if (deviceMode === "desktop") {
+      handleStyleChange(key, value);
+      return;
+    }
+    const section = usePageBuilderStore.getState().sections.find(s => s.id === selectedBlock.id);
+    if (section) {
+      const existing = (section.settings.responsiveStyles as Record<string, Record<string, unknown>> | undefined) ?? {};
+      updateSection(selectedBlock.id, {
+        settings: {
+          ...section.settings,
+          responsiveStyles: {
+            ...existing,
+            [deviceMode]: { ...(existing[deviceMode] ?? {}), [key]: value },
+          },
+        },
+      });
+    }
+  };
+
   return (
     <div className="flex h-full flex-col bg-background/50 backdrop-blur-xl">
       <div className="border-b border-border p-5">
@@ -80,8 +109,8 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-1 rounded-xl bg-muted/20 p-1 border border-border/50">
-          {(["content", "style", "motion", "effects"] as const).map((tab) => (
+        <div className="grid grid-cols-5 gap-1 rounded-xl bg-muted/20 p-1 border border-border/50">
+          {(["content", "style", "motion", "effects", "interactions"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -193,35 +222,30 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
                 </div>
               </PropertyRow>
             </Section>
+
+            <Section title="Responsive">
+              <PropertyRow label="Breakpoint">
+                <select
+                  value={deviceMode}
+                  onChange={(e) => setDeviceMode(e.target.value as DeviceMode)}
+                  className="w-full rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50"
+                >
+                  <option value="desktop">Desktop (1025px+)</option>
+                  <option value="tablet">Tablet (768\u20131024px)</option>
+                  <option value="mobile">Mobile (320\u2013767px)</option>
+                </select>
+              </PropertyRow>
+              {deviceMode !== "desktop" && (
+                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-[10px] text-amber-400">
+                  Editing {deviceMode} overrides &mdash; values set here apply only at this breakpoint.
+                </div>
+              )}
+            </Section>
           </div>
         )}
 
         {activeTab === "motion" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
-            <Section title="Entrance Animation">
-              <PropertyRow label="Type">
-                <select
-                  className="w-full rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] font-medium text-foreground outline-none ring-1 ring-border/50"
-                >
-                  <option>Fade Up</option>
-                  <option>Scale In</option>
-                  <option>Blur Reveal</option>
-                </select>
-              </PropertyRow>
-              <PropertyRow label="Duration">
-                <Slider value="0.8s" onChange={() => {}} />
-              </PropertyRow>
-            </Section>
-
-            <Section title="Hover Effects">
-              <PropertyRow label="Scale">
-                <Slider value="1.05" onChange={() => {}} />
-              </PropertyRow>
-              <PropertyRow label="Tilt">
-                <input type="checkbox" className="h-4 w-4 rounded border-border bg-muted/30" />
-              </PropertyRow>
-            </Section>
-          </div>
+          <MotionTab sectionId={selectedBlock.id} />
         )}
 
         {activeTab === "effects" && (
@@ -244,6 +268,10 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
               </PropertyRow>
             </Section>
           </div>
+        )}
+
+        {activeTab === "interactions" && (
+          <InteractionsTab sectionId={selectedBlock.id} />
         )}
       </div>
     </div>

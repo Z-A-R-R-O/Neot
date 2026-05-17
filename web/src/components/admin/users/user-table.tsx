@@ -11,6 +11,7 @@ interface UserRecord {
   email: string | null;
   fullName: string | null;
   role: string;
+  status: string;
   ageGroup: string | null;
   onboardingCompleted: boolean;
   createdAt: string;
@@ -51,6 +52,7 @@ export function UserTable({ users, onUserUpdated, onUserDeleted }: UserTableProp
           <tr>
             <th className="px-4 py-3 font-medium text-muted-foreground">User</th>
             <th className="px-4 py-3 font-medium text-muted-foreground">Role</th>
+            <th className="px-4 py-3 font-medium text-muted-foreground">Status</th>
             <th className="px-4 py-3 font-medium text-muted-foreground">Age Group</th>
             <th className="px-4 py-3 font-medium text-muted-foreground">Courses</th>
             <th className="px-4 py-3 font-medium text-muted-foreground">Enrolled</th>
@@ -78,6 +80,11 @@ export function UserTable({ users, onUserUpdated, onUserDeleted }: UserTableProp
                   {u.role}
                 </Badge>
               </td>
+              <td className="px-4 py-3">
+                <Badge variant={u.status === "suspended" ? "destructive" : u.status === "pending_approval" ? "secondary" : "outline"}>
+                  {u.status === "pending_approval" ? "Pending" : u.status === "suspended" ? "Suspended" : "Active"}
+                </Badge>
+              </td>
               <td className="px-4 py-3 text-muted-foreground">
                 {u.ageGroup || "—"}
               </td>
@@ -95,7 +102,11 @@ export function UserTable({ users, onUserUpdated, onUserDeleted }: UserTableProp
                   <UserActions
                     userId={u.id}
                     currentRole={u.role}
-                    onRoleChange={(_, role) => {
+                    currentStatus={u.status}
+                    onRoleChange={() => {
+                      onUserUpdated(u.id);
+                    }}
+                    onStatusChange={() => {
                       onUserUpdated(u.id);
                     }}
                     onDelete={(userId) => onUserDeleted(userId)}

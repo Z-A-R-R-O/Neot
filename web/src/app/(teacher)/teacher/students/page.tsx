@@ -34,26 +34,25 @@ export default function StudentsPage() {
   const [sort, setSort] = useState("name");
   const [order, setOrder] = useState("asc");
   const [page, setPage] = useState(1);
-
-  const fetchStudents = useCallback(async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const params = new URLSearchParams({ q: query, sort, order, page: String(page), limit: "10" });
-      const res = await fetch(`/api/teacher/students?${params}`);
-      if (!res.ok) throw new Error("Failed to fetch");
-      const json = await res.json();
-      setData(json);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }, [query, sort, order, page]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchStudents();
-  }, [fetchStudents]);
+    const params = new URLSearchParams({ q: query, sort, order, page: String(page), limit: "10" });
+    fetch(`/api/teacher/students?${params}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
+      })
+      .then(setData)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, [query, sort, order, page, refreshKey]);
+
+  const handleRetry = useCallback(() => {
+    setLoading(true);
+    setError(false);
+    setRefreshKey((k) => k + 1);
+  }, []);
 
   const toggleSort = (field: string) => {
     if (sort === field) {
@@ -83,7 +82,7 @@ export default function StudentsPage() {
           />
         </div>
         <button
-          onClick={fetchStudents}
+          onClick={handleRetry}
           className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground hover:text-foreground"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />

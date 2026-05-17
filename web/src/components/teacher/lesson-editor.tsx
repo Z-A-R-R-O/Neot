@@ -15,6 +15,7 @@ import { BlockPalette } from "@/components/teacher/block-palette";
 import { TextEditor } from "@/components/teacher/block-editors/text-editor";
 import { VideoEditor } from "@/components/teacher/block-editors/video-editor";
 import { QuizEditor } from "@/components/teacher/block-editors/quiz-editor";
+import { PdfEditor } from "@/components/teacher/block-editors/pdf-editor";
 
 interface Block {
   id: string;
@@ -105,6 +106,9 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
     if (blockType === "video") {
       newBlock.content = { url: "", provider: "youtube", caption: "", transcript: "" } as unknown as Record<string, unknown>;
     }
+    if (blockType === "pdf") {
+      newBlock.content = { url: "", title: "" } as unknown as Record<string, unknown>;
+    }
     setBlocks((prev) => [...prev, newBlock]);
   }
 
@@ -137,6 +141,13 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
       case "quiz":
         return (
           <QuizEditor
+            content={block.content}
+            onChange={(content) => handleBlockContentChange(block.id, content)}
+          />
+        );
+      case "pdf":
+        return (
+          <PdfEditor
             content={block.content}
             onChange={(content) => handleBlockContentChange(block.id, content)}
           />

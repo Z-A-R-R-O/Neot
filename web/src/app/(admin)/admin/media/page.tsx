@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
@@ -34,27 +34,23 @@ export default function AdminMediaPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [mimeFilter, setMimeFilter] = useState("all");
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const fetchMedia = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-      if (mimeFilter && mimeFilter !== "all") params.set("mimeType", mimeFilter);
-
-      const res = await fetch(`/api/admin/media?${params}`);
-      if (!res.ok) throw new Error("Failed to load media");
-      setMedia(await res.json());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load media");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [search, mimeFilter]);
+  const loadMedia = () => setRefreshKey((k) => k + 1);
 
   useEffect(() => {
-    fetchMedia();
-  }, [fetchMedia]);
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (mimeFilter && mimeFilter !== "all") params.set("mimeType", mimeFilter);
+    const url = `/api/admin/media?${params}`;
+    const controller = new AbortController();
+    fetch(url, { signal: controller.signal })
+      .then((res) => { if (!res.ok) throw new Error("Failed to load media"); return res.json(); })
+      .then(setMedia)
+      .catch((err) => { if (err.name !== "AbortError") setError(err.message); })
+      .finally(() => setIsLoading(false));
+    return () => controller.abort();
+  }, [search, mimeFilter, refreshKey]);
 
   function handleDeleted(id: string) {
     setMedia((prev) => prev?.filter((m) => m.id !== id) ?? null);
@@ -69,7 +65,7 @@ export default function AdminMediaPage() {
         </p>
       </div>
 
-      <MediaUploader onUploaded={fetchMedia} />
+      <MediaUploader onUploaded={loadMedia} />
 
       <div className="flex flex-wrap items-end gap-3">
         <div className="space-y-1.5">
@@ -102,7 +98,7 @@ export default function AdminMediaPage() {
       {isLoading ? (
         <LoadingScreen fullScreen={false} message="Loading media..." />
       ) : error ? (
-        <ErrorState message={error} onRetry={fetchMedia} />
+        <ErrorState message={error} onRetry={loadMedia} />
       ) : (
         <MediaGrid items={media ?? []} onDeleted={handleDeleted} />
       )}

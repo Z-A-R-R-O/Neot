@@ -15,50 +15,108 @@ import {
   Palette,
   Puzzle,
   GraduationCap,
+  Database,
+  History,
+  UserCheck,
+  Heart,
+  LayoutTemplate,
+  Navigation,
+  Globe,
+  Bell,
+  Shield,
+  Box,
+  Zap,
+  Languages,
+  Plug,
+  Code,
+  Accessibility,
   type LucideIcon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useNavigation } from "@/hooks/useNavigation";
+import type { NavItemData } from "@/lib/navigation-service";
 
 type Role = "student" | "teacher" | "parent" | "admin";
 
-interface NavItem {
-  label: string;
-  href: string;
-  icon: LucideIcon;
-}
+const iconMap: Record<string, LucideIcon> = {
+  LayoutDashboard,
+  BookOpen,
+  Award,
+  Trophy,
+  Users,
+  BarChart3,
+  Eye,
+  Settings,
+  FileText,
+  Palette,
+  Puzzle,
+  GraduationCap,
+  Database,
+  History,
+  UserCheck,
+  Heart,
+  LayoutTemplate,
+  Navigation,
+  Globe,
+  Bell,
+  Shield,
+  Box,
+  Zap,
+  Languages,
+  Plug,
+  Code,
+  Accessibility,
+};
 
-const navItems: Record<Role, NavItem[]> = {
+const fallbackNavItems: Record<Role, NavItemData[]> = {
   student: [
-    { label: "Home", href: "/dashboard", icon: LayoutDashboard },
-    { label: "My Courses", href: "/dashboard/courses", icon: BookOpen },
-    { label: "Achievements", href: "/dashboard/achievements", icon: Award },
-    { label: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
-    { label: "Settings", href: "/dashboard/settings", icon: Settings },
+    { id: "student-home", label: "Home", href: "/dashboard", icon: "LayoutDashboard", children: [] },
+    { id: "student-courses", label: "My Courses", href: "/dashboard/courses", icon: "BookOpen", children: [] },
+    { id: "student-achievements", label: "Achievements", href: "/dashboard/achievements", icon: "Award", children: [] },
+    { id: "student-leaderboard", label: "Leaderboard", href: "/dashboard/leaderboard", icon: "Trophy", children: [] },
+    { id: "student-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   teacher: [
-    { label: "Dashboard", href: "/teacher", icon: LayoutDashboard },
-    { label: "My Courses", href: "/teacher/courses", icon: BookOpen },
-    { label: "Analytics", href: "/teacher/analytics", icon: BarChart3 },
-    { label: "Students", href: "/teacher/students", icon: Users },
-    { label: "Settings", href: "/dashboard/settings", icon: Settings },
+    { id: "teacher-dashboard", label: "Dashboard", href: "/teacher", icon: "LayoutDashboard", children: [] },
+    { id: "teacher-courses", label: "My Courses", href: "/teacher/courses", icon: "BookOpen", children: [] },
+    { id: "teacher-analytics", label: "Analytics", href: "/teacher/analytics", icon: "BarChart3", children: [] },
+    { id: "teacher-students", label: "Students", href: "/teacher/students", icon: "Users", children: [] },
+    { id: "teacher-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   parent: [
-    { label: "Overview", href: "/dashboard", icon: Eye },
-    { label: "Children", href: "/dashboard/children", icon: Users },
-    { label: "Reports", href: "/dashboard/reports", icon: BarChart3 },
-    { label: "Settings", href: "/dashboard/settings", icon: Settings },
+    { id: "parent-overview", label: "Overview", href: "/dashboard", icon: "Eye", children: [] },
+    { id: "parent-children", label: "Children", href: "/dashboard/children", icon: "Users", children: [] },
+    { id: "parent-reports", label: "Reports", href: "/dashboard/reports", icon: "BarChart3", children: [] },
+    { id: "parent-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   admin: [
-    { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-    { label: "Users", href: "/admin/users", icon: Users },
-    { label: "Teachers", href: "/admin/teachers", icon: GraduationCap },
-    { label: "Courses", href: "/admin/courses", icon: BookOpen },
-    { label: "Pages", href: "/admin/pages", icon: FileText },
-    { label: "Themes", href: "/admin/themes", icon: Palette },
-    { label: "Blocks", href: "/admin/blocks", icon: Puzzle },
-    { label: "Settings", href: "/admin/settings", icon: Settings },
+    { id: "admin-dashboard", label: "Dashboard", href: "/admin", icon: "LayoutDashboard", children: [] },
+    { id: "admin-analytics", label: "Analytics", href: "/admin/analytics", icon: "BarChart3", children: [] },
+    { id: "admin-users", label: "Users", href: "/admin/users", icon: "Users", children: [] },
+    { id: "admin-teachers", label: "Teachers", href: "/admin/teachers", icon: "GraduationCap", children: [] },
+    { id: "admin-students", label: "Students", href: "/admin/students", icon: "UserCheck", children: [] },
+    { id: "admin-parents", label: "Parents", href: "/admin/parents", icon: "Heart", children: [] },
+    { id: "admin-courses", label: "Courses", href: "/admin/courses", icon: "BookOpen", children: [] },
+    { id: "admin-pages", label: "Pages", href: "/admin/pages", icon: "FileText", children: [] },
+    { id: "admin-templates", label: "Templates", href: "/admin/templates", icon: "LayoutTemplate", children: [] },
+    { id: "admin-data-binding", label: "Data Binding", href: "/admin/data-binding", icon: "Database", children: [] },
+    { id: "admin-navigation", label: "Navigation", href: "/admin/navigation", icon: "Navigation", children: [] },
+    { id: "admin-themes", label: "Themes", href: "/admin/themes", icon: "Palette", children: [] },
+    { id: "admin-blocks", label: "Blocks", href: "/admin/blocks", icon: "Puzzle", children: [] },
+    { id: "admin-seo", label: "SEO", href: "/admin/seo", icon: "Globe", children: [] },
+    { id: "admin-notifications", label: "Notifications", href: "/admin/notifications", icon: "Bell", children: [] },
+    { id: "admin-security", label: "Security", href: "/admin/security", icon: "Shield", children: [] },
+    { id: "admin-backup", label: "Backup", href: "/admin/backup", icon: "Database", children: [] },
+    { id: "admin-version-history", label: "Version History", href: "/admin/version-history", icon: "History", children: [] },
+    { id: "admin-components", label: "Components", href: "/admin/components", icon: "Box", children: [] },
+    { id: "admin-dashboard-builder", label: "Dashboard Builder", href: "/admin/dashboard-builder", icon: "LayoutDashboard", children: [] },
+    { id: "admin-automation", label: "Automation", href: "/admin/automation", icon: "Zap", children: [] },
+    { id: "admin-localization", label: "Localization", href: "/admin/localization", icon: "Languages", children: [] },
+    { id: "admin-integrations", label: "Integrations", href: "/admin/integrations", icon: "Plug", children: [] },
+    { id: "admin-api", label: "API", href: "/admin/api", icon: "Code", children: [] },
+    { id: "admin-accessibility", label: "Accessibility", href: "/admin/accessibility", icon: "Accessibility", children: [] },
+    { id: "admin-settings", label: "Settings", href: "/admin/settings", icon: "Settings", children: [] },
   ],
 };
 
@@ -68,9 +126,46 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+function renderNavItems(
+  items: NavItemData[],
+  pathname: string,
+  onClose: () => void,
+  depth = 0,
+): React.ReactNode {
+  return (
+    <ul className="space-y-1">
+      {items.map((item) => {
+        const Icon = item.icon ? iconMap[item.icon] : null;
+        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+        const hasChildren = item.children.length > 0;
+        return (
+          <li key={item.id}>
+            <Link
+              href={item.href}
+              onClick={onClose}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                depth > 0 && "pl-8",
+                isActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              {Icon && <Icon className="h-5 w-5 shrink-0" />}
+              {item.label}
+            </Link>
+            {hasChildren && renderNavItems(item.children, pathname, onClose, depth + 1)}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const items = navItems[role] ?? navItems.student;
+  const { items: fetchedItems, isLoading } = useNavigation(role);
+  const items = fetchedItems.length > 0 ? fetchedItems : (fallbackNavItems[role] ?? []);
 
   return (
     <>
@@ -95,29 +190,13 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="flex-1 overflow-y-auto p-4">
-          <ul className="space-y-1">
-            {items.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                    )}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted-foreground border-t-primary" />
+            </div>
+          ) : (
+            renderNavItems(items, pathname, onClose)
+          )}
         </nav>
       </aside>
     </>

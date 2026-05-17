@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
   const { search, status, page, limit } = parsed.data;
 
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = { deletedAt: null };
   if (status && status !== "all") where.status = status;
 
   if (search) {

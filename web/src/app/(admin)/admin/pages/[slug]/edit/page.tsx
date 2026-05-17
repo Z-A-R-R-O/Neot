@@ -13,8 +13,10 @@ import { DevModeToggle } from "@/components/dev-mode/DevModeToggle";
 import { ResponsiveBar } from "@/components/dev-mode/ResponsiveBar";
 import { HistoryPanel } from "@/components/dev-mode/HistoryPanel";
 import { PublishButton } from "@/components/dev-mode/PublishButton";
+import { PreviewToggle } from "@/components/dev-mode/preview-toggle";
 import { DevModeProvider } from "@/components/dev-mode/DevModeProvider";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { useAutoSave } from "@/hooks/useAutoSave";
 import {
   Dialog,
   DialogContent,
@@ -51,7 +53,6 @@ export default function EditPagePage() {
   const [error, setError] = useState<string | null>(null);
 
   const { setSections, setLoading, sections, isDirty } = usePageBuilderStore();
-  const enabled = useDevModeStore((s) => s.enabled);
 
   const [toast, setToast] = useState<{ message: string; variant: "success" | "error" } | null>(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -135,6 +136,11 @@ export default function EditPagePage() {
         })),
       );
       useDevModeStore.getState().disable();
+      await fetch(`/api/page-versions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pageId: pageData!.id }),
+      });
       setToast({ message: "Published!", variant: "success" });
       setTimeout(() => setToast(null), 3000);
     } catch (err) {
@@ -185,6 +191,8 @@ export default function EditPagePage() {
     };
   }, [slug, setSections]);
 
+  useAutoSave(pageData?.id ?? "", slug);
+
   if (isLoading) {
     return <LoadingScreen message="Loading page..." />;
   }
@@ -198,7 +206,7 @@ export default function EditPagePage() {
   }
 
   return (
-    <DevModeProvider>
+    <DevModeProvider pageId={pageData.id} pageSlug={pageData.slug} pageStatus={pageData.status}>
       {toast && (
         <div
           className={`fixed right-4 top-20 z-[100] rounded-lg border px-4 py-3 text-sm font-medium shadow-lg transition-all ${
@@ -254,6 +262,7 @@ export default function EditPagePage() {
             </div>
             <div className="h-4 w-[1px] bg-border" />
             <DevModeToggle />
+            <PreviewToggle pageId={pageData.id} pageSlug={pageData.slug} />
             <PublishButton
               onPublish={handlePublish}
               isDirty={isDirty}

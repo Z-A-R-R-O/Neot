@@ -8,8 +8,10 @@ const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 export type AuthUser = {
   id: string;
   email: string | null;
+  emailVerified: string | null;
   fullName: string | null;
   role: string;
+  status: string;
   ageGroup: string | null;
   avatarUrl: string | null;
   onboardingCompleted: boolean;
@@ -60,9 +62,11 @@ export async function getUser(): Promise<AuthUser | null> {
       email: session.user.email,
       fullName: session.user.fullName,
       role: session.user.role,
+      status: session.user.status,
       ageGroup: session.user.ageGroup,
       avatarUrl: session.user.avatarUrl,
       onboardingCompleted: session.user.onboardingCompleted,
+      emailVerified: session.user.emailVerified?.toISOString() ?? null,
     };
   } catch {
     return null;

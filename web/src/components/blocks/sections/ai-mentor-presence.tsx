@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
-import { Sparkles, Lightbulb, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Sparkles, Lightbulb } from "lucide-react";
 
 const hints = [
   "Your learning style: visual-spatial",
@@ -12,17 +12,9 @@ const hints = [
   "You excel at pattern recognition",
 ];
 
-const positions = [
-  { x: 85, y: 20 },
-  { x: 10, y: 40 },
-  { x: 80, y: 65 },
-  { x: 15, y: 75 },
-];
-
 export function AiMentorPresence() {
   const [hintIndex, setHintIndex] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [currentPos, setCurrentPos] = useState(positions[0]);
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
   const springX = useSpring(mouseX, { stiffness: 30, damping: 40 });
@@ -42,14 +34,6 @@ export function AiMentorPresence() {
       setHintIndex((prev) => (prev + 1) % hints.length);
     }, 8000);
     return () => clearInterval(interval);
-  }, [visible]);
-
-  useEffect(() => {
-    if (!visible) return;
-    const moveInterval = setInterval(() => {
-      setCurrentPos(positions[Math.floor(Math.random() * positions.length)]);
-    }, 12000);
-    return () => clearInterval(moveInterval);
   }, [visible]);
 
   useEffect(() => {

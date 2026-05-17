@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock, Archive, X } from "lucide-react";
+import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock, Archive, X, Timer } from "lucide-react";
 import Link from "next/link";
 import { LevelProgress } from "@/components/gamification/level-progress";
 import { StreakFlame } from "@/components/gamification/streak-flame";
@@ -52,6 +52,7 @@ interface DashboardContentProps {
     levelTitle: string;
     levelProgress: number;
     certificates: number;
+    timeSpent: number;
   };
   enrollments: EnrollmentCourse[];
   continueLesson: ContinueLesson | null;
@@ -71,6 +72,13 @@ const difficultyColors: Record<string, string> = {
   intermediate: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   advanced: "bg-red-500/20 text-red-400 border-red-500/30",
 };
+
+function formatTime(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
+}
 
 export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations }: DashboardContentProps) {
   return (
@@ -93,6 +101,7 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
           { label: "Enrolled Courses", value: stats.courses, icon: BookOpen, gradient: "from-primary-500/20 via-primary-500/5 to-transparent", delay: 0 },
           { label: "Completed Lessons", value: stats.lessons, icon: CheckCircle, gradient: "from-accent-500/20 via-accent-500/5 to-transparent", delay: 0.1 },
           { label: "XP Points", value: stats.xp, icon: Zap, gradient: "from-secondary-500/20 via-secondary-500/5 to-transparent", delay: 0.2 },
+          { label: "Time Spent", value: formatTime(stats.timeSpent), icon: Timer, gradient: "from-cyan-500/20 via-cyan-500/5 to-transparent", delay: 0.25 },
           { label: "Certificates", value: stats.certificates, icon: TrendingUp, gradient: "from-emerald-500/20 via-emerald-500/5 to-transparent", delay: 0.3 },
         ] as StatCard[]).map((card) => {
           const Icon = card.icon;

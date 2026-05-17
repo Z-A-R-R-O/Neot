@@ -19,5 +19,5 @@ export default async function ParentReportsPage() {
     select: { id: true, fullName: true, email: true },
   });
 
-  return <ParentReportsContent children={children} />;
+  return <ParentReportsContent childItems={children} />;
 }

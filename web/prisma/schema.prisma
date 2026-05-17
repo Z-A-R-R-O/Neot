@@ -10,9 +10,12 @@ datasource db {
 model Profile {
   id                  String    @id
   email               String?
+  emailVerified       DateTime? @map("email_verified")
+  verificationToken   String?   @map("verification_token")
   fullName            String?   @map("full_name")
   avatarUrl           String?   @map("avatar_url")
   role                String    @default("student")
+  status              String    @default("active")
   passwordHash        String?   @map("password_hash")
   ageGroup            String?   @map("age_group")
   parentId            String?   @map("parent_id")
@@ -36,6 +39,9 @@ model Profile {
   xpTransactions XPTransaction[]
   userAchievements UserAchievement[]
   certificates Certificate[]
+  bookmarks Bookmark[]
+  lessonNotes LessonNote[]
+  userBadges UserBadge[]
   notifications Notification[]
   sessions Session[]
   mediaUploads Media[]
@@ -72,6 +78,7 @@ model Course {
   status           String   @default("draft")
   estimatedMinutes Int?     @map("estimated_minutes")
   metadata         String   @default("{}")
+  deletedAt        DateTime? @map("deleted_at")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
@@ -80,8 +87,30 @@ model Course {
   modules   Module[]
   enrollments Enrollment[]
   certificates Certificate[]
+  tags CourseTag[]
 
   @@map("courses")
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  courses   CourseTag[]
+
+  @@map("tags")
+}
+
+model CourseTag {
+  courseId String @map("course_id")
+  tagId    String @map("tag_id")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, tagId])
+  @@map("course_tags")
 }
 
 model Module {
@@ -108,12 +137,15 @@ model Lesson {
   content          String   @default("{}")
   estimatedMinutes Int?     @map("estimated_minutes")
   status           String   @default("draft")
+  deletedAt        DateTime? @map("deleted_at")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
   module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   progress LessonProgress[]
+  bookmarks Bookmark[]
+  lessonNotes LessonNote[]
 
   @@map("lessons")
 }
@@ -303,6 +335,100 @@ model Certificate {
   @@map("certificates")
 }
 
+model Bookmark {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  lessonId  String   @map("lesson_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("bookmarks")
+}
+
+model LessonNote {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  lessonId  String   @map("lesson_id")
+  content   String
+  blockId   String?  @map("block_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([userId, lessonId])
+  @@map("lesson_notes")
+}
+
+model Badge {
+  id          String   @id
+  name        String
+  description String
+  iconUrl     String?
+  category    String   @default("progress")
+  criteria    String   @default("{}")
+  xpReward    Int      @default(0) @map("xp_reward")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  userBadges UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  userId  String   @map("user_id")
+  badgeId String   @map("badge_id")
+  earnedAt DateTime @default(now()) @map("earned_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge  @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, badgeId])
+  @@map("user_badges")
+}
+
+model Report {
+  id          String   @id @default(uuid())
+  type        String
+  targetId    String   @map("target_id")
+  reason      String
+  reportedBy  String   @map("reported_by")
+  status      String   @default("pending")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("reports")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String?  @map("entity_id")
+  actorId     String?  @map("actor_id")
+  metadata    String   @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model DashboardConfig {
+  id        String   @id @default(uuid())
+  role      String
+  widgets   String   @default("[]")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([role])
+  @@map("dashboard_configs")
+}
+
 model Notification {
   id        String    @id @default(uuid())
   userId    String    @map("user_id")
@@ -327,4 +453,54 @@ model PlatformSetting {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("platform_settings")
+}
+
+model PageTemplate {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  sections    String   @default("[]")
+  thumbnail   String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("page_templates")
+}
+
+model PageVersion {
+  id        String   @id @default(uuid())
+  pageId    String   @map("page_id")
+  sections  String   @default("[]")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([pageId])
+  @@map("page_versions")
+}
+
+model NavItem {
+  id        String   @id @default(uuid())
+  label     String
+  href      String
+  icon      String?
+  role      String   @default("all")
+  parentId  String?  @map("parent_id")
+  sortOrder Int      @default(0) @map("sort_order")
+  isVisible Boolean  @default(true) @map("is_visible")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  parent   NavItem?  @relation("NavHierarchy", fields: [parentId], references: [id])
+  children NavItem[] @relation("NavHierarchy")
+
+  @@index([role])
+  @@map("nav_items")
+}
+
+model PreviewToken {
+  id        String   @id @default(uuid())
+  pageId    String   @map("page_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("preview_tokens")
 }

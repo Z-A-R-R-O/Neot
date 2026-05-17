@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
+import { Timer } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore, type PageSection, type SectionType } from "@/stores/pageBuilderStore";
 import { StructureTree } from "./StructureTree";
@@ -10,17 +11,25 @@ import { saveUserPreset } from "@/lib/block-presets";
 import { ResponsiveBar } from "./ResponsiveBar";
 import { HistoryPanel } from "./HistoryPanel";
 import { DevModeToggle } from "./DevModeToggle";
+import { AlignmentGuides } from "./alignment-guides";
+import { PreviewToggle } from "./preview-toggle";
+import { AnimationTimeline } from "./animation-timeline";
 
 interface DevModeShellProps {
   children: ReactNode;
+  pageId?: string;
+  pageSlug?: string;
+  pageStatus?: string;
 }
 
-export function DevModeShell({ children }: DevModeShellProps) {
+export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevModeShellProps) {
   const [presetName, setPresetName] = useState("");
   const [showSavePreset, setShowSavePreset] = useState(false);
   const enabled = useDevModeStore((s) => s.enabled);
   const deviceMode = useDevModeStore((s) => s.deviceMode);
-  const { sections, selectedId, updateSection, selectSection, removeSection, addSection } = usePageBuilderStore();
+  const { sections, selectedId, updateSection, selectSection, removeSection, addSection, reorderSections } = usePageBuilderStore();
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [timelineOpen, setTimelineOpen] = useState(false);
 
   const canvasMaxWidth = deviceMode === "mobile" ? "375px" : deviceMode === "tablet" ? "768px" : "1440px";
 
@@ -68,6 +77,20 @@ export function DevModeShell({ children }: DevModeShellProps) {
           <ResponsiveBar />
         </div>
         <div className="flex items-center gap-2">
+          {pageStatus === "draft" && (
+            <span className="rounded-md bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-400 ring-1 ring-inset ring-amber-500/20">
+              Draft
+            </span>
+          )}
+          {pageId && pageSlug && <PreviewToggle pageId={pageId} pageSlug={pageSlug} />}
+          <button
+            onClick={() => setTimelineOpen(!timelineOpen)}
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+            title="Animation Timeline"
+          >
+            <Timer className="h-3.5 w-3.5" />
+          </button>
+          <AnimationTimeline open={timelineOpen} onClose={() => setTimelineOpen(false)} />
           <HistoryPanel />
           <DevModeToggle />
         </div>
@@ -102,6 +125,15 @@ export function DevModeShell({ children }: DevModeShellProps) {
             };
             addSection(copy);
           }}
+          onReorder={(activeId, overId) => {
+            const ordered = [...sections];
+            const activeIdx = ordered.findIndex((s) => s.id === activeId);
+            const overIdx = ordered.findIndex((s) => s.id === overId);
+            if (activeIdx === -1 || overIdx === -1) return;
+            const [moved] = ordered.splice(activeIdx, 1);
+            ordered.splice(overIdx, 0, moved);
+            reorderSections(ordered.map((s, i) => ({ ...s, sortOrder: i })));
+          }}
         />
       </div>
 
@@ -111,10 +143,11 @@ export function DevModeShell({ children }: DevModeShellProps) {
              style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
         
         <div className="relative z-10 flex-1 overflow-y-auto custom-scrollbar">
-          <div className="mx-auto min-h-full w-full bg-background shadow-[0_0_100px_rgba(0,0,0,0.5)] transition-all duration-500" style={{ maxWidth: canvasMaxWidth }}>
+          <div ref={canvasRef} className="mx-auto min-h-full w-full bg-background shadow-[0_0_100px_rgba(0,0,0,0.5)] transition-all duration-500" style={{ maxWidth: canvasMaxWidth }}>
             {children}
           </div>
         </div>
+        <AlignmentGuides containerRef={canvasRef} activeBlockId={selectedId ?? undefined} />
       </div>
 
       {/* Right Sidebar: Properties */}

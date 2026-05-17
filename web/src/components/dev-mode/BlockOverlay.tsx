@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { ChevronUp, ChevronDown, Trash2 } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { ResizeHandle } from "./resize-handle";
 
 interface BlockOverlayProps {
   blockId: string;
@@ -45,6 +46,24 @@ export function BlockOverlay({ blockId, label, path, children }: Omit<BlockOverl
     return () => observer.disconnect();
   }, [enabled, children]);
 
+  const handleResize = useCallback(
+    (width: number, height: number) => {
+      const section = usePageBuilderStore.getState().sections.find((s) => s.id === blockId);
+      if (!section) return;
+      usePageBuilderStore.getState().updateSection(blockId, {
+        settings: {
+          ...section.settings,
+          styles: {
+            ...(section.settings.styles ?? {}),
+            width: `${Math.round(width)}px`,
+            height: `${Math.round(height)}px`,
+          },
+        },
+      });
+    },
+    [blockId],
+  );
+
   if (!enabled) {
     return <>{children}</>;
   }
@@ -53,6 +72,7 @@ export function BlockOverlay({ blockId, label, path, children }: Omit<BlockOverl
     <div className="relative">
       <div
         ref={ref}
+        data-block-id={blockId}
         className={`relative transition-all duration-150 ${
           isHovered && !isSelected ? "ring-2 ring-primary-500/50" : ""
         } ${isSelected ? "ring-2 ring-primary-500 shadow-glow-sm" : ""}`}
@@ -139,11 +159,8 @@ export function BlockOverlay({ blockId, label, path, children }: Omit<BlockOverl
             {Math.round(rect.width)} × {Math.round(rect.height)}
           </div>
 
-          {/* Figma-style handles */}
-          <div className="absolute -left-1.5 -top-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
-          <div className="absolute -right-1.5 -top-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
-          <div className="absolute -bottom-1.5 -left-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
-          <div className="absolute -bottom-1.5 -right-1.5 h-3 w-3 rounded-sm border-2 border-primary-500 bg-white" />
+          {/* Resize handles */}
+          <ResizeHandle rect={rect} onResize={handleResize} />
         </div>
       )}
 

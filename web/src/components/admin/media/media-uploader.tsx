@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { Upload, Loader2, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface MediaUploaderProps {
@@ -14,11 +13,13 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isImage, setIsImage] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const altRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
     if (!file) return;
+    setIsImage(file.type.startsWith("image/"));
     setPreview(URL.createObjectURL(file));
     setIsUploading(true);
 
@@ -76,7 +77,7 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
           </div>
         ) : preview ? (
           <div className="relative">
-            {fileRef.current?.files?.[0]?.type?.startsWith("image/") ? (
+            {isImage ? (
               <img
                 src={preview}
                 alt="Preview"
@@ -87,7 +88,7 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
             )}
             <button
               className="absolute -right-2 -top-2 rounded-full bg-red-500 p-0.5 text-white"
-              onClick={() => setPreview(null)}
+              onClick={() => { setPreview(null); setIsImage(false); }}
             >
               <X className="h-3 w-3" />
             </button>

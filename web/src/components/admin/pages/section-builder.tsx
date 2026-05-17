@@ -11,7 +11,6 @@ import { useDevModeStore } from "@/stores/devModeStore";
 import { StructureTree } from "@/components/dev-mode/StructureTree";
 import { PropertiesPanel } from "@/components/dev-mode/PropertiesPanel";
 import { PresetPicker } from "@/components/dev-mode/PresetPicker";
-import { getPresets } from "@/lib/block-presets";
 
 const defaultContent: Record<SectionType, Record<string, unknown>> = {
   hero: { title: "", subtitle: "", ctaText: "Get Started", ctaLink: "/signup", background: "color" },
@@ -34,8 +33,6 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
   const {
     sections,
     selectedId,
-    isDirty,
-    isLoading,
     addSection,
     updateSection,
     setSections,
@@ -120,6 +117,7 @@ export function SectionBuilder({ pageId, onSave }: SectionBuilderProps) {
       setLoading(false);
     }
   }, [pageId, onSave, setLoading, setSections, markClean]);
+  void handleSave;
 
   const selectedSection = sections.find((s) => s.id === selectedId);
 

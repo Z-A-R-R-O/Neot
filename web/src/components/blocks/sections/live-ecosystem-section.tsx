@@ -32,7 +32,7 @@ function useCountUp(target: number, duration = 2000) {
     return () => observer.disconnect();
   }, [target, duration, started]);
 
-  return { value, ref };
+  return [value, ref] as const;
 }
 
 const activities = [
@@ -53,10 +53,10 @@ const AIAdjustments = [
 ];
 
 export function LiveEcosystemSection() {
-  const activeLearners = useCountUp(1247);
-  const conceptsToday = useCountUp(3891);
-  const avgRetention = useCountUp(94);
-  const [now, setNow] = useState(Date.now());
+  const [activeLearners, activeLearnersRef] = useCountUp(1247);
+  const [conceptsToday, conceptsTodayRef] = useCountUp(3891);
+  const [avgRetention, avgRetentionRef] = useCountUp(94);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
@@ -99,8 +99,8 @@ export function LiveEcosystemSection() {
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/60">Active Now</span>
               </div>
-              <span ref={activeLearners.ref} className="font-heading text-4xl font-bold text-foreground tracking-tight">
-                {activeLearners.value}
+              <span ref={activeLearnersRef} className="font-heading text-4xl font-bold text-foreground tracking-tight">
+                {activeLearners}
               </span>
               <div className="mt-2 flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -115,8 +115,8 @@ export function LiveEcosystemSection() {
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/60">Concepts Today</span>
               </div>
-              <span ref={conceptsToday.ref} className="font-heading text-4xl font-bold text-foreground tracking-tight">
-                {conceptsToday.value}
+              <span ref={conceptsTodayRef} className="font-heading text-4xl font-bold text-foreground tracking-tight">
+                {conceptsToday}
               </span>
             </div>
 
@@ -127,8 +127,8 @@ export function LiveEcosystemSection() {
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/60">Avg Retention</span>
               </div>
-              <span ref={avgRetention.ref} className="font-heading text-4xl font-bold text-foreground tracking-tight">
-                {avgRetention.value}%
+              <span ref={avgRetentionRef} className="font-heading text-4xl font-bold text-foreground tracking-tight">
+                {avgRetention}%
               </span>
             </div>
           </div>

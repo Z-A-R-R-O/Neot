@@ -102,7 +102,7 @@ export default function UserDetailPage() {
           userId={user.id}
           currentRole={user.role}
           onRoleChange={(_, newRole) => setUser((prev) => prev ? { ...prev, role: newRole } : prev)}
-          onDelete={(userId) => router.push("/admin/users")}
+          onDelete={(_userId) => router.push("/admin/users")}
         />
       </div>
 

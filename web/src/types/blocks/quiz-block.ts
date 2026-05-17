@@ -3,11 +3,17 @@ export type QuizQuestionType =
   | "msq"
   | "true-false"
   | "fill-blank"
-  | "matching";
+  | "matching"
+  | "short-answer";
 
 export interface QuizOption {
   id: string;
   text: string;
+}
+
+export interface ShortAnswerQuestion {
+  question: string;
+  correctAnswer: string;
 }
 
 export interface QuizQuestion {

@@ -22,10 +22,12 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = localStorage.getItem("neot-theme-mode") as ThemeMode | null;
-    if (stored === "light" || stored === "dark") {
-      setModeState(stored);
-    }
-    setMounted(true);
+    queueMicrotask(() => {
+      if (stored === "light" || stored === "dark") {
+        setModeState(stored);
+      }
+      setMounted(true);
+    });
   }, []);
 
   useEffect(() => {

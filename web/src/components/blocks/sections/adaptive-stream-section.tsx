@@ -8,7 +8,9 @@ function HydratedCounter({ cycleStep }: { cycleStep: number }) {
   const [value, setValue] = useState("000");
 
   useEffect(() => {
-    setValue(String(Math.floor(Math.random() * 900 + 100) + cycleStep * 7).slice(0, 3));
+    requestAnimationFrame(() => {
+      setValue(String(Math.floor(Math.random() * 900 + 100) + cycleStep * 7).slice(0, 3));
+    });
   }, [cycleStep]);
 
   return (
@@ -49,7 +51,7 @@ export function AdaptiveStreamSection() {
     const update = () => {
       setDimensions({ w: el.offsetWidth, h: el.offsetHeight });
     };
-    update();
+    requestAnimationFrame(update);
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);

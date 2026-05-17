@@ -6,7 +6,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  Users, BookOpen, GraduationCap, Trophy, TrendingUp, Loader2,
+  Users, BookOpen, GraduationCap, Trophy,
 } from "lucide-react";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";

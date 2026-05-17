@@ -28,6 +28,7 @@ export default function PublishCoursePage() {
   const router = useRouter();
   const { data: course, isLoading, error, refetch } = useCourse(params.id);
   const [publishing, setPublishing] = useState(false);
+  const [archiving, setArchiving] = useState(false);
 
   if (isLoading) {
     return <LoadingScreen message="Checking readiness..." />;
@@ -84,6 +85,7 @@ export default function PublishCoursePage() {
 
   const allPassed = checklist.every((item) => item.passed);
   const isPublished = course.status === "published";
+  const isArchived = course.status === "archived";
 
   async function handleTogglePublish() {
     setPublishing(true);
@@ -103,6 +105,24 @@ export default function PublishCoursePage() {
     }
   }
 
+  async function handleArchive() {
+    setArchiving(true);
+    try {
+      await fetch(`/api/courses/${params.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: isArchived ? "draft" : "archived",
+        }),
+      });
+      refetch();
+    } catch {
+      // Silently fail
+    } finally {
+      setArchiving(false);
+    }
+  }
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
@@ -112,8 +132,8 @@ export default function PublishCoursePage() {
             Review and publish your course.
           </p>
         </div>
-        <Badge variant={isPublished ? "default" : "secondary"}>
-          {isPublished ? "Published" : "Draft"}
+        <Badge variant={isPublished ? "default" : isArchived ? "destructive" : "secondary"}>
+          {isPublished ? "Published" : isArchived ? "Archived" : "Draft"}
         </Badge>
       </div>
 
@@ -185,23 +205,44 @@ export default function PublishCoursePage() {
           <Button variant="outline" onClick={() => router.back()}>
             Back
           </Button>
-          {isPublished ? (
+          {isArchived ? (
             <Button
               variant="outline"
-              disabled={publishing}
-              onClick={handleTogglePublish}
+              disabled={archiving}
+              onClick={handleArchive}
             >
-              {publishing && <Loader2 className="h-4 w-4 animate-spin" />}
-              Unpublish
+              {archiving && <Loader2 className="h-4 w-4 animate-spin" />}
+              Unarchive
             </Button>
           ) : (
-            <Button
-              disabled={!allPassed || publishing}
-              onClick={handleTogglePublish}
-            >
-              {publishing && <Loader2 className="h-4 w-4 animate-spin" />}
-              Publish Course
-            </Button>
+            <>
+              {isPublished ? (
+                <Button
+                  variant="outline"
+                  disabled={publishing}
+                  onClick={handleTogglePublish}
+                >
+                  {publishing && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Unpublish
+                </Button>
+              ) : (
+                <Button
+                  disabled={!allPassed || publishing}
+                  onClick={handleTogglePublish}
+                >
+                  {publishing && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Publish Course
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                disabled={archiving}
+                onClick={handleArchive}
+              >
+                {archiving && <Loader2 className="h-4 w-4 animate-spin" />}
+                Archive
+              </Button>
+            </>
           )}
         </div>
       </div>

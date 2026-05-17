@@ -8,8 +8,8 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const lesson = await prisma.lesson.findUnique({
-    where: { id },
+  const lesson = await prisma.lesson.findFirst({
+    where: { id, deletedAt: null },
     include: {
       module: {
         select: {

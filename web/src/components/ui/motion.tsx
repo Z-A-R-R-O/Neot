@@ -113,13 +113,12 @@ export function ScaleOnHover({ children, className }: ScaleOnHoverProps) {
 
 interface CounterProps {
   value: number;
-  duration?: number;
   suffix?: string;
   prefix?: string;
   className?: string;
 }
 
-export function Counter({ value, duration = 2, suffix = "", prefix = "", className }: CounterProps) {
+export function Counter({ value, suffix = "", prefix = "", className }: CounterProps) {
   return (
     <motion.span
       className={className}

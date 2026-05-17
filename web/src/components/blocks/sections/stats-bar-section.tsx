@@ -52,7 +52,7 @@ export function StatsBarSection({ content, blockId }: { content: Record<string, 
     const el = sectionRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsInView(true); },
+      ([entry]) => { if (entry.isIntersecting) queueMicrotask(() => setIsInView(true)); },
       { threshold: 0.3 }
     );
     obs.observe(el);

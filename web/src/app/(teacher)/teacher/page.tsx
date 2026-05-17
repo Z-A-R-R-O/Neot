@@ -11,7 +11,7 @@ export default async function TeacherDashboardPage() {
   let stats = { totalCourses: 0, totalStudents: 0, totalEnrollments: 0, averageProgress: 0 };
 
   try {
-    const [totalCourses, enrollments, progressData] = await Promise.all([
+    const [totalCourses, enrollments, _progressData] = await Promise.all([
       prisma.course.count({ where: { teacherId: userId ?? "" } }),
       prisma.enrollment.findMany({
         where: { course: { teacherId: userId ?? "" } },

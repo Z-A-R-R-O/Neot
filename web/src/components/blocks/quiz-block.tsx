@@ -37,6 +37,12 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
     (selected: string | string[]): boolean => {
       if (!question) return false;
 
+      if (question.type === "short-answer") {
+        const userAnswer = (selected as string).trim().toLowerCase();
+        const correct = (question.correctAnswer as string).trim().toLowerCase();
+        return userAnswer === correct;
+      }
+
       const correct = question.correctAnswer;
 
       if (Array.isArray(correct) && Array.isArray(selected)) {
@@ -248,6 +254,19 @@ export function QuizBlock({ content, lessonId = "", blockId = "" }: QuizBlockPro
             placeholder="Type your answer..."
             className="w-full rounded-lg border border-border p-3 focus:border-primary focus:outline-none"
             disabled={submitted}
+          />
+        )}
+
+        {question.type === "short-answer" && (
+          <textarea
+            value={typeof currentAnswer === "string" ? currentAnswer : ""}
+            onChange={(e) => {
+              if (!submitted) setCurrentAnswer(e.target.value);
+            }}
+            placeholder="Type your answer..."
+            className="w-full rounded-lg border border-border p-3 focus:border-primary focus:outline-none"
+            disabled={submitted}
+            rows={3}
           />
         )}
       </div>

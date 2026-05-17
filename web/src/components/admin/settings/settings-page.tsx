@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneralSettings } from "@/components/admin/settings/general-settings";
 import { AuthSettings } from "@/components/admin/settings/auth-settings";
 import { EmailSettings } from "@/components/admin/settings/email-settings";
+import { FeatureTogglesSection } from "@/components/admin/settings/feature-toggles-section";
 
 interface SettingRecord {
   key: string;
@@ -90,6 +91,7 @@ export function SettingsPage() {
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="auth">Auth</TabsTrigger>
           <TabsTrigger value="email">Email</TabsTrigger>
+          <TabsTrigger value="features">Features</TabsTrigger>
         </TabsList>
         <TabsContent value="general" className="mt-4">
           <GeneralSettings values={values} onChange={handleChange} />
@@ -99,6 +101,9 @@ export function SettingsPage() {
         </TabsContent>
         <TabsContent value="email" className="mt-4">
           <EmailSettings values={values} onChange={handleChange} />
+        </TabsContent>
+        <TabsContent value="features" className="mt-4">
+          <FeatureTogglesSection values={values} onChange={handleChange} />
         </TabsContent>
       </Tabs>
     </div>

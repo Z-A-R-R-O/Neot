@@ -9,8 +9,8 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const course = await prisma.course.findUnique({
-    where: { id },
+  const course = await prisma.course.findFirst({
+    where: { id, deletedAt: null },
     include: {
       category: { select: { id: true, name: true, slug: true } },
       teacher: { select: { id: true, fullName: true, avatarUrl: true } },
@@ -46,7 +46,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const existing = await prisma.course.findUnique({ where: { id } });
+  const existing = await prisma.course.findFirst({ where: { id, deletedAt: null } });
   if (!existing) {
     return NextResponse.json({ error: "Course not found" }, { status: 404 });
   }
@@ -76,7 +76,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const existing = await prisma.course.findUnique({ where: { id } });
+  const existing = await prisma.course.findFirst({ where: { id, deletedAt: null } });
   if (!existing) {
     return NextResponse.json({ error: "Course not found" }, { status: 404 });
   }

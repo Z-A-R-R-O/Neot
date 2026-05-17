@@ -11,13 +11,25 @@ export type SectionType =
   | "pricing-table"
   | "custom-html";
 
+export interface ResponsiveStyles {
+  desktop?: Record<string, unknown>;
+  tablet?: Record<string, unknown>;
+  mobile?: Record<string, unknown>;
+}
+
+export interface SectionSettings {
+  styles?: Record<string, unknown>;
+  responsiveStyles?: ResponsiveStyles;
+  [key: string]: unknown;
+}
+
 export interface PageSection {
   id: string;
   pageId: string;
   blockType: SectionType;
   sortOrder: number;
   content: Record<string, unknown>;
-  settings: Record<string, unknown>;
+  settings: SectionSettings;
 }
 
 interface PageBuilderState {

@@ -67,8 +67,10 @@ export function LessonPlayer({
   const timeSpentRef = useRef(0);
 
   useEffect(() => {
-    reset();
-    setTotalBlocks(blocks.length);
+    queueMicrotask(() => {
+      reset();
+      setTotalBlocks(blocks.length);
+    });
 
     progressIntervalRef.current = setInterval(() => {
       timeSpentRef.current += 30;

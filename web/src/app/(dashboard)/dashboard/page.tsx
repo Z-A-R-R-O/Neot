@@ -9,7 +9,7 @@ export default async function DashboardPage() {
   const user = await getUser();
   const name = user?.email ? user.email.split("@")[0] : "there";
 
-  let stats = { courses: 0, lessons: 0, xp: 0, streak: 0, level: 1, levelTitle: "Beginner", levelProgress: 0, certificates: 0 };
+  let stats = { courses: 0, lessons: 0, xp: 0, streak: 0, level: 1, levelTitle: "Beginner", levelProgress: 0, certificates: 0, timeSpent: 0 };
   let enrollments: {
     id: string;
     progress: number;
@@ -42,7 +42,7 @@ export default async function DashboardPage() {
   }[] = [];
 
   try {
-    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs] = await Promise.all([
+    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, timeAgg] = await Promise.all([
       prisma.profile.findUnique({
         where: { id: user!.id },
         select: { xp: true, level: true, currentStreak: true },
@@ -68,6 +68,10 @@ export default async function DashboardPage() {
       }),
       prisma.certificate.count({ where: { userId: user!.id } }),
       getRecommendations(user!.id),
+      prisma.lessonProgress.aggregate({
+        where: { userId: user!.id },
+        _sum: { timeSpent: true },
+      }),
     ]);
     recommendations = recs;
 
@@ -84,6 +88,7 @@ export default async function DashboardPage() {
       levelTitle: getLevelTitle(level),
       levelProgress: levelInfo.progress,
       certificates: certCount,
+      timeSpent: timeAgg._sum.timeSpent ?? 0,
     };
     enrollments = enrolled;
 

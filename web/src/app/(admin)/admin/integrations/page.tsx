@@ -1,0 +1,102 @@
+import { prisma } from "@/lib/db";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Key, Webhook, Puzzle, Link } from "lucide-react";
+
+export default async function AdminIntegrationsPage() {
+  const settings = await prisma.platformSetting.findMany({
+    where: { group: "integrations" },
+  });
+
+  const values: Record<string, string> = {};
+  for (const s of settings) {
+    values[s.key] = s.value;
+  }
+
+  const integrations = [
+    {
+      name: "Stripe",
+      description: "Payment processing for course purchases",
+      icon: Key,
+      status: values["stripe_enabled"] ?? "disabled",
+      apiKey: values["stripe_key"] ? "••••••••" + values["stripe_key"].slice(-4) : null,
+    },
+    {
+      name: "SendGrid",
+      description: "Email delivery for notifications and alerts",
+      icon: Key,
+      status: values["sendgrid_enabled"] ?? "disabled",
+      apiKey: values["sendgrid_key"] ? "••••••••" + values["sendgrid_key"].slice(-4) : null,
+    },
+    {
+      name: "Webhooks",
+      description: "Outbound event notifications to external services",
+      icon: Webhook,
+      status: values["webhooks_enabled"] ?? "disabled",
+      endpoints: parseInt(values["webhook_count"] ?? "0"),
+    },
+    {
+      name: "LMS Import",
+      description: "Import content from external LMS platforms",
+      icon: Puzzle,
+      status: values["lms_import_enabled"] ?? "disabled",
+    },
+    {
+      name: "OAuth Providers",
+      description: "Social login and SSO integrations",
+      icon: Link,
+      status: values["oauth_enabled"] ?? "disabled",
+      providers: values["oauth_providers"] ?? "",
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Integrations</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Third-party integrations and API connections.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {integrations.map((integration) => {
+          const Icon = integration.icon;
+          return (
+            <Card key={integration.name}>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">{integration.name}</CardTitle>
+                    <CardDescription>{integration.description}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <Badge variant={integration.status === "enabled" ? "default" : "secondary"}>
+                    {integration.status === "enabled" ? "Enabled" : "Disabled"}
+                  </Badge>
+                  {"apiKey" in integration && integration.apiKey && (
+                    <span className="text-xs text-muted-foreground">{integration.apiKey}</span>
+                  )}
+                  {"endpoints" in integration && integration.endpoints !== undefined && (
+                    <span className="text-xs text-muted-foreground">
+                      {integration.endpoints} endpoint{integration.endpoints !== 1 ? "s" : ""}
+                    </span>
+                  )}
+                  {"providers" in integration && integration.providers && (
+                    <span className="text-xs text-muted-foreground">{integration.providers}</span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

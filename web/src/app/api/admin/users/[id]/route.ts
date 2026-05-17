@@ -5,6 +5,7 @@ import { getUser } from "@/lib/auth";
 
 const updateUserSchema = z.object({
   role: z.enum(["student", "teacher", "parent", "admin"]).optional(),
+  status: z.enum(["active", "suspended", "pending_approval"]).optional(),
   fullName: z.string().min(1).max(200).optional(),
   email: z.string().email().optional(),
   ageGroup: z.string().optional(),

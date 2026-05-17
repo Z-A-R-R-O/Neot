@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Shield, Trash2 } from "lucide-react";
+import { Loader2, Shield, Trash2, Ban, CheckCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +24,18 @@ import { Label } from "@/components/ui/label";
 interface UserActionsProps {
   userId: string;
   currentRole: string;
+  currentStatus?: string;
   onRoleChange: (userId: string, role: string) => void;
+  onStatusChange?: (userId: string, status: string) => void;
   onDelete: (userId: string) => void;
 }
 
 export function UserActions({
   userId,
   currentRole,
+  currentStatus = "active",
   onRoleChange,
+  onStatusChange,
   onDelete,
 }: UserActionsProps) {
   const [showRoleDialog, setShowRoleDialog] = useState(false);
@@ -62,6 +66,24 @@ export function UserActions({
     }
   }
 
+  async function handleStatusChange(newStatus: string) {
+    setIsUpdating(true);
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        onStatusChange?.(userId, newStatus);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
   async function handleDelete() {
     setIsUpdating(true);
     try {
@@ -82,6 +104,41 @@ export function UserActions({
   return (
     <>
       <div className="flex items-center gap-2">
+        {currentStatus === "pending_approval" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-green-500 hover:text-green-600"
+            disabled={isUpdating}
+            onClick={() => handleStatusChange("active")}
+          >
+            <CheckCircle className="h-4 w-4" />
+            Approve
+          </Button>
+        )}
+        {currentStatus !== "suspended" ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-orange-500 hover:text-orange-600"
+            disabled={isUpdating}
+            onClick={() => handleStatusChange("suspended")}
+          >
+            <Ban className="h-4 w-4" />
+            Suspend
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-green-500 hover:text-green-600"
+            disabled={isUpdating}
+            onClick={() => handleStatusChange("active")}
+          >
+            <CheckCircle className="h-4 w-4" />
+            Reinstate
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="sm"
@@ -91,7 +148,7 @@ export function UserActions({
           }}
         >
           <Shield className="h-4 w-4" />
-          Change Role
+          Role
         </Button>
         <Button
           variant="ghost"

@@ -5,10 +5,12 @@ import { editorRegistry } from "@/lib/editor-registry";
 import { TextBlock } from "@/components/blocks/text-block";
 import { VideoBlock } from "@/components/blocks/video-block";
 import { QuizBlock } from "@/components/blocks/quiz-block";
+import { PdfBlock } from "@/components/blocks/pdf-block";
 
 blockRegistry.register("text", { component: TextBlock, label: "Text", scope: "lesson" });
 blockRegistry.register("video", { component: VideoBlock, label: "Video", scope: "lesson" });
 blockRegistry.register("quiz", { component: QuizBlock, label: "Quiz", scope: "lesson" });
+blockRegistry.register("pdf", { component: PdfBlock, label: "PDF", scope: "lesson" });
 
 // Page section renders
 import {

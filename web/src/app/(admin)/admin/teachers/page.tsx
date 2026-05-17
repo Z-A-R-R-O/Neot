@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Users, BookOpen, GraduationCap, Trash2, ArrowUpDown } from "lucide-react";
+import { Search, BookOpen, GraduationCap, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";
@@ -36,26 +36,26 @@ export default function AdminTeachersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-
-  const fetchTeachers = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-
-      const res = await fetch(`/api/admin/teachers?${params}`);
-      if (!res.ok) throw new Error("Failed to load teachers");
-      setData(await res.json());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load teachers");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [search]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchTeachers();
-  }, [fetchTeachers]);
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+
+    fetch(`/api/admin/teachers?${params}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load teachers");
+        return res.json();
+      })
+      .then(setData)
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load teachers"))
+      .finally(() => setIsLoading(false));
+  }, [search, refreshKey]);
+
+  const handleRetry = useCallback(() => {
+    setIsLoading(true);
+    setRefreshKey((k) => k + 1);
+  }, []);
 
   async function handleDelete(teacherId: string, name: string | null) {
     if (!confirm(`Delete teacher "${name ?? "Unknown"}"? This action cannot be undone.`)) return;
@@ -101,7 +101,7 @@ export default function AdminTeachersPage() {
       {isLoading ? (
         <LoadingScreen fullScreen={false} message="Loading teachers..." />
       ) : error ? (
-        <ErrorState message={error} onRetry={fetchTeachers} />
+        <ErrorState message={error} onRetry={handleRetry} />
       ) : data ? (
         <>
           <p className="text-xs text-muted-foreground">
