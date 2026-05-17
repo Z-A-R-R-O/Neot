@@ -42,6 +42,7 @@ model Profile {
   bookmarks Bookmark[]
   lessonNotes LessonNote[]
   userBadges UserBadge[]
+  reviews Review[]
   notifications Notification[]
   passwordResetTokens PasswordResetToken[]
   sessions Session[]
@@ -91,6 +92,7 @@ model Course {
   enrollments Enrollment[]
   certificates Certificate[]
   tags CourseTag[]
+  reviews Review[]
 
   @@map("courses")
 }
@@ -664,4 +666,22 @@ model Message {
   @@index([recipientId])
   @@index([recipientId, readAt])
   @@map("messages")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  courseId  String   @map("course_id")
+  rating    Int
+  comment   String?
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+  @@map("reviews")
 }
