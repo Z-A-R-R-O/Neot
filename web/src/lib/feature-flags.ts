@@ -42,6 +42,7 @@ const DEFAULT_FLAGS: { key: string; label: string; description: string; enabled:
   { key: "responsive_editing", label: "Responsive Editing", description: "Enable per-breakpoint style overrides", enabled: true },
   { key: "beta_onboarding", label: "New Onboarding (Beta)", description: "Use the new step-based onboarding flow", enabled: false },
   { key: "beta_analytics", label: "Enhanced Analytics (Beta)", description: "Show advanced analytics charts and reports", enabled: false },
+  { key: "performance_inspector", label: "Performance Inspector", description: "Show page composition and size analysis in Dev Mode", enabled: true },
 ];
 
 export async function ensureDefaultFlags(): Promise<void> {

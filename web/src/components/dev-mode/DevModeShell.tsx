@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef, useState } from "react";
-import { Timer, LayoutTemplate, Layers } from "lucide-react";
+import { Timer, LayoutTemplate, Layers, BarChart3 } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore, type PageSection, type SectionType } from "@/stores/pageBuilderStore";
 import { StructureTree } from "./StructureTree";
@@ -16,6 +16,7 @@ import { PreviewToggle } from "./preview-toggle";
 import { AnimationTimeline } from "./animation-timeline";
 import { TemplateLibraryPanel } from "./template-library-panel";
 import { ReusableBlocksPanel } from "./reusable-blocks-panel";
+import { PerformanceInspectorPanel } from "./performance-inspector-panel";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface DevModeShellProps {
@@ -32,6 +33,7 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
   const [showSaveReusable, setShowSaveReusable] = useState(false);
   const animationStudioEnabled = useFeatureFlag("animation_studio");
   const reusableBlocksEnabled = useFeatureFlag("reusable_blocks");
+  const perfInspectorEnabled = useFeatureFlag("performance_inspector");
   const enabled = useDevModeStore((s) => s.enabled);
   const deviceMode = useDevModeStore((s) => s.deviceMode);
   const { sections, selectedId, updateSection, selectSection, removeSection, addSection, reorderSections, setSections } = usePageBuilderStore();
@@ -39,6 +41,7 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [templateLibraryOpen, setTemplateLibraryOpen] = useState(false);
   const [reusableBlocksOpen, setReusableBlocksOpen] = useState(false);
+  const [perfInspectorOpen, setPerfInspectorOpen] = useState(false);
 
   const canvasMaxWidth = deviceMode === "mobile" ? "375px" : deviceMode === "tablet" ? "768px" : "1440px";
 
@@ -167,6 +170,21 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
               <ReusableBlocksPanel
                 open={reusableBlocksOpen}
                 onClose={() => setReusableBlocksOpen(false)}
+              />
+            </>
+          )}
+          {perfInspectorEnabled && (
+            <>
+              <button
+                onClick={() => setPerfInspectorOpen(!perfInspectorOpen)}
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+                title="Performance Inspector"
+              >
+                <BarChart3 className="h-3.5 w-3.5" />
+              </button>
+              <PerformanceInspectorPanel
+                open={perfInspectorOpen}
+                onClose={() => setPerfInspectorOpen(false)}
               />
             </>
           )}
