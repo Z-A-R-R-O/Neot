@@ -369,7 +369,7 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Admin editable pages: homepage, pricing, blogs, policies, marketing | ✅ | CustomPage model + PageRenderer |
-| Blog system | 🔲 | Not implemented |
+| Blog system | ✅ | BlogPost model, CRUD API, public listing/detail pages, admin management with draft/publish workflow |
 | FAQ management | ✅ | FAQ section editor |
 | Landing page builder | ✅ | Page builder with Dev Mode |
 
@@ -472,13 +472,13 @@
 | Certificates | 1 | 1 | 0 | 0 | 0 |
 | Recommendations | 2 | 1 | 1 | 0 | 0 |
 | Dev Mode | 7 | 4 | 3 | 0 | 0 |
-| CMS | 4 | 3 | 0 | 1 | 0 |
+| CMS | 4 | 4 | 0 | 0 | 0 |
 | Security | 7 | 7 | 0 | 0 | 0 |
 | Performance | 6 | 3 | 0 | 3 | 0 |
 | Future Features | 13 | 0 | 0 | 13 | 0 |
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **149** | **16** | **39** | **0** |
+| **TOTAL** | **211** | **150** | **16** | **38** | **0** |
 
-> **Completion: 70.6%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Security category fully complete. Key gaps: AI features, scaling.
+> **Completion: 71.1%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Blog system with draft/publish workflow, public pages, admin management. Security and CMS categories fully complete. Key gaps: AI features, scaling.
