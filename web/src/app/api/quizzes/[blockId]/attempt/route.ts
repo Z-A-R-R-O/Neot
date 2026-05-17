@@ -7,6 +7,8 @@ import { saveQuizAttempt } from "@/lib/quizzes";
 import { getLevelInfo, XP_REWARDS } from "@/lib/gamification/xp-calculator";
 import { checkAndAwardAchievements } from "@/lib/gamification/achievement-service";
 import type { NewAchievement } from "@/lib/gamification/achievement-service";
+import { checkAndAwardBadges } from "@/lib/gamification/badge-service";
+import type { NewBadge } from "@/lib/gamification/badge-service";
 
 const attemptSchema = z.object({
   lessonId: z.string().uuid(),
@@ -51,12 +53,14 @@ export async function POST(
   let xpAwarded = 0;
   let level = 0;
   let newAchievements: NewAchievement[] = [];
+  let newBadges: NewBadge[] = [];
 
   if (percentage >= 80) {
     const result = await awardQuizPassXp(userId, parsed.data.lessonId, blockId, percentage);
     xpAwarded = result.xpAwarded;
     level = result.level;
     newAchievements = result.newAchievements;
+    newBadges = result.newBadges;
   }
 
   const passed = percentage >= 80;
@@ -73,7 +77,7 @@ export async function POST(
   });
 
   return NextResponse.json(
-    { ...attempt, xpAwarded, level, newAchievements: newAchievements.length > 0 ? newAchievements : undefined },
+    { ...attempt, xpAwarded, level, newAchievements: newAchievements.length > 0 ? newAchievements : undefined, newBadges: newBadges.length > 0 ? newBadges : undefined },
     { status: 201 },
   );
 }
@@ -100,6 +104,7 @@ async function awardQuizPassXp(
         xpAwarded: 0,
         level: profile?.level ?? 1,
         newAchievements: [] as NewAchievement[],
+        newBadges: [] as NewBadge[],
       };
     }
 
@@ -138,11 +143,13 @@ async function awardQuizPassXp(
     const newAchievements = percentage >= 100
       ? await checkAndAwardAchievements(userId, tx)
       : [];
+    const newBadges = await checkAndAwardBadges(userId, tx);
 
     return {
       xpAwarded: XP_REWARDS.QUIZ_PASS,
       level: levelInfo.level,
       newAchievements,
+      newBadges,
     };
   });
 }

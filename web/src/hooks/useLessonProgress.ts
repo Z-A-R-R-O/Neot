@@ -44,6 +44,7 @@ export function useUpdateProgress(lessonId: string) {
         level: number;
         courseCompleted: boolean;
         newAchievements?: { id: string; name: string; description: string; xpReward: number }[];
+        newBadges?: { id: string; name: string; description: string; icon: string; xpReward: number }[];
       }>;
     },
     onSuccess: () => {

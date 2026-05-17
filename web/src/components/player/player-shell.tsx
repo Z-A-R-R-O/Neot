@@ -9,6 +9,7 @@ import { PlayerHeader } from "@/components/player/player-header";
 import { NavigationButtons } from "@/components/player/navigation-buttons";
 import { XpPopup } from "@/components/gamification/xp-popup";
 import { AchievementPopup } from "@/components/gamification/achievement-popup";
+import { BadgePopup } from "@/components/gamification/badge-popup";
 import { BookmarkToggle } from "@/components/player/bookmark-toggle";
 import { NotesPanel } from "@/components/player/notes-panel";
 import { FileText, CheckCircle2 } from "lucide-react";
@@ -54,6 +55,8 @@ export function LessonPlayer({
   const [xpPopup, setXpPopup] = useState<{ amount: number; courseCompleted?: boolean } | null>(null);
   const [achievementQueue, setAchievementQueue] = useState<{ name: string; description: string; xpReward: number }[]>([]);
   const [currentAchievement, setCurrentAchievement] = useState<{ name: string; description: string; xpReward: number } | null>(null);
+  const [badgeQueue, setBadgeQueue] = useState<{ name: string; description: string; icon: string; xpReward: number }[]>([]);
+  const [currentBadge, setCurrentBadge] = useState<{ name: string; description: string; icon: string; xpReward: number } | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
 
   const {
@@ -90,16 +93,33 @@ export function LessonPlayer({
     setXpPopup(null);
     if (achievementQueue.length > 0) {
       setCurrentAchievement(achievementQueue[0]);
+    } else if (badgeQueue.length > 0) {
+      setCurrentBadge(badgeQueue[0]);
     }
-  }, [achievementQueue]);
+  }, [achievementQueue, badgeQueue]);
 
   const handleAchievementComplete = useCallback(() => {
     setAchievementQueue((prev) => {
       const [_, ...rest] = prev;
       if (rest.length > 0) {
         setCurrentAchievement(rest[0]);
+      } else if (badgeQueue.length > 0) {
+        setCurrentAchievement(null);
+        setCurrentBadge(badgeQueue[0]);
       } else {
         setCurrentAchievement(null);
+      }
+      return rest;
+    });
+  }, [badgeQueue]);
+
+  const handleBadgeComplete = useCallback(() => {
+    setBadgeQueue((prev) => {
+      const [_, ...rest] = prev;
+      if (rest.length > 0) {
+        setCurrentBadge(rest[0]);
+      } else {
+        setCurrentBadge(null);
       }
       return rest;
     });
@@ -117,6 +137,10 @@ export function LessonPlayer({
     const achievements = result.newAchievements;
     if (achievements && achievements.length > 0) {
       setAchievementQueue(achievements);
+    }
+    const badges = result.newBadges;
+    if (badges && badges.length > 0) {
+      setBadgeQueue(badges);
     }
     if (result.courseCompleted) {
       setTimeout(() => router.push(`/courses/${lesson.module.courseId}/certificate`), 3000);
@@ -149,6 +173,15 @@ export function LessonPlayer({
           description={currentAchievement.description}
           xpReward={currentAchievement.xpReward}
           onComplete={handleAchievementComplete}
+        />
+      )}
+      {currentBadge && (
+        <BadgePopup
+          name={currentBadge.name}
+          description={currentBadge.description}
+          icon={currentBadge.icon}
+          xpReward={currentBadge.xpReward}
+          onComplete={handleBadgeComplete}
         />
       )}
 

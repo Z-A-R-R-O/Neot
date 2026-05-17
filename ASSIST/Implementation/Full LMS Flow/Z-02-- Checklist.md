@@ -72,7 +72,7 @@
 | Global Styles | ✅ | 10th PropertiesPanel tab: per-block theme token overrides (12 color, 3 typography, 5 radii keys) stored in section.settings.themeOverrides |
 | Variables/Tokens | ✅ | Theme token system with CSS variable provider |
 | Data Bindings | ✅ | DataBoundRenderer + data-binding-tab in PropertiesPanel: 6 source types, filters, sorting, field mapping, cache, fallback |
-| CMS Connections | 🔲 | No connection between block props and CMS data sources |
+| CMS Connections | ✅ | DataBoundRenderer + data-binding-tab: 6 source types, filters, sorting, field mapping, cache, fallback |
 | Dynamic Routes | 🚧 | CustomPage rendering via catch-all route, but no admin UI to create/edit routes |
 | Version History | ✅ | Named snapshots + versionTag badges (Published/Before Publish/Manual) + diff modal |
 | Publish Manager | ✅ | page-validator.ts with real checks (empty sections, missing title, empty fields) + PublishButton with validation results + versionTagged snapshots |
@@ -451,7 +451,7 @@
 | Properties Panel | 15 | 15 | 0 | 0 | 0 |
 | Responsive Engine | 6 | 4 | 1 | 1 | 0 |
 | Theme System | 5 | 2 | 3 | 0 | 0 |
-| Data Binding | 2 | 1 | 0 | 1 | 0 |
+| Data Binding | 2 | 2 | 0 | 0 | 0 |
 | CMS | 6 | 2 | 2 | 2 | 0 |
 | Templates | 5 | 5 | 0 | 0 | 0 |
 | Animations | 3 | 2 | 1 | 0 | 0 |
@@ -479,6 +479,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **265** | **158** | **29** | **78** | **0** |
+| **TOTAL** | **265** | **159** | **29** | **77** | **0** |
 
-> **Completion: 59.6%** — Properties Panel 15/15 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ + Templates 5/5 ✅ + Admin Pages 31/32 ✅ + Dev Mode Modules 17/21 ✅. Still needing: billing admin page, CMS connections, dev console, custom breakpoints, nested editing, overlay improvements, accessibility tools, cache invalidation, webhook integrations, performance bundle insights.
+> **Completion: 60.0%** — Properties Panel 15/15 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ + Templates 5/5 ✅ + Admin Pages 31/32 ✅ + Dev Mode Modules 17/21 ✅ + Data Binding 2/2 ✅. Still needing: billing admin page, dev console, custom breakpoints, nested editing, overlay improvements, accessibility tools, cache invalidation, webhook integrations, performance bundle insights.

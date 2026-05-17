@@ -13,3 +13,8 @@ export type { NewAchievement } from "./achievement-service";
 
 export { REWARDS, getUnlockedRewards, getLockedRewards } from "./rewards";
 export type { RewardDefinition } from "./rewards";
+
+export { BADGES, BADGE_CATEGORIES } from "./badges";
+export type { BadgeDefinition } from "./badges";
+export { checkAndAwardBadges, ensureBadgesSeeded } from "./badge-service";
+export type { NewBadge } from "./badge-service";

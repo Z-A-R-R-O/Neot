@@ -7,6 +7,8 @@ import { calculateStreak } from "@/lib/gamification/streak-tracker";
 import { getLevelInfo, XP_REWARDS } from "@/lib/gamification/xp-calculator";
 import { checkAndAwardAchievements } from "@/lib/gamification/achievement-service";
 import type { NewAchievement } from "@/lib/gamification/achievement-service";
+import { checkAndAwardBadges } from "@/lib/gamification/badge-service";
+import type { NewBadge } from "@/lib/gamification/badge-service";
 import { recalculateEnrollmentProgress } from "@/lib/courses/enrollment-service";
 import { awardCourseCompletion } from "@/lib/courses/completion-service";
 import { updateContinueLearning } from "@/lib/courses/continue-learning";
@@ -95,6 +97,7 @@ export async function POST(
   let level = 0;
   let courseCompleted = false;
   let newAchievements: NewAchievement[] = [];
+  let newBadges: NewBadge[] = [];
 
   if (isNewCompletion) {
     const result = await awardLessonXp(userId, id);
@@ -103,6 +106,7 @@ export async function POST(
     longestStreak = result.longestStreak;
     level = result.level;
     newAchievements = result.newAchievements;
+    newBadges = result.newBadges;
 
     const lesson = await prisma.lesson.findUnique({
       where: { id },
@@ -128,6 +132,7 @@ export async function POST(
     level,
     courseCompleted,
     newAchievements: newAchievements.length > 0 ? newAchievements : undefined,
+    newBadges: newBadges.length > 0 ? newBadges : undefined,
   });
 }
 
@@ -145,6 +150,7 @@ async function awardLessonXp(userId: string, lessonId: string) {
         longestStreak: profile?.longestStreak ?? 0,
         level: profile?.level ?? 1,
         newAchievements: [] as NewAchievement[],
+        newBadges: [] as NewBadge[],
       };
     }
 
@@ -209,6 +215,7 @@ async function awardLessonXp(userId: string, lessonId: string) {
     }
 
     const newAchievements = await checkAndAwardAchievements(userId, tx);
+    const newBadges = await checkAndAwardBadges(userId, tx);
 
     return {
       xpAwarded: XP_REWARDS.LESSON_COMPLETE,
@@ -216,6 +223,7 @@ async function awardLessonXp(userId: string, lessonId: string) {
       longestStreak: streakResult.longestStreak,
       level: levelInfo.level,
       newAchievements,
+      newBadges,
     };
   });
 }
