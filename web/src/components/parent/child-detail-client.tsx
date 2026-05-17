@@ -11,6 +11,10 @@ import {
   Award,
   Target,
   Clock,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle,
+  BarChart3,
 } from "lucide-react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -33,12 +37,16 @@ interface ChildProfile {
   lastActivityDate: string | null;
 }
 
-interface EnrollmentItem {
+interface CourseItem {
   id: string;
-  courseId: string;
-  courseTitle: string;
+  title: string;
+  subject: string | null;
+  difficulty: string;
   progress: number;
+  completedLessons: number;
   completed: boolean;
+  timeSpent: number;
+  avgQuizScore: number | null;
 }
 
 interface AchievementItem {
@@ -58,35 +66,55 @@ interface ActivityItem {
   timestamp: string;
 }
 
+interface WeakSubject {
+  subject: string;
+  avgScore: number;
+  quizCount: number;
+}
+
+interface OnTrackStatus {
+  isOnTrack: boolean;
+  lessonsPerDay: number;
+  expectedRate: number;
+  streakHealthy: boolean;
+}
+
+interface ReportData {
+  child: ChildProfile;
+  weeklyXp: { date: string; xp: number }[];
+  courses: CourseItem[];
+  totalCompletedLessons: number;
+  totalTimeSpent: number;
+  recentActivity: ActivityItem[];
+  weakSubjects: WeakSubject[];
+  onTrack: OnTrackStatus;
+}
+
 interface Props {
   child: ChildProfile;
-  enrollments: EnrollmentItem[];
+  enrollments: { id: string; courseId: string; courseTitle: string; progress: number; completed: boolean }[];
   completedLessonsCount: number;
   achievements: AchievementItem[];
 }
 
-export function ChildDetailClient({
-  child,
-  enrollments,
-  completedLessonsCount,
-  achievements,
-}: Props) {
-  const [activityData, setActivityData] = useState<ActivityItem[] | null>(null);
-  const [activityLoading, setActivityLoading] = useState(false);
+export function ChildDetailClient({ child, enrollments, completedLessonsCount, achievements }: Props) {
+  const [reportData, setReportData] = useState<ReportData | null>(null);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
-    if (activeTab !== "activity") return;
-    if (activityData !== null) return;
+    if (activeTab !== "reports") return;
+    if (reportData !== null) return;
 
+    setLoading(true);
     fetch(`/api/parent/reports?childId=${child.id}&days=30`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data) setActivityData(data.recentActivity);
-        setActivityLoading(false);
+        if (data) setReportData(data);
+        setLoading(false);
       })
-      .catch(() => setActivityLoading(false));
-  }, [activeTab, child.id, activityData]);
+      .catch(() => setLoading(false));
+  }, [activeTab, child.id, reportData]);
 
   const initials = (child.fullName ?? child.email ?? "C")
     .split(" ")
@@ -94,6 +122,13 @@ export function ChildDetailClient({
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+  function formatTime(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
+  }
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 p-6">
@@ -124,7 +159,7 @@ export function ChildDetailClient({
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="courses">Courses</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
-          <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+          <TabsTrigger value="reports">Reports & Insights</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-6 space-y-6">
@@ -347,70 +382,197 @@ export function ChildDetailClient({
           )}
         </TabsContent>
 
-        <TabsContent value="activity" className="mt-6">
-          {activityLoading ? (
+        <TabsContent value="reports" className="mt-6 space-y-6">
+          {loading && (
             <div className="flex items-center justify-center py-16">
               <Clock className="h-6 w-6 animate-spin text-primary-400" />
             </div>
-          ) : activityData && activityData.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: easing }}
-              className="space-y-3"
-            >
-              {activityData.map((act) => (
+          )}
+
+          {reportData && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: easing }}
+              >
+                <Card className={reportData.onTrack.isOnTrack ? "border-emerald-500/20" : "border-amber-500/20"}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      {reportData.onTrack.isOnTrack ? (
+                        <CheckCircle className="h-5 w-5 text-emerald-400" />
+                      ) : (
+                        <AlertTriangle className="h-5 w-5 text-amber-400" />
+                      )}
+                      Learning Progress
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="rounded-xl bg-[rgba(255,255,255,0.03)] p-4">
+                        <p className="text-xs text-muted-foreground">Lessons per day</p>
+                        <p className="font-heading text-2xl font-bold text-foreground">
+                          {reportData.onTrack.lessonsPerDay}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Target: {reportData.onTrack.expectedRate}/day
+                        </p>
+                      </div>
+                      <div className="rounded-xl bg-[rgba(255,255,255,0.03)] p-4">
+                        <p className="text-xs text-muted-foreground">Total time</p>
+                        <p className="font-heading text-2xl font-bold text-foreground">
+                          {formatTime(reportData.totalTimeSpent)}
+                        </p>
+                      </div>
+                      <div className="rounded-xl bg-[rgba(255,255,255,0.03)] p-4">
+                        <p className="text-xs text-muted-foreground">Status</p>
+                        <p className={`font-heading text-lg font-bold ${reportData.onTrack.isOnTrack ? "text-emerald-400" : "text-amber-400"}`}>
+                          {reportData.onTrack.isOnTrack ? "On Track" : "Needs Attention"}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {reportData.onTrack.streakHealthy ? "Streak healthy" : "Streak low"}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {reportData.weakSubjects.length > 0 && (
                 <motion.div
-                  key={act.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1, ease: easing }}
                 >
-                  <Card>
-                    <CardContent className="flex items-start gap-3 py-4">
-                      <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-primary-500/10">
-                        {act.status === "completed" ? (
-                          <BookOpen className="h-4 w-4 text-primary-400" />
-                        ) : (
-                          <Clock className="h-4 w-4 text-yellow-400" />
-                        )}
+                  <Card className="border-red-500/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-red-400">
+                        <AlertTriangle className="h-5 w-5" />
+                        Weak Subjects
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {reportData.weakSubjects.map((ws, i) => (
+                          <div key={ws.subject} className="flex items-center justify-between rounded-xl bg-[rgba(255,255,255,0.03)] p-4">
+                            <div>
+                              <p className="font-medium text-foreground">{ws.subject}</p>
+                              <p className="text-xs text-muted-foreground">{ws.quizCount} quizzes</p>
+                            </div>
+                            <div className="text-right">
+                              <p className={`font-heading text-xl font-bold ${ws.avgScore < 50 ? "text-red-400" : "text-amber-400"}`}>
+                                {Math.round(ws.avgScore)}%
+                              </p>
+                              <p className="text-xs text-muted-foreground">Average score</p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-foreground">
-                          {act.lessonTitle}
-                        </p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">
-                          {new Date(act.timestamp).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                          {act.score !== null && (
-                            <span className="ml-2 text-primary-400">
-                              Score: {Math.round(act.score)}%
-                            </span>
-                          )}
-                        </p>
-                      </div>
-                      <Badge variant={act.status === "completed" ? "default" : "secondary"}>
-                        {act.status}
-                      </Badge>
                     </CardContent>
                   </Card>
                 </motion.div>
-              ))}
-            </motion.div>
-          ) : activityData ? (
+              )}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: easing }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5" />
+                      Weekly XP Activity
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-end gap-2 h-32">
+                      {reportData.weeklyXp.map((day, i) => {
+                        const maxXp = Math.max(...reportData.weeklyXp.map((d) => d.xp), 1);
+                        const height = (day.xp / maxXp) * 100;
+                        return (
+                          <div key={day.date} className="flex flex-1 flex-col items-center gap-1">
+                            <div
+                              className="w-full rounded-t bg-primary-500/60 transition-all duration-300"
+                              style={{ height: `${Math.max(height, 4)}%` }}
+                            />
+                            <span className="text-[10px] text-muted-foreground">
+                              {new Date(day.date).toLocaleDateString("en-US", { weekday: "short" })}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3, ease: easing }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Course Details</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {reportData.courses.map((course, i) => (
+                        <div key={course.id} className="rounded-xl bg-[rgba(255,255,255,0.03)] p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="font-medium text-foreground">{course.title}</p>
+                            <Badge variant={course.completed ? "default" : "secondary"}>
+                              {Math.round(course.progress)}%
+                            </Badge>
+                          </div>
+                          <div className="grid grid-cols-3 gap-4 text-xs">
+                            <div>
+                              <p className="text-muted-foreground">Lessons</p>
+                              <p className="font-medium text-foreground">{course.completedLessons}</p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Time</p>
+                              <p className="font-medium text-foreground">{formatTime(course.timeSpent)}</p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Quiz Avg</p>
+                              <p className="font-medium text-foreground">
+                                {course.avgQuizScore !== null ? `${Math.round(course.avgQuizScore)}%` : "N/A"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </>
+          )}
+
+          {!loading && !reportData && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <Clock className="h-10 w-10 text-muted-foreground/40" />
+              <BarChart3 className="h-10 w-10 text-muted-foreground/40" />
               <p className="mt-4 text-sm font-medium text-muted-foreground">
-                No recent activity
+                Load reports to see detailed insights
               </p>
-            </div>
-          ) : (
-            <div className="flex items-center justify-center py-16">
-              <Clock className="h-6 w-6 animate-spin text-primary-400" />
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => {
+                  setLoading(true);
+                  fetch(`/api/parent/reports?childId=${child.id}&days=30`)
+                    .then((res) => (res.ok ? res.json() : null))
+                    .then((data) => {
+                      if (data) setReportData(data);
+                      setLoading(false);
+                    })
+                    .catch(() => setLoading(false));
+                }}
+              >
+                Load Reports
+              </Button>
             </div>
           )}
         </TabsContent>

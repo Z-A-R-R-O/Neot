@@ -97,6 +97,11 @@ export async function GET(request: Request) {
     const courseLessons = completedLessons.filter(
       (lp) => lp.lesson.module.courseId === enr.course.id,
     );
+    const courseTimeSpent = courseLessons.reduce((sum, lp) => sum + lp.timeSpent, 0);
+    const courseQuizzes = courseLessons.filter((lp) => lp.score !== null);
+    const avgQuizScore = courseQuizzes.length > 0
+      ? courseQuizzes.reduce((sum, lp) => sum + (lp.score ?? 0), 0) / courseQuizzes.length
+      : null;
     return {
       id: enr.course.id,
       title: enr.course.title,
@@ -105,8 +110,53 @@ export async function GET(request: Request) {
       progress: enr.progress,
       completedLessons: courseLessons.length,
       completed: enr.completed,
+      timeSpent: courseTimeSpent,
+      avgQuizScore,
     };
   });
+
+  const weakSubjects = (() => {
+    const subjectScores: Record<string, number[]> = {};
+    for (const lp of completedLessons) {
+      if (lp.score !== null) {
+        const course = enrollments.find((e) => {
+          const courseLessons = completedLessons.filter(
+            (cl) => cl.lesson.module.courseId === e.course.id,
+          );
+          return courseLessons.includes(lp);
+        });
+        if (course?.course.subject) {
+          const subject = course.course.subject;
+          if (!subjectScores[subject]) subjectScores[subject] = [];
+          subjectScores[subject].push(lp.score);
+        }
+      }
+    }
+    return Object.entries(subjectScores)
+      .map(([subject, scores]) => ({
+        subject,
+        avgScore: scores.reduce((a, b) => a + b, 0) / scores.length,
+        quizCount: scores.length,
+      }))
+      .filter((s) => s.avgScore < 70)
+      .sort((a, b) => a.avgScore - b.avgScore);
+  })();
+
+  const totalTimeSpent = completedLessons.reduce((sum, lp) => sum + lp.timeSpent, 0);
+
+  const onTrack = (() => {
+    const daysSinceStart = child.lastActivityDate
+      ? Math.max(1, Math.ceil((Date.now() - new Date(child.lastActivityDate).getTime()) / (1000 * 60 * 60 * 24)))
+      : 1;
+    const lessonsPerDay = completedLessons.length / Math.max(1, daysSinceStart);
+    const expectedRate = 0.5;
+    return {
+      isOnTrack: lessonsPerDay >= expectedRate || child.currentStreak >= 3,
+      lessonsPerDay: Math.round(lessonsPerDay * 10) / 10,
+      expectedRate,
+      streakHealthy: child.currentStreak >= 3,
+    };
+  })();
 
   const recentActivityItems = recentActivity.map((lp) => ({
     id: lp.id,
@@ -130,6 +180,9 @@ export async function GET(request: Request) {
     weeklyXp,
     courses: coursesWithProgress,
     totalCompletedLessons: completedLessons.length,
+    totalTimeSpent,
     recentActivity: recentActivityItems,
+    weakSubjects,
+    onTrack,
   });
 }
