@@ -13,6 +13,7 @@ import { getActiveMultiplier, trackSeasonalProgress } from "@/lib/gamification/s
 import { recalculateEnrollmentProgress } from "@/lib/courses/enrollment-service";
 import { awardCourseCompletion } from "@/lib/courses/completion-service";
 import { updateContinueLearning } from "@/lib/courses/continue-learning";
+import { checkAndSendParentAlerts } from "@/lib/parent-alerts";
 
 const upsertProgressSchema = z.object({
   status: z.enum(["not_started", "in_progress", "completed"]).optional(),
@@ -127,6 +128,8 @@ export async function POST(
       const completion = await awardCourseCompletion(userId, courseId);
       courseCompleted = !completion.alreadyCompleted && completion.xpAwarded > 0;
     }
+
+    await checkAndSendParentAlerts(userId);
   }
 
   return NextResponse.json({

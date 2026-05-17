@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { Users, BookOpen, Trophy, ArrowRight } from "lucide-react";
+import { Users, BookOpen, Trophy, ArrowRight, Bell } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ParentAlertSettings } from "@/components/parent/parent-alert-settings";
 
 export default async function ParentDashboardPage() {
   const user = await getUser();
@@ -19,7 +20,38 @@ export default async function ParentDashboardPage() {
     streak: number;
   }[] = [];
 
+  let alertConfig = {
+    streakThreshold: 3,
+    inactivityDays: 5,
+    quizScoreThreshold: 60,
+    notifyStreakDrop: true,
+    notifyInactivity: true,
+    notifyLowScores: true,
+    notifyCourseComplete: true,
+  };
+
   try {
+    const parentProfile = await prisma.profile.findUnique({
+      where: { id: user!.id },
+      select: { metadata: true },
+    });
+
+    if (parentProfile?.metadata) {
+      const metadata = JSON.parse(parentProfile.metadata) as Record<string, unknown>;
+      const alertConfigData = metadata.alertConfig as Record<string, unknown> | undefined;
+      if (alertConfigData) {
+        alertConfig = {
+          streakThreshold: (alertConfigData.streakThreshold as number) ?? 3,
+          inactivityDays: (alertConfigData.inactivityDays as number) ?? 5,
+          quizScoreThreshold: (alertConfigData.quizScoreThreshold as number) ?? 60,
+          notifyStreakDrop: (alertConfigData.notifyStreakDrop as boolean) ?? true,
+          notifyInactivity: (alertConfigData.notifyInactivity as boolean) ?? true,
+          notifyLowScores: (alertConfigData.notifyLowScores as boolean) ?? true,
+          notifyCourseComplete: (alertConfigData.notifyCourseComplete as boolean) ?? true,
+        };
+      }
+    }
+
     const children = await prisma.profile.findMany({
       where: { parentId: user!.id },
       select: { id: true, fullName: true, email: true, xp: true, currentStreak: true },
@@ -126,9 +158,11 @@ export default async function ParentDashboardPage() {
                 </Button>
               </div>
             </div>
-          ))}
+            ))}
         </div>
       )}
+
+      <ParentAlertSettings initialConfig={alertConfig} />
     </div>
   );
 }
