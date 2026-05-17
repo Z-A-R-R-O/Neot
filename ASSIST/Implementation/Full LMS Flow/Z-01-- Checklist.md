@@ -170,9 +170,9 @@
 |---|---|---|
 | MCQ | ✅ | Multiple choice with single correct answer |
 | True/False | ✅ | Two-option quiz |
-| Short answer | 🔲 | Not implemented |
-| Coding challenge | 🔲 | Future |
-| Timed quizzes | 🔲 | Not implemented |
+| Short answer | ✅ | Textarea input with exact-match grading |
+| True/False | ✅ | Two-option quiz |
+| Timed quizzes | ✅ | QuizTimer component with configurable timeLimit, auto-submit on time up |
 | Attempts tracking | ✅ | QuizAttempt model |
 | Pass score (80%) | ✅ | Bonus XP on pass |
 | Quiz flow: attempt → grade → save score → award bonus XP → unlock achievement | ✅ | Full flow wired: saveQuizAttempt + awardQuizPassXp with +50 XP bonus + perfect_quiz achievement check |
@@ -199,7 +199,7 @@
 | Create/edit courses | ✅ | Full course builder |
 | Manage lessons | ✅ | Module + lesson CRUD |
 | Upload media | ✅ | Media library |
-| Publish/archive courses | 🔲 | Publish exists, archive/soft-delete missing |
+| Publish/archive courses | ✅ | Teacher course archive/restore with soft-delete (deletedAt + status: archived) |
 | View enrolled students | ✅ | /teacher/students page |
 | Track student performance | ✅ | Student table with scores, progress, activity |
 | Message students | 🔲 | Not implemented |
@@ -458,9 +458,9 @@
 | DB & Site Structure | 8 | 8 | 0 | 0 | 0 |
 | Public Site & Auth Flow | 8 | 7 | 1 | 0 | 0 |
 | Student System | 27 | 19 | 2 | 6 | 0 |
-| Course System | 15 | 11 | 2 | 2 | 0 |
+| Course System | 15 | 12 | 1 | 2 | 0 |
 | Lesson System | 9 | 7 | 1 | 1 | 0 |
-| Quiz System | 7 | 4 | 0 | 3 | 0 |
+| Quiz System | 7 | 6 | 0 | 1 | 0 |
 | Teacher System | 17 | 12 | 2 | 3 | 0 |
 | Admin System | 14 | 11 | 1 | 2 | 0 |
 | Parent System | 10 | 2 | 1 | 7 | 0 |
@@ -478,6 +478,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **132** | **21** | **51** | **0** |
+| **TOTAL** | **211** | **135** | **19** | **50** | **0** |
 
-> **Completion: 62.6%** — Core infrastructure and learning flow are solid. Email verification flow complete. Badges system (20 badges, 5 categories). Seasonal events (6 events with XP multipliers). Teacher messaging students with inbox. Parent reports with weak subject analysis, on-track status, weekly XP charts. Admin analytics with MAU/WAU/DAU, retention rate, engagement metrics. Key gaps: parent communication, AI features, scaling.
+> **Completion: 64.0%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Timed quizzes + short answer quizzes already implemented. Teacher course archive already implemented. Key gaps: parent communication, AI features, scaling.
