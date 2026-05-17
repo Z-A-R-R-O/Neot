@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useRef, useState } from "react";
-import { Timer, LayoutTemplate } from "lucide-react";
+import { Timer, LayoutTemplate, Layers } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore, type PageSection, type SectionType } from "@/stores/pageBuilderStore";
 import { StructureTree } from "./StructureTree";
@@ -15,6 +15,7 @@ import { AlignmentGuides } from "./alignment-guides";
 import { PreviewToggle } from "./preview-toggle";
 import { AnimationTimeline } from "./animation-timeline";
 import { TemplateLibraryPanel } from "./template-library-panel";
+import { ReusableBlocksPanel } from "./reusable-blocks-panel";
 
 interface DevModeShellProps {
   children: ReactNode;
@@ -26,12 +27,15 @@ interface DevModeShellProps {
 export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevModeShellProps) {
   const [presetName, setPresetName] = useState("");
   const [showSavePreset, setShowSavePreset] = useState(false);
+  const [reusableName, setReusableName] = useState("");
+  const [showSaveReusable, setShowSaveReusable] = useState(false);
   const enabled = useDevModeStore((s) => s.enabled);
   const deviceMode = useDevModeStore((s) => s.deviceMode);
   const { sections, selectedId, updateSection, selectSection, removeSection, addSection, reorderSections, setSections } = usePageBuilderStore();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [templateLibraryOpen, setTemplateLibraryOpen] = useState(false);
+  const [reusableBlocksOpen, setReusableBlocksOpen] = useState(false);
 
   const canvasMaxWidth = deviceMode === "mobile" ? "375px" : deviceMode === "tablet" ? "768px" : "1440px";
 
@@ -59,6 +63,26 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
     });
     setPresetName("");
     setShowSavePreset(false);
+  }
+
+  async function handleSaveReusable() {
+    if (!selectedSection || !reusableName.trim()) return;
+    try {
+      await fetch("/api/admin/reusable-blocks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: reusableName.trim(),
+          blockType: selectedSection.blockType,
+          content: JSON.stringify(selectedSection.content),
+          settings: JSON.stringify(selectedSection.settings),
+        }),
+      });
+      setReusableName("");
+      setShowSaveReusable(false);
+    } catch {
+      alert("Failed to save reusable block");
+    }
   }
 
   const treeNodes = sections.map((s) => ({
@@ -123,6 +147,17 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
                 alert("Failed to parse template");
               }
             }}
+          />
+          <button
+            onClick={() => setReusableBlocksOpen(!reusableBlocksOpen)}
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-glass hover:text-foreground"
+            title="Reusable Blocks"
+          >
+            <Layers className="h-3.5 w-3.5" />
+          </button>
+          <ReusableBlocksPanel
+            open={reusableBlocksOpen}
+            onClose={() => setReusableBlocksOpen(false)}
           />
           <HistoryPanel />
           <DevModeToggle />
@@ -210,6 +245,13 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
           {selectedSection && (
             <div className="flex items-center gap-1">
               <button
+                onClick={() => setShowSaveReusable(!showSaveReusable)}
+                className="rounded-lg px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground hover:bg-glass transition-colors"
+                title="Save as reusable block"
+              >
+                +Reuse
+              </button>
+              <button
                 onClick={() => setShowSavePreset(!showSavePreset)}
                 className="rounded-lg px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground hover:bg-glass transition-colors"
                 title="Save as preset"
@@ -223,6 +265,27 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
             </div>
           )}
         </div>
+        {showSaveReusable && selectedSection && (
+          <div className="border-b border-border px-4 py-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={reusableName}
+                onChange={(e) => setReusableName(e.target.value)}
+                placeholder="Reusable block name..."
+                className="flex-1 rounded-lg bg-muted/30 px-2 py-1.5 text-[11px] outline-none ring-1 ring-border/50 focus:ring-primary-500/40"
+                autoFocus
+                onKeyDown={(e) => e.key === "Enter" && handleSaveReusable()}
+              />
+              <button
+                onClick={handleSaveReusable}
+                className="rounded-lg bg-primary-500 px-2.5 py-1.5 text-[10px] font-bold text-white hover:bg-primary-400 transition-colors"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        )}
         {showSavePreset && selectedSection && (
           <div className="border-b border-border px-4 py-2">
             <div className="flex items-center gap-2">

@@ -518,3 +518,18 @@ model Role {
 
   @@map("roles")
 }
+
+model ReusableBlock {
+  id         String   @id @default(uuid())
+  name       String
+  description String?
+  blockType  String   @map("block_type")
+  content    String   @default("{}")
+  settings   String   @default("{}")
+  category   String   @default("general")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@map("reusable_blocks")
+}
