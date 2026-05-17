@@ -135,7 +135,7 @@
 | Responsive | ✅ | Wired into responsive engine with per-breakpoint overrides per section |
 | Data | ✅ | Full data-binding-tab.tsx: 6 source types (courses/users/categories/enrollments/lessons/analytics), filters, sorting, field mapping, cache duration, fallback display |
 | Accessibility | ✅ | Full a11y-tab.tsx: Semantic role presets (16 roles), custom role, ARIA label/describedby/hidden, live region (off/polite/assertive), tab index, keyboard shortcut |
-| SEO | 🔲 | Not implemented |
+| SEO | ✅ | Full seo-tab.tsx: Meta title/description, canonical URL, OG title/description/image, robots noindex/nofollow, sitemap priority/changeFreq, JSON-LD structured data |
 | Visibility Rules | 🔲 | Not implemented |
 
 ## 7. RESPONSIVE ENGINE (§RESPONSIVE ENGINE)
@@ -289,11 +289,11 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Per-page title | 🔲 | Not configured in page builder |
-| Meta description | 🔲 | Not configured |
-| OG image | 🔲 | Not configured |
-| Canonical URL | 🔲 | Not configured |
-| Structured data | 🔲 | Not configured |
+| Per-page title | 🚧 | Configurable via SEOTab in PropertiesPanel (metaTitle) |
+| Meta description | 🚧 | Configurable via SEOTab (metaDescription) |
+| OG image | 🚧 | Configurable via SEOTab (ogImage) |
+| Canonical URL | 🚧 | Configurable via SEOTab (canonicalUrl) |
+| Structured data | 🚧 | Configurable via SEOTab (JSON-LD textarea) |
 
 ## 24. MEDIA LIBRARY SYSTEM (§MEDIA LIBRARY SYSTEM)
 
@@ -437,7 +437,7 @@
 | Dev Mode Modules (21) | 21 | 11 | 5 | 5 | 0 |
 | Live Visual Editor | 16 | 10 | 3 | 3 | 0 |
 | Structure Tree | 8 | 4 | 0 | 4 | 0 |
-| Properties Panel | 14 | 12 | 0 | 2 | 0 |
+| Properties Panel | 14 | 13 | 0 | 1 | 0 |
 | Responsive Engine | 7 | 4 | 3 | 0 | 0 |
 | Theme System | 5 | 2 | 3 | 0 | 0 |
 | Data Binding | 3 | 1 | 0 | 2 | 0 |
@@ -468,6 +468,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **295** | **113** | **42** | **140** | **0** |
+| **TOTAL** | **295** | **114** | **42** | **139** | **0** |
 
-> **Completion: 38.3%** — Admin pages 24/27. Properties Panel has 12/14 categories (Data + Accessibility added). Remaining: SEO, Visibility rules in Properties Panel; version control, dashboard builder.
+> **Completion: 38.6%** — Admin pages 24/27. Properties Panel has 13/14 categories (Data, A11y, SEO added). Remaining: Visibility Rules in Properties Panel; version control, dashboard builder.

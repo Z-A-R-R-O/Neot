@@ -10,6 +10,7 @@ import { StyleTab } from "./section-editors/style-tab";
 import { EffectsTab } from "./section-editors/effects-tab";
 import { DataBindingTab } from "./section-editors/data-binding-tab";
 import { AccessibilityTab } from "./section-editors/accessibility-tab";
+import { SEOTab } from "./section-editors/seo-tab";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -24,7 +25,7 @@ interface PropertiesPanelProps {
 }
 
 export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange }: PropertiesPanelProps) {
-  const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects" | "interactions" | "data" | "a11y">("content");
+  const [activeTab, setActiveTab] = useState<"content" | "style" | "motion" | "effects" | "interactions" | "data" | "a11y" | "seo">("content");
   const enabled = useDevModeStore((s) => s.enabled);
 
   if (!enabled) return null;
@@ -57,8 +58,8 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
           </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 rounded-xl bg-muted/20 p-1 border border-border/50">
-          {(["content", "style", "motion", "effects", "interactions", "data", "a11y"] as const).map((tab) => (
+        <div className="grid grid-cols-8 gap-1 rounded-xl bg-muted/20 p-1 border border-border/50">
+          {(["content", "style", "motion", "effects", "interactions", "data", "a11y", "seo"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -150,6 +151,10 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
 
         {activeTab === "a11y" && (
           <AccessibilityTab sectionId={selectedBlock.id} />
+        )}
+
+        {activeTab === "seo" && (
+          <SEOTab sectionId={selectedBlock.id} />
         )}
       </div>
     </div>
