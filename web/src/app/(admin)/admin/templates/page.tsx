@@ -39,6 +39,7 @@ interface Template {
   name: string;
   slug: string;
   description: string | null;
+  category: string;
   sections: string;
   thumbnail: string | null;
   createdAt: string;
@@ -114,7 +115,6 @@ export default function AdminTemplatesPage() {
       const sections = await sectionsRes.json();
 
       const payload = JSON.stringify({
-        category: templateCategory,
         sections: sections.map((s: { blockType: string; sortOrder: number; content: string; settings: string }) => ({
           blockType: s.blockType,
           sortOrder: s.sortOrder,
@@ -129,6 +129,7 @@ export default function AdminTemplatesPage() {
         body: JSON.stringify({
           name: templateName,
           description: templateDescription || null,
+          category: templateCategory,
           sections: payload,
         }),
       });
@@ -235,18 +236,16 @@ export default function AdminTemplatesPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {(() => {
             const parsed = templates.map((t) => {
-              let category = "page";
               let sections: { blockType: string }[] = [];
               try {
                 const data = JSON.parse(t.sections);
-                if (data.category) category = data.category;
-                if (Array.isArray(data.sections)) sections = data.sections;
-                else if (Array.isArray(data)) sections = data;
+                if (Array.isArray(data)) sections = data;
+                else if (Array.isArray(data.sections)) sections = data.sections;
               } catch {}
-              return { ...t, _category: category, _sections: sections };
+              return { ...t, _sections: sections };
             });
             return parsed
-              .filter((t) => activeCategory === "all" || t._category === activeCategory)
+              .filter((t) => activeCategory === "all" || t.category === activeCategory)
               .map((template) => {
             return (
               <Card key={template.id}>
@@ -254,7 +253,7 @@ export default function AdminTemplatesPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <CardTitle className="truncate">{template.name}</CardTitle>
-                      <span className="rounded-md bg-primary-500/10 px-1.5 py-0.5 text-[10px] font-medium text-primary-400 capitalize">{template._category}</span>
+                      <span className="rounded-md bg-primary-500/10 px-1.5 py-0.5 text-[10px] font-medium text-primary-400 capitalize">{template.category}</span>
                     </div>
                     {template.description && (
                       <CardDescription className="mt-1 line-clamp-2">
@@ -343,6 +342,20 @@ export default function AdminTemplatesPage() {
                 placeholder="Brief description of this template"
                 rows={3}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Category</Label>
+              <Select value={templateCategory} onValueChange={setTemplateCategory}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="page">Page</SelectItem>
+                  <SelectItem value="dashboard">Dashboard</SelectItem>
+                  <SelectItem value="marketing">Marketing</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

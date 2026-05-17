@@ -460,10 +460,12 @@ model PageTemplate {
   name        String
   slug        String   @unique
   description String?
+  category    String   @default("page")
   sections    String   @default("[]")
   thumbnail   String?
   createdAt   DateTime @default(now()) @map("created_at")
 
+  @@index([category])
   @@map("page_templates")
 }
 

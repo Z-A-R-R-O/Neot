@@ -6,6 +6,7 @@ import { getUser } from "@/lib/auth";
 const createTemplateSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional().nullable(),
+  category: z.enum(["page", "dashboard", "marketing"]).optional().default("page"),
   sections: z.string().default("[]"),
 });
 
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  const { name, description, sections } = parsed.data;
+  const { name, description, category, sections } = parsed.data;
   const slug = generateSlug(name);
 
   const existing = await prisma.pageTemplate.findUnique({ where: { slug } });
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
   }
 
   const template = await prisma.pageTemplate.create({
-    data: { name, slug, description, sections },
+    data: { name, slug, description, category, sections },
   });
 
   return NextResponse.json(template, { status: 201 });
