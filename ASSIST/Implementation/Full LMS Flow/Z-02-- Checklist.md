@@ -176,12 +176,12 @@
 ## 11. TEMPLATE SYSTEM (§TEMPLATE SYSTEM)
 
 | Requirement | Status | Notes |
-|---|---|---|
-| Section templates | 🔲 | Not implemented |
-| Page templates | 🔲 | Not implemented |
-| Dashboard layout templates | 🔲 | Not implemented |
-| Marketing layout templates | 🔲 | Not implemented |
-| Template library | 🔲 | Not implemented |
+|---|---|---|---|
+| Section templates | ✅ | Block presets for hero/feature-grid/cta-banner (built-in + user presets in localStorage) |
+| Page templates | ✅ | Admin page: save from any page, apply to any page, delete; persisted via API |
+| Dashboard layout templates | 🚧 | Same page template engine with category filtering ("dashboard" category label) |
+| Marketing layout templates | 🚧 | Same page template engine with category filtering ("marketing" category label) |
+| Template library | ✅ | Admin grid with section count, section-type badges (up to 5), category filter pills (all/page/dashboard/marketing) |
 
 ## 12. ANIMATION SYSTEM (§ANIMATION SYSTEM)
 
@@ -442,7 +442,7 @@
 | Theme System | 5 | 2 | 3 | 0 | 0 |
 | Data Binding | 3 | 1 | 0 | 2 | 0 |
 | CMS | 6 | 2 | 2 | 2 | 0 |
-| Templates | 5 | 0 | 0 | 5 | 0 |
+| Templates | 5 | 3 | 2 | 0 | 0 |
 | Animations | 3 | 2 | 1 | 0 | 0 |
 | Interaction Engine | 2 | 2 | 0 | 0 | 0 |
 | Navigation Builder | 3 | 0 | 1 | 2 | 0 |
@@ -468,6 +468,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **295** | **125** | **42** | **128** | **0** |
+| **TOTAL** | **295** | **128** | **44** | **123** | **0** |
 
-> **Completion: 42.4%** — Properties Panel 14/14 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ fully complete. Remaining: Template System, Admin roles page.
+> **Completion: 43.4%** — Properties Panel 14/14 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ + Templates 3/5 ✅. Remaining: Admin roles page, dashboard/marketing-specific templates.

@@ -62,8 +62,10 @@ export default function AdminTemplatesPage() {
   const [saving, setSaving] = useState(false);
   const [templateName, setTemplateName] = useState("");
   const [templateDescription, setTemplateDescription] = useState("");
+  const [templateCategory, setTemplateCategory] = useState("page");
   const [selectedSourcePageId, setSelectedSourcePageId] = useState("");
   const [selectedSourcePageSlug, setSelectedSourcePageSlug] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
 
   const [showApplyDialog, setShowApplyDialog] = useState(false);
   const [applying, setApplying] = useState(false);
@@ -90,6 +92,7 @@ export default function AdminTemplatesPage() {
   function openSaveDialog() {
     setTemplateName("");
     setTemplateDescription("");
+    setTemplateCategory("page");
     setSelectedSourcePageId("");
     setSelectedSourcePageSlug("");
     setShowSaveDialog(true);
@@ -110,20 +113,23 @@ export default function AdminTemplatesPage() {
       if (!sectionsRes.ok) throw new Error("Failed to load page sections");
       const sections = await sectionsRes.json();
 
+      const payload = JSON.stringify({
+        category: templateCategory,
+        sections: sections.map((s: { blockType: string; sortOrder: number; content: string; settings: string }) => ({
+          blockType: s.blockType,
+          sortOrder: s.sortOrder,
+          content: s.content,
+          settings: s.settings,
+        })),
+      });
+
       const res = await fetch("/api/admin/templates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: templateName,
           description: templateDescription || null,
-          sections: JSON.stringify(
-            sections.map((s: { blockType: string; sortOrder: number; content: string; settings: string }) => ({
-              blockType: s.blockType,
-              sortOrder: s.sortOrder,
-              content: s.content,
-              settings: s.settings,
-            }))
-          ),
+          sections: payload,
         }),
       });
 
@@ -194,10 +200,27 @@ export default function AdminTemplatesPage() {
             Saved page layouts and section structures.
           </p>
         </div>
-        <Button onClick={openSaveDialog}>
-          <Save className="h-4 w-4" />
-          Save as Template
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1 rounded-lg bg-muted/30 p-0.5">
+            {["all", "page", "dashboard", "marketing"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
+                  activeCategory === cat
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          <Button onClick={openSaveDialog}>
+            <Save className="h-4 w-4" />
+            Save as Template
+          </Button>
+        </div>
       </div>
 
       {!templates || templates.length === 0 ? (
@@ -210,18 +233,29 @@ export default function AdminTemplatesPage() {
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {templates.map((template) => {
-            let sectionCount = 0;
-            try {
-              const parsed = JSON.parse(template.sections);
-              if (Array.isArray(parsed)) sectionCount = parsed.length;
-            } catch {}
-
+          {(() => {
+            const parsed = templates.map((t) => {
+              let category = "page";
+              let sections: { blockType: string }[] = [];
+              try {
+                const data = JSON.parse(t.sections);
+                if (data.category) category = data.category;
+                if (Array.isArray(data.sections)) sections = data.sections;
+                else if (Array.isArray(data)) sections = data;
+              } catch {}
+              return { ...t, _category: category, _sections: sections };
+            });
+            return parsed
+              .filter((t) => activeCategory === "all" || t._category === activeCategory)
+              .map((template) => {
             return (
               <Card key={template.id}>
                 <CardHeader>
                   <div className="min-w-0 flex-1">
-                    <CardTitle className="truncate">{template.name}</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="truncate">{template.name}</CardTitle>
+                      <span className="rounded-md bg-primary-500/10 px-1.5 py-0.5 text-[10px] font-medium text-primary-400 capitalize">{template._category}</span>
+                    </div>
                     {template.description && (
                       <CardDescription className="mt-1 line-clamp-2">
                         {template.description}
@@ -233,31 +267,18 @@ export default function AdminTemplatesPage() {
                   <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <Layers className="h-4 w-4" />
-                      <span>{sectionCount} section{sectionCount !== 1 ? "s" : ""}</span>
+                      <span>{template._sections.length} section{template._sections.length !== 1 ? "s" : ""}</span>
                     </div>
-                    {sectionCount > 0 && (
+                    {template._sections.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
-                        {(() => {
-                          try {
-                            const parsed = JSON.parse(template.sections);
-                            if (Array.isArray(parsed)) {
-                              return parsed.slice(0, 5).map((s: { blockType: string }, i: number) => (
-                                <Badge key={i} variant="outline" className="text-xs">
-                                  {s.blockType}
-                                </Badge>
-                              ));
-                            }
-                          } catch {}
-                          return null;
-                        })()}
-                        {(() => {
-                          try {
-                            const parsed = JSON.parse(template.sections);
-                            return Array.isArray(parsed) && parsed.length > 5 ? (
-                              <span className="text-xs text-muted-foreground">+{parsed.length - 5} more</span>
-                            ) : null;
-                          } catch { return null; }
-                        })()}
+                        {template._sections.slice(0, 5).map((s: { blockType: string }, i: number) => (
+                          <Badge key={i} variant="outline" className="text-xs">
+                            {s.blockType}
+                          </Badge>
+                        ))}
+                        {template._sections.length > 5 && (
+                          <span className="text-xs text-muted-foreground">+{template._sections.length - 5} more</span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -287,7 +308,8 @@ export default function AdminTemplatesPage() {
                 </div>
               </Card>
             );
-          })}
+          });
+          })()}
         </div>
       )}
 
