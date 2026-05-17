@@ -17,6 +17,7 @@ const createCourseSchema = z.object({
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const categoryId = searchParams.get("categoryId");
+  const tag = searchParams.get("tag");
   const status = searchParams.get("status") ?? "published";
   const teacherId = searchParams.get("teacherId");
 
@@ -25,6 +26,9 @@ export async function GET(request: Request) {
   if (categoryId) where.categoryId = categoryId;
   if (status && status !== "all") where.status = status;
   if (teacherId) where.teacherId = teacherId;
+  if (tag) {
+    where.tags = { some: { tag: { slug: tag } } };
+  }
 
   const courses = await prisma.course.findMany({
     where,
@@ -32,6 +36,7 @@ export async function GET(request: Request) {
     include: {
       category: { select: { id: true, name: true, slug: true } },
       teacher: { select: { id: true, fullName: true, avatarUrl: true } },
+      tags: { select: { tag: { select: { id: true, name: true, slug: true } } } },
       _count: { select: { modules: true, enrollments: true } },
     },
   });

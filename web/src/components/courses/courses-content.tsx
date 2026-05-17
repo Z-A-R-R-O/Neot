@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { ArrowRight, Sparkles, Search } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { ArrowRight, Sparkles, Search, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useCourses, type CourseListItem } from "@/hooks/useCourses";
@@ -20,14 +20,38 @@ function extractCategories(courses: CourseListItem[] | undefined) {
   return Array.from(cats.values());
 }
 
-export function CoursesContent() {
+function extractTags(courses: CourseListItem[] | undefined) {
+  const tags = new Map<string, { slug: string; name: string }>();
+  if (!courses) return [];
+  for (const c of courses) {
+    for (const t of c.tags ?? []) {
+      if (!tags.has(t.tag.slug)) {
+        tags.set(t.tag.slug, { slug: t.tag.slug, name: t.tag.name });
+      }
+    }
+  }
+  return Array.from(tags.values());
+}
+
+interface Props {
+  initialTag?: string;
+}
+
+export function CoursesContent({ initialTag }: Props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>();
+  const [selectedTag, setSelectedTag] = useState<string | undefined>(initialTag);
   const { data: courses, isLoading, error } = useCourses({
     status: "published",
     categoryId: selectedCategoryId,
+    tag: selectedTag,
   });
 
+  useEffect(() => {
+    if (initialTag) setSelectedTag(initialTag);
+  }, [initialTag]);
+
   const categories = useMemo(() => extractCategories(courses), [courses]);
+  const tags = useMemo(() => extractTags(courses), [courses]);
 
   return (
     <main className="bg-background text-foreground">
@@ -143,6 +167,19 @@ export function CoursesContent() {
                   All{" "}
                   <span className="gradient-text-accent">courses</span>
                 </h2>
+                {(selectedTag || selectedCategoryId) && (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Filtered by {selectedTag && <span className="text-primary-400">#{selectedTag}</span>}
+                    {selectedTag && selectedCategoryId && <span> + </span>}
+                    {selectedCategoryId && <span className="text-primary-400">category</span>}
+                    <button
+                      onClick={() => { setSelectedTag(undefined); setSelectedCategoryId(undefined); }}
+                      className="ml-2 text-xs text-muted-foreground underline hover:text-foreground"
+                    >
+                      Clear filters
+                    </button>
+                  </p>
+                )}
               </div>
             </div>
 
@@ -161,7 +198,7 @@ export function CoursesContent() {
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
-                    onClick={() => setSelectedCategoryId(cat.id)}
+                    onClick={() => { setSelectedCategoryId(cat.id); setSelectedTag(undefined); }}
                     className={`rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 ${
                       selectedCategoryId === cat.id
                         ? "bg-primary-500/20 text-primary-300 border border-primary-500/30"
@@ -169,6 +206,25 @@ export function CoursesContent() {
                     }`}
                   >
                     {cat.name}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {tags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {tags.slice(0, 12).map((t) => (
+                  <button
+                    key={t.slug}
+                    onClick={() => { setSelectedTag(selectedTag === t.slug ? undefined : t.slug); setSelectedCategoryId(undefined); }}
+                    className={`inline-flex items-center gap-1 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-300 ${
+                      selectedTag === t.slug
+                        ? "bg-violet-500/20 text-violet-300 border border-violet-500/30"
+                        : "border border-[rgba(255,255,255,0.06)] text-muted-foreground hover:border-[rgba(255,255,255,0.15)]"
+                    }`}
+                  >
+                    <Tag className="h-3 w-3" />
+                    {t.name}
                   </button>
                 ))}
               </div>

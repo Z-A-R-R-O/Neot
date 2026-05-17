@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Clock, BookOpen, Users } from "lucide-react";
+import { Clock, BookOpen, Users, Tag } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +53,23 @@ export function CourseCard({ course, enrolled, progress }: CourseCardProps) {
               </Badge>
             )}
           </div>
+
+          {course.tags && course.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {course.tags.slice(0, 3).map((t) => (
+                <span
+                  key={t.tag.id}
+                  className="inline-flex items-center gap-0.5 rounded-md bg-[rgba(255,255,255,0.04)] px-1.5 py-0.5 text-[10px] text-muted-foreground/70"
+                >
+                  <Tag className="h-2.5 w-2.5" />
+                  {t.tag.name}
+                </span>
+              ))}
+              {course.tags.length > 3 && (
+                <span className="text-[10px] text-muted-foreground/50">+{course.tags.length - 3}</span>
+              )}
+            </div>
+          )}
 
           <h3 className="mt-3 text-lg font-bold text-foreground tracking-tight transition-colors group-hover:text-primary-400">
             {course.title}

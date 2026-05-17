@@ -15,6 +15,7 @@ export interface CourseListItem {
   createdAt: string;
   category: { id: string; name: string; slug: string } | null;
   teacher: { id: string; fullName: string | null; avatarUrl: string | null };
+  tags: { tag: { id: string; name: string; slug: string } }[];
   _count: { modules: number; enrollments: number };
 }
 
@@ -22,11 +23,13 @@ async function fetchCourses(params?: {
   categoryId?: string;
   teacherId?: string;
   status?: string;
+  tag?: string;
 }) {
   const searchParams = new URLSearchParams();
   if (params?.categoryId) searchParams.set("categoryId", params.categoryId);
   if (params?.teacherId) searchParams.set("teacherId", params.teacherId);
   if (params?.status) searchParams.set("status", params.status);
+  if (params?.tag) searchParams.set("tag", params.tag);
 
   const qs = searchParams.toString();
   const res = await fetch(`/api/courses${qs ? `?${qs}` : ""}`);
@@ -38,6 +41,7 @@ export function useCourses(params?: {
   categoryId?: string;
   teacherId?: string;
   status?: string;
+  tag?: string;
 }) {
   return useQuery({
     queryKey: ["courses", params],
