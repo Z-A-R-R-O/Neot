@@ -334,8 +334,8 @@
 |---|---|---|
 | DAU/MAU | 🚧 | DAU chart implemented on /admin/analytics. MAU not implemented. |
 | Growth | 🚧 | Signups chart on admin analytics page |
-| Retention | 🔲 | Not implemented |
-| Platform usage | 🔲 | Not implemented |
+| Retention | ✅ | 4-week cohort retention table with retained/total counts and progress bars |
+| Platform usage | ✅ | Active teachers/parents, avg enrollments/user, completion rate, avg progress, role activity breakdown |
 | Top courses | ✅ | Top courses chart on admin analytics page |
 
 ## 18. CERTIFICATE SYSTEM (§CERTIFICATE SYSTEM)
@@ -479,6 +479,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **150** | **16** | **38** | **0** |
+| **TOTAL** | **211** | **152** | **16** | **36** | **0** |
 
-> **Completion: 71.1%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Blog system with draft/publish workflow, public pages, admin management. Security and CMS categories fully complete. Key gaps: AI features, scaling.
+> **Completion: 72.0%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention cohorts, platform usage metrics. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Blog system with draft/publish workflow, public pages, admin management. Security, CMS, and Analytics categories fully complete. Homepage scroll performance optimized. Key gaps: AI features, scaling.

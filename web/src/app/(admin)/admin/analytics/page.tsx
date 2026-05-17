@@ -49,6 +49,18 @@ interface AnalyticsData {
   statusDistribution: { status: string; count: number }[];
   dailyStats: DailyStat[];
   topCourses: TopCourse[];
+  retention: {
+    overall: number;
+    cohorts: { cohort: string; total: number; retained: number; rate: number }[];
+  };
+  platformUsage: {
+    activeTeachers: number;
+    activeParents: number;
+    avgEnrollmentsPerUser: number;
+    overallCompletionRate: number;
+    avgProgress: number;
+    roleActivity: { role: string; active: number }[];
+  };
 }
 
 export default function AdminAnalyticsPage() {
@@ -324,6 +336,98 @@ export default function AdminAnalyticsPage() {
             </table>
           </div>
         )}
+      </motion.div>
+
+      {/* Retention Cohorts */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: easing }}
+        className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6"
+      >
+        <h2 className="mb-4 font-heading text-base font-bold text-foreground">
+          Retention Cohorts (4-Week)
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {data.retention.cohorts.map((cohort) => (
+            <div
+              key={cohort.cohort}
+              className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4"
+            >
+              <p className="text-xs text-muted-foreground">{cohort.cohort}</p>
+              <p className="mt-1 font-heading text-2xl font-bold text-foreground">
+                {cohort.rate}%
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {cohort.retained}/{cohort.total} retained
+              </p>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
+                <div
+                  className={`h-full rounded-full transition-all ${
+                    cohort.rate >= 50 ? "bg-emerald-500" : cohort.rate >= 25 ? "bg-amber-500" : "bg-red-500"
+                  }`}
+                  style={{ width: `${cohort.rate}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Platform Usage */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.35, ease: easing }}
+        className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6"
+      >
+        <h2 className="mb-4 font-heading text-base font-bold text-foreground">
+          Platform Usage
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <p className="text-xs text-muted-foreground">Active Teachers</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.platformUsage.activeTeachers}
+            </p>
+          </div>
+          <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <p className="text-xs text-muted-foreground">Active Parents</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.platformUsage.activeParents}
+            </p>
+          </div>
+          <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <p className="text-xs text-muted-foreground">Avg Enrollments/User</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.platformUsage.avgEnrollmentsPerUser}
+            </p>
+          </div>
+          <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <p className="text-xs text-muted-foreground">Completion Rate</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.platformUsage.overallCompletionRate}%
+            </p>
+          </div>
+          <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <p className="text-xs text-muted-foreground">Avg Progress</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.platformUsage.avgProgress}%
+            </p>
+          </div>
+        </div>
+
+        {/* Role Activity */}
+        <div className="mt-4">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">Active Users by Role (30d)</p>
+          <div className="flex gap-3">
+            {data.platformUsage.roleActivity.map((r) => (
+              <Badge key={r.role} variant="outline" className="gap-1">
+                {r.role}: {r.active}
+              </Badge>
+            ))}
+          </div>
+        </div>
       </motion.div>
     </div>
   );

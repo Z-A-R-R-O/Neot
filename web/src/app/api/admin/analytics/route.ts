@@ -11,6 +11,7 @@ export async function GET() {
   const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
+  const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
 
   const [
     totalUsers,
@@ -27,6 +28,16 @@ export async function GET() {
     retainedUsers,
     totalTimeSpent,
     weeklyActiveUsers,
+    // Retention cohorts
+    week1Profiles,
+    week2Profiles,
+    week3Profiles,
+    week4Profiles,
+    // Platform usage
+    activeTeachers,
+    activeParents,
+    enrollmentsByRole,
+    courseCompletionRates,
   ] = await Promise.all([
     prisma.profile.count(),
     prisma.profile.groupBy({ by: ["role"], _count: { id: true } }),
@@ -76,7 +87,93 @@ export async function GET() {
       select: { userId: true },
       distinct: ["userId"],
     }),
+    // Retention cohorts: users who signed up in each of the last 4 weeks
+    prisma.profile.findMany({
+      where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), lt: new Date() } },
+      select: { id: true, createdAt: true },
+    }),
+    prisma.profile.findMany({
+      where: { createdAt: { gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), lt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } },
+      select: { id: true, createdAt: true },
+    }),
+    prisma.profile.findMany({
+      where: { createdAt: { gte: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000), lt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) } },
+      select: { id: true, createdAt: true },
+    }),
+    prisma.profile.findMany({
+      where: { createdAt: { gte: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000), lt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000) } },
+      select: { id: true, createdAt: true },
+    }),
+    // Platform usage
+    prisma.profile.count({
+      where: {
+        role: "teacher",
+        courses: { some: { status: "published", deletedAt: null } },
+      },
+    }),
+    prisma.profile.count({
+      where: {
+        role: "parent",
+        children: { some: { lessonProgress: { some: { updatedAt: { gte: thirtyDaysAgo } } } } },
+      },
+    }),
+    prisma.enrollment.groupBy({
+      by: ["userId"],
+      _count: { id: true },
+    }),
+    prisma.enrollment.findMany({
+      select: { progress: true, completed: true },
+    }),
   ]);
+
+  // Calculate cohort retention
+  const cohortData = [
+    { cohort: "Week 1 (current)", total: week1Profiles.length, retained: 0, rate: 0 },
+    { cohort: "Week 2", total: week2Profiles.length, retained: 0, rate: 0 },
+    { cohort: "Week 3", total: week3Profiles.length, retained: 0, rate: 0 },
+    { cohort: "Week 4", total: week4Profiles.length, retained: 0, rate: 0 },
+  ];
+
+  const allXpUserIds = new Set(recentXpTransactions.map((tx) => tx.userId));
+
+  cohortData[0].retained = week1Profiles.filter((p) => allXpUserIds.has(p.id)).length;
+  cohortData[1].retained = week2Profiles.filter((p) => allXpUserIds.has(p.id)).length;
+  cohortData[2].retained = week3Profiles.filter((p) => allXpUserIds.has(p.id)).length;
+  cohortData[3].retained = week4Profiles.filter((p) => allXpUserIds.has(p.id)).length;
+
+  cohortData.forEach((c) => {
+    c.rate = c.total > 0 ? Math.round((c.retained / c.total) * 100) : 0;
+  });
+
+  // Platform usage metrics
+  const enrollmentDistribution = enrollmentsByRole.map((e) => e._count.id);
+  const avgEnrollmentsPerUser = totalUsers > 0
+    ? Math.round((enrollmentsByRole.length / totalUsers) * 100) / 100
+    : 0;
+
+  const completedCourses = courseCompletionRates.filter((e) => e.completed).length;
+  const overallCompletionRate = courseCompletionRates.length > 0
+    ? Math.round((completedCourses / courseCompletionRates.length) * 100)
+    : 0;
+
+  const avgProgress = courseCompletionRates.length > 0
+    ? Math.round(courseCompletionRates.reduce((sum, e) => sum + e.progress, 0) / courseCompletionRates.length)
+    : 0;
+
+  // Monthly active by role
+  const roleActivity = await Promise.all(
+    ["student", "teacher", "parent"].map(async (role) => {
+      const users = await prisma.xPTransaction.findMany({
+        where: {
+          createdAt: { gte: thirtyDaysAgo },
+          user: { role },
+        },
+        select: { userId: true },
+        distinct: ["userId"],
+      });
+      return { role, active: users.length };
+    })
+  );
 
   const roleDist = roleCounts.map((r) => ({ role: r.role, count: r._count.id }));
   const statusDist = statusCounts.map((s) => ({ status: s.status, count: s._count.id }));
@@ -142,5 +239,17 @@ export async function GET() {
       teacher: c.teacher.fullName ?? "Unknown",
       enrollments: c._count.enrollments,
     })),
+    retention: {
+      overall: retentionRate,
+      cohorts: cohortData,
+    },
+    platformUsage: {
+      activeTeachers,
+      activeParents,
+      avgEnrollmentsPerUser,
+      overallCompletionRate,
+      avgProgress,
+      roleActivity,
+    },
   });
 }
