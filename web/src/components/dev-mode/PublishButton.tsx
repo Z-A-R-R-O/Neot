@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Loader2, CheckCircle, AlertTriangle, Rocket } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
+import { usePageBuilderStore } from "@/stores/pageBuilderStore";
+import { useHistoryStore } from "@/stores/historyStore";
 
 interface PublishButtonProps {
   onPublish?: () => Promise<void>;
@@ -19,6 +21,8 @@ export function PublishButton({ onPublish, isDirty = false }: PublishButtonProps
   async function handlePublish() {
     setPublishing(true);
     try {
+      const sections = usePageBuilderStore.getState().sections;
+      useHistoryStore.getState().saveSnapshot("Before publish", JSON.stringify(sections));
       await onPublish?.();
     } finally {
       setPublishing(false);

@@ -231,12 +231,12 @@
 ## 17. VERSION CONTROL SYSTEM (§VERSION CONTROL SYSTEM)
 
 | Requirement | Status | Notes |
-|---|---|---|
-| Version snapshot on publish | 🔲 | Not implemented |
-| Rollback | 🔲 | Not implemented |
-| Compare versions | 🔲 | Not implemented |
-| Preview drafts | 🔲 | Not implemented |
-| Restore layouts | 🔲 | Not implemented |
+|---|---|---|---|
+| Undo/redo | ✅ | historyStore with past/future stacks, Ctrl+Z/Ctrl+Shift+Z |
+| Named snapshots | ✅ | HistoryPanel: save/restore/delete named snapshots via historyStore |
+| Auto-snapshot on publish | ✅ | PublishButton auto-saves "Before publish" snapshot |
+| Version compare/diff | ✅ | HistoryPanel: diff modal showing added/removed/changed sections per snapshot |
+| Rollback / restore layouts | ✅ | historyStore.restoreSnapshot with confirmation
 
 ## 18. PREVIEW ENVIRONMENTS (§PREVIEW ENVIRONMENTS)
 
@@ -448,7 +448,7 @@
 | Navigation Builder | 3 | 0 | 1 | 2 | 0 |
 | Dashboard Builder | 5 | 0 | 0 | 5 | 0 |
 | Overlay System | 8 | 3 | 1 | 4 | 0 |
-| Version Control | 5 | 0 | 0 | 5 | 0 |
+| Version Control | 5 | 5 | 0 | 0 | 0 |
 | Preview Environments | 4 | 2 | 0 | 2 | 0 |
 | Publishing Pipeline | 5 | 1 | 1 | 3 | 0 |
 | Undo/Redo | 4 | 3 | 0 | 1 | 0 |
@@ -468,6 +468,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **295** | **115** | **42** | **138** | **0** |
+| **TOTAL** | **295** | **120** | **42** | **133** | **0** |
 
-> **Completion: 39.0%** — Properties Panel 14/14 ✅ fully complete (all categories implemented: Content, Style, Motion, Effects, Interactions, Data, Accessibility, SEO, Visibility Rules). Remaining: version control, dashboard builder, template system.
+> **Completion: 40.7%** — Properties Panel 14/14 ✅ + Version Control 5/5 ✅ fully complete. Remaining: Dashboard Builder, Template System, Admin roles page.
