@@ -547,3 +547,20 @@ model FeatureFlag {
 
   @@map("feature_flags")
 }
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  name      String
+  key       String   @unique
+  prefix    String   @map("prefix")
+  lastChars String   @map("last_chars")
+  role      String   @default("admin")
+  active    Boolean  @default(true)
+  lastUsedAt DateTime? @map("last_used_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([key])
+  @@index([active])
+  @@map("api_keys")
+}

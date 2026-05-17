@@ -1,159 +1,248 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+"use client";
 
-interface ApiEndpoint {
-  method: string;
-  path: string;
-  description: string;
-  auth: boolean;
+import { useState, useEffect, useCallback } from "react";
+import { Key, Plus, Trash2, Copy, Check, Loader2, RefreshCw } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LoadingScreen } from "@/components/ui/loading-screen";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+interface ApiKeyRecord {
+  id: string;
+  name: string;
+  prefix: string;
+  lastChars: string;
+  role: string;
+  active: boolean;
+  lastUsedAt: string | null;
+  createdAt: string;
 }
-
-interface ApiGroup {
-  category: string;
-  endpoints: ApiEndpoint[];
-}
-
-const apiGroups: ApiGroup[] = [
-  {
-    category: "Authentication",
-    endpoints: [
-      { method: "POST", path: "/api/auth/login", description: "Authenticate user and create session", auth: false },
-      { method: "POST", path: "/api/auth/logout", description: "Destroy active session", auth: true },
-      { method: "GET", path: "/api/auth/session", description: "Get current session info", auth: false },
-    ],
-  },
-  {
-    category: "Users",
-    endpoints: [
-      { method: "GET", path: "/api/users", description: "List all users", auth: true },
-      { method: "GET", path: "/api/users/[id]", description: "Get user by ID", auth: true },
-      { method: "PUT", path: "/api/users/[id]", description: "Update user", auth: true },
-      { method: "DELETE", path: "/api/users/[id]", description: "Delete user", auth: true },
-    ],
-  },
-  {
-    category: "Courses",
-    endpoints: [
-      { method: "GET", path: "/api/courses", description: "List courses", auth: false },
-      { method: "POST", path: "/api/courses", description: "Create course", auth: true },
-      { method: "GET", path: "/api/courses/[id]", description: "Get course details", auth: false },
-      { method: "PUT", path: "/api/courses/[id]", description: "Update course", auth: true },
-      { method: "DELETE", path: "/api/courses/[id]", description: "Delete course", auth: true },
-    ],
-  },
-  {
-    category: "Content",
-    endpoints: [
-      { method: "GET", path: "/api/courses/[id]/modules", description: "List course modules", auth: false },
-      { method: "POST", path: "/api/courses/[id]/modules", description: "Create module", auth: true },
-      { method: "GET", path: "/api/modules/[id]/lessons", description: "List module lessons", auth: false },
-      { method: "POST", path: "/api/modules/[id]/lessons", description: "Create lesson", auth: true },
-      { method: "PUT", path: "/api/lessons/[id]", description: "Update lesson", auth: true },
-    ],
-  },
-  {
-    category: "Media",
-    endpoints: [
-      { method: "POST", path: "/api/media/upload", description: "Upload a file", auth: true },
-      { method: "GET", path: "/api/media", description: "List uploaded media", auth: true },
-      { method: "DELETE", path: "/api/media/[id]", description: "Delete media", auth: true },
-    ],
-  },
-  {
-    category: "Admin",
-    endpoints: [
-      { method: "GET", path: "/api/admin/analytics", description: "Platform analytics data", auth: true },
-      { method: "GET", path: "/api/admin/blocks", description: "List block definitions", auth: true },
-      { method: "GET", path: "/api/admin/users", description: "Admin user management", auth: true },
-    ],
-  },
-];
 
 export default function AdminApiPage() {
+  const [keys, setKeys] = useState<ApiKeyRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newRole, setNewRole] = useState("admin");
+  const [creating, setCreating] = useState(false);
+  const [rawKey, setRawKey] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const fetchKeys = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/api-keys");
+      if (!res.ok) throw new Error("Failed to load API keys");
+      setKeys(await res.json());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchKeys();
+  }, [fetchKeys]);
+
+  async function handleCreate() {
+    if (!newName.trim()) return;
+    setCreating(true);
+    try {
+      const res = await fetch("/api/admin/api-keys", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName.trim(), role: newRole }),
+      });
+      if (!res.ok) throw new Error("Failed to create key");
+      const data = await res.json();
+      setRawKey(data.rawKey);
+      setNewName("");
+      setShowCreate(false);
+      await fetchKeys();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to create");
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this API key? This cannot be undone.")) return;
+    setDeleting(id);
+    try {
+      const res = await fetch(`/api/admin/api-keys/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete");
+      setKeys((prev) => prev.filter((k) => k.id !== id));
+    } catch {
+      alert("Failed to delete");
+    } finally {
+      setDeleting(null);
+    }
+  }
+
+  function handleCopy() {
+    if (rawKey) {
+      navigator.clipboard.writeText(rawKey);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
+  if (isLoading) return <LoadingScreen fullScreen={false} message="Loading API keys..." />;
+
+  if (error) return <ErrorState message={error} onRetry={fetchKeys} />;
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">API</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          API endpoints, rate limits, and usage information.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">API Keys</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Manage API keys for external integrations.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={fetchKeys}>
+            <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
+            Refresh
+          </Button>
+          <Button size="sm" onClick={() => { setShowCreate(!showCreate); setRawKey(null); }}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
+            New Key
+          </Button>
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Rate Limiting</CardTitle>
-          <CardDescription>Global API rate limit configuration</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <p className="text-xs text-muted-foreground">Max Requests</p>
-              <p className="text-lg font-semibold text-foreground">5</p>
-              <p className="text-xs text-muted-foreground">per window</p>
+      {showCreate && (
+        <div className="rounded-xl border border-border bg-muted/10 p-4">
+          <div className="flex items-end gap-3">
+            <div className="flex-1 space-y-1.5">
+              <label className="text-xs text-muted-foreground">Key Name</label>
+              <Input
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Integration name..."
+                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                autoFocus
+              />
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Window Duration</p>
-              <p className="text-lg font-semibold text-foreground">60s</p>
-              <p className="text-xs text-muted-foreground">rolling window</p>
+            <div className="space-y-1.5">
+              <label className="text-xs text-muted-foreground">Role</label>
+              <Select value={newRole} onValueChange={setNewRole}>
+                <SelectTrigger className="w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="teacher">Teacher</SelectItem>
+                  <SelectItem value="student">Student</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Strategy</p>
-              <p className="text-lg font-semibold text-foreground">In-Memory</p>
-              <p className="text-xs text-muted-foreground">per IP address</p>
-            </div>
+            <Button onClick={handleCreate} disabled={creating || !newName.trim()}>
+              {creating ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
+              Generate
+            </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      )}
 
-      {apiGroups.map((group) => (
-        <Card key={group.category}>
-          <CardHeader>
-            <CardTitle className="text-base">{group.category}</CardTitle>
-            <CardDescription>
-              {group.endpoints.length} endpoint{group.endpoints.length !== 1 ? "s" : ""}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-border text-muted-foreground">
-                    <th className="pb-2 pr-4 font-medium">Method</th>
-                    <th className="pb-2 pr-4 font-medium">Path</th>
-                    <th className="pb-2 pr-4 font-medium">Description</th>
-                    <th className="pb-2 font-medium">Auth</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {group.endpoints.map((ep) => (
-                    <tr key={ep.path + ep.method} className="border-b border-border/50 last:border-0">
-                      <td className="py-2 pr-4">
-                        <span className={`font-mono text-xs font-semibold ${
-                          ep.method === "GET" ? "text-green-500" :
-                          ep.method === "POST" ? "text-blue-500" :
-                          ep.method === "PUT" ? "text-yellow-500" :
-                          "text-red-500"
-                        }`}>
-                          {ep.method}
-                        </span>
-                      </td>
-                      <td className="py-2 pr-4 font-mono text-xs text-foreground">{ep.path}</td>
-                      <td className="py-2 pr-4 text-muted-foreground">{ep.description}</td>
-                      <td className="py-2">
-                        {ep.auth ? (
-                          <Badge variant="secondary" className="text-xs">Required</Badge>
-                        ) : (
-                          <Badge variant="outline" className="text-xs">Public</Badge>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+      {rawKey && (
+        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+          <p className="mb-2 text-xs font-semibold text-emerald-400">
+            Key generated — copy it now. You won&apos;t see it again.
+          </p>
+          <div className="flex items-center gap-2">
+            <code className="flex-1 rounded-lg bg-muted/30 px-3 py-2 text-xs font-mono text-foreground break-all">
+              {rawKey}
+            </code>
+            <Button size="sm" variant="outline" onClick={handleCopy}>
+              {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {keys.length === 0 && !rawKey ? (
+        <EmptyState
+          icon={Key}
+          title="No API keys"
+          description="Create your first API key for external integrations."
+        />
+      ) : (
+        <div className="overflow-hidden rounded-xl border border-border">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/20">
+                <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Name</th>
+                <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Key</th>
+                <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Role</th>
+                <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</th>
+                <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Last Used</th>
+                <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Created</th>
+                <th className="px-4 py-3" />
+              </tr>
+            </thead>
+            <tbody>
+              {keys.map((apiKey) => (
+                <tr key={apiKey.id} className="border-b border-border/50 transition-colors hover:bg-muted/10">
+                  <td className="px-4 py-3">
+                    <span className="text-sm font-medium text-foreground">{apiKey.name}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <code className="rounded bg-muted/30 px-2 py-0.5 text-[10px] font-mono text-muted-foreground">
+                      {apiKey.prefix}...{apiKey.lastChars}
+                    </code>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-xs text-muted-foreground capitalize">{apiKey.role}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      apiKey.active ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
+                    }`}>
+                      {apiKey.active ? "Active" : "Revoked"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-[11px] text-muted-foreground">
+                    {apiKey.lastUsedAt ? new Date(apiKey.lastUsedAt).toLocaleDateString() : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-[11px] text-muted-foreground whitespace-nowrap">
+                    {new Date(apiKey.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => handleDelete(apiKey.id)}
+                      disabled={deleting === apiKey.id}
+                      className="rounded-lg p-1.5 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                      title="Delete key"
+                    >
+                      {deleting === apiKey.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-3.5 w-3.5" />
+                      )}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
