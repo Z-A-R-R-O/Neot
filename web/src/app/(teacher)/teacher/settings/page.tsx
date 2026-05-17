@@ -8,6 +8,10 @@ interface Metadata {
   grade_levels?: string[];
   bio?: string;
   age_group?: string;
+  notifyEnrollments?: boolean;
+  notifyCourseComplete?: boolean;
+  notifyStudentMessages?: boolean;
+  notifyWeeklyReport?: boolean;
 }
 
 export default async function TeacherSettingsPage() {

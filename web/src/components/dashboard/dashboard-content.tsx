@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock, Archive, X, Timer } from "lucide-react";
+import { BookOpen, CheckCircle, Zap, TrendingUp, ArrowRight, Clock, Archive, X, Timer, Target, Calendar, Activity } from "lucide-react";
 import Link from "next/link";
 import { LevelProgress } from "@/components/gamification/level-progress";
 import { StreakFlame } from "@/components/gamification/streak-flame";
@@ -54,6 +54,21 @@ interface ActiveEvent {
   progress: number;
 }
 
+interface ActivityItem {
+  id: string;
+  lessonTitle: string;
+  courseTitle: string;
+  status: string;
+  score: number | null;
+  createdAt: string;
+}
+
+interface WeeklyGoal {
+  target: number;
+  completed: number;
+  xpThisWeek: number;
+}
+
 interface DashboardContentProps {
   name: string;
   stats: {
@@ -71,6 +86,8 @@ interface DashboardContentProps {
   continueLesson: ContinueLesson | null;
   recommendations?: RecommendedCourse[];
   seasonalEvents?: ActiveEvent[];
+  recentActivity?: ActivityItem[];
+  weeklyGoal?: WeeklyGoal;
 }
 
 interface StatCard {
@@ -94,7 +111,7 @@ function formatTime(seconds: number): string {
   return `${minutes}m`;
 }
 
-export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations, seasonalEvents }: DashboardContentProps) {
+export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations, seasonalEvents, recentActivity, weeklyGoal }: DashboardContentProps) {
   return (
     <div className="space-y-10">
       <motion.div
@@ -391,6 +408,90 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
           </div>
         </div>
       </motion.div>
+
+      {weeklyGoal && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.45, ease: easing }}
+        >
+          <h2 className="font-heading text-xl font-bold tracking-tight text-foreground mb-6">Weekly Goals</h2>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl">
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-emerald-500/10 blur-[60px]" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-4">
+                  <Target className="h-5 w-5 text-emerald-400" />
+                  <p className="text-sm font-medium text-foreground">Lessons This Week</p>
+                </div>
+                <div className="flex items-end gap-2">
+                  <p className="font-heading text-4xl font-bold text-foreground">{weeklyGoal.completed}</p>
+                  <p className="text-sm text-muted-foreground mb-1">/ {weeklyGoal.target} lessons</p>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all duration-500"
+                    style={{ width: `${Math.min((weeklyGoal.completed / weeklyGoal.target) * 100, 100)}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl">
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-yellow-500/10 blur-[60px]" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-4">
+                  <Calendar className="h-5 w-5 text-yellow-400" />
+                  <p className="text-sm font-medium text-foreground">XP This Week</p>
+                </div>
+                <p className="font-heading text-4xl font-bold text-foreground">{weeklyGoal.xpThisWeek.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mt-1">Keep earning XP to level up faster</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {recentActivity && recentActivity.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: easing }}
+        >
+          <h2 className="font-heading text-xl font-bold tracking-tight text-foreground mb-6">Recent Activity</h2>
+          <div className="space-y-3">
+            {recentActivity.slice(0, 5).map((activity, i) => (
+              <motion.div
+                key={activity.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.05 }}
+                className="flex items-center gap-4 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-500/10">
+                  {activity.status === "completed" ? (
+                    <CheckCircle className="h-5 w-5 text-emerald-400" />
+                  ) : (
+                    <Activity className="h-5 w-5 text-yellow-400" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{activity.lessonTitle}</p>
+                  <p className="text-xs text-muted-foreground">{activity.courseTitle}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  {activity.score !== null && (
+                    <p className="text-sm font-medium text-primary-400">{Math.round(activity.score)}%</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(activity.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

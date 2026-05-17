@@ -43,9 +43,13 @@ export default async function DashboardPage() {
   }[] = [];
 
   let seasonalEvents: Awaited<ReturnType<typeof getActiveEventsForUser>> = [];
+  let recentActivity: { id: string; lessonTitle: string; courseTitle: string; status: string; score: number | null; createdAt: string }[] = [];
+  let weeklyGoal: { target: number; completed: number; xpThisWeek: number } = { target: 5, completed: 0, xpThisWeek: 0 };
 
   try {
-    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, timeAgg, events] = await Promise.all([
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, timeAgg, events, activity, xpThisWeek] = await Promise.all([
       prisma.profile.findUnique({
         where: { id: user!.id },
         select: { xp: true, level: true, currentStreak: true },
@@ -76,9 +80,39 @@ export default async function DashboardPage() {
         _sum: { timeSpent: true },
       }),
       getActiveEventsForUser(user!.id),
+      prisma.lessonProgress.findMany({
+        where: { userId: user!.id },
+        orderBy: { updatedAt: "desc" },
+        take: 10,
+        include: {
+          lesson: {
+            select: {
+              title: true,
+              module: { select: { course: { select: { title: true } } } },
+            },
+          },
+        },
+      }),
+      prisma.xPTransaction.aggregate({
+        where: { userId: user!.id, createdAt: { gte: sevenDaysAgo } },
+        _sum: { amount: true },
+      }),
     ]);
     recommendations = recs;
     seasonalEvents = events;
+    recentActivity = activity.map((a) => ({
+      id: a.id,
+      lessonTitle: a.lesson.title,
+      courseTitle: a.lesson.module.course.title,
+      status: a.status,
+      score: a.score,
+      createdAt: a.updatedAt.toISOString(),
+    }));
+    weeklyGoal = {
+      target: 5,
+      completed: lessonCount,
+      xpThisWeek: xpThisWeek._sum.amount ?? 0,
+    };
 
     const xp = profile?.xp ?? 0;
     const level = profile?.level ?? 1;
@@ -116,5 +150,5 @@ export default async function DashboardPage() {
     // Dashboard data not available
   }
 
-  return <DashboardContent name={name} stats={stats} enrollments={enrollments} continueLesson={continueLesson} recommendations={recommendations} seasonalEvents={seasonalEvents} />;
+  return <DashboardContent name={name} stats={stats} enrollments={enrollments} continueLesson={continueLesson} recommendations={recommendations} seasonalEvents={seasonalEvents} recentActivity={recentActivity} weeklyGoal={weeklyGoal} />;
 }
