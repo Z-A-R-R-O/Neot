@@ -1,32 +1,16 @@
 "use client";
 
-import { blockRegistry } from "@/lib/block-registry";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 import { useDevModeStore, type DeviceMode } from "@/stores/devModeStore";
 import { BlockOverlay } from "@/components/dev-mode/BlockOverlay";
 import { PublicHeader } from "@/components/layout/public-header";
+import { DataBoundRenderer } from "@/components/blocks/data-bound-renderer";
 
 const deviceWidths: Record<DeviceMode, string> = {
   desktop: "100%",
   tablet: "768px",
   mobile: "375px",
 };
-
-function renderSectionFallback(
-  blockType: string,
-  content: Record<string, unknown>,
-  blockId?: string,
-) {
-  const SectionComponent = blockRegistry.getComponent(blockType);
-  if (!SectionComponent) {
-    return (
-      <div className="py-6 text-center text-sm text-muted-foreground">
-        Unknown section type: {blockType}
-      </div>
-    );
-  }
-  return <SectionComponent content={content} blockId={blockId} />;
-}
 
 export function LivePreview() {
   const { sections } = usePageBuilderStore();
@@ -56,11 +40,7 @@ export function LivePreview() {
               label={section.blockType}
               path={`Page > ${section.blockType}`}
             >
-              {renderSectionFallback(
-                section.blockType,
-                section.content as Record<string, unknown>,
-                section.id,
-              )}
+              <DataBoundRenderer section={section} />
             </BlockOverlay>
           ))}
           {sections.length === 0 && (
