@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, Sparkles } from "lucide-react";
-import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { InlineEditor } from "@/components/dev-mode/InlineEditor";
@@ -13,64 +13,28 @@ interface HeroSectionProps {
   blockId?: string;
 }
 
-function useParallax(
-  springX: MotionValue<number>,
-  springY: MotionValue<number>,
-  viewportRef: React.RefObject<{ w: number; h: number }>,
-  strength: number
-) {
-  const x = useTransform(springX, (v) => {
-    const { w } = viewportRef.current;
-    return (v / w - 0.5) * strength * 2;
-  });
-  const y = useTransform(springY, (v) => {
-    const { h } = viewportRef.current;
-    return (v / h - 0.5) * strength * 2;
-  });
-  return { x, y };
-}
-
-const PARTICLE_COUNT = 8;
-const NODE_COUNT = 4;
+const PARTICLE_COUNT = 4;
+const NODE_COUNT = 2;
 
 export function HeroSection({ content, blockId }: HeroSectionProps) {
   const devModeEnabled = useDevModeStore((s) => s.enabled);
   const updateSection = usePageBuilderStore((s) => s.updateSection);
   const viewportRef = useRef({ w: 1920, h: 1080 });
 
-  // Mouse tracking
+  // Simplified mouse tracking - only 2 springs instead of 10
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
-  const normX = useMotionValue(0.5);
-  const normY = useMotionValue(0.5);
+  const springX = useSpring(rawX, { stiffness: 40, damping: 30 });
+  const springY = useSpring(rawY, { stiffness: 40, damping: 30 });
 
-  // Motion hierarchy springs
-  const springRawX = useSpring(rawX, { stiffness: 100, damping: 30 });
-  const springRawY = useSpring(rawY, { stiffness: 100, damping: 30 });
-  const springBgX = useSpring(normX, { stiffness: 50, damping: 35 });
-  const springBgY = useSpring(normY, { stiffness: 50, damping: 35 });
-  const springWidgetX = useSpring(normX, { stiffness: 100, damping: 28 });
-  const springWidgetY = useSpring(normY, { stiffness: 100, damping: 28 });
-  const springFastX = useSpring(normX, { stiffness: 180, damping: 18 });
-  const springFastY = useSpring(normY, { stiffness: 180, damping: 18 });
-  const springGlowX = useSpring(normX, { stiffness: 30, damping: 40 });
-  const springGlowY = useSpring(normY, { stiffness: 30, damping: 40 });
-
-  // Parallax offsets per layer
-  const bgOffset = useParallax(springBgX, springBgY, viewportRef, 3);
-  const mainOffset = useParallax(springBgX, springBgY, viewportRef, 9);
-  const widgetOffset = useParallax(springWidgetX, springWidgetY, viewportRef, 16);
-  const particleOffset = useParallax(springFastX, springFastY, viewportRef, 24);
-  const glowOffset = useParallax(springGlowX, springGlowY, viewportRef, 5);
-
-  // Main panel subtle rotate
-  const mainRotateX = useTransform(springBgY, (v) => {
-    const { h } = viewportRef.current;
-    return (v / h - 0.5) * 4;
-  });
-  const mainRotateY = useTransform(springBgX, (v) => {
+  // Single parallax layer instead of 5
+  const parallaxX = useTransform(springX, (v) => {
     const { w } = viewportRef.current;
-    return (v / w - 0.5) * -4;
+    return (v / w - 0.5) * 12;
+  });
+  const parallaxY = useTransform(springY, (v) => {
+    const { h } = viewportRef.current;
+    return (v / h - 0.5) * 12;
   });
 
   useEffect(() => {
@@ -82,18 +46,29 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Throttled mouse move - only update on animation frame
   useEffect(() => {
+    let rafId: number;
+    let lastX = 0;
+    let lastY = 0;
+    const threshold = 2; // Only update if moved more than 2px
+
     const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      rawX.set(clientX);
-      rawY.set(clientY);
-      const { w, h } = viewportRef.current;
-      normX.set(clientX);
-      normY.set(clientY);
+      if (Math.abs(e.clientX - lastX) < threshold && Math.abs(e.clientY - lastY) < threshold) return;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        rawX.set(e.clientX);
+        rawY.set(e.clientY);
+      });
     };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [rawX, rawY, normX, normY]);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [rawX, rawY]);
 
   const title = (content.title as string) || "Adaptive Learning. Built for Humans.";
   const subtitle =
@@ -144,88 +119,76 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
   return (
     <section className="noise relative flex min-h-[90vh] items-center overflow-hidden px-6 pb-20 pt-32">
-      {/* Layer 0: Atmospheric Background */}
+      {/* Layer 0: Atmospheric Background - optimized */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {/* Gradient Mesh — pale blue, lavender, soft cyan, ultra-light pink */}
+        {/* Gradient Mesh - reduced blur values for performance */}
         <motion.div
-          style={{ x: bgOffset.x, y: bgOffset.y }}
-          className="absolute inset-0"
+          style={{ x: parallaxX, y: parallaxY }}
+          className="absolute inset-0 will-change-transform"
         >
-          <div className="absolute -left-1/4 -top-1/4 h-[800px] w-[800px] rounded-full bg-blue-200/20 dark:bg-blue-500/8 blur-[160px] animate-ambient-float" />
-          <div className="absolute -bottom-1/4 -right-1/4 h-[700px] w-[700px] rounded-full bg-purple-200/18 dark:bg-purple-500/6 blur-[160px] animate-ambient-float" style={{ animationDelay: "-5s" }} />
-          <div className="absolute left-1/3 top-1/2 h-[500px] w-[500px] rounded-full bg-cyan-200/14 dark:bg-cyan-500/5 blur-[140px] animate-ambient-float" style={{ animationDelay: "-10s" }} />
-          <div className="absolute right-1/3 bottom-1/3 h-[400px] w-[400px] rounded-full bg-pink-200/12 dark:bg-pink-500/4 blur-[120px] animate-ambient-float" style={{ animationDelay: "-3s" }} />
-          <div className="absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-200/12 dark:bg-primary-500/6 blur-[160px] animate-ambient-float" style={{ animationDelay: "-7s" }} />
+          <div className="absolute -left-1/4 -top-1/4 h-[600px] w-[600px] rounded-full bg-blue-200/15 dark:bg-blue-500/5 blur-[100px]" />
+          <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-purple-200/12 dark:bg-purple-500/4 blur-[100px]" />
+          <div className="absolute left-1/3 top-1/2 h-[400px] w-[400px] rounded-full bg-cyan-200/10 dark:bg-cyan-500/3 blur-[80px]" />
         </motion.div>
 
-        {/* Radial lighting behind key focus zones */}
-        <motion.div
-          style={{ x: glowOffset.x, y: glowOffset.y }}
-          className="absolute left-[55%] top-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-400/12 dark:bg-primary-500/18 blur-[100px]"
-        />
-        <motion.div
-          style={{ x: glowOffset.x, y: glowOffset.y }}
-          className="absolute left-[60%] top-[30%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-400/10 dark:bg-accent-500/12 blur-[80px]"
-        />
+        {/* Existing glowing orbs - reduced blur */}
+        <div className="absolute -left-1/4 -top-1/4 h-[600px] w-[600px] rounded-full bg-secondary-500/5 blur-[100px]" />
+        <div className="absolute -right-1/4 -bottom-1/4 h-[600px] w-[600px] rounded-full bg-accent-500/5 blur-[100px]" />
 
-        {/* Existing glowing orbs (preserved) */}
-        <div className="absolute -left-1/4 -top-1/4 h-[1000px] w-[1000px] rounded-full bg-secondary-500/10 blur-[180px] animate-pulse-glow" />
-        <div className="absolute -right-1/4 -bottom-1/4 h-[1000px] w-[1000px] rounded-full bg-accent-500/10 blur-[180px] animate-pulse-glow" style={{ animationDelay: "2s" }} />
-
-        {/* Floating Particles (enhanced with glow) */}
-        <div className="absolute inset-0 opacity-25">
+        {/* Floating Particles - reduced count */}
+        <div className="absolute inset-0 opacity-20 will-change-transform">
           {[...Array(PARTICLE_COUNT)].map((_, i) => (
             <motion.div
               key={i}
-              style={{ x: particleOffset.x, y: particleOffset.y }}
+              style={{ x: parallaxX, y: parallaxY }}
+              className="will-change-transform"
             >
               <motion.div
-                className="absolute h-1 w-1 rounded-full bg-primary-400 shadow-[0_0_6px_rgba(79,124,255,0.6)]"
+                className="absolute h-1 w-1 rounded-full bg-primary-400"
                 animate={{
-                  y: [0, -120 + i * 10, 0],
-                  x: [0, Math.sin(i * 2) * 60, 0],
-                  opacity: [0, 1, 0],
-                  scale: [0, 1.5, 0],
+                  y: [0, -80 + i * 10, 0],
+                  x: [0, Math.sin(i * 2) * 40, 0],
+                  opacity: [0, 0.8, 0],
                 }}
                 transition={{
-                  duration: 12 + i * 2,
+                  duration: 10 + i * 2,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: i * 1.2,
+                  delay: i * 1.5,
                 }}
                 style={{
-                  left: `${10 + i * 11}%`,
-                  top: `${15 + (i % 4) * 18}%`,
+                  left: `${10 + i * 18}%`,
+                  top: `${15 + (i % 3) * 22}%`,
                 }}
               />
             </motion.div>
           ))}
         </div>
 
-        {/* Ambient Nodes */}
-        <div className="absolute inset-0 opacity-35">
+        {/* Ambient Nodes - reduced count */}
+        <div className="absolute inset-0 opacity-25 will-change-transform">
           {[...Array(NODE_COUNT)].map((_, i) => (
             <motion.div
               key={`node-${i}`}
-              style={{ x: particleOffset.x, y: particleOffset.y }}
+              style={{ x: parallaxX, y: parallaxY }}
+              className="will-change-transform"
             >
               <motion.div
-                className="absolute h-1.5 w-1.5 rounded-full bg-primary-300/70 dark:bg-primary-400/50 shadow-[0_0_8px_rgba(79,124,255,0.4)]"
+                className="absolute h-1.5 w-1.5 rounded-full bg-primary-300/50 dark:bg-primary-400/30"
                 animate={{
-                  y: [0, -60 + i * 15, 0],
-                  x: [0, 30 + i * 10, 0],
-                  opacity: [0.2, 0.8, 0.2],
-                  scale: [0.5, 1.3, 0.5],
+                  y: [0, -40 + i * 15, 0],
+                  x: [0, 20 + i * 10, 0],
+                  opacity: [0.2, 0.6, 0.2],
                 }}
                 transition={{
-                  duration: 15 + i * 3,
+                  duration: 12 + i * 3,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: i * 2.5,
+                  delay: i * 3,
                 }}
                 style={{
-                  left: `${25 + i * 18}%`,
-                  top: `${30 + (i % 3) * 20}%`,
+                  left: `${25 + i * 25}%`,
+                  top: `${30 + (i % 2) * 25}%`,
                 }}
               />
             </motion.div>
@@ -233,14 +196,14 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
         </div>
       </div>
 
-      {/* Layer 1: Cursor-responsive spotlight */}
+      {/* Layer 1: Cursor-responsive spotlight - simplified */}
       <motion.div
-        className="pointer-events-none absolute inset-0 z-[1] opacity-40"
+        className="pointer-events-none absolute inset-0 z-[1] opacity-30 will-change-transform"
         style={{
-          background: `radial-gradient(circle 500px at var(--x) var(--y), rgba(79,124,255,0.1), transparent 80%)`,
+          background: `radial-gradient(circle 400px at var(--x) var(--y), rgba(79,124,255,0.08), transparent 80%)`,
           // @ts-expect-error: Framer motion custom properties
-          "--x": springRawX,
-          "--y": springRawY,
+          "--x": springX,
+          "--y": springY,
         }}
       />
 
@@ -349,14 +312,14 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
         <div className="relative z-10 hidden h-[700px] w-full max-w-[700px] items-center justify-center lg:flex">
           {/* Ghost Panel 1 — behind main panel, left offset */}
           <motion.div
-            style={{ x: bgOffset.x, y: bgOffset.y }}
-            className="glass-ghost absolute left-[5%] top-[12%] h-[400px] w-[480px] -translate-x-1/2 -translate-y-1/2"
+            style={{ x: parallaxX, y: parallaxY }}
+            className="glass-ghost absolute left-[5%] top-[12%] h-[400px] w-[480px] -translate-x-1/2 -translate-y-1/2 will-change-transform"
           />
 
           {/* Ghost Panel 2 — behind main panel, right offset */}
           <motion.div
-            style={{ x: bgOffset.x, y: bgOffset.y }}
-            className="glass-ghost absolute right-[5%] bottom-[10%] h-[350px] w-[440px] translate-x-1/2 translate-y-1/2"
+            style={{ x: parallaxX, y: parallaxY }}
+            className="glass-ghost absolute right-[5%] bottom-[10%] h-[350px] w-[440px] translate-x-1/2 translate-y-1/2 will-change-transform"
           />
 
           {/* Central Focal Point: Adaptive Dashboard */}
@@ -365,12 +328,9 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              x: mainOffset.x,
-              y: mainOffset.y,
-              rotateX: mainRotateX,
-              rotateY: mainRotateY,
+              x: parallaxX,
+              y: parallaxY,
               willChange: "transform",
-              boxShadow: "var(--hero-panel-shadow)",
             }}
             className="glass-hero-panel relative h-[480px] w-[560px] overflow-hidden rounded-[40px]"
           >
@@ -417,23 +377,14 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
           {/* AI Knowledge Node */}
           <motion.div
-            style={{ x: widgetOffset.x, y: widgetOffset.y, willChange: "transform" }}
+            style={{ x: parallaxX, y: parallaxY, willChange: "transform" }}
           >
             <motion.div
-              animate={{ 
-                y: [0, -30, 0],
-                x: [0, 10, 0],
-                rotate: [0, 5, 0]
-              }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
+              animate={{ y: [0, -20, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="glass-hero-card absolute -left-4 top-12 h-36 w-36 rounded-[32px] p-8 flex flex-col items-center justify-center gap-3"
             >
               <div className="h-12 w-12 rounded-2xl bg-accent-500/20 flex items-center justify-center border border-accent-500/30 relative">
-                <div className="absolute inset-0 rounded-2xl bg-accent-400/20 blur-lg animate-pulse" />
                 <Sparkles className="h-6 w-6 text-accent-400 relative z-10" />
               </div>
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-400">AI Engine</span>
@@ -442,19 +393,11 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
           {/* Adaptive Progress */}
           <motion.div
-            style={{ x: widgetOffset.x, y: widgetOffset.y, willChange: "transform" }}
+            style={{ x: parallaxX, y: parallaxY, willChange: "transform" }}
           >
             <motion.div
-              animate={{ 
-                y: [0, 30, 0],
-                x: [0, -15, 0]
-              }}
-              transition={{ 
-                duration: 10, 
-                repeat: Infinity, 
-                ease: "easeInOut",
-                delay: 1
-              }}
+              animate={{ y: [0, 20, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               className="glass-hero-card absolute -right-6 bottom-24 h-44 w-48 rounded-[32px] p-8"
             >
               <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Adaptive Path</div>
@@ -474,20 +417,11 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
           {/* Analytics Pulse */}
           <motion.div
-            style={{ x: widgetOffset.x, y: widgetOffset.y, willChange: "transform" }}
+            style={{ x: parallaxX, y: parallaxY, willChange: "transform" }}
           >
             <motion.div
-              animate={{ 
-                scale: [1, 1.02, 1],
-                rotate: [0, -2, 0],
-                y: [0, 10, 0]
-              }}
-              transition={{ 
-                duration: 12, 
-                repeat: Infinity, 
-                ease: "easeInOut",
-                delay: 0.5
-              }}
+              animate={{ scale: [1, 1.01, 1] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               className="glass-hero-card absolute left-12 -bottom-4 h-28 w-56 rounded-[24px] px-8 py-6 flex items-center gap-6"
             >
               <div className="relative h-12 w-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Sparkles, Lightbulb } from "lucide-react";
 
@@ -15,12 +15,6 @@ const hints = [
 export function AiMentorPresence() {
   const [hintIndex, setHintIndex] = useState(0);
   const [visible, setVisible] = useState(false);
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-  const springX = useSpring(mouseX, { stiffness: 30, damping: 40 });
-  const springY = useSpring(mouseY, { stiffness: 30, damping: 40 });
-  const driftX = useTransform(springX, (v) => (v - 0.5) * 20);
-  const driftY = useTransform(springY, (v) => (v - 0.5) * 20);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -36,15 +30,6 @@ export function AiMentorPresence() {
     return () => clearInterval(interval);
   }, [visible]);
 
-  useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX / window.innerWidth);
-      mouseY.set(e.clientY / window.innerHeight);
-    };
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, [mouseX, mouseY]);
-
   if (!visible) return null;
 
   return (
@@ -53,7 +38,6 @@ export function AiMentorPresence() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="fixed bottom-6 right-6 z-50 hidden lg:block pointer-events-auto"
-      style={{ x: driftX, y: driftY }}
     >
       <motion.div
         animate={{ y: [0, -4, 0] }}
