@@ -12,6 +12,7 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
   student: [
     { id: "student-home", label: "Home", href: "/dashboard", icon: "LayoutDashboard", children: [] },
     { id: "student-courses", label: "My Courses", href: "/dashboard/courses", icon: "BookOpen", children: [] },
+    { id: "student-messages", label: "Messages", href: "/dashboard/messages", icon: "Mail", children: [] },
     { id: "student-achievements", label: "Achievements", href: "/dashboard/achievements", icon: "Award", children: [] },
     { id: "student-leaderboard", label: "Leaderboard", href: "/dashboard/leaderboard", icon: "Trophy", children: [] },
     { id: "student-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
@@ -19,6 +20,7 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
   teacher: [
     { id: "teacher-dashboard", label: "Dashboard", href: "/teacher", icon: "LayoutDashboard", children: [] },
     { id: "teacher-courses", label: "My Courses", href: "/teacher/courses", icon: "BookOpen", children: [] },
+    { id: "teacher-messages", label: "Messages", href: "/teacher/messages", icon: "Mail", children: [] },
     { id: "teacher-analytics", label: "Analytics", href: "/teacher/analytics", icon: "BarChart3", children: [] },
     { id: "teacher-students", label: "Students", href: "/teacher/students", icon: "Users", children: [] },
     { id: "teacher-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
