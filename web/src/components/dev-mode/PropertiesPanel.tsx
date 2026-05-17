@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+
 import { useDevModeStore } from "@/stores/devModeStore";
 import { editorRegistry } from "@/lib/editor-registry";
 import { MotionTab } from "./section-editors/motion-tab";
 import { InteractionsTab } from "./section-editors/interactions-tab";
 import { StyleTab } from "./section-editors/style-tab";
+import { EffectsTab } from "./section-editors/effects-tab";
 
 interface PropertiesPanelProps {
   selectedBlock: {
@@ -133,25 +135,7 @@ export function PropertiesPanel({ selectedBlock, onContentChange, onStyleChange 
         )}
 
         {activeTab === "effects" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-right-2 duration-300">
-            <Section title="Glassmorphism">
-              <PropertyRow label="Blur">
-                <Slider value="16px" onChange={() => {}} />
-              </PropertyRow>
-              <PropertyRow label="Transparency">
-                <Slider value="40%" onChange={() => {}} />
-              </PropertyRow>
-            </Section>
-
-            <Section title="Lighting">
-              <PropertyRow label="Inner Glow">
-                <input type="checkbox" className="h-4 w-4 rounded border-border bg-muted/30" />
-              </PropertyRow>
-              <PropertyRow label="Mesh Gradient">
-                <input type="checkbox" className="h-4 w-4 rounded border-border bg-muted/30" />
-              </PropertyRow>
-            </Section>
-          </div>
+          <EffectsTab sectionId={selectedBlock.id} />
         )}
 
         {activeTab === "interactions" && (
@@ -182,21 +166,4 @@ function PropertyRow({ label, children }: { label: string; children: React.React
   );
 }
 
-function Slider({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const numValue = parseInt(value) || 0;
-  const unit = value.replace(/[0-9]/g, "") || "px";
 
-  return (
-    <div className="flex items-center gap-2">
-      <input
-        type="range"
-        min="0"
-        max={unit === "%" ? 100 : 200}
-        value={numValue}
-        onChange={(e) => onChange(`${e.target.value}${unit}`)}
-        className="h-1 w-full appearance-none rounded-full bg-muted accent-primary-500 cursor-pointer"
-      />
-      <span className="w-10 text-right text-[10px] text-muted-foreground">{value}</span>
-    </div>
-  );
-}
