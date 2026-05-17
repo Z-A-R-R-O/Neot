@@ -31,6 +31,7 @@ export async function POST(request: Request) {
 
   const id = crypto.randomUUID();
   const hashedPassword = hashPassword(password);
+  const verificationToken = crypto.randomUUID();
 
   await prisma.profile.create({
     data: {
@@ -40,11 +41,12 @@ export async function POST(request: Request) {
       passwordHash: hashedPassword,
       ageGroup: ageGroup ?? null,
       role: role,
+      verificationToken,
     },
   });
 
   const token = await createSession(id);
-  const response = NextResponse.json({ success: true });
+  const response = NextResponse.json({ success: true, verificationToken });
   response.headers.set(
     "Set-Cookie",
     `${getSessionCookieName()}=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}; SameSite=Lax`,

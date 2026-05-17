@@ -54,8 +54,7 @@ export function useAuth() {
       const data = await res.json();
       if (!res.ok) return { error: new Error(data.error ?? "Signup failed") };
       await fetchUser();
-      router.push("/onboarding");
-      return { error: null };
+      return { error: null, verificationToken: data.verificationToken as string | undefined };
     } catch (e) {
       return { error: e instanceof Error ? e : new Error("Signup failed") };
     } finally {

@@ -23,6 +23,7 @@
 | OAuth (Google/GitHub) | 🔲 | Not implemented |
 | Magic link | 🔲 | Future scope |
 | MFA-ready architecture | 🔲 | Not started |
+| Email verification | ✅ | Token-based verification flow: signup generates token, /verify-email page, /api/auth/verify-email GET route, resend via /api/auth/send-verification |
 | RBAC authorization | ✅ | Role-based route protection in middleware.ts |
 | Middleware route protection: /admin=ADMIN, /teacher=TEACHER, /dashboard=STUDENT, /parent=PARENT | ✅ | Implemented in src/lib/middleware.ts |
 | CSRF protection | ✅ | Origin validation on mutation endpoints |
@@ -62,7 +63,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Sign up → verify email → select role → create profile → onboarding → redirect | 🚧 | Signup exists with role selection, profile creation, and role-specific onboarding wizard. Email verification NOT implemented. |
+| Sign up → verify email → select role → create profile → onboarding → redirect | ✅ | Full flow: signup generates verification token, /verify-email page with link, login shows verified banner, resend verification endpoint |
 | Role-specific onboarding: student interests, teacher expertise/bio, parent child-link | ✅ | StudentOnboarding (profile, interests, goals), TeacherOnboarding (profile, expertise, bio), ParentOnboarding (profile, child info, preferences) |
 
 ## 7. STUDENT SYSTEM FLOW (§STUDENT SYSTEM FLOW)
@@ -453,9 +454,9 @@
 
 | Category | Total | ✅ Done | 🚧 Partial | 🔲 Not Started | ❌ Missing |
 |---|---|---|---|---|---|
-| Core Roles & Auth | 7 | 6 | 1 | 0 | 0 |
+| Core Roles & Auth | 8 | 7 | 1 | 0 | 0 |
 | DB & Site Structure | 8 | 8 | 0 | 0 | 0 |
-| Public Site & Auth Flow | 8 | 6 | 1 | 1 | 0 |
+| Public Site & Auth Flow | 8 | 7 | 1 | 0 | 0 |
 | Student System | 27 | 19 | 2 | 6 | 0 |
 | Course System | 15 | 11 | 2 | 2 | 0 |
 | Lesson System | 9 | 7 | 1 | 1 | 0 |
@@ -477,6 +478,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **210** | **126** | **23** | **54** | **0** |
+| **TOTAL** | **211** | **129** | **23** | **52** | **0** |
 
-> **Completion: 60.0%** — Core infrastructure and learning flow are solid. Badges system (20 badges, 5 categories) + DB-backed awarding. Seasonal events (6 events with XP multipliers 1.5x-3x, bonus XP, progress tracking). Quiz pass XP + perfect_quiz achievement wired. Admin moderation + analytics added. Key gaps: parent communication, notifications, AI features, scaling.
+> **Completion: 61.1%** — Core infrastructure and learning flow are solid. Email verification flow complete (token-based, signup → verify → login). Badges system (20 badges, 5 categories) + DB-backed awarding. Seasonal events (6 events with XP multipliers 1.5x-3x, bonus XP, progress tracking). Quiz pass XP + perfect_quiz achievement wired. Admin moderation + analytics added. Key gaps: parent communication, notifications, AI features, scaling.

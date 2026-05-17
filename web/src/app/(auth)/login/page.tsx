@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { AuthSplitLayout } from "@/components/auth/auth-split-layout";
 import { LoginForm } from "@/components/auth/login-form";
+import { VerifiedBanner } from "@/components/auth/verified-banner";
 
 export default function LoginPage() {
   return (
@@ -7,6 +9,9 @@ export default function LoginPage() {
       title="Welcome back"
       subtitle="Sign in to your NEOT account"
     >
+      <Suspense fallback={null}>
+        <VerifiedBanner />
+      </Suspense>
       <LoginForm />
     </AuthSplitLayout>
   );

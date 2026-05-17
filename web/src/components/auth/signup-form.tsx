@@ -29,6 +29,7 @@ export function SignupForm() {
   const { signup } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [verificationUrl, setVerificationUrl] = useState<string | null>(null);
 
   const {
     register,
@@ -40,24 +41,44 @@ export function SignupForm() {
 
   async function onSubmit(data: SignupData) {
     setServerError(null);
-    const { error } = await signup(data.email, data.password, undefined, data.ageGroup);
+    const { error, verificationToken } = await signup(data.email, data.password, undefined, data.ageGroup);
     if (error) {
       setServerError(error.message);
     } else {
       setSuccess(true);
+      if (verificationToken) {
+        setVerificationUrl(`${window.location.origin}/api/auth/verify-email?token=${verificationToken}`);
+      }
     }
   }
 
   if (success) {
     return (
-      <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/20">
-          <Mail className="h-6 w-6 text-green-400" />
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-6 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20">
+            <Mail className="h-6 w-6 text-emerald-400" />
+          </div>
+          <h3 className="text-lg font-bold text-foreground">Verify your email</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Click the link below to verify your email address.
+          </p>
         </div>
-        <h3 className="text-lg font-bold text-foreground">Check your email</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We sent a confirmation link to your email address.
-        </p>
+        {verificationUrl && (
+          <a
+            href={verificationUrl}
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary-500/20 bg-primary-500/10 py-3 text-sm font-medium text-primary-400 transition-colors hover:bg-primary-500/20"
+          >
+            Verify Email Address
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        )}
+        <Link
+          href="/login"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-foreground py-3 text-sm font-semibold text-background transition-colors hover:opacity-90"
+        >
+          Go to Login
+        </Link>
       </div>
     );
   }
