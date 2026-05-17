@@ -2,26 +2,68 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, type LucideIcon } from "lucide-react";
+import {
+  X, LayoutDashboard, BookOpen, Award, Trophy, Users, BarChart3, Eye, Settings,
+  type LucideIcon,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useNavigation } from "@/hooks/useNavigation";
+import type { NavItemData } from "@/lib/navigation-service";
 
-interface MobileNavItem {
-  label: string;
-  href: string;
-  icon: LucideIcon;
-}
+const iconMap: Record<string, LucideIcon> = {
+  LayoutDashboard,
+  BookOpen,
+  Award,
+  Trophy,
+  Users,
+  BarChart3,
+  Eye,
+  Settings,
+};
 
 interface MobileNavProps {
-  items: MobileNavItem[];
+  role: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function MobileNav({ items, isOpen, onClose }: MobileNavProps) {
+export function MobileNav({ role, isOpen, onClose }: MobileNavProps) {
   const pathname = usePathname();
+  const { items, isLoading } = useNavigation(role);
 
   if (!isOpen) return null;
+
+  function renderItems(items: NavItemData[], depth = 0): React.ReactNode {
+    return (
+      <ul className="space-y-1">
+        {items.map((item) => {
+          const Icon = item.icon ? iconMap[item.icon] : null;
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const hasChildren = item.children.length > 0;
+          return (
+            <li key={item.id}>
+              <Link
+                href={item.href}
+                onClick={onClose}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  depth > 0 && "pl-8",
+                  isActive
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                {Icon && <Icon className="h-5 w-5 shrink-0" />}
+                {item.label}
+              </Link>
+              {hasChildren && renderItems(item.children, depth + 1)}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden">
@@ -37,29 +79,15 @@ export function MobileNav({ items, isOpen, onClose }: MobileNavProps) {
           </button>
         </div>
         <nav className="flex-1 overflow-y-auto p-4">
-          <ul className="space-y-1">
-            {items.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                    )}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted-foreground border-t-primary" />
+            </div>
+          ) : items.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">No navigation items</p>
+          ) : (
+            renderItems(items)
+          )}
         </nav>
       </div>
     </div>

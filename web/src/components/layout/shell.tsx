@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { OfflineBanner } from "@/components/layout/offline-banner";
 
 type Role = "student" | "teacher" | "parent" | "admin";
@@ -19,6 +20,11 @@ export function Shell({ role, children }: ShellProps) {
   return (
     <div className="flex min-h-screen">
       <Sidebar
+        role={role}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <MobileNav
         role={role}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
