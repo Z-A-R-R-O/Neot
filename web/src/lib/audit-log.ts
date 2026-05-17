@@ -1,6 +1,19 @@
 import { prisma } from "@/lib/db";
+import { dispatchWebhooks } from "@/lib/webhook";
 
 export type AuditAction = "create" | "update" | "delete" | "publish" | "restore" | "permission_change" | "theme_change";
+
+function actionToEvent(action: AuditAction, resource: string): string {
+  const mapping: Partial<Record<AuditAction, string>> = {
+    create: `${resource}.created`,
+    update: `${resource}.updated`,
+    delete: `${resource}.deleted`,
+    publish: `page.published`,
+    permission_change: `role.changed`,
+    theme_change: `theme.created`,
+  };
+  return mapping[action] ?? `${resource}.${action}`;
+}
 
 export async function createAuditLog(params: {
   action: AuditAction;
@@ -9,7 +22,7 @@ export async function createAuditLog(params: {
   userId?: string;
   details?: Record<string, unknown>;
 }) {
-  return prisma.auditLog.create({
+  const entry = await prisma.auditLog.create({
     data: {
       action: params.action,
       resource: params.resource,
@@ -18,6 +31,17 @@ export async function createAuditLog(params: {
       details: JSON.stringify(params.details ?? {}),
     },
   });
+
+  dispatchWebhooks({
+    event: actionToEvent(params.action, params.resource),
+    resource: params.resource,
+    resourceId: params.resourceId ?? "",
+    userId: params.userId ?? null,
+    details: params.details ?? null,
+    timestamp: new Date().toISOString(),
+  }).catch(() => {});
+
+  return entry;
 }
 
 export interface AuditLogEntry {

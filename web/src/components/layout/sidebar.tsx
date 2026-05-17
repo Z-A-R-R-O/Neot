@@ -116,6 +116,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "admin-localization", label: "Localization", href: "/admin/localization", icon: "Languages", children: [] },
     { id: "admin-integrations", label: "Integrations", href: "/admin/integrations", icon: "Plug", children: [] },
     { id: "admin-api", label: "API", href: "/admin/api", icon: "Code", children: [] },
+    { id: "admin-webhooks", label: "Webhooks", href: "/admin/webhooks", icon: "Webhook", children: [] },
     { id: "admin-accessibility", label: "Accessibility", href: "/admin/accessibility", icon: "Accessibility", children: [] },
     { id: "admin-settings", label: "Settings", href: "/admin/settings", icon: "Settings", children: [] },
   ],
