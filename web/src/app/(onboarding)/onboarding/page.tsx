@@ -13,10 +13,10 @@ export default async function OnboardingPage() {
     const dashboards: Record<string, string> = {
       student: "/dashboard",
       teacher: "/teacher",
-      parent: "/dashboard",
+      parent: "/parent",
       admin: "/admin",
     };
-    redirect(dashboards[user.role] ?? "/dashboard");
+    redirect(dashboards[user.role] ?? "/");
   }
 
   return <OnboardingWizard role={user.role} userId={user.id} />;

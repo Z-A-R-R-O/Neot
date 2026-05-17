@@ -12,6 +12,18 @@ const protectedPathPrefixes = ["/dashboard", "/teacher", "/admin", "/onboarding"
 const authPathPrefixes = ["/login", "/signup", "/forgot-password"];
 const apiPathPrefix = "/api";
 
+const ROLE_DASHBOARDS: Record<string, string> = {
+  student: "/dashboard",
+  teacher: "/teacher",
+  admin: "/admin",
+  parent: "/parent",
+};
+
+function getUserDashboard(role: string | null, onboardingCompleted: boolean): string {
+  if (!onboardingCompleted) return "/onboarding";
+  return ROLE_DASHBOARDS[role ?? ""] ?? "/";
+}
+
 function isPrefixedPath(pathname: string, prefixes: string[]) {
   return prefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 }
@@ -40,6 +52,11 @@ export async function updateSession(request: NextRequest) {
 
   const user = await getUser();
 
+  // RSC navigations cannot handle 307 responses — let server component layouts redirect instead
+  if (isRSCRequest) {
+    return NextResponse.next({ request });
+  }
+
   // Block suspended users from accessing protected routes
   if (user && user.status === "suspended" && isProtectedPath) {
     const redirectUrl = request.nextUrl.clone();
@@ -55,20 +72,25 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Skip redirect for RSC navigations — RSC streaming cannot handle 307 responses
-  if (user && isAuthPath && !isRSCRequest) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = user.onboardingCompleted ? "/dashboard" : "/onboarding";
-    redirectUrl.search = "";
-    return NextResponse.redirect(redirectUrl);
+  if (user && isAuthPath) {
+    const target = getUserDashboard(user.role, user.onboardingCompleted);
+    if (target !== pathname) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = target;
+      redirectUrl.search = "";
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   const requiredRole = getRequiredRole(pathname);
-  if (user && requiredRole && user.role !== requiredRole && !isRSCRequest) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = user.onboardingCompleted ? "/dashboard" : "/onboarding";
-    redirectUrl.search = "";
-    return NextResponse.redirect(redirectUrl);
+  if (user && requiredRole && user.role !== requiredRole) {
+    const target = getUserDashboard(user.role, user.onboardingCompleted);
+    if (target !== pathname) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = target;
+      redirectUrl.search = "";
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   return NextResponse.next({ request });
