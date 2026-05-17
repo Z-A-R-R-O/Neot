@@ -7,7 +7,7 @@ export interface VersionSnapshot {
   createdAt: Date;
 }
 
-export async function createVersionSnapshot(pageId: string): Promise<VersionSnapshot> {
+export async function createVersionSnapshot(pageId: string, versionTag?: string): Promise<VersionSnapshot> {
   const sections = await prisma.pageSection.findMany({
     where: { pageId },
     orderBy: { sortOrder: "asc" },
@@ -17,6 +17,7 @@ export async function createVersionSnapshot(pageId: string): Promise<VersionSnap
     data: {
       pageId,
       sections: JSON.stringify(sections),
+      versionTag: versionTag ?? null,
     },
   });
 

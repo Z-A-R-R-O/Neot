@@ -470,10 +470,11 @@ model PageTemplate {
 }
 
 model PageVersion {
-  id        String   @id @default(uuid())
-  pageId    String   @map("page_id")
-  sections  String   @default("[]")
-  createdAt DateTime @default(now()) @map("created_at")
+  id         String   @id @default(uuid())
+  pageId     String   @map("page_id")
+  sections   String   @default("[]")
+  versionTag String?  @map("version_tag")
+  createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([pageId])
   @@map("page_versions")

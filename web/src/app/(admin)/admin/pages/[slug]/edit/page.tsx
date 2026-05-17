@@ -123,6 +123,13 @@ export default function EditPagePage() {
           });
         }
       }
+
+      await fetch(`/api/admin/pages/${pageData!.slug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "published" }),
+      });
+
       const res = await fetch(`/api/admin/pages/${pageData!.id}/sections`);
       const serverSections = await res.json();
       setSections(
@@ -139,8 +146,11 @@ export default function EditPagePage() {
       await fetch(`/api/page-versions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pageId: pageData!.id }),
+        body: JSON.stringify({ pageId: pageData!.id, versionTag: "publish" }),
       });
+
+      setPageData((prev) => prev ? { ...prev, status: "published" } : null);
+      setSettingsForm((prev) => ({ ...prev, status: "published" }));
       setToast({ message: "Published!", variant: "success" });
       setTimeout(() => setToast(null), 3000);
     } catch (err) {
@@ -266,6 +276,7 @@ export default function EditPagePage() {
             <PublishButton
               onPublish={handlePublish}
               isDirty={isDirty}
+              pageTitle={pageData.title}
             />
           </div>
         </div>

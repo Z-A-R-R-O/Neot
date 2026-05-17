@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await request.json();
-  const { pageId } = body;
+  const { pageId, versionTag } = body;
 
   if (!pageId) {
     return NextResponse.json({ error: "pageId is required" }, { status: 400 });
@@ -36,6 +36,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
   }
 
-  const snapshot = await createVersionSnapshot(pageId);
+  const snapshot = await createVersionSnapshot(pageId, versionTag);
   return NextResponse.json(snapshot, { status: 201 });
 }

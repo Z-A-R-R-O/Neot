@@ -1,20 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { Loader2, CheckCircle, AlertTriangle, Rocket } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Loader2, CheckCircle, AlertTriangle, XCircle, Rocket } from "lucide-react";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 import { useHistoryStore } from "@/stores/historyStore";
+import { validatePublish, type ValidationResult } from "@/lib/page-validator";
 
 interface PublishButtonProps {
   onPublish?: () => Promise<void>;
   isDirty?: boolean;
+  pageTitle?: string;
 }
 
-export function PublishButton({ onPublish, isDirty = false }: PublishButtonProps) {
+export function PublishButton({ onPublish, isDirty = false, pageTitle = "" }: PublishButtonProps) {
   const [publishing, setPublishing] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const enabled = useDevModeStore((s) => s.enabled);
+
+  const validationResults = useMemo<ValidationResult[]>(() => {
+    if (!showConfirm) return [];
+    const sections = usePageBuilderStore.getState().sections;
+    return validatePublish({ title: pageTitle }, sections);
+  }, [showConfirm, pageTitle]);
+
+  const errors = validationResults.filter((r) => r.type === "error");
+  const warnings = validationResults.filter((r) => r.type === "warning");
+  const hasErrors = errors.length > 0;
 
   if (!enabled) return null;
 
@@ -65,14 +77,26 @@ export function PublishButton({ onPublish, isDirty = false }: PublishButtonProps
               </div>
 
               <div className="mb-4 space-y-2">
-                <div className="flex items-center gap-2 rounded-lg bg-emerald-500/5 px-3 py-2">
-                  <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
-                  <span className="text-xs text-emerald-400">All blocks valid</span>
-                </div>
-                <div className="flex items-center gap-2 rounded-lg bg-amber-500/5 px-3 py-2">
-                  <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
-                  <span className="text-xs text-amber-400">Responsive check recommended</span>
-                </div>
+                {hasErrors ? (
+                  errors.map((r, i) => (
+                    <div key={i} className="flex items-start gap-2 rounded-lg bg-red-500/5 px-3 py-2">
+                      <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-400" />
+                      <span className="text-xs text-red-400">{r.message}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center gap-2 rounded-lg bg-emerald-500/5 px-3 py-2">
+                    <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-xs text-emerald-400">All checks passed</span>
+                  </div>
+                )}
+
+                {warnings.map((r, i) => (
+                  <div key={i} className="flex items-start gap-2 rounded-lg bg-amber-500/5 px-3 py-2">
+                    <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
+                    <span className="text-xs text-amber-400">{r.message}</span>
+                  </div>
+                ))}
               </div>
 
               <div className="flex items-center justify-end gap-3">
@@ -84,8 +108,8 @@ export function PublishButton({ onPublish, isDirty = false }: PublishButtonProps
                 </button>
                 <button
                   onClick={handlePublish}
-                  disabled={publishing}
-                  className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2 text-xs font-semibold text-white hover:bg-primary-600 transition-colors"
+                  disabled={publishing || hasErrors}
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2 text-xs font-semibold text-white hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {publishing ? "Publishing..." : "Publish Now"}
                 </button>
