@@ -12,6 +12,17 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const search = searchParams.get("search");
   const mimeType = searchParams.get("mimeType");
+  const folder = searchParams.get("folder");
+  const foldersOnly = searchParams.get("foldersOnly") === "true";
+
+  if (foldersOnly) {
+    const result = await prisma.media.findMany({
+      select: { folder: true },
+      distinct: ["folder"],
+      orderBy: { folder: "asc" },
+    });
+    return NextResponse.json(result.map((r) => r.folder));
+  }
 
   const where: Record<string, unknown> = {};
   if (search) {
@@ -23,6 +34,9 @@ export async function GET(request: Request) {
   }
   if (mimeType) {
     where.mimeType = { startsWith: mimeType };
+  }
+  if (folder && folder !== "all") {
+    where.folder = folder;
   }
 
   const media = await prisma.media.findMany({
@@ -70,6 +84,7 @@ export async function POST(request: Request) {
   await writeFile(filePath, buffer);
 
   const alt = formData.get("alt") as string | null;
+  const folder = formData.get("folder") as string | null;
 
   const media = await prisma.media.create({
     data: {
@@ -79,6 +94,7 @@ export async function POST(request: Request) {
       sizeBytes: file.size,
       url: `/uploads/${safeName}`,
       alt,
+      folder: folder || "uncategorized",
       uploadedById: user.id,
     },
   });

@@ -312,12 +312,14 @@ model Media {
   sizeBytes   Int      @map("size_bytes")
   url         String
   alt         String?
+  folder      String   @default("uncategorized")
   uploadedById String  @map("uploaded_by_id")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   uploadedBy Profile @relation(fields: [uploadedById], references: [id])
 
+  @@index([folder])
   @@map("media")
 }
 

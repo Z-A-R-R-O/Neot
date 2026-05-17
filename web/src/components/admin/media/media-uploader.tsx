@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 
 interface MediaUploaderProps {
   onUploaded: () => void;
+  currentFolder?: string;
 }
 
-export function MediaUploader({ onUploaded }: MediaUploaderProps) {
+export function MediaUploader({ onUploaded, currentFolder = "uncategorized" }: MediaUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -28,6 +29,9 @@ export function MediaUploader({ onUploaded }: MediaUploaderProps) {
       formData.set("file", file);
       if (altRef.current?.value) {
         formData.set("alt", altRef.current.value);
+      }
+      if (currentFolder) {
+        formData.set("folder", currentFolder);
       }
 
       const res = await fetch("/api/admin/media", {
