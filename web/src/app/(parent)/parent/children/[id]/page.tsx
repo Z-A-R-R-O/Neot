@@ -33,7 +33,7 @@ export default async function ChildDetailPage({ params }: PageProps) {
 
   const [enrollments, completedLessonsCount, userAchievements] = await Promise.all([
     prisma.enrollment.findMany({
-      where: { userId: id },
+      where: { userId: id, course: { deletedAt: null } },
       include: {
         course: { select: { id: true, title: true } },
       },

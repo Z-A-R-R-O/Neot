@@ -12,13 +12,13 @@ export default async function TeacherDashboardPage() {
 
   try {
     const [totalCourses, enrollments, _progressData] = await Promise.all([
-      prisma.course.count({ where: { teacherId: userId ?? "" } }),
+      prisma.course.count({ where: { teacherId: userId ?? "", deletedAt: null } }),
       prisma.enrollment.findMany({
-        where: { course: { teacherId: userId ?? "" } },
+        where: { course: { teacherId: userId ?? "", deletedAt: null } },
         select: { id: true, userId: true, progress: true },
       }),
       prisma.lessonProgress.findMany({
-        where: { lesson: { module: { course: { teacherId: userId ?? "" } } } },
+        where: { lesson: { module: { course: { teacherId: userId ?? "", deletedAt: null } } } },
         select: { score: true },
       }),
     ]);

@@ -41,19 +41,26 @@ export default function TeacherCoursesPage() {
     return <ErrorState message="Failed to load courses" onRetry={() => refetch()} />;
   }
 
-  async function handleAction(courseId: string, action: "publish" | "archive" | "draft") {
+  async function handleAction(courseId: string, action: "publish" | "archive" | "draft" | "restore") {
     setActionLoading(courseId);
     try {
-      const statusMap: Record<string, string> = {
-        publish: "published",
-        archive: "archived",
-        draft: "draft",
-      };
-      await fetch(`/api/courses/${courseId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: statusMap[action] }),
-      });
+      if (action === "archive" || action === "restore") {
+        await fetch(`/api/courses/${courseId}/archive`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ courseId, action }),
+        });
+      } else {
+        const statusMap: Record<string, string> = {
+          publish: "published",
+          draft: "draft",
+        };
+        await fetch(`/api/courses/${courseId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: statusMap[action] }),
+        });
+      }
       refetch();
     } catch {
       // Silently fail

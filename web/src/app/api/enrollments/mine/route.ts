@@ -11,7 +11,10 @@ export async function GET() {
   }
 
   const enrollments = await prisma.enrollment.findMany({
-    where: { userId },
+    where: {
+      userId,
+      course: { deletedAt: null },
+    },
     include: {
       course: {
         select: {

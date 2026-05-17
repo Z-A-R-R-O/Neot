@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const skip = (page - 1) * limit;
 
   const enrollments = await prisma.enrollment.findMany({
-    where: { course: { teacherId: userId } },
+    where: { course: { teacherId: userId, deletedAt: null } },
     include: {
       user: {
         select: { id: true, fullName: true, email: true, avatarUrl: true },

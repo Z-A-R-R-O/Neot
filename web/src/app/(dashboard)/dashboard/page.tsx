@@ -47,10 +47,10 @@ export default async function DashboardPage() {
         where: { id: user!.id },
         select: { xp: true, level: true, currentStreak: true },
       }),
-      prisma.enrollment.count({ where: { userId: user!.id, archived: false } }),
+      prisma.enrollment.count({ where: { userId: user!.id, archived: false, course: { deletedAt: null } } }),
       prisma.lessonProgress.count({ where: { userId: user!.id, status: "completed" } }),
       prisma.enrollment.findMany({
-        where: { userId: user!.id, archived: false },
+        where: { userId: user!.id, archived: false, course: { deletedAt: null } },
         include: {
           course: { include: { category: true } },
         },
@@ -58,7 +58,7 @@ export default async function DashboardPage() {
         take: 6,
       }),
       prisma.enrollment.findFirst({
-        where: { userId: user!.id, lastLessonId: { not: null } },
+        where: { userId: user!.id, lastLessonId: { not: null }, course: { deletedAt: null } },
         orderBy: { lastAccessedAt: "desc" },
         select: {
           lastLessonId: true,

@@ -15,7 +15,7 @@ export default async function DashboardCoursesPage() {
 
   try {
     enrollments = await prisma.enrollment.findMany({
-      where: { userId: user.id },
+      where: { userId: user.id, course: { deletedAt: null } },
       include: {
         course: {
           include: { category: true },
