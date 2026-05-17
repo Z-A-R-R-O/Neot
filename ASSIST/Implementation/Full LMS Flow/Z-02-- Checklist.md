@@ -207,12 +207,12 @@
 ## 15. DASHBOARD BUILDER SYSTEM (§DASHBOARD BUILDER SYSTEM)
 
 | Requirement | Status | Notes |
-|---|---|---|
-| Dynamically editable student dashboard widgets | 🔲 | Dashboard is hardcoded JSX |
-| Teacher dashboard widget editor | 🔲 | Not implemented |
-| Admin analytics widget editor | 🔲 | Not implemented |
-| Parent dashboard card editor | 🔲 | Not implemented |
-| Widget engine (StatsCard, Leaderboard, AnalyticsChart, CourseProgress as blocks) | 🔲 | Not implemented |
+|---|---|---|---|
+| Dynamically editable student dashboard widgets | ✅ | Role-based widget config with visibility toggle, up/down reorder, title editing |
+| Teacher dashboard widget editor | ✅ | Same builder, teacher role tab with teacher-specific defaults |
+| Admin analytics widget editor | ✅ | Same builder, admin role tab with analytics/health defaults |
+| Parent dashboard card editor | ✅ | Same builder, parent role tab with children/reports/streaks defaults |
+| Widget engine (StatsCard, Leaderboard, etc. as blocks) | ✅ | Widget catalog with 8 types (stats/list/chart/grid/progress/calendar/table/feed), add/remove/title-edit per role, persisted via API |
 
 ## 16. OVERLAY SYSTEM (§OVERLAY SYSTEM)
 
@@ -446,7 +446,7 @@
 | Animations | 3 | 2 | 1 | 0 | 0 |
 | Interaction Engine | 2 | 2 | 0 | 0 | 0 |
 | Navigation Builder | 3 | 0 | 1 | 2 | 0 |
-| Dashboard Builder | 5 | 0 | 0 | 5 | 0 |
+| Dashboard Builder | 5 | 5 | 0 | 0 | 0 |
 | Overlay System | 8 | 3 | 1 | 4 | 0 |
 | Version Control | 5 | 5 | 0 | 0 | 0 |
 | Preview Environments | 4 | 2 | 0 | 2 | 0 |
@@ -468,6 +468,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **295** | **120** | **42** | **133** | **0** |
+| **TOTAL** | **295** | **125** | **42** | **128** | **0** |
 
-> **Completion: 40.7%** — Properties Panel 14/14 ✅ + Version Control 5/5 ✅ fully complete. Remaining: Dashboard Builder, Template System, Admin roles page.
+> **Completion: 42.4%** — Properties Panel 14/14 ✅ + Version Control 5/5 ✅ + Dashboard Builder 5/5 ✅ fully complete. Remaining: Template System, Admin roles page.
