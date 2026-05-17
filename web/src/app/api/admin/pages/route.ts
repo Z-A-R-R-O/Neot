@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { requirePermission } from "@/lib/permissions";
 
 const createPageSchema = z.object({
   title: z.string().min(1).max(200),
@@ -15,7 +16,8 @@ const createPageSchema = z.object({
 export async function GET() {
   const user = await getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const permError = await requirePermission(user.role, "pages", "read");
+  if (permError) return permError;
 
   const pages = await prisma.customPage.findMany({
     orderBy: { createdAt: "desc" },
@@ -28,7 +30,8 @@ export async function GET() {
 export async function POST(request: Request) {
   const user = await getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const permError = await requirePermission(user.role, "pages", "create");
+  if (permError) return permError;
 
   const body = await request.json();
   const parsed = createPageSchema.safeParse(body);

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { requirePermission } from "@/lib/permissions";
 
 const listQuerySchema = z.object({
   search: z.string().optional(),
@@ -14,7 +15,8 @@ const listQuerySchema = z.object({
 export async function GET(request: Request) {
   const user = await getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const permError = await requirePermission(user.role, "users", "read");
+  if (permError) return permError;
 
   const { searchParams } = new URL(request.url);
   const parsed = listQuerySchema.safeParse(Object.fromEntries(searchParams));

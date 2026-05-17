@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { requirePermission } from "@/lib/permissions";
 
 const createSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -122,7 +123,8 @@ async function ensureDefaultRoles() {
 export async function GET() {
   const user = await getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const permError = await requirePermission(user.role, "roles", "read");
+  if (permError) return permError;
 
   await ensureDefaultRoles();
 
@@ -136,7 +138,8 @@ export async function GET() {
 export async function POST(request: Request) {
   const user = await getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (user.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const permError = await requirePermission(user.role, "roles", "create");
+  if (permError) return permError;
 
   const body = await request.json();
   const parsed = createSchema.safeParse(body);
