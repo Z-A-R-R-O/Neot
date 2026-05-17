@@ -383,7 +383,7 @@
 | Rate limiting | ✅ | In-memory rate limiter |
 | Secure uploads | ✅ | File type/size validation |
 | Audit logs | ✅ | Wired into page edits, role changes, theme changes, messages, media upload/delete |
-| Soft deletes | 🔲 | Cascade deletes only |
+| Soft deletes | ✅ | Course soft-delete via deletedAt field, archive/restore API, teacher UI |
 
 ## 23. PERFORMANCE ARCHITECTURE (§PERFORMANCE ARCHITECTURE)
 
@@ -473,12 +473,12 @@
 | Recommendations | 2 | 1 | 1 | 0 | 0 |
 | Dev Mode | 7 | 4 | 3 | 0 | 0 |
 | CMS | 4 | 3 | 0 | 1 | 0 |
-| Security | 7 | 6 | 0 | 1 | 0 |
+| Security | 7 | 7 | 0 | 0 | 0 |
 | Performance | 6 | 3 | 0 | 3 | 0 |
 | Future Features | 13 | 0 | 0 | 13 | 0 |
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **148** | **16** | **40** | **0** |
+| **TOTAL** | **211** | **149** | **16** | **39** | **0** |
 
-> **Completion: 70.1%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Analytics category fully complete. Key gaps: AI features, scaling.
+> **Completion: 70.6%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, parent-to-teacher messaging, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Admin notifications wired (new user, course publish, report flagged). Course soft-delete implemented. Security category fully complete. Key gaps: AI features, scaling.
