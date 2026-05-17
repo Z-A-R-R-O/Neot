@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ChevronRight, GripVertical, Eye, EyeOff, Trash2, Copy } from "lucide-react";
+import { ChevronRight, GripVertical, Eye, EyeOff, Trash2, Copy, Lock, Unlock } from "lucide-react";
 import type { TreeNodeData } from "./StructureTree";
 import { useDevModeStore } from "@/stores/devModeStore";
 
@@ -12,15 +12,17 @@ interface SortableTreeNodeProps {
   depth: number;
   onSelect?: (id: string) => void;
   onToggleVisibility?: (id: string) => void;
+  onToggleLock?: (id: string) => void;
   onDuplicate?: (id: string) => void;
   onDelete?: (id: string) => void;
 }
 
-export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, onDuplicate, onDelete }: SortableTreeNodeProps) {
+export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, onToggleLock, onDuplicate, onDelete }: SortableTreeNodeProps) {
   const [expanded, setExpanded] = useState(true);
   const selectedId = useDevModeStore((s) => s.selectedId);
   const isSelected = selectedId === node.id;
   const hasChildren = node.children && node.children.length > 0;
+  const isLocked = node.locked ?? false;
 
   const {
     attributes,
@@ -29,7 +31,7 @@ export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, on
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: node.id });
+  } = useSortable({ id: node.id, disabled: isLocked });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -64,10 +66,10 @@ export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, on
         <button
           {...attributes}
           {...listeners}
-          className="flex h-4 w-4 items-center justify-center cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-30 transition-opacity"
+          className={`flex h-4 w-4 items-center justify-center ${isLocked ? "cursor-not-allowed opacity-20" : "cursor-grab active:cursor-grabbing"} opacity-0 group-hover:opacity-30 transition-opacity`}
           onClick={(e) => e.stopPropagation()}
         >
-          <GripVertical className="h-3.5 w-3.5" />
+          <GripVertical className={`h-3.5 w-3.5 ${isLocked ? "text-muted-foreground/30" : ""}`} />
         </button>
 
         <div className="flex flex-1 items-center gap-2 truncate">
@@ -84,9 +86,20 @@ export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, on
           <button
             onClick={(e) => {
               e.stopPropagation();
+              onToggleLock?.(node.id);
+            }}
+            className={`rounded-md p-1 transition-all ${isSelected ? "hover:bg-white/20" : "hover:bg-glass"}`}
+            title={isLocked ? "Unlock" : "Lock"}
+          >
+            {isLocked ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
               onToggleVisibility?.(node.id);
             }}
             className={`rounded-md p-1 transition-all ${isSelected ? "hover:bg-white/20" : "hover:bg-glass"}`}
+            title={node.visible !== false ? "Hide" : "Show"}
           >
             {node.visible !== false ? (
               <Eye className="h-3 w-3" />
@@ -100,15 +113,17 @@ export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, on
               onDuplicate?.(node.id);
             }}
             className={`rounded-md p-1 transition-all ${isSelected ? "hover:bg-white/20" : "hover:bg-glass"}`}
+            title="Duplicate"
           >
             <Copy className="h-3 w-3" />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onDelete?.(node.id);
+              if (!isLocked) onDelete?.(node.id);
             }}
-            className={`rounded-md p-1 transition-all ${isSelected ? "hover:bg-white/20" : "hover:bg-red-500/40"}`}
+            className={`rounded-md p-1 transition-all ${isSelected ? "hover:bg-white/20" : "hover:bg-red-500/40"} ${isLocked ? "opacity-30 cursor-not-allowed" : ""}`}
+            title={isLocked ? "Locked" : "Delete"}
           >
             <Trash2 className="h-3 w-3" />
           </button>
@@ -117,13 +132,14 @@ export function SortableTreeNode({ node, depth, onSelect, onToggleVisibility, on
 
       {hasChildren && expanded && (
         <div>
-          {node.children!.map((child) => (
+          {node.children!.map((child: TreeNodeData) => (
             <SortableTreeNode
               key={child.id}
               node={child}
               depth={depth + 1}
               onSelect={onSelect}
               onToggleVisibility={onToggleVisibility}
+              onToggleLock={onToggleLock}
               onDuplicate={onDuplicate}
               onDelete={onDelete}
             />

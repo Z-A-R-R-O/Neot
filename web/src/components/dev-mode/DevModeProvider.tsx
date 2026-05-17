@@ -71,6 +71,8 @@ export function DevModeProvider({ children, pageId, pageSlug, pageStatus }: DevM
       if (e.key === "Delete" || e.key === "Backspace") {
         const selectedId = useDevModeStore.getState().selectedId;
         if (selectedId) {
+          const section = usePageBuilderStore.getState().sections.find((s) => s.id === selectedId);
+          if (section?.settings.locked) return;
           e.preventDefault();
           usePageBuilderStore.getState().removeSection(selectedId);
           useDevModeStore.getState().select(null);

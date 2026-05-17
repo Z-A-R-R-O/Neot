@@ -20,6 +20,8 @@ export interface ResponsiveStyles {
 export interface SectionSettings {
   styles?: Record<string, unknown>;
   responsiveStyles?: ResponsiveStyles;
+  hidden?: boolean;
+  locked?: boolean;
   [key: string]: unknown;
 }
 

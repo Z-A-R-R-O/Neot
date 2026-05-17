@@ -21,6 +21,15 @@ import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
 import { blockRegistry } from "@/lib/block-registry";
 
+export interface TreeNodeData {
+  id: string;
+  type: string;
+  label: string;
+  children?: TreeNodeData[];
+  visible?: boolean;
+  locked?: boolean;
+}
+
 interface StructureTreeProps {
   blocks: TreeNodeData[];
   onAddBlock?: (type: string) => void;
@@ -28,17 +37,11 @@ interface StructureTreeProps {
   onDelete?: (id: string) => void;
   onDuplicate?: (id: string) => void;
   onReorder?: (activeId: string, overId: string) => void;
+  onToggleVisibility?: (id: string) => void;
+  onToggleLock?: (id: string) => void;
 }
 
-export interface TreeNodeData {
-  id: string;
-  type: string;
-  label: string;
-  children?: TreeNodeData[];
-  visible?: boolean;
-}
-
-export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplicate, onReorder }: StructureTreeProps) {
+export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplicate, onReorder, onToggleVisibility, onToggleLock }: StructureTreeProps) {
   const [search, setSearch] = useState("");
   const [showTypePicker, setShowTypePicker] = useState(false);
 
@@ -86,13 +89,14 @@ export function StructureTree({ blocks, onAddBlock, onSelect, onDelete, onDuplic
             usePageBuilderStore.getState().selectSection(id);
             onSelect?.(id);
           }}
-          onToggleVisibility={() => {}}
+          onToggleVisibility={(id) => onToggleVisibility?.(id)}
+          onToggleLock={(id) => onToggleLock?.(id)}
           onDuplicate={(id) => onDuplicate?.(id)}
           onDelete={(id) => onDelete?.(id)}
         />
         {hasChildren && (
           <div>
-            {node.children!.map((child) => renderSortableNode(child, depth + 1))}
+            {node.children!.map((child: TreeNodeData) => renderSortableNode(child, depth + 1))}
           </div>
         )}
       </div>

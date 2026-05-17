@@ -65,6 +65,8 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
     id: s.id,
     type: s.blockType,
     label: s.blockType,
+    visible: !s.settings.hidden,
+    locked: s.settings.locked ?? false,
     children: [] as { id: string; type: string; label: string }[],
   }));
 
@@ -134,7 +136,25 @@ export function DevModeShell({ children, pageId, pageSlug, pageStatus }: DevMode
         <StructureTree
           blocks={treeNodes}
           onSelect={(id) => selectSection(id)}
-          onDelete={(id) => removeSection(id)}
+          onDelete={(id) => {
+            const section = sections.find((s) => s.id === id);
+            if (section?.settings.locked) return;
+            removeSection(id);
+          }}
+          onToggleVisibility={(id) => {
+            const section = sections.find((s) => s.id === id);
+            if (!section) return;
+            updateSection(id, {
+              settings: { ...section.settings, hidden: !section.settings.hidden },
+            });
+          }}
+          onToggleLock={(id) => {
+            const section = sections.find((s) => s.id === id);
+            if (!section) return;
+            updateSection(id, {
+              settings: { ...section.settings, locked: !section.settings.locked },
+            });
+          }}
           onAddBlock={(type) => {
             const newSection: PageSection = {
               id: crypto.randomUUID(),

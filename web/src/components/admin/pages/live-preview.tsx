@@ -47,7 +47,9 @@ export function LivePreview() {
           </div>
         )}
         <div className="pt-[100px]">
-          {sections.map((section) => (
+          {sections
+            .filter((section) => !section.settings.hidden)
+            .map((section) => (
             <BlockOverlay
               key={section.id}
               blockId={section.id}
