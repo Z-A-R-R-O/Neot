@@ -299,7 +299,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Course search | ✅ | By title/description/subject + teacher name, debounced 250ms, dropdown in header |
+| Course search | ✅ | By title/description/subject + teacher name, debounced 250ms, dropdown in header, courses page search input |
 | Lesson search | ✅ | Included in search API + dropdown results |
 | Teacher search | ✅ | Included in search API + dropdown results |
 | Category search | ✅ | Included in search API + dropdown results |

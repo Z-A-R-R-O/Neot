@@ -20,6 +20,7 @@ export async function GET(request: Request) {
   const tag = searchParams.get("tag");
   const status = searchParams.get("status") ?? "published";
   const teacherId = searchParams.get("teacherId");
+  const search = searchParams.get("search");
 
   const where: Record<string, unknown> = { deletedAt: null };
 
@@ -28,6 +29,13 @@ export async function GET(request: Request) {
   if (teacherId) where.teacherId = teacherId;
   if (tag) {
     where.tags = { some: { tag: { slug: tag } } };
+  }
+  if (search) {
+    where.OR = [
+      { title: { contains: search } },
+      { description: { contains: search } },
+      { subject: { contains: search } },
+    ];
   }
 
   const courses = await prisma.course.findMany({

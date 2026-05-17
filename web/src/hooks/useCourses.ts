@@ -24,12 +24,14 @@ async function fetchCourses(params?: {
   teacherId?: string;
   status?: string;
   tag?: string;
+  search?: string;
 }) {
   const searchParams = new URLSearchParams();
   if (params?.categoryId) searchParams.set("categoryId", params.categoryId);
   if (params?.teacherId) searchParams.set("teacherId", params.teacherId);
   if (params?.status) searchParams.set("status", params.status);
   if (params?.tag) searchParams.set("tag", params.tag);
+  if (params?.search) searchParams.set("search", params.search);
 
   const qs = searchParams.toString();
   const res = await fetch(`/api/courses${qs ? `?${qs}` : ""}`);
@@ -42,6 +44,7 @@ export function useCourses(params?: {
   teacherId?: string;
   status?: string;
   tag?: string;
+  search?: string;
 }) {
   return useQuery({
     queryKey: ["courses", params],

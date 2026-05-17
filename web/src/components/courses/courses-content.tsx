@@ -40,10 +40,12 @@ interface Props {
 export function CoursesContent({ initialTag }: Props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>();
   const [selectedTag, setSelectedTag] = useState<string | undefined>(initialTag);
+  const [searchQuery, setSearchQuery] = useState("");
   const { data: courses, isLoading, error } = useCourses({
     status: "published",
     categoryId: selectedCategoryId,
     tag: selectedTag,
+    search: searchQuery || undefined,
   });
 
   useEffect(() => {
@@ -134,6 +136,8 @@ export function CoursesContent({ initialTag }: Props) {
               <input
                 type="text"
                 placeholder="Search courses..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-48 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
               />
             </div>
