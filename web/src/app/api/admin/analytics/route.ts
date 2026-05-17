@@ -9,6 +9,8 @@ export async function GET() {
   }
 
   const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
 
   const [
     totalUsers,
@@ -20,6 +22,11 @@ export async function GET() {
     recentProfiles,
     recentXpTransactions,
     topCourses,
+    mauUsers,
+    lastMonthUsers,
+    retainedUsers,
+    totalTimeSpent,
+    weeklyActiveUsers,
   ] = await Promise.all([
     prisma.profile.count(),
     prisma.profile.groupBy({ by: ["role"], _count: { id: true } }),
@@ -46,6 +53,28 @@ export async function GET() {
         teacher: { select: { fullName: true } },
         _count: { select: { enrollments: true } },
       },
+    }),
+    prisma.xPTransaction.findMany({
+      where: { createdAt: { gte: thirtyDaysAgo } },
+      select: { userId: true },
+      distinct: ["userId"],
+    }),
+    prisma.profile.count({
+      where: { createdAt: { lt: thirtyDaysAgo } },
+    }),
+    prisma.xPTransaction.findMany({
+      where: { createdAt: { gte: thirtyDaysAgo } },
+      select: { userId: true },
+      distinct: ["userId"],
+    }),
+    prisma.lessonProgress.aggregate({
+      where: { updatedAt: { gte: thirtyDaysAgo } },
+      _sum: { timeSpent: true },
+    }),
+    prisma.xPTransaction.findMany({
+      where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } },
+      select: { userId: true },
+      distinct: ["userId"],
     }),
   ]);
 
@@ -76,12 +105,32 @@ export async function GET() {
     dau: data.activeUsers.size,
   }));
 
+  const mau = mauUsers.length;
+  const retentionRate = lastMonthUsers > 0
+    ? Math.round((retainedUsers.length / lastMonthUsers) * 100)
+    : 0;
+
+  const totalTime = totalTimeSpent._sum.timeSpent ?? 0;
+  const avgDailyLessons = Math.round((totalCompletedLessons / 30) * 10) / 10;
+
+  const dau = new Set(recentXpTransactions.map((tx) => tx.userId)).size;
+  const mauRatio = totalUsers > 0 ? Math.round((mau / totalUsers) * 100) : 0;
+
   return NextResponse.json({
     overview: {
       totalUsers,
       totalCourses,
       totalEnrollments,
       totalCompletedLessons,
+    },
+    engagement: {
+      dau,
+      mau,
+      wau: weeklyActiveUsers.length,
+      mauRatio,
+      retentionRate,
+      totalTimeSpent: totalTime,
+      avgDailyLessons,
     },
     roleDistribution: roleDist,
     statusDistribution: statusDist,

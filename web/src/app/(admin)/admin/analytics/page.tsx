@@ -6,7 +6,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  Users, BookOpen, GraduationCap, Trophy,
+  Users, BookOpen, GraduationCap, Trophy, Activity, Clock, TrendingUp, Target,
 } from "lucide-react";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";
@@ -35,6 +35,15 @@ interface AnalyticsData {
     totalCourses: number;
     totalEnrollments: number;
     totalCompletedLessons: number;
+  };
+  engagement: {
+    dau: number;
+    mau: number;
+    wau: number;
+    mauRatio: number;
+    retentionRate: number;
+    totalTimeSpent: number;
+    avgDailyLessons: number;
   };
   roleDistribution: { role: string; count: number }[];
   statusDistribution: { status: string; count: number }[];
@@ -113,6 +122,65 @@ export default function AdminAnalyticsPage() {
           <p className="mt-1 font-heading text-2xl font-bold text-foreground">
             {data.overview.totalCompletedLessons.toLocaleString()}
           </p>
+        </div>
+      </motion.div>
+
+      {/* Engagement Metrics */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.08, ease: easing }}
+      >
+        <h2 className="mb-4 font-heading text-lg font-bold text-foreground">Engagement</h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Activity className="h-3 w-3 text-blue-400" /> DAU
+            </div>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.engagement.dau.toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Activity className="h-3 w-3 text-purple-400" /> WAU
+            </div>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.engagement.wau.toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Activity className="h-3 w-3 text-green-400" /> MAU
+            </div>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.engagement.mau.toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <TrendingUp className="h-3 w-3 text-yellow-400" /> MAU %
+            </div>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {data.engagement.mauRatio}%
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Target className="h-3 w-3 text-emerald-400" /> Retention
+            </div>
+            <p className={`mt-1 font-heading text-xl font-bold ${data.engagement.retentionRate >= 50 ? "text-emerald-400" : "text-amber-400"}`}>
+              {data.engagement.retentionRate}%
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Clock className="h-3 w-3 text-cyan-400" /> Time (30d)
+            </div>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">
+              {Math.round(data.engagement.totalTimeSpent / 3600)}h
+            </p>
+          </div>
         </div>
       </motion.div>
 
