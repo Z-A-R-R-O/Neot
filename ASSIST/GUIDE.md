@@ -41,7 +41,7 @@ Open http://localhost:3000 — you'll see the landing page.
 ```
 web/
 ├── prisma/
-│   └── schema.prisma          ← Database models (17 models, source of truth)
+│   └── schema.prisma          ← Database models (30+ models, source of truth)
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/             ← Login, signup, forgot-password
@@ -174,11 +174,13 @@ Read the relevant spec in `Vision - Core/` for context. Follow conventions in `0
 | 1.5 Admin CMS | ✅ Complete |
 | 1.75 Dynamic Renderer | ✅ Complete |
 | UI Transformation | ✅ Complete |
-| 2.5 Dev Mode | 🚧 7/10 — gaps remain (OverlaySystem stub, no drag-reorder, responsive unwired) |
-| **D Dashboard Completion** | **🔲 Active** |
-| 2 Adaptive + Gamification | 🔲 Not started |
+| 2.5 Dev Mode | ✅ Complete — all 6 gaps closed |
+| D Dashboard Completion | ✅ Complete |
+| **Z-01 LMS Flow** | **🚧 68.7% (145/211)** — Active: parent communication, AI features |
+| **Z-02 Admin Flow** | **🚧 In progress** — Analytics, Dev Mode, feature flags, backup done |
+| 2 Adaptive + Gamification | 🚧 Partially covered by Z-01 (badges, seasonal events, achievements done) |
 | 3 AI + Mobile | 🔲 Not started |
-| 4 Parent + School | 🔲 Not started |
+| 4 Parent + School | 🚧 Partially covered by Z-01 (reports, alerts done; messaging TBD) |
 | 5 Scale + Marketplace | 🔲 Not started |
 
 ---

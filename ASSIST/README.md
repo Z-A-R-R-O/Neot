@@ -167,7 +167,7 @@ The commit format is: `XX -- NEOT -- <description>` where `XX` auto-increments.
 | **4** Parent + School | Phase 1 done | Student/teacher data populated |
 | **5** Scale + Marketplace | All prior phases | Everything stable |
 
-**Shipped:** ✅ Phases 0, 1, 1.5, 1.75, UI, 2.5 complete. Phase 2 (Adaptive + Gamification) is the next active phase.
+**Shipped:** ✅ Phases 0, 1, 1.5, 1.75, UI, 2.5, D complete. Z-01 LMS Flow at **68.7%** (145/211). Active work: parent communication, AI features, production scaling.
 
 ---
 

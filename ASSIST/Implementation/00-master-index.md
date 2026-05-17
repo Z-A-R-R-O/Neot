@@ -236,13 +236,30 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - **D.10** — Loading & Error States: skeletons and error+retry on all dashboard pages
 - **D.11** — Dev Mode Remaining Gaps: All 6 gaps closed (OverlaySystem, responsive engine wiring, drag-to-reorder, toast system, presets connection, style merging)
 
+### Recent Z-01/Z-02 Progress (Commits 110-126)
+- **Email verification**: Token-based signup verification, `/verify-email` page, resend endpoint
+- **Badges system**: 20 DB-backed badges across 5 categories (progress, quiz, streak, mastery, social), `checkAndAwardBadges` service, BadgePopup, achievements page tab
+- **Seasonal events**: 6 events with XP multipliers (1.5x-3x), bonus XP per lesson, `UserSeasonalProgress` model, dashboard UI with challenge progress bars
+- **Parent reports**: Per-child detailed reports with courses, achievements, activity, insights tabs; weak subject analysis based on quiz scores; weekly XP charts; on-track status
+- **Parent alerts**: Automated notifications for streak drops, inactivity, low quiz scores, course completion; configurable preferences in `Profile.metadata.alertConfig`
+- **Teacher messaging**: `Message` model, send/list/read APIs, compose UI, student inbox, read/unread states, notifications
+- **Course reviews**: `Review` model with `@@unique([userId, courseId])`, submit/fetch APIs, star rating UI, course reviews component
+- **Search relevance ranking**: Multi-factor scoring (exact match 50pts, starts-with 30pts, word position 15pts, multi-term 10pts), field-weighted (title 3x, subject 2x, desc/teacher 1.5x, tags 2x), popularity boost via enrollment count (log2 scale)
+- **Teacher analytics expansion**: 30-day cohort retention rate, 8-week weekly retention trend, composite engagement score (time 40%, completions 35%, active students 25%), weekly retention/engagement charts, avg time per student
+- **Admin analytics**: MAU/WAU/DAU, retention rate, time spent, engagement dashboard, top courses, role/status distribution, daily signups chart
+- **Student dashboard**: Recent activity feed, weekly goals, XP tracking, insights section
+- **Dev console**: System health, DB stats, recent activity logs, performance metrics
+- **Teacher settings**: Notification preferences (enrollments, completions, messages, weekly report)
+- **Audit logs**: Wired into messages, media upload/delete
+- **Analytics category**: Fully complete (9/9) — student time spent, teacher retention/engagement, admin MAU/WAU/DAU
+
 ### Master Plan Completion Status
 
 | Master Plan | Items | ✅ Done | 🚧 Partial | 🔲 Not Started | Progress |
 |---|---|---|---|---|---|---|---|
-| **Z-01 — LMS Flow** | 210 | 110 | 27 | 73 | **52.4%** |
+| **Z-01 — LMS Flow** | 211 | 145 | 16 | 43 | **68.7%** |
 | **Z-02 — Admin Flow** | 295 | 110 | 42 | 143 | **37.3%** |
-| **Combined** | **505** | **220** | **69** | **216** | **43.6%** |
+| **Combined** | **506** | **255** | **58** | **186** | **50.4%** |
 
 > See `Full LMS Flow/Z-01-- Checklist.md` and `Full LMS Flow/Z-02-- Checklist.md` for full itemized tracking.
 
@@ -252,10 +269,21 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - ✅ **Z-01: Achievement auto-unlock** — All 9 achievements wired with XP rewards + notifications
 - ✅ **Z-01: Quiz pass bonus XP** — +50 XP awarded on quiz pass (≥80%) + perfect_quiz achievement check
 - ✅ **Z-01: Certificate generation** — Auto-issued on course completion with serial + notification
-- **Z-01: Notification system** — quiz results, streak milestones (3/7/14/30/50/100), course publish alerts now done. Missing: teacher messages, grading alerts.
-- **Z-02: Admin pages** — 20 of 27 not started (teachers, courses, moderation, etc.) — analytics done
-- **Z-01: Password reset** — needs email service integration
-- **Z-02: Properties Panel expansion** — Layout, Spacing, Typography, Colors, Borders categories not started
+- ✅ **Z-01: Email verification** — Token-based signup verification, /verify-email page, resend endpoint
+- ✅ **Z-01: Badges system** — 20 DB-backed badges across 5 categories, awarding on lesson/quiz completion
+- ✅ **Z-01: Seasonal events** — 6 events with XP multipliers (1.5x-3x), bonus XP, progress tracking
+- ✅ **Z-01: Teacher messaging** — Message model, send/list/read APIs, compose UI, student inbox
+- ✅ **Z-01: Parent reports** — Per-child detailed reports with weak subject analysis, time tracking, on-track status
+- ✅ **Z-01: Parent alerts** — Automated notifications for streak drops, inactivity, low scores, configurable preferences
+- ✅ **Z-01: Course reviews** — Review model, submit/fetch APIs, star rating UI
+- ✅ **Z-01: Search relevance ranking** — Multi-factor scoring (exact match, word position, popularity boost, field-weighted)
+- ✅ **Z-01: Teacher analytics** — Retention cohorts (30-day + 8-week weekly), engagement scoring (composite), weekly charts
+- ✅ **Z-01: Analytics category** — Fully complete (9/9): student time spent, teacher retention/engagement, admin MAU/WAU/DAU
+- **Z-01: Parent communication** — Direct messaging to teachers (TBD)
+- **Z-01: AI features** — Tutor, summaries, adaptive learning, quiz generation (TBD)
+- **Z-01: Scaling** — Caching, CDN, PostgreSQL migration (TBD)
+- **Z-02: Admin pages** — Teachers, courses, moderation, categories, analytics (partial)
+- **Z-02: Properties Panel expansion** — Effects, Data binding, Accessibility, SEO, Visibility Rules (partial)
 
 ---
 
