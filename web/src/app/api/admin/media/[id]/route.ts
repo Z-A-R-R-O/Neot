@@ -3,6 +3,7 @@ import { unlink } from "fs/promises";
 import path from "path";
 import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
+import { createAuditLog } from "@/lib/audit-log";
 
 export async function DELETE(
   _request: Request,
@@ -25,6 +26,14 @@ export async function DELETE(
   } catch {
     // File may not exist on disk, that's ok
   }
+
+  await createAuditLog({
+    action: "delete",
+    resource: "media",
+    resourceId: media.id,
+    userId: user.id,
+    details: { filename: media.originalName },
+  });
 
   await prisma.media.delete({ where: { id } });
 

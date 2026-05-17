@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getUserId } from "@/lib/auth";
 import { csrfGuard } from "@/lib/csrf";
 import { NOTIFICATION_TYPES } from "@/lib/notifications";
+import { createAuditLog } from "@/lib/audit-log";
 
 const sendMessageSchema = z.object({
   recipientId: z.string(),
@@ -63,6 +64,14 @@ export async function POST(request: Request) {
       message: subject,
       link: "/dashboard/messages",
     },
+  });
+
+  await createAuditLog({
+    action: "create",
+    resource: "message",
+    resourceId: message.id,
+    userId: senderId,
+    details: { recipientId, subject },
   });
 
   return NextResponse.json({ success: true, messageId: message.id }, { status: 201 });

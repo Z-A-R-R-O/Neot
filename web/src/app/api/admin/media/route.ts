@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { createAuditLog } from "@/lib/audit-log";
 
 export async function GET(request: Request) {
   const user = await getUser();
@@ -97,6 +98,14 @@ export async function POST(request: Request) {
       folder: folder || "uncategorized",
       uploadedById: user.id,
     },
+  });
+
+  await createAuditLog({
+    action: "create",
+    resource: "media",
+    resourceId: media.id,
+    userId: user.id,
+    details: { filename: file.name, mimeType: file.type, sizeBytes: file.size },
   });
 
   return NextResponse.json(media, { status: 201 });
