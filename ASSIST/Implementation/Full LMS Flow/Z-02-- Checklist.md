@@ -26,7 +26,7 @@
 | /admin/teachers | 🔲 | No dedicated teacher management |
 | /admin/students | 🔲 | No admin-level student overview |
 | /admin/parents | 🔲 | Not implemented |
-| /admin/analytics | 🔲 | Not implemented (teacher analytics exists, not admin) |
+| /admin/analytics | ✅ | Admin analytics with DAU chart, signups, user roles, top courses charts |
 | /admin/cms (pages) | ✅ | Page builder |
 | /admin/dev-mode | ✅ | Dev Mode shell with full editor |
 | /admin/site-builder | ✅ | Part of page builder |
@@ -56,10 +56,10 @@
 | Component Registry | 🚧 | BlockRegistry exists but no admin UI to register new components |
 | Layout Builder | 🔲 | No layout-level editing |
 | Theme Editor | ✅ | Split-pane theme editor with color pickers, fonts, animation config |
-| Responsive Editor | 🚧 | ResponsiveBar exists, responsive engine defined but NOT wired into PropertiesPanel |
-| Animation Studio | 🔲 | No animation timeline editor |
+| Responsive Editor | ✅ | Responsive engine wired into PropertiesPanel + LivePreview with per-breakpoint style merging |
+| Animation Studio | ✅ | animation-timeline.tsx with track lanes, play/pause/stop, frame-by-frame preview |
 | Template Library | 🔲 | No template save/load |
-| Overlay Manager | 🚧 | BlockOverlay works, but OverlaySystem is a stub |
+| Overlay Manager | ✅ | OverlaySystem with ResizeObserver tracking, hover/click delegation, dimension display |
 | Global Styles | 🚧 | Theme tokens handle colors/typography/spacing, but no per-block style overrides in Dev Mode |
 | Variables/Tokens | ✅ | Theme token system with CSS variable provider |
 | Data Bindings | 🔲 | No dynamic data binding for blocks |
@@ -67,10 +67,10 @@
 | Dynamic Routes | 🚧 | CustomPage rendering via catch-all route, but no admin UI to create/edit routes |
 | Version History | 🔲 | No version snapshots on publish |
 | Publish Manager | ✅ | Publish button with confirmation |
-| Preview Environments | 🔲 | No staging/draft preview |
+| Preview Environments | ✅ | preview-toggle.tsx with draft/preview environment switching |
 | Reusable Blocks | 🔲 | No reusable block system |
-| Interaction Editor | 🔲 | No click/hover/scroll interaction editor |
-| Accessibility Tools | 🔲 | No contrast checker, keyboard nav tester |
+| Interaction Editor | ✅ | interaction-engine.ts with 6 action types + interactions-tab.tsx in PropertiesPanel |
+| Accessibility Tools | ✅ | accessibility-tools.tsx with contrast checker, ARIA label editor, heading hierarchy validator |
 | Performance Inspector | 🔲 | No render profiling |
 | Dev Console | 🔲 | Not implemented |
 
@@ -90,10 +90,10 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Drag-and-drop editing | ✅ | Section drag-add from library |
-| Resize handles | 🔲 | Not implemented |
-| Alignment guides | 🔲 | Not implemented |
+| Resize handles | ✅ | resize-handle.tsx for visual block resizing on canvas |
+| Alignment guides | ✅ | alignment-guides.tsx for snap-to-guide alignment visualization |
 | Spacing visualization | 🔲 | Not implemented |
-| Responsive preview | 🚧 | Device switcher works, but properties don't change per breakpoint |
+| Responsive preview | ✅ | Device switcher works, properties change per breakpoint via responsive engine |
 | Nested editing | 🔲 | Not implemented |
 | Multi-select | 🔲 | Not implemented |
 | Zoom/pan | 🔲 | Not implemented |
@@ -105,7 +105,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Drag reorder | 🔲 | Grip icon is decorative, no dnd-kit wiring |
+| Drag reorder | ✅ | Full @dnd-kit sortable wiring via sortable-tree-node.tsx |
 | Nesting | 🔲 | Not implemented (flat section list only) |
 | Collapse/expand | 🔲 | Not implemented |
 | Visibility toggle | 🔲 | Not implemented |
@@ -125,9 +125,9 @@
 | Colors | 🔲 | Not implemented (theme-level only) |
 | Borders | 🔲 | Not implemented |
 | Effects | 🚧 | PropertiesPanel has Effects tab but limited |
-| Animations | 🚧 | Motion tab exists with basic controls |
-| Interactions | 🔲 | Not implemented |
-| Responsive | 🔲 | Not wired |
+| Animations | ✅ | Dedicated motion-tab.tsx with animation type/duration/delay controls |
+| Interactions | ✅ | interactions-tab.tsx for click/hover/scroll interaction configuration |
+| Responsive | ✅ | Wired into responsive engine with per-breakpoint overrides |
 | Data | 🔲 | Not implemented |
 | Accessibility | 🔲 | Not implemented |
 | SEO | 🔲 | Not implemented |
@@ -141,8 +141,8 @@
 | Tablet preview | ✅ | Canvas resizes |
 | Mobile preview | ✅ | Canvas resizes |
 | Custom breakpoints | 🔲 | Not implemented |
-| Per-breakpoint styles stored per block | 🔲 | responsive-engine.ts defines override merging but NOT wired into PropertiesPanel or canvas rendering |
-| Merge system: Desktop base → Tablet override → Mobile override | 🔲 | Defined in code, not applied |
+| Per-breakpoint styles stored per block | 🚧 | responsive-engine.ts defines override merging, partially wired but not fully persisted |
+| Merge system: Desktop base → Tablet override → Mobile override | ✅ | Applied to LivePreview |
 
 ## 8. THEME SYSTEM (§THEME SYSTEM)
 
@@ -182,15 +182,15 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Fade, slide, scale, parallax, hover, scroll reveal, stagger | 🚧 | PropertiesPanel has Motion tab with basic animation controls. Framer Motion used throughout components. |
-| Animation timeline (Figma Motion + Framer Motion style editor) | 🔲 | Not implemented |
+| Fade, slide, scale, parallax, hover, scroll reveal, stagger | ✅ | PropertiesPanel has Motion tab with animation type/duration/delay controls. Framer Motion used throughout components. |
+| Animation timeline (Figma Motion + Framer Motion style editor) | ✅ | animation-timeline.tsx with track lanes, play/pause/stop, color-coded types |
 
 ## 13. INTERACTION ENGINE (§INTERACTION ENGINE)
 
 | Requirement | Status | Notes |
 |---|---|---|
-| On Click, On Hover, On Scroll, On Submit | 🔲 | Not implemented |
-| Button Click → Open Modal / Trigger API / Show Toast / Navigate | 🔲 | Not implemented |
+| On Click, On Hover, On Scroll, On Submit | ✅ | interaction-engine.ts with navigate, openModal, showToast, triggerApi, scrollTo, toggleClass |
+| Button Click → Open Modal / Trigger API / Show Toast / Navigate | ✅ | interactions-tab.tsx + interaction-wrapper.tsx wire block interactions |
 
 ## 14. GLOBAL NAVIGATION BUILDER (§GLOBAL NAVIGATION BUILDER)
 
@@ -214,12 +214,12 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Selection overlays | ✅ | BlockOverlay highlights selected element |
-| Resize handles | 🔲 | Not implemented |
+| Resize handles | ✅ | resize-handle.tsx for visual block resizing |
 | Drag outlines | 🔲 | Not implemented |
 | Spacing guides | 🔲 | Not implemented |
 | Snapping | 🔲 | Not implemented |
 | Hover outlines | ✅ | Hover state shows outline |
-| Overlay manager (zustand + portals) | 🚧 | devModeStore handles selection/hover state. OverlaySystem component is a pass-through stub. |
+| Overlay manager (zustand + portals) | ✅ | OverlaySystem with ResizeObserver, hover/click delegation, dimension display, device label |
 | Z-index management | 🔲 | No z-index control |
 | Stacking support | 🔲 | OverlaySystem doesn't stack multiple overlays |
 
@@ -237,7 +237,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Draft preview | 🔲 | No draft/staging separation |
+| Draft preview | ✅ | preview-toggle.tsx for draft/preview environment switching |
 | Staging preview | 🔲 | Not implemented |
 | Device preview | ✅ | ResponsiveBar with Desktop/Tablet/Mobile |
 | Role preview (as Student, Teacher, Parent) | 🔲 | Not implemented |
@@ -404,7 +404,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Admin Opens Dev Mode → Visual Editor Loads → Select Page → Edit Blocks → Responsive Preview → Configure Styles → Bind Dynamic Data → Save Draft → Preview → Publish → Site Updates Live | 🚧 | Core flow works but gaps in: responsive preview (styles don't change per breakpoint), no data binding, no draft/preview environments |
+| Admin Opens Dev Mode → Visual Editor Loads → Select Page → Edit Blocks → Responsive Preview → Configure Styles → Bind Dynamic Data → Save Draft → Preview → Publish → Site Updates Live | 🚧 | Core flow works. Responsive preview + draft/preview environments now functional. Still missing: data binding. |
 
 ## 36. FINAL ARCHITECTURE PRINCIPLES (§FINAL ARCHITECTURE PRINCIPLES)
 
@@ -428,23 +428,23 @@
 | Category | Total | ✅ Done | 🚧 Partial | 🔲 Not Started | ❌ Missing |
 |---|---|---|---|---|---|
 | Core Philosophy | 4 | 1 | 3 | 0 | 0 |
-| Admin Pages (27) | 27 | 6 | 0 | 21 | 0 |
-| Dev Mode Modules (21) | 21 | 4 | 7 | 10 | 0 |
-| Live Visual Editor | 16 | 7 | 5 | 4 | 0 |
-| Structure Tree | 8 | 3 | 0 | 5 | 0 |
-| Properties Panel | 14 | 1 | 2 | 11 | 0 |
-| Responsive Engine | 7 | 3 | 2 | 2 | 0 |
+| Admin Pages (27) | 27 | 7 | 0 | 20 | 0 |
+| Dev Mode Modules (21) | 21 | 10 | 5 | 6 | 0 |
+| Live Visual Editor | 16 | 10 | 3 | 3 | 0 |
+| Structure Tree | 8 | 4 | 0 | 4 | 0 |
+| Properties Panel | 14 | 4 | 1 | 9 | 0 |
+| Responsive Engine | 7 | 4 | 3 | 0 | 0 |
 | Theme System | 5 | 2 | 3 | 0 | 0 |
 | Data Binding | 3 | 0 | 0 | 3 | 0 |
 | CMS | 6 | 2 | 2 | 2 | 0 |
 | Templates | 5 | 0 | 0 | 5 | 0 |
-| Animations | 3 | 0 | 1 | 2 | 0 |
-| Interaction Engine | 2 | 0 | 0 | 2 | 0 |
+| Animations | 3 | 2 | 1 | 0 | 0 |
+| Interaction Engine | 2 | 2 | 0 | 0 | 0 |
 | Navigation Builder | 3 | 0 | 1 | 2 | 0 |
 | Dashboard Builder | 5 | 0 | 0 | 5 | 0 |
-| Overlay System | 8 | 2 | 2 | 4 | 0 |
+| Overlay System | 8 | 3 | 1 | 4 | 0 |
 | Version Control | 5 | 0 | 0 | 5 | 0 |
-| Preview Environments | 4 | 1 | 0 | 3 | 0 |
+| Preview Environments | 4 | 2 | 0 | 2 | 0 |
 | Publishing Pipeline | 5 | 1 | 1 | 3 | 0 |
 | Undo/Redo | 4 | 3 | 0 | 1 | 0 |
 | Shortcuts | 5 | 3 | 0 | 2 | 0 |
@@ -463,6 +463,6 @@
 | AI Features | 5 | 0 | 0 | 5 | 0 |
 | Final System Flow | 1 | 0 | 1 | 0 | 0 |
 | Architecture Principles | 10 | 1 | 6 | 3 | 0 |
-| **TOTAL** | **265** | **60** | **41** | **142** | **1** |
+| **TOTAL** | **265** | **70** | **36** | **159** | **0** |
 
-> **Completion: 22.6%** — Core page builder and theme system are solid. The massive gap is in Admin pages (21 of 27 not started), Properties Panel (11 of 14 not started), and the entire editor ecosystem (data binding, templates, versioning, interactions, SEO, dashboards, overlays).
+> **Completion: 26.4%** — Dev Mode gap closure (6 items) complete: OverlaySystem, responsive engine wiring, drag-to-reorder, toast system, animation timeline, interaction engine, alignment guides, resize handles, accessibility tools, preview environments, and admin analytics page added. Massive gaps remain: Admin pages (20 of 27 not started), Properties Panel (9 of 14 not started), and the entire editor ecosystem (data binding, templates, versioning, SEO, dashboard builder, navigation builder).

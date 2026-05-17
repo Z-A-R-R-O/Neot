@@ -23,8 +23,8 @@ Phase 1 — Core Learning                →  Z-01: Course + Lesson + Quiz
 Phase 1.5 — Admin CMS                  →  Z-02: Admin Pages + CMS
 Phase 1.75 — Dynamic Renderer          →  Z-02: Component Registry + Rendering
 Phase UI — Premium Redesign            →  Z-02: Theme System
-Phase 2.5 — Dev Mode                   →  Z-02: Developer Mode (partial)
-Phase D — Dashboard Completion         →  Z-01: Dashboards (Student/Teacher/Parent)
+Phase 2.5 — Dev Mode                   →  Z-02: Developer Mode (complete)
+Phase D — Dashboard Completion         →  Z-01: Dashboards (Student/Teacher/Parent) ✅ Complete
 Phase 2 — Adaptive + Gamification      →  Z-01: Gamification + Recommendations
 Phase 3 — AI + Mobile                  →  Z-01: AI Features + Mobile
 Phase 4 — Parent + School              →  Z-01: Parent System
@@ -124,7 +124,7 @@ New (Z-01 §NOTIFICATION SYSTEM): In-app + email + push for XP, achievements, co
 | **XP source of truth** | XPTransaction only | Profile.xp = denormalised cache, XPTransaction = audit | ✅ Already decided |
 | **Enrollment progress** | Stored count | Recalculated from lesson completions | ✅ Already decided |
 | **Continue Learning** | Random query | `Enrollment.lastLessonId` | ✅ Already decided |
-| **Admin vs Dev Mode** | Separate tools | Dev Mode = primary editor | 🚧 Partial alignment |
+| **Admin vs Dev Mode** | Separate tools | Dev Mode = primary editor | ✅ Dev Mode gaps closed; overlay, structure, responsive, interactions all wired |
 | **Dashboard rendering** | Hardcoded | Widget blocks + registry | 🔲 Not started |
 | **Database** | SQLite for dev | PostgreSQL for prod (per Z-02 tech stack) | 🚧 SQLite chosen for local dev |
 | **Realtime** | Not implemented | WebSockets/Pusher/Liveblocks | 🔲 Future |
@@ -133,33 +133,35 @@ New (Z-01 §NOTIFICATION SYSTEM): In-app + email + push for XP, achievements, co
 
 ## Gap Prioritization (What to Build Next)
 
-### P0 — Critical for Demo/Core Experience
-| Gap | Master Plan | Current Phase |
-|---|---|---|
-| Dev Mode gaps closed (OverlaySystem, responsive wiring, drag-reorder, toasts) | Z-02 §3.5.1-3.5.6 | Phase D task D.11 |
-| Achievement auto-unlock on XP/streak/quiz milestones | Z-01 §GAMIFICATION | Post D |
-| Certificate generation on course completion | Z-01 §CERTIFICATE | Post D |
-| Notification system (in-app) | Z-01 §NOTIFICATION | Post D |
-| Course archive/delete from student dashboard | Z-01 §COURSE STATES | Post D |
+### P0 — Critical for Demo/Core Experience (✅ Dev Mode gaps CLOSED)
+| Gap | Master Plan | Current Phase | Status |
+|---|---|---|---|
+| Dev Mode gaps closed (OverlaySystem, responsive wiring, drag-reorder, toasts, presets) | Z-02 §3.5.1-3.5.6 | Phase D task D.11 | ✅ Done |
+| Achievement auto-unlock on XP/streak/quiz milestones | Z-01 §GAMIFICATION | Next | 🔲 |
+| Certificate generation on course completion | Z-01 §CERTIFICATE | Next | 🔲 |
+| Notification system expansion | Z-01 §NOTIFICATION | Next | 🔲 |
+| Course archive/delete from student dashboard | Z-01 §COURSE STATES | Next | 🔲 |
 
 ### P1 — Platform Completeness
-| Gap | Master Plan | Current Phase |
-|---|---|---|
-| Admin: Teacher management page | Z-02 §2 | Post D |
-| Admin: Course overview/management | Z-02 §2 | Post D |
-| Admin: Platform analytics | Z-02 §2 | Post D |
-| Parent: Detailed child reports | Z-01 §PARENT | Phase 4 |
-| Search: Full-text search across courses/lessons/teachers | Z-01 §SEARCH | Post D |
-| Module-based project structure | Both §PROJECT STRUCTURE | Refactor |
+| Gap | Master Plan | Current Phase | Status |
+|---|---|---|---|
+| Admin: Teacher management page | Z-02 §2 | Next | 🔲 |
+| Admin: Course overview/management | Z-02 §2 | Next | 🔲 |
+| Admin: Platform analytics | Z-02 §2 | Post D | ✅ Basic page added |
+| Parent: Detailed child reports | Z-01 §PARENT | Phase 4 | 🔲 |
+| Search: Full-text search across courses/lessons/teachers | Z-01 §SEARCH | Next | 🔲 |
+| Module-based project structure | Both §PROJECT STRUCTURE | Refactor | 🔲 |
 
-### P2 — Developer Mode Expansion
-| Gap | Master Plan | Current Phase |
-|---|---|---|
-| StructureTree drag-to-reorder (dnd-kit) | Z-02 §5 | Phase D |
-| Responsive engine wired into PropertiesPanel | Z-02 §7 | Phase D |
-| Properties Panel: Layout, Spacing, Typography, Colors, Borders | Z-02 §6 | Post D |
-| OverlaySystem: z-index, stacking, resize handles | Z-02 §16 | Post D |
-| Version control on publish | Z-02 §17 | Post D |
+### P2 — Developer Mode Expansion (All Phase D targets ✅)
+| Gap | Master Plan | Current Phase | Status |
+|---|---|---|---|
+| StructureTree drag-to-reorder (dnd-kit) | Z-02 §5 | Phase D | ✅ Done |
+| Responsive engine wired into PropertiesPanel | Z-02 §7 | Phase D | ✅ Done |
+| Animation timeline + interaction engine | Z-02 §12-13 | Phase D | ✅ Done |
+| OverlaySystem rewrite + resize handles + alignment guides | Z-02 §16 | Phase D | ✅ Done |
+| Toast system + preview environments + accessibility tools | Z-02 §3, §18 | Phase D | ✅ Done |
+| Properties Panel: Layout, Spacing, Typography, Colors, Borders | Z-02 §6 | Post D | 🔲 |
+| Version control on publish | Z-02 §17 | Post D | 🔲 |
 
 ### P3 — Vision Expansion
 | Gap | Master Plan | Current Phase |

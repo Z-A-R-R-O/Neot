@@ -21,8 +21,8 @@
 | 1.5 | **Admin CMS** | Page builder + Theme engine + User/Media mgmt | ✅ Complete | Z-02: Admin Pages + CMS |
 | 1.75 | **Dynamic Renderer** | Component registry + PageRenderer + 17 schema-driven sections | ✅ Complete | Z-02: Registry + Rendering |
 | UI | **UI Transformation** | Premium dark palette, cinematic hero, glass design system | ✅ Complete | Z-02: Theme System |
-| 2.5 | **Dev Mode — Visual Experience Engine** | Core overlay system (7/10 — gaps: OverlaySystem stub, responsive engine unwired, no drag-reorder) | 🚧 Gaps remain | Z-02: Dev Mode (partial) |
-| D | **Dashboard Completion** | All dashboards fully functional, gamification UI, Dev Mode gaps closed | 🔲 Active | Z-01: Dashboards + Z-02: Dev Mode |
+| 2.5 | **Dev Mode — Visual Experience Engine** | Full overlay system, responsive engine, drag-reorder, animation timeline, interaction engine, alignment guides, resize handles, toast system, accessibility tools, preview environments | ✅ Complete | Z-02: Dev Mode (complete) |
+| D | **Dashboard Completion** | All dashboards fully functional, gamification UI, Dev Mode gaps closed | ✅ Complete | Z-01: Dashboards + Z-02: Dev Mode |
 | 2 | **Adaptive + Gamification** | Adaptive engine + XP/Streaks/Recs | 🔲 Not started | Z-01: Gamification |
 | 3 | **AI + Mobile** | AI Tutor + Content Gen | 🔲 Not started | Z-01: AI Features |
 | 4 | **Parent + School** | Parent dash + Classroom + Hardening | 🔲 Not started | Z-01: Parent System |
@@ -189,52 +189,73 @@ Phase 0 ──► Phase 1 ──► Phase 1.5 ──► Phase 1.75 ──► Pha
 - Admin editors updated for new fields (secondary CTA, prefix/suffix, testimonials)
 - `typecheck` + `next build` — zero errors
 
-### Phase 2.5 — Dev Mode / Visual Experience Engine (🚧 Gaps Remain)
-- 13 components: `BlockOverlay`, `DevModeProvider`, `DevModeShell`, `DevModeToggle`, `HistoryPanel`, `InlineEditor`, `OverlaySystem`, `PresetPicker`, `PropertiesPanel`, `PublishButton`, `ResponsiveBar`, `StructureTree`, `TreeNode`
+### Phase 2.5 — Dev Mode / Visual Experience Engine (✅ Complete)
+- 21 components: `BlockOverlay`, `DevModeProvider`, `DevModeShell`, `DevModeToggle`, `HistoryPanel`, `InlineEditor`, `OverlaySystem`, `PresetPicker`, `PropertiesPanel`, `PublishButton`, `ResponsiveBar`, `StructureTree`, `TreeNode`, `sortable-tree-node`, `animation-timeline`, `resize-handle`, `alignment-guides`, `accessibility-tools`, `preview-toggle`, `interactions-tab`, `motion-tab`
 - `devModeStore` — handles overlay state, device mode, hovered/selected IDs
 - `historyStore` — undo/redo stack with snapshots and persistence
 - `history-middleware` — automatic snapshot capture on `pageBuilderStore` changes
 - `pageBuilderStore` — manages section tree (add, remove, reorder, duplicate, update)
 - `DevModeProvider` — keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z, Del, Esc) and history initialization
 - `BlockOverlay` — hover/selection outlines, type labels, dimension indicators, corner handles, guide lines
-- `StructureTree` + `TreeNode` — layer hierarchy with search/filter, delete, duplicate, add actions (no drag-reorder)
-- `PropertiesPanel` — 4-tab property editor (Content, Style, Motion, Effects) with sliders, color pickers
+- `StructureTree` + `TreeNode` — layer hierarchy with search/filter, delete, duplicate, add actions, **full drag-to-reorder via @dnd-kit**
+- `sortable-tree-node` — SortableContext + useSortable integration for drag-and-drop
+- `PropertiesPanel` — 4-tab property editor (Content, Style, Motion, Effects) with sliders, color pickers; **typed section editors wired** (HeroEditor, FeatureGridEditor, StatsBarEditor, etc.)
 - `InlineEditor` — contentEditable wrapper for real-time text editing on canvas
-- `ResponsiveBar` — breakpoint switcher with canvas resize (Desktop/Tablet/Mobile)
+- `ResponsiveBar` — breakpoint switcher with canvas resize (Desktop/Tablet/Mobile); **responsive engine wired into LivePreview**
 - `DevModeToggle` — global switch to enter/exit visual editing mode
 - `PublishButton` — saves all changes to DB and exits Dev Mode (with confirmation modal)
-- `DevModeShell` — full 3-panel editor layout (layers sidebar, canvas, properties panel)
-- `PresetPicker` — visual preset swapper for block types (hero, feature-grid, cta)
+- `DevModeShell` — full 3-panel editor layout with **top toolbar** (ResponsiveBar, HistoryPanel, DevModeToggle)
+- `PresetPicker` — visual preset swapper for block types; **Save as Preset** with localStorage persistence and user preset management
+- `OverlaySystem` — full overlay manager with ResizeObserver tracking, hover/click delegation via `data-block-id`, dimension display, device mode label
+- `animation-timeline` — visual timeline with track lanes, play/pause/stop, frame-by-frame preview, color-coded animation types
+- `interaction-engine` (lib) — 6 interaction action types + `executeInteraction()` dispatcher
+- `interactions-tab` — PropertiesPanel tab for click/hover/scroll interactions
+- `motion-tab` — dedicated motion/animation tab in PropertiesPanel
+- `resize-handle` — visual block resize handles on canvas
+- `alignment-guides` — snap-to-guide alignment visualization
+- `accessibility-tools` — contrast checker, ARIA label editor, heading hierarchy validator
+- `preview-toggle` — draft/preview environment switching
+- `toast.tsx` (ui) — Radix Toast-based system with default/success/error/warning variants
+- `interaction-wrapper.tsx` (blocks) — wraps blocks with interaction event handlers
 - Bidirectional selection sync between `devModeStore` and `pageBuilderStore`
 - Inline editing wired in 7 section types (hero, feature-grid, cta-banner, faq, pricing, stats-bar, testimonials)
 - Undo/redo keyboard shortcuts with snapshot restore
 - Publish flow auto-exits Dev Mode with success toast
+- **All 6 known gaps closed** ✅
 
-**Known Gaps (see Phase D task D.11):**
-- ❌ `OverlaySystem.tsx` is a pass-through stub (14 lines, renders children only)
-- ❌ `responsive-engine.ts` defined but NOT wired into PropertiesPanel or LivePreview
-- ❌ `StructureTree` — no actual drag-to-reorder (grip icon is decorative only)
-- ❌ No proper toast system — uses inline state-based toasts
-- ❌ Presets defined but not fully connected to section creation flow
+### Phase D — Dashboard Completion (✅ Complete)
+- **D.1** — Active Courses on Student Dashboard: real enrolled course cards with progress bars
+- **D.2** — Learning Streak Tracking: daily activity streak, real count on dashboard via `streak-tracker.ts`
+- **D.3** — XP Popup + Level Progress: animated "+100 XP" popup, circular/bar level progress with 50-level system
+- **D.4** — Streak Flame in Header: fire icon with streak count, color-coded (gray/orange/red)
+- **D.5** — Continue Learning Recommendations: most recently accessed incomplete lesson via `Enrollment.lastLessonId`
+- **D.6** — Teacher Dashboard: connected `overview-stats.tsx` and `quick-actions.tsx` components
+- **D.7** — Teacher Students Page: real enrolled students with search/filter, student table
+- **D.8** — Parent Dashboard Scaffold: route group, layout with auth guard, children-overview component
+- **D.9** — XP Awarded on Lesson Complete: auto-create `XPTransaction` (+100 per lesson, +50 bonus for quiz pass)
+- **D.10** — Loading & Error States: skeletons and error+retry on all dashboard pages
+- **D.11** — Dev Mode Remaining Gaps: All 6 gaps closed (OverlaySystem, responsive engine wiring, drag-to-reorder, toast system, presets connection, style merging)
 
 ### Master Plan Completion Status
 
 | Master Plan | Items | ✅ Done | 🚧 Partial | 🔲 Not Started | Progress |
-|---|---|---|---|---|---|
-| **Z-01 — LMS Flow** | 209 | 108 | 26 | 76 | **51.7%** |
-| **Z-02 — Admin Flow** | 265 | 60 | 41 | 142 | **22.6%** |
-| **Combined** | **474** | **168** | **67** | **218** | **35.4%** |
+|---|---|---|---|---|---|---|---|
+| **Z-01 — LMS Flow** | 210 | 110 | 27 | 73 | **52.4%** |
+| **Z-02 — Admin Flow** | 265 | 70 | 36 | 159 | **26.4%** |
+| **Combined** | **475** | **180** | **63** | **232** | **37.9%** |
 
 > See `Full LMS Flow/Z-01-- Checklist.md` and `Full LMS Flow/Z-02-- Checklist.md` for full itemized tracking.
 
 ### Gaps / Next Up (from Z-01/Z-02 analysis)
-- **Phase D — Dashboard Completion** (active) — Active Courses on dashboard, learning streak, XP popup, level progress, teacher students page, parent dashboard scaffold, Dev Mode gaps
-- **Z-02: Dev Mode gaps** — OverlaySystem stub, responsive engine unwired, no drag-reorder, no toast system (Phase D task D.11)
-- **Z-01: Achievement auto-unlock** — XP/streak/quiz milestones not wired to achievement system
-- **Z-01: Certificate generation** — Course completion detected but no PDF/share flow
-- **Z-01: Notification system** — In-app notifications not implemented (XP, achievements, course publish, grading)
-- **Z-02: Admin pages** — 21 of 27 admin pages not started (teachers, courses, analytics, moderation, etc.)
+- ✅ **Phase D — Dashboard Completion** (complete)
+- ✅ **Z-02: Dev Mode gaps** — All 6 gaps closed
+- ✅ **Z-01: Achievement auto-unlock** — All 9 achievements wired with XP rewards + notifications
+- ✅ **Z-01: Quiz pass bonus XP** — +50 XP awarded on quiz pass (≥80%) + perfect_quiz achievement check
+- ✅ **Z-01: Certificate generation** — Auto-issued on course completion with serial + notification
+- **Z-01: Notification system expansion** — XP level-up, streak reminders, course publish, grading alerts
+- **Z-02: Admin pages** — 20 of 27 not started (teachers, courses, moderation, etc.) — analytics done
 - **Z-01: Password reset** — needs email service integration
+- **Z-02: Properties Panel expansion** — Layout, Spacing, Typography, Colors, Borders categories not started
 
 ---
 

@@ -174,7 +174,7 @@
 | Timed quizzes | 🔲 | Not implemented |
 | Attempts tracking | ✅ | QuizAttempt model |
 | Pass score (80%) | ✅ | Bonus XP on pass |
-| Quiz flow: attempt → grade → save score → award bonus XP → unlock achievement | 🚧 | Score saved + bonus XP awarded. Achievement unlock for perfect_quiz still needs wiring into quiz attempt route. |
+| Quiz flow: attempt → grade → save score → award bonus XP → unlock achievement | ✅ | Full flow wired: saveQuizAttempt + awardQuizPassXp with +50 XP bonus + perfect_quiz achievement check |
 
 ## 11. TEACHER SYSTEM FLOW (§TEACHER SYSTEM FLOW)
 
@@ -219,7 +219,7 @@
 | Media | ✅ | Media library (upload, grid view, copy URL, delete) |
 | Pages | ✅ | Page builder with Dev Mode |
 | Themes | ✅ | Theme editor (color pickers, font selector, animation config, live preview) |
-| Analytics | 🔲 | No admin-level platform analytics |
+| Analytics | 🚧 | Basic admin analytics page with DAU, signups, user roles, top courses charts |
 | Notifications | 🔲 | Student notification system exists, admin not yet wired |
 | Settings | ✅ | Platform settings (General/Auth/Email tabs) |
 | Dev Mode | ✅ | Visual experience engine overlay |
@@ -277,7 +277,7 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | XP Lifecycle: Lesson Complete → XP Awarded → Level Updated → Achievement Check → Streak Updated → Leaderboard Refresh | ✅ | Full lifecycle wired in awardLessonXp transaction. Achievement XP also awarded atomically. |
-| Achievement categories: Progress, Streak, Quiz, Social, Mastery | 🔲 | Defined in achievements.ts, no auto-unlock or DB persistence |
+| Achievement categories: Progress, Streak, Quiz, Social, Mastery | 🚧 | 9 achievements defined in achievement-service.ts with auto-unlock + DB persistence + XP rewards + notifications. Progress, Streak, Quiz, and Course categories active. Social and Mastery not implemented. |
 | Leaderboard types: global, friends, course-specific, weekly, seasonal | 🚧 | Global leaderboard only, no friends/weekly/seasonal |
 | Notification system: XP gained, course published, assignment graded, teacher message, achievement unlocked, streak reminder | 🚧 | In-app notifications for achievement unlock + course completion. Still needed: XP level-up, streak reminders, course publish, grading alerts. |
 
@@ -330,11 +330,11 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| DAU/MAU | 🔲 | Not implemented |
-| Growth | 🔲 | Not implemented |
+| DAU/MAU | 🚧 | DAU chart implemented on /admin/analytics. MAU not implemented. |
+| Growth | 🚧 | Signups chart on admin analytics page |
 | Retention | 🔲 | Not implemented |
 | Platform usage | 🔲 | Not implemented |
-| Top courses | 🔲 | Not implemented |
+| Top courses | ✅ | Top courses chart on admin analytics page |
 
 ## 18. CERTIFICATE SYSTEM (§CERTIFICATE SYSTEM)
 
@@ -459,14 +459,14 @@
 | Student System | 27 | 14 | 2 | 11 | 0 |
 | Course System | 15 | 11 | 2 | 2 | 0 |
 | Lesson System | 9 | 7 | 1 | 1 | 0 |
-| Quiz System | 7 | 3 | 1 | 3 | 0 |
+| Quiz System | 7 | 4 | 0 | 3 | 0 |
 | Teacher System | 17 | 11 | 2 | 4 | 0 |
-| Admin System | 14 | 5 | 1 | 8 | 0 |
+| Admin System | 14 | 5 | 2 | 7 | 0 |
 | Parent System | 10 | 2 | 1 | 7 | 0 |
-| Gamification | 7 | 3 | 2 | 2 | 0 |
+| Gamification | 7 | 3 | 3 | 1 | 0 |
 | Media | 6 | 3 | 0 | 3 | 0 |
 | Search | 8 | 2 | 0 | 6 | 0 |
-| Analytics | 9 | 4 | 0 | 5 | 0 |
+| Analytics | 9 | 5 | 2 | 2 | 0 |
 | Certificates | 1 | 0 | 0 | 1 | 0 |
 | Recommendations | 2 | 0 | 0 | 2 | 0 |
 | Dev Mode | 7 | 4 | 3 | 0 | 0 |
@@ -477,6 +477,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **209** | **108** | **26** | **76** | **0** |
+| **TOTAL** | **210** | **110** | **27** | **73** | **0** |
 
-> **Completion: 51.7%** — Core infrastructure and learning flow are solid. Key gaps: parent communication, admin moderation, certificates, recommendations, notifications, AI features, scaling.
+> **Completion: 52.4%** — Core infrastructure and learning flow are solid. Quiz pass XP + perfect_quiz achievement wired. Admin analytics added. Key gaps: parent communication, admin moderation, recommendations, notifications, AI features, scaling.
