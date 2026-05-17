@@ -1,12 +1,14 @@
 "use client";
 
-import { BarChart3, Users, BookOpen, TrendingUp } from "lucide-react";
+import { BarChart3, Users, BookOpen, TrendingUp, Clock, Target, Activity } from "lucide-react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { EnrollmentChart } from "@/components/teacher/analytics/enrollment-chart";
 import { CompletionFunnel } from "@/components/teacher/analytics/completion-funnel";
 import { ScoreDistribution } from "@/components/teacher/analytics/score-distribution";
 import { DropOffChart } from "@/components/teacher/analytics/drop-off-chart";
+import { RetentionChart } from "@/components/teacher/analytics/retention-chart";
+import { EngagementChart } from "@/components/teacher/analytics/engagement-chart";
 import { useCourseAnalytics } from "@/hooks/analytics/useCourseAnalytics";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -81,9 +83,31 @@ export default function AnalyticsPage() {
         />
       </div>
 
+      {/* Retention & Engagement Cards */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <StatCard
+          icon={Target}
+          label="Retention Rate"
+          value={isLoading ? <Skeleton className="h-8 w-16" /> : `${data?.retention.rate ?? "--"}%`}
+          color="text-violet-500"
+        />
+        <StatCard
+          icon={Activity}
+          label="Engagement Rate"
+          value={isLoading ? <Skeleton className="h-8 w-16" /> : `${data?.engagement.rate ?? "--"}%`}
+          color="text-cyan-500"
+        />
+        <StatCard
+          icon={Clock}
+          label="Avg Time/Student"
+          value={isLoading ? <Skeleton className="h-8 w-24" /> : data?.engagement.avgTimePerStudent != null ? `${Math.round(data.engagement.avgTimePerStudent / 60)}m` : "--"}
+          color="text-orange-500"
+        />
+      </div>
+
       {isLoading ? (
         <div className="grid gap-6 lg:grid-cols-2">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <Card key={i}>
               <CardHeader>
                 <Skeleton className="h-5 w-32" />
@@ -144,6 +168,32 @@ export default function AnalyticsPage() {
                 <DropOffChart data={data.dropOffPoints} />
               ) : (
                 <p className="py-16 text-center text-sm text-tertiary-foreground">No drop-off data yet.</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base font-medium">Weekly Retention</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {data?.retention.weekly.some((w) => w.active > 0) ? (
+                <RetentionChart data={data.retention.weekly} />
+              ) : (
+                <p className="py-16 text-center text-sm text-tertiary-foreground">No retention data yet.</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base font-medium">Engagement Score</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {data?.engagement.weekly.some((w) => w.score > 0) ? (
+                <EngagementChart data={data.engagement.weekly} />
+              ) : (
+                <p className="py-16 text-center text-sm text-tertiary-foreground">No engagement data yet.</p>
               )}
             </CardContent>
           </Card>

@@ -314,7 +314,7 @@
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Time spent | 🔲 | Not tracked |
+| Time spent | ✅ | Tracked in LessonProgress.timeSpent, shown in dashboard stats and parent reports |
 | Completion rate | ✅ | Derived from enrollment progress |
 | Quiz scores | ✅ | Stored in QuizAttempt |
 | Streaks | ✅ | From Profile fields |
@@ -324,9 +324,9 @@
 | Requirement | Status | Notes |
 |---|---|---|
 | Enrollments | ✅ | Chart |
-| Retention | 🔲 | Not calculated |
+| Retention | ✅ | 30-day cohort retention + 8-week weekly retention trend with active/retained/rate metrics |
 | Revenue | 🔲 | Future |
-| Engagement | 🔲 | Not calculated |
+| Engagement | ✅ | Composite score (time 40%, completions 35%, active students 25%), weekly trend, engagement rate, avg time/student |
 
 ### Admin Analytics
 
@@ -442,8 +442,8 @@
 | 1 | Core auth + RBAC | ✅ |
 | 2 | Course architecture | ✅ |
 | 3 | Lesson/progress system | ✅ |
-| 4 | Gamification | 🚧 | Achievements auto-unlock wired. Seasonal events + badges still TBD |
-| 5 | Teacher analytics | ✅ | Basic analytics implemented |
+| 4 | Gamification | ✅ | Badges (20), seasonal events (6), achievements, XP, levels, streaks |
+| 5 | Teacher analytics | ✅ | Enrollment trends, completion funnel, score distribution, drop-off points, retention cohorts, engagement scoring |
 | 6 | Admin governance | 🚧 | Users + Settings done. Teachers, Moderation, Categories, Analytics TBD |
 | 7 | Parent monitoring | 🚧 | Basic dashboard done. Reports, alerts, communication TBD |
 | 8 | Dev Mode completion | 🚧 | Gaps: OverlaySystem stub, responsive unwired, no drag-reorder |
@@ -462,13 +462,13 @@
 | Course System | 15 | 12 | 1 | 2 | 0 |
 | Lesson System | 9 | 7 | 1 | 1 | 0 |
 | Quiz System | 7 | 6 | 0 | 1 | 0 |
-| Teacher System | 17 | 12 | 2 | 3 | 0 |
+| Teacher System | 17 | 14 | 2 | 1 | 0 |
 | Admin System | 14 | 11 | 1 | 2 | 0 |
 | Parent System | 10 | 7 | 1 | 2 | 0 |
 | Gamification | 7 | 6 | 0 | 1 | 0 |
 | Media | 6 | 5 | 0 | 1 | 0 |
 | Search | 8 | 7 | 0 | 1 | 0 |
-| Analytics | 9 | 6 | 1 | 2 | 0 |
+| Analytics | 9 | 9 | 0 | 0 | 0 |
 | Certificates | 1 | 1 | 0 | 0 | 0 |
 | Recommendations | 2 | 1 | 1 | 0 | 0 |
 | Dev Mode | 7 | 4 | 3 | 0 | 0 |
@@ -479,6 +479,6 @@
 | Project Structure | 1 | 0 | 0 | 1 | 0 |
 | Production Principles | 10 | 6 | 4 | 0 | 0 |
 | Implementation Order | 9 | 5 | 4 | 1 | 0 |
-| **TOTAL** | **211** | **142** | **16** | **46** | **0** |
+| **TOTAL** | **211** | **145** | **16** | **43** | **0** |
 
-> **Completion: 67.3%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Key gaps: parent communication, AI features, scaling.
+> **Completion: 68.7%** — Core infrastructure and learning flow are solid. Email verification, badges (20 across 5 categories), seasonal events (6 with XP multipliers), teacher messaging, parent reports with weak subject analysis, admin analytics with MAU/WAU/DAU/retention. Audit logs wired into messages and media. PDF/attachment support in media library. Search relevance ranking with multi-factor scoring. Teacher analytics with retention cohorts and engagement scoring. Analytics category fully complete. Key gaps: parent communication, AI features, scaling.
