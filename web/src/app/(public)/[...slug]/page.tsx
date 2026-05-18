@@ -1,11 +1,31 @@
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { PageRenderer } from "@/components/blocks/page-renderer";
+import { buildPageMetadata, getGlobalSeoSettings } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const path = "/" + slug.join("/");
+  const [page, global] = await Promise.all([
+    prisma.customPage.findFirst({
+      where: { path, status: "published" },
+    }).catch(() => null),
+    getGlobalSeoSettings(),
+  ]);
+  if (!page) return {};
+  const seo = JSON.parse((page as { seo?: string }).seo ?? "{}") as Record<string, unknown>;
+  return buildPageMetadata(
+    Object.keys(seo).length > 0 ? seo : undefined,
+    { title: page.title },
+    global,
+  );
 }
 
 export default async function SlugPage({ params, searchParams }: PageProps) {

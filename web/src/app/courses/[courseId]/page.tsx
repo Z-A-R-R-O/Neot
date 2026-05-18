@@ -10,6 +10,51 @@ import { ErrorState } from "@/components/ui/error-state";
 import { EnrollButton } from "@/components/courses/enroll-button";
 import { ModuleList } from "@/components/courses/module-list";
 import { useCourse } from "@/hooks/useCourses";
+import { buildPageMetadata, getGlobalSeoSettings } from "@/lib/seo";
+import { Metadata } from "next";
+import { prisma } from "@/lib/db";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ courseId: string }>;
+}): Promise<Metadata> {
+  const { courseId } = await params;
+  const global = await getGlobalSeoSettings();
+
+  let course;
+  try {
+    course = await prisma.course.findUnique({
+      where: { id: courseId, status: "published" },
+      include: { teacher: { select: { fullName: true } } },
+    });
+  } catch {
+    // ignore
+  }
+
+  if (!course) {
+    return {
+      title: `Course — ${global.siteTitle}`,
+      description: global.metaDescription,
+      robots: { index: true, follow: true },
+      openGraph: {
+        title: `Course — ${global.siteTitle}`,
+        description: global.metaDescription,
+        type: "website",
+      },
+    };
+  }
+
+  const title = course.title;
+  const description = course.description || global.metaDescription;
+  const image = course.thumbnailUrl || global.ogImage;
+
+  return buildPageMetadata(
+    undefined,
+    { title, description, image },
+    global,
+  );
+}
 
 const difficultyColors: Record<string, "default" | "secondary" | "outline"> = {
   beginner: "default",

@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { PageRenderer } from "@/components/blocks/page-renderer";
 import { PublicLayout } from "@/components/layout/public-layout";
@@ -11,6 +12,7 @@ import { IntelligenceCorridor } from "@/components/blocks/sections/intelligence-
 import { AiMentorPresence } from "@/components/blocks/sections/ai-mentor-presence";
 import { BreathingInterlude } from "@/components/blocks/sections/breathing-interlude";
 import { InvisibleContinuity } from "@/components/blocks/sections/invisible-continuity";
+import { buildPageMetadata, getGlobalSeoSettings } from "@/lib/seo";
 
 async function getHomepageSections() {
   try {
@@ -19,18 +21,31 @@ async function getHomepageSections() {
       include: { sections: { orderBy: { sortOrder: "asc" } } },
     });
     if (!page) return null;
-    return page.sections.map((s: { id: string; blockType: string; content: string }) => ({
-      id: s.id,
-      blockType: s.blockType,
-      content: JSON.parse(s.content) as Record<string, unknown>,
-    }));
+    return {
+      sections: page.sections.map((s: { id: string; blockType: string; content: string }) => ({
+        id: s.id,
+        blockType: s.blockType,
+        content: JSON.parse(s.content) as Record<string, unknown>,
+      })),
+      seo: JSON.parse((page as { seo?: string }).seo ?? "{}") as Record<string, unknown>,
+    };
   } catch {
     return null;
   }
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const [result, global] = await Promise.all([
+    getHomepageSections(),
+    getGlobalSeoSettings(),
+  ]);
+  const seo = result?.seo;
+  return buildPageMetadata(seo, { title: "NEOT — Learning That Adapts to You" }, global);
+}
+
 export default async function Home() {
-  const sections = await getHomepageSections();
+  const result = await getHomepageSections();
+  const sections = result?.sections ?? null;
 
   return (
     <PublicLayout>

@@ -3,7 +3,7 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { InlineEditor } from "@/components/dev-mode/InlineEditor";
 import { useDevModeStore } from "@/stores/devModeStore";
 import { usePageBuilderStore } from "@/stores/pageBuilderStore";
@@ -20,6 +20,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
   const devModeEnabled = useDevModeStore((s) => s.enabled);
   const updateSection = usePageBuilderStore((s) => s.updateSection);
   const viewportRef = useRef({ w: 1920, h: 1080 });
+  const [mounted, setMounted] = useState(false);
 
   // Simplified mouse tracking - only 2 springs instead of 10
   const rawX = useMotionValue(0);
@@ -38,6 +39,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
   });
 
   useEffect(() => {
+    setMounted(true);
     const handleResize = () => {
       viewportRef.current = { w: window.innerWidth, h: window.innerHeight };
     };
@@ -122,10 +124,10 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
       {/* Layer 0: Atmospheric Background - optimized */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {/* Gradient Mesh - reduced blur values for performance */}
-        <motion.div
-          style={{ x: parallaxX, y: parallaxY }}
-          className="absolute inset-0 will-change-transform"
-        >
+          <motion.div
+            style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0 }}
+            className="absolute inset-0 will-change-transform"
+          >
           <div className="absolute -left-1/4 -top-1/4 h-[600px] w-[600px] rounded-full bg-blue-200/15 dark:bg-blue-500/5 blur-[100px]" />
           <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-purple-200/12 dark:bg-purple-500/4 blur-[100px]" />
           <div className="absolute left-1/3 top-1/2 h-[400px] w-[400px] rounded-full bg-cyan-200/10 dark:bg-cyan-500/3 blur-[80px]" />
@@ -140,7 +142,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
           {[...Array(PARTICLE_COUNT)].map((_, i) => (
             <motion.div
               key={i}
-              style={{ x: parallaxX, y: parallaxY }}
+              style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0 }}
               className="will-change-transform"
             >
               <motion.div
@@ -170,7 +172,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
           {[...Array(NODE_COUNT)].map((_, i) => (
             <motion.div
               key={`node-${i}`}
-              style={{ x: parallaxX, y: parallaxY }}
+              style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0 }}
               className="will-change-transform"
             >
               <motion.div
@@ -312,13 +314,13 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
         <div className="relative z-10 hidden h-[700px] w-full max-w-[700px] items-center justify-center lg:flex">
           {/* Ghost Panel 1 — behind main panel, left offset */}
           <motion.div
-            style={{ x: parallaxX, y: parallaxY }}
+            style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0 }}
             className="glass-ghost absolute left-[5%] top-[12%] h-[400px] w-[480px] -translate-x-1/2 -translate-y-1/2 will-change-transform"
           />
 
           {/* Ghost Panel 2 — behind main panel, right offset */}
           <motion.div
-            style={{ x: parallaxX, y: parallaxY }}
+            style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0 }}
             className="glass-ghost absolute right-[5%] bottom-[10%] h-[350px] w-[440px] translate-x-1/2 translate-y-1/2 will-change-transform"
           />
 
@@ -328,8 +330,8 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              x: parallaxX,
-              y: parallaxY,
+              x: mounted ? parallaxX : 0,
+              y: mounted ? parallaxY : 0,
               willChange: "transform",
             }}
             className="glass-hero-panel relative h-[480px] w-[560px] overflow-hidden rounded-[40px]"
@@ -377,7 +379,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
           {/* AI Knowledge Node */}
           <motion.div
-            style={{ x: parallaxX, y: parallaxY, willChange: "transform" }}
+            style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0, willChange: "transform" }}
           >
             <motion.div
               animate={{ y: [0, -20, 0] }}
@@ -393,7 +395,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
           {/* Adaptive Progress */}
           <motion.div
-            style={{ x: parallaxX, y: parallaxY, willChange: "transform" }}
+            style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0, willChange: "transform" }}
           >
             <motion.div
               animate={{ y: [0, 20, 0] }}
@@ -417,7 +419,7 @@ export function HeroSection({ content, blockId }: HeroSectionProps) {
 
           {/* Analytics Pulse */}
           <motion.div
-            style={{ x: parallaxX, y: parallaxY, willChange: "transform" }}
+            style={{ x: mounted ? parallaxX : 0, y: mounted ? parallaxY : 0, willChange: "transform" }}
           >
             <motion.div
               animate={{ scale: [1, 1.01, 1] }}

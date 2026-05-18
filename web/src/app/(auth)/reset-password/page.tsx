@@ -13,6 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
+export const metadata = {
+  title: "Set New Password",
+  robots: { index: false, follow: false },
+};
+
 const resetSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),

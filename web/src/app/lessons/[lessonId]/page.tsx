@@ -1,10 +1,39 @@
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { LessonPlayer } from "@/components/player/player-shell";
+import { buildPageMetadata, getGlobalSeoSettings } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lessonId: string }>;
+}): Promise<Metadata> {
+  const { lessonId } = await params;
+  const global = await getGlobalSeoSettings();
+
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    include: {
+      module: {
+        include: {
+          course: { select: { title: true } },
+        },
+      },
+    },
+  }).catch(() => null);
+
+  if (!lesson) return {};
+
+  const title = `${lesson.title} — ${lesson.module.course.title}`;
+  const description = lesson.description || global.metaDescription;
+
+  return buildPageMetadata(undefined, { title, description }, global);
+}
 
 export default async function LessonPage({
   params,

@@ -1,8 +1,19 @@
+import { Metadata } from "next";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ArrowRight, Calendar, User } from "lucide-react";
+import { buildPageMetadata, getGlobalSeoSettings } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const global = await getGlobalSeoSettings();
+  return buildPageMetadata(
+    undefined,
+    { title: "Blog & Insights", description: "Latest updates, tips, and stories from our learning community" },
+    global,
+  );
+}
 
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({

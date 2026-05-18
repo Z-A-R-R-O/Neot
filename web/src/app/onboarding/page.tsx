@@ -1,6 +1,12 @@
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 import { getUser } from "@/lib/auth";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
+
+export const metadata: Metadata = {
+  title: "Complete Your Profile",
+  robots: { index: false, follow: false },
+};
 
 export default async function OnboardingPage() {
   const user = await getUser();

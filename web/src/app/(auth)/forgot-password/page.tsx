@@ -13,6 +13,11 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 
+export const metadata = {
+  title: "Reset Password",
+  robots: { index: false, follow: false },
+};
+
 const forgotSchema = z.object({
   email: z.string().email("Enter a valid email address"),
 });

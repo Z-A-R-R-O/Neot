@@ -1,9 +1,36 @@
 import { PublicLayout } from "@/components/layout/public-layout";
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import { format } from "date-fns";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User } from "lucide-react";
+import { buildPageMetadata, getGlobalSeoSettings } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const global = await getGlobalSeoSettings();
+
+  const post = await prisma.blogPost.findUnique({
+    where: { slug, status: "published" },
+  }).catch(() => null);
+
+  if (!post) return {};
+
+  const title = post.title;
+  const description = post.excerpt || post.content.slice(0, 160);
+  const image = post.coverImage || global.ogImage;
+
+  return buildPageMetadata(
+    undefined,
+    { title, description, image },
+    global,
+  );
+}
 
 export default async function BlogPostPage({
   params,
