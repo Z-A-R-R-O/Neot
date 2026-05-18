@@ -83,6 +83,8 @@
 - [x] Lesson skills API (CRUD for skill-to-lesson mapping)
 - [x] Skill mapper UI component for teachers
 - [x] Skill mapping integrated into lesson editor
+- [x] Leaderboard time windows (weekly, monthly views)
+- [x] Leaderboard displays level and streak per user
 
 ## Technical Achievements
 

@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 163 | 77.3% |
+| Z-01 LMS Flow | 211 | 164 | 77.7% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **328** | **68.9%** |
+| **Combined** | **476** | **329** | **69.1%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -32,6 +32,7 @@
 | Dev Mode | ✅ Complete | Block editor, live preview |
 | Mastery Tracking | ✅ Complete | Skill models, mastery engine, dashboard, API |
 | Adaptive Engine | ✅ Complete | Recommendation engine, skill-to-lesson mapping UI, mastery tracking |
+| Leaderboard | ✅ Complete | All-time, weekly, monthly views with level/streak display |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -42,13 +43,12 @@
 | # | Task | Plan | Priority |
 |---|------|------|----------|
 | 1 | Badge system + achievement tracking | Z-01 | High |
-| 2 | Leaderboard time windows (weekly, monthly) | Z-01 | High |
-| 3 | AI tutor chat interface | Z-01 | Medium |
-| 6 | Content generation API | Z-02 | Medium |
-| 7 | Parent dashboard foundation | Z-02 | Medium |
-| 8 | School account management | Z-02 | Medium |
-| 9 | Flutter app setup | Z-01 | Low |
-| 10 | Offline sync architecture | Z-01 | Low |
+| 2 | AI tutor chat interface | Z-01 | Medium |
+| 3 | Content generation API | Z-02 | Medium |
+| 4 | Parent dashboard foundation | Z-02 | Medium |
+| 5 | School account management | Z-02 | Medium |
+| 6 | Flutter app setup | Z-01 | Low |
+| 7 | Offline sync architecture | Z-01 | Low |
 
 ## Decision Log
 
@@ -61,3 +61,4 @@
 | 2026-05-18 | Mastery tracking before AI | Foundation for adaptive learning; AI needs mastery data to personalize |
 | 2026-05-18 | Recommendation engine uses mastery data | Suggests review/practice/advance based on skill scores |
 | 2026-05-18 | Skill-to-lesson mapping in lesson editor | Teachers can tag lessons with skills and set weights for mastery tracking |
+| 2026-05-18 | Leaderboard time windows | Weekly/monthly views give fresh competitive cycles |

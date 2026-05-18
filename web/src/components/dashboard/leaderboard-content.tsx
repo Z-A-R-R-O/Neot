@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, Medal, User, Zap } from "lucide-react";
+import { Trophy, Medal, User, Zap, Flame, ChevronUp } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -10,12 +12,15 @@ interface LeaderboardEntry {
   fullName: string | null;
   avatarUrl: string | null;
   totalXp: number;
+  level: number;
+  streak: number;
 }
 
 interface Props {
   leaderboard: LeaderboardEntry[];
   currentUserId: string;
   userRank: number;
+  period: string;
 }
 
 const rankStyles = [
@@ -24,7 +29,13 @@ const rankStyles = [
   { border: "border-amber-600/30", bg: "bg-amber-600/10", icon: "text-amber-500", label: "3rd" },
 ];
 
-export function DashboardLeaderboardContent({ leaderboard, currentUserId, userRank }: Props) {
+const PERIODS = [
+  { key: "all", label: "All Time" },
+  { key: "week", label: "This Week" },
+  { key: "month", label: "This Month" },
+];
+
+export function DashboardLeaderboardContent({ leaderboard, currentUserId, userRank, period }: Props) {
   return (
     <div className="space-y-8">
       <motion.div
@@ -39,6 +50,23 @@ export function DashboardLeaderboardContent({ leaderboard, currentUserId, userRa
           Top learners ranked by XP.
         </p>
       </motion.div>
+
+      {/* Period Tabs */}
+      <div className="flex gap-2">
+        {PERIODS.map((p) => (
+          <Link
+            key={p.key}
+            href={`/dashboard/leaderboard?period=${p.key}`}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              period === p.key
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            {p.label}
+          </Link>
+        ))}
+      </div>
 
       {leaderboard.length === 0 ? (
         <motion.div
@@ -83,7 +111,7 @@ export function DashboardLeaderboardContent({ leaderboard, currentUserId, userRa
                     top3 ? `${style?.icon}` : "text-muted-foreground"
                   }`}>
                     {top3 ? (
-                      rank === 1 ? <Trophy className="h-5 w-5" /> : rank === 2 ? <Medal className="h-5 w-5" /> : <Medal className="h-5 w-5" />
+                      rank === 1 ? <Trophy className="h-5 w-5" /> : <Medal className="h-5 w-5" />
                     ) : (
                       <span className="text-muted-foreground">{rank}</span>
                     )}
@@ -108,6 +136,15 @@ export function DashboardLeaderboardContent({ leaderboard, currentUserId, userRa
                       }`}>
                         {entry.fullName || "Anonymous Learner"}
                       </p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>Lvl {entry.level}</span>
+                        {entry.streak > 0 && (
+                          <span className="flex items-center gap-0.5">
+                            <Flame className="h-3 w-3 text-orange-400" />
+                            {entry.streak}
+                          </span>
+                        )}
+                      </div>
                       {isCurrentUser && (
                         <p className="text-xs text-primary-400/70">You</p>
                       )}
