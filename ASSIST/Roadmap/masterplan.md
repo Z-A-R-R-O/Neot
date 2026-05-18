@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 171 | 81.0% |
+| Z-01 LMS Flow | 211 | 172 | 81.5% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **336** | **70.6%** |
+| **Combined** | **476** | **337** | **70.8%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -40,6 +40,7 @@
 | XP System | ✅ Complete | Difficulty multipliers, streak bonus, first-try bonus, speed bonus, perfect quiz bonus |
 | Spaced Repetition | ✅ Complete | Review scheduling based on mastery decay, urgency tracking |
 | AI Tutor | ✅ Complete | Socratic method chat, lesson context, fallback responses |
+| Content Generation | ✅ Complete | Quiz questions, practice problems, summaries, lesson outlines, improvement suggestions |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -49,11 +50,10 @@
 
 | # | Task | Plan | Priority |
 |---|------|------|----------|
-| 1 | Content generation API | Z-02 | Medium |
-| 2 | Parent dashboard foundation | Z-02 | Medium |
-| 3 | School account management | Z-02 | Medium |
-| 4 | Flutter app setup | Z-01 | Low |
-| 5 | Offline sync architecture | Z-01 | Low |
+| 1 | Parent dashboard foundation | Z-02 | Medium |
+| 2 | School account management | Z-02 | Medium |
+| 3 | Flutter app setup | Z-01 | Low |
+| 4 | Offline sync architecture | Z-01 | Low |
 
 ## Decision Log
 
@@ -74,3 +74,4 @@
 | 2026-05-18 | Refined XP calculation | Multi-factor XP rewards (difficulty, streak, first-try, speed, perfect quiz) incentivize quality learning |
 | 2026-05-18 | Spaced repetition system | Review scheduling based on mastery decay prevents knowledge loss |
 | 2026-05-18 | AI Tutor in lesson player | Socratic method chat with lesson context helps students learn independently |
+| 2026-05-18 | Content generation API | Teachers can auto-generate quizzes, practice problems, summaries, and lesson outlines |

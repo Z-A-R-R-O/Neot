@@ -94,7 +94,8 @@
 
 ## Phase 3: AI + Mobile ❌
 - [x] AI tutor chat interface
-- [ ] Content generation API
+- [x] Content generation API
+- [ ] Quiz auto-generation
 - [ ] Quiz auto-generation
 - [ ] Safety guardrails
 - [ ] Flutter app setup
@@ -140,7 +141,7 @@
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
-| 3 | 12 | 1 | 8.3% |
+| 3 | 12 | 2 | 16.7% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **103** | **71** | **68.9%** |
+| **Total** | **103** | **72** | **69.9%** |

@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
 import { LessonSkillMapper } from "@/components/teacher/lesson-skill-mapper";
+import { ContentGenerator } from "@/components/ai/content-generator";
 
 const BLOCK_TYPES = [
   { type: "text", icon: Type, label: "Text" },
@@ -175,6 +176,26 @@ function LessonEditorForm({
             />
           </div>
         </div>
+      </Card>
+
+      <Card>
+        <CardContent className="pt-6">
+          <ContentGenerator
+            initialContent={description}
+            onInsert={(generated) => {
+              if (generated.questions) {
+                const quizBlock = {
+                  id: crypto.randomUUID(),
+                  type: "quiz",
+                  data: {
+                    questions: generated.questions,
+                  },
+                };
+                setBlocks((prev) => [...prev, quizBlock]);
+              }
+            }}
+          />
+        </CardContent>
       </Card>
 
       <div className="flex gap-6">

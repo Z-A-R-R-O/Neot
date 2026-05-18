@@ -103,6 +103,9 @@
 - [x] AI tutor chat API (Socratic method, lesson context, fallback responses)
 - [x] AI tutor chat UI component
 - [x] AI tutor integrated into lesson player sidebar
+- [x] Content generation API (quiz, practice, summary, improvements, lesson outline)
+- [x] Content generator UI for teachers
+- [x] Content generation integrated into lesson editor
 
 ## Technical Achievements
 
