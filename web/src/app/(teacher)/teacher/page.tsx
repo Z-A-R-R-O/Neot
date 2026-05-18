@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { OverviewStats } from "@/components/teacher/dashboard/overview-stats";
 import { QuickActions } from "@/components/teacher/dashboard/quick-actions";
 import { AtRiskStudentsContent } from "@/components/teacher/at-risk-students";
+import { TeacherMasteryOverview } from "@/components/teacher/class-mastery-overview";
 
 export default async function TeacherDashboardPage() {
   const authUser = await getUser();
@@ -48,6 +49,11 @@ export default async function TeacherDashboardPage() {
       <div>
         <h2 className="mb-3 text-lg font-semibold">At-Risk Students</h2>
         <AtRiskStudentsContent />
+      </div>
+
+      <div>
+        <h2 className="mb-3 text-lg font-semibold">Class Mastery Overview</h2>
+        <TeacherMasteryOverview />
       </div>
     </div>
   );

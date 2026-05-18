@@ -93,6 +93,9 @@
 - [x] Streak notification service (warnings, milestones, recovery)
 - [x] Streak heatmap (14-day activity visualization)
 - [x] Streak notifications widget on student dashboard
+- [x] Teacher mastery overview API (class-level skill analytics)
+- [x] Class mastery component (skill breakdown, student rankings, course filter)
+- [x] Teacher mastery view integrated into teacher dashboard
 
 ## Technical Achievements
 

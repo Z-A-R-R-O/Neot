@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 167 | 79.1% |
+| Z-01 LMS Flow | 211 | 168 | 79.6% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **332** | **69.7%** |
+| **Combined** | **476** | **333** | **70.0%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -36,6 +36,7 @@
 | At-Risk Detection | ✅ Complete | Teacher dashboard: inactivity, low progress, low scores, low mastery |
 | Badge System | ✅ Complete | Rarity tiers (common-legendary), progress indicators, rarity filtering |
 | Streak Notifications | ✅ Complete | Warnings, milestones, recovery prompts, streak heatmap |
+| Mastery Teacher View | ✅ Complete | Class-level skill analytics, student rankings, course filtering |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -67,3 +68,4 @@
 | 2026-05-18 | At-risk student detection for teachers | Multi-factor risk scoring helps teachers intervene early |
 | 2026-05-18 | Badge rarity system | 5 tiers (common-legendary) with distinct visual styling and progress tracking |
 | 2026-05-18 | Streak notifications on dashboard | Proactive nudges prevent streak loss and motivate consistency |
+| 2026-05-18 | Teacher mastery view | Class-level skill analytics help teachers identify gaps and celebrate wins |
