@@ -2,6 +2,7 @@ import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { OverviewStats } from "@/components/teacher/dashboard/overview-stats";
 import { QuickActions } from "@/components/teacher/dashboard/quick-actions";
+import { AtRiskStudentsContent } from "@/components/teacher/at-risk-students";
 
 export default async function TeacherDashboardPage() {
   const authUser = await getUser();
@@ -43,6 +44,11 @@ export default async function TeacherDashboardPage() {
 
       <OverviewStats stats={stats} />
       <QuickActions />
+
+      <div>
+        <h2 className="mb-3 text-lg font-semibold">At-Risk Students</h2>
+        <AtRiskStudentsContent />
+      </div>
     </div>
   );
 }

@@ -85,6 +85,8 @@
 - [x] Skill mapping integrated into lesson editor
 - [x] Leaderboard time windows (weekly, monthly views)
 - [x] Leaderboard displays level and streak per user
+- [x] At-risk student detection API (multi-factor risk scoring)
+- [x] At-risk student component on teacher dashboard
 
 ## Technical Achievements
 
