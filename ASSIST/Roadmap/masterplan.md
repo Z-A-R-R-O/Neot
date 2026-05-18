@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 165 | 78.2% |
+| Z-01 LMS Flow | 211 | 166 | 78.7% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **330** | **69.3%** |
+| **Combined** | **476** | **331** | **69.5%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -34,6 +34,7 @@
 | Adaptive Engine | ✅ Complete | Recommendation engine, skill-to-lesson mapping UI, mastery tracking |
 | Leaderboard | ✅ Complete | All-time, weekly, monthly views with level/streak display |
 | At-Risk Detection | ✅ Complete | Teacher dashboard: inactivity, low progress, low scores, low mastery |
+| Badge System | ✅ Complete | Rarity tiers (common-legendary), progress indicators, rarity filtering |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -43,13 +44,12 @@
 
 | # | Task | Plan | Priority |
 |---|------|------|----------|
-| 1 | Badge rarity + progress indicators | Z-01 | High |
-| 2 | AI tutor chat interface | Z-01 | Medium |
-| 3 | Content generation API | Z-02 | Medium |
-| 4 | Parent dashboard foundation | Z-02 | Medium |
-| 5 | School account management | Z-02 | Medium |
-| 6 | Flutter app setup | Z-01 | Low |
-| 7 | Offline sync architecture | Z-01 | Low |
+| 1 | AI tutor chat interface | Z-01 | Medium |
+| 2 | Content generation API | Z-02 | Medium |
+| 3 | Parent dashboard foundation | Z-02 | Medium |
+| 4 | School account management | Z-02 | Medium |
+| 5 | Flutter app setup | Z-01 | Low |
+| 6 | Offline sync architecture | Z-01 | Low |
 
 ## Decision Log
 
@@ -64,3 +64,4 @@
 | 2026-05-18 | Skill-to-lesson mapping in lesson editor | Teachers can tag lessons with skills and set weights for mastery tracking |
 | 2026-05-18 | Leaderboard time windows | Weekly/monthly views give fresh competitive cycles |
 | 2026-05-18 | At-risk student detection for teachers | Multi-factor risk scoring helps teachers intervene early |
+| 2026-05-18 | Badge rarity system | 5 tiers (common-legendary) with distinct visual styling and progress tracking |

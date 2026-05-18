@@ -87,6 +87,9 @@
 - [x] Leaderboard displays level and streak per user
 - [x] At-risk student detection API (multi-factor risk scoring)
 - [x] At-risk student component on teacher dashboard
+- [x] Badge rarity system (common, uncommon, rare, epic, legendary)
+- [x] Progress indicators for locked badges
+- [x] Rarity filtering on achievements page
 
 ## Technical Achievements
 

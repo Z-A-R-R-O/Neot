@@ -78,7 +78,8 @@
 - [x] Skill-to-lesson mapping UI (teacher)
 - [x] Leaderboard time windows (weekly, monthly)
 - [x] At-risk student identification (teacher)
-- [ ] Badge rarity + progress indicators
+- [x] Badge rarity + progress indicators
+- [ ] XP calculation rules refinement
 - [ ] Leaderboard (class, global)
 - [ ] XP calculation rules refinement
 - [ ] Level progression thresholds
@@ -134,8 +135,8 @@
 | 1.75 | 10 | 10 | 100% |
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
-| 2 | 21 | 14 | 66.7% |
+| 2 | 21 | 15 | 71.4% |
 | 3 | 12 | 0 | 0% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **103** | **65** | **63.1%** |
+| **Total** | **103** | **66** | **64.1%** |
