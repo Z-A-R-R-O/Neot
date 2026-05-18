@@ -72,12 +72,14 @@
 - [x] Mastery analytics API
 - [x] Mastery dashboard component
 - [x] Mastery page (`/dashboard/mastery`)
+- [x] Adaptive recommendation engine
+- [x] Recommendations API
+- [x] Recommendations on student dashboard
 - [ ] Badge system (definitions, awards)
 - [ ] Leaderboard (class, global)
 - [ ] XP calculation rules refinement
 - [ ] Level progression thresholds
 - [ ] Streak notifications
-- [ ] Adaptive recommendation engine
 - [ ] Mastery dashboard (teacher view)
 - [ ] Spaced repetition system
 - [ ] At-risk student identification
@@ -129,8 +131,8 @@
 | 1.75 | 10 | 10 | 100% |
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
-| 2 | 18 | 8 | 44.4% |
+| 2 | 21 | 11 | 52.4% |
 | 3 | 12 | 0 | 0% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **100** | **59** | **59.0%** |
+| **Total** | **103** | **62** | **60.2%** |

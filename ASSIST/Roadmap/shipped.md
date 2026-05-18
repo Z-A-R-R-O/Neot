@@ -77,6 +77,9 @@
 - [x] Mastery dashboard component (category filter, skill cards, weak/strong areas)
 - [x] Mastery page (`/dashboard/mastery`)
 - [x] Navigation integration (sidebar + nav service)
+- [x] Adaptive recommendation engine (review/practice/advance based on mastery)
+- [x] Recommendations API (`/api/gamification/recommendations`)
+- [x] Recommendations integrated into student dashboard
 
 ## Technical Achievements
 

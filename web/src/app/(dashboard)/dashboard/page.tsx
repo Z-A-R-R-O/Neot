@@ -3,7 +3,8 @@ import { prisma } from "@/lib/db";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { getLevelInfo } from "@/lib/gamification/xp-calculator";
 import { getLevelTitle } from "@/lib/gamification/level-system";
-import { getRecommendations } from "@/lib/courses/recommendations";
+import { getRecommendations as getCourseRecommendations } from "@/lib/courses/recommendations";
+import { getRecommendations as getAdaptiveRecommendations } from "@/lib/gamification/recommendation-engine";
 import { getActiveEventsForUser } from "@/lib/gamification/seasonal-event-service";
 
 export default async function DashboardPage() {
@@ -49,7 +50,7 @@ export default async function DashboardPage() {
   try {
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, timeAgg, events, activity, xpThisWeek] = await Promise.all([
+    const [profile, courseCount, lessonCount, enrolled, lastProgress, certCount, recs, adaptiveRecs, timeAgg, events, activity, xpThisWeek] = await Promise.all([
       prisma.profile.findUnique({
         where: { id: user!.id },
         select: { xp: true, level: true, currentStreak: true },
@@ -74,7 +75,8 @@ export default async function DashboardPage() {
         },
       }),
       prisma.certificate.count({ where: { userId: user!.id } }),
-      getRecommendations(user!.id),
+      getCourseRecommendations(user!.id),
+      getAdaptiveRecommendations(user!.id, 3),
       prisma.lessonProgress.aggregate({
         where: { userId: user!.id },
         _sum: { timeSpent: true },
@@ -100,6 +102,19 @@ export default async function DashboardPage() {
     ]);
     recommendations = recs;
     seasonalEvents = events;
+
+    if (adaptiveRecs.length > 0) {
+      const adaptiveCourseRecs = adaptiveRecs.map((r) => ({
+        id: r.lesson.courseId,
+        title: r.lesson.courseTitle,
+        description: `${r.type === "review" ? "Review" : r.type === "practice" ? "Practice" : "Advance in"} ${r.skillName}`,
+        thumbnailUrl: null as string | null,
+        difficulty: "beginner" as string,
+        category: null as { name: string } | null,
+        teacher: null as { fullName: string | null } | null,
+      }));
+      recommendations = [...adaptiveCourseRecs, ...recs].slice(0, 6);
+    }
     recentActivity = activity.map((a) => ({
       id: a.id,
       lessonTitle: a.lesson.title,

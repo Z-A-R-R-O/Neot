@@ -28,3 +28,6 @@ export { calculateMasteryScore, adjustDifficulty, getMasteryLevel, getMasteryCol
 export type { MasteryResult, MasteryUpdate } from "./mastery-engine";
 export { updateSkillMastery, updateLessonMastery, getUserMasteryOverview, getSkillTrend, getWeakAreas, getStrongAreas } from "./mastery-service";
 export { seedDefaultSkills } from "./skill-seeder";
+
+export { getRecommendations } from "./recommendation-engine";
+export type { Recommendation } from "./recommendation-engine";

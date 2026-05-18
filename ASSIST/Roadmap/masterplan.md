@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 159 | 75.4% |
+| Z-01 LMS Flow | 211 | 162 | 76.8% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **324** | **68.1%** |
+| **Combined** | **476** | **327** | **68.7%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -31,7 +31,7 @@
 | Admin Panel | 🚧 Partial | Properties panel, full analytics |
 | Dev Mode | ✅ Complete | Block editor, live preview |
 | Mastery Tracking | ✅ Complete | Skill models, mastery engine, dashboard, API |
-| Adaptive Engine | 🚧 In Progress | Difficulty adjustment wired, recommendation engine next |
+| Adaptive Engine | 🚧 In Progress | Recommendation engine complete, skill-to-lesson mapping next |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -43,9 +43,8 @@
 |---|------|------|----------|
 | 1 | Badge system + achievement tracking | Z-01 | High |
 | 2 | Leaderboard time windows (weekly, monthly) | Z-01 | High |
-| 3 | Adaptive recommendation engine | Z-01 | High |
-| 4 | Skill-to-lesson mapping UI (teacher) | Z-01 | High |
-| 5 | AI tutor chat interface | Z-01 | Medium |
+| 3 | Skill-to-lesson mapping UI (teacher) | Z-01 | High |
+| 4 | AI tutor chat interface | Z-01 | Medium |
 | 6 | Content generation API | Z-02 | Medium |
 | 7 | Parent dashboard foundation | Z-02 | Medium |
 | 8 | School account management | Z-02 | Medium |
@@ -61,3 +60,4 @@
 | 2026-05-17 | Dev Mode before Adaptive | Visual tools help teachers create better content |
 | 2026-05-18 | Consolidate ASSIST structure | Easier navigation, single source of truth |
 | 2026-05-18 | Mastery tracking before AI | Foundation for adaptive learning; AI needs mastery data to personalize |
+| 2026-05-18 | Recommendation engine uses mastery data | Suggests review/practice/advance based on skill scores |
