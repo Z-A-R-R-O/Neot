@@ -79,6 +79,7 @@
 - [x] Leaderboard time windows (weekly, monthly)
 - [x] At-risk student identification (teacher)
 - [x] Badge rarity + progress indicators
+- [x] Streak notifications (warnings, milestones, heatmap)
 - [ ] XP calculation rules refinement
 - [ ] Leaderboard (class, global)
 - [ ] XP calculation rules refinement
@@ -135,8 +136,8 @@
 | 1.75 | 10 | 10 | 100% |
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
-| 2 | 21 | 15 | 71.4% |
+| 2 | 21 | 16 | 76.2% |
 | 3 | 12 | 0 | 0% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **103** | **66** | **64.1%** |
+| **Total** | **103** | **67** | **65.0%** |

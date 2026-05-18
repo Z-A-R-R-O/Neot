@@ -31,3 +31,6 @@ export { seedDefaultSkills } from "./skill-seeder";
 
 export { getRecommendations } from "./recommendation-engine";
 export type { Recommendation } from "./recommendation-engine";
+
+export { getStreakNotifications, getStreakHistory } from "./streak-notifications";
+export type { StreakNotification } from "./streak-notifications";

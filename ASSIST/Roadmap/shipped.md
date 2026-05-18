@@ -90,6 +90,9 @@
 - [x] Badge rarity system (common, uncommon, rare, epic, legendary)
 - [x] Progress indicators for locked badges
 - [x] Rarity filtering on achievements page
+- [x] Streak notification service (warnings, milestones, recovery)
+- [x] Streak heatmap (14-day activity visualization)
+- [x] Streak notifications widget on student dashboard
 
 ## Technical Achievements
 
