@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 170 | 80.6% |
+| Z-01 LMS Flow | 211 | 171 | 81.0% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **335** | **70.4%** |
+| **Combined** | **476** | **336** | **70.6%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -39,6 +39,7 @@
 | Mastery Teacher View | ✅ Complete | Class-level skill analytics, student rankings, course filtering |
 | XP System | ✅ Complete | Difficulty multipliers, streak bonus, first-try bonus, speed bonus, perfect quiz bonus |
 | Spaced Repetition | ✅ Complete | Review scheduling based on mastery decay, urgency tracking |
+| AI Tutor | ✅ Complete | Socratic method chat, lesson context, fallback responses |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -48,12 +49,11 @@
 
 | # | Task | Plan | Priority |
 |---|------|------|----------|
-| 1 | AI tutor chat interface | Z-01 | Medium |
-| 2 | Content generation API | Z-02 | Medium |
-| 3 | Parent dashboard foundation | Z-02 | Medium |
-| 4 | School account management | Z-02 | Medium |
-| 5 | Flutter app setup | Z-01 | Low |
-| 6 | Offline sync architecture | Z-01 | Low |
+| 1 | Content generation API | Z-02 | Medium |
+| 2 | Parent dashboard foundation | Z-02 | Medium |
+| 3 | School account management | Z-02 | Medium |
+| 4 | Flutter app setup | Z-01 | Low |
+| 5 | Offline sync architecture | Z-01 | Low |
 
 ## Decision Log
 
@@ -73,3 +73,4 @@
 | 2026-05-18 | Teacher mastery view | Class-level skill analytics help teachers identify gaps and celebrate wins |
 | 2026-05-18 | Refined XP calculation | Multi-factor XP rewards (difficulty, streak, first-try, speed, perfect quiz) incentivize quality learning |
 | 2026-05-18 | Spaced repetition system | Review scheduling based on mastery decay prevents knowledge loss |
+| 2026-05-18 | AI Tutor in lesson player | Socratic method chat with lesson context helps students learn independently |

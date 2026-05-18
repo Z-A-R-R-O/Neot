@@ -12,7 +12,8 @@ import { AchievementPopup } from "@/components/gamification/achievement-popup";
 import { BadgePopup } from "@/components/gamification/badge-popup";
 import { BookmarkToggle } from "@/components/player/bookmark-toggle";
 import { NotesPanel } from "@/components/player/notes-panel";
-import { FileText, CheckCircle2 } from "lucide-react";
+import { AiTutorChat } from "@/components/ai/ai-tutor-chat";
+import { FileText, CheckCircle2, Bot } from "lucide-react";
 
 interface LessonBlock {
   id: string;
@@ -58,6 +59,7 @@ export function LessonPlayer({
   const [badgeQueue, setBadgeQueue] = useState<{ name: string; description: string; icon: string; xpReward: number }[]>([]);
   const [currentBadge, setCurrentBadge] = useState<{ name: string; description: string; icon: string; xpReward: number } | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
+  const [aiTutorOpen, setAiTutorOpen] = useState(false);
 
   const {
     currentBlockIndex,
@@ -199,6 +201,17 @@ export function LessonPlayer({
         <div className="flex items-center gap-2">
           <BookmarkToggle lessonId={lesson.id} />
           <button
+            onClick={() => setAiTutorOpen(!aiTutorOpen)}
+            className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-colors ${
+              aiTutorOpen
+                ? "border-primary/30 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+            }`}
+            title="AI Tutor"
+          >
+            <Bot className="h-4 w-4" />
+          </button>
+          <button
             onClick={() => setNotesOpen(!notesOpen)}
             className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-colors ${
               notesOpen
@@ -239,8 +252,15 @@ export function LessonPlayer({
           </div>
         </div>
 
-        <div className={`transition-all duration-200 ${notesOpen ? "w-80" : "w-0"}`}>
-          {notesOpen && (
+        <div className={`transition-all duration-200 ${aiTutorOpen ? "w-96" : notesOpen ? "w-80" : "w-0"}`}>
+          {aiTutorOpen && (
+            <AiTutorChat
+              lessonId={lesson.id}
+              lessonTitle={lesson.title}
+              onClose={() => setAiTutorOpen(false)}
+            />
+          )}
+          {notesOpen && !aiTutorOpen && (
             <NotesPanel
               lessonId={lesson.id}
               open={notesOpen}

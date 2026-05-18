@@ -100,6 +100,9 @@
 - [x] XP bonus notifications when multipliers apply
 - [x] Spaced repetition system (review scheduling based on mastery decay)
 - [x] Review schedule widget on student dashboard (overdue/due/upcoming)
+- [x] AI tutor chat API (Socratic method, lesson context, fallback responses)
+- [x] AI tutor chat UI component
+- [x] AI tutor integrated into lesson player sidebar
 
 ## Technical Achievements
 
