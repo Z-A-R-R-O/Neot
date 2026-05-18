@@ -82,7 +82,8 @@
 - [x] Streak notifications (warnings, milestones, heatmap)
 - [x] Mastery dashboard (teacher view)
 - [x] XP calculation rules refinement (multipliers, bonuses)
-- [ ] Spaced repetition system
+- [x] Spaced repetition system
+- [ ] (Phase 2 complete)
 - [ ] Leaderboard (class, global)
 - [ ] XP calculation rules refinement
 - [ ] Level progression thresholds
@@ -138,8 +139,8 @@
 | 1.75 | 10 | 10 | 100% |
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
-| 2 | 21 | 18 | 85.7% |
+| 2 | 21 | 21 | 100% ✅ |
 | 3 | 12 | 0 | 0% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **103** | **69** | **67.0%** |
+| **Total** | **103** | **70** | **68.0%** |

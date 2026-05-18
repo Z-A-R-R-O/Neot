@@ -98,6 +98,8 @@
 - [x] Teacher mastery view integrated into teacher dashboard
 - [x] Refined XP calculation (difficulty multipliers, streak bonus, first-try, speed, perfect quiz)
 - [x] XP bonus notifications when multipliers apply
+- [x] Spaced repetition system (review scheduling based on mastery decay)
+- [x] Review schedule widget on student dashboard (overdue/due/upcoming)
 
 ## Technical Achievements
 

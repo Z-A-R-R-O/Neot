@@ -8,6 +8,7 @@ import { LevelProgress } from "@/components/gamification/level-progress";
 import { StreakFlame } from "@/components/gamification/streak-flame";
 import { SeasonalEventsContent } from "@/components/dashboard/seasonal-events-content";
 import { StreakNotificationsWidget } from "@/components/gamification/streak-notifications-widget";
+import { SpacedRepetitionWidget } from "@/components/gamification/spaced-repetition-widget";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -144,6 +145,14 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
         transition={{ duration: 0.8, delay: 0.2, ease: easing }}
       >
         <StreakNotificationsWidget />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.25, ease: easing }}
+      >
+        <SpacedRepetitionWidget />
       </motion.div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

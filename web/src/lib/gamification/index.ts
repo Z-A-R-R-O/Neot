@@ -34,3 +34,6 @@ export type { Recommendation } from "./recommendation-engine";
 
 export { getStreakNotifications, getStreakHistory } from "./streak-notifications";
 export type { StreakNotification } from "./streak-notifications";
+
+export { getSpacedRepetitionReviews, getReviewSummary } from "./spaced-repetition";
+export type { ReviewItem } from "./spaced-repetition";
