@@ -10,12 +10,14 @@ import {
   Card,
   CardHeader,
   CardTitle,
+  CardContent,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
+import { LessonSkillMapper } from "@/components/teacher/lesson-skill-mapper";
 
 const BLOCK_TYPES = [
   { type: "text", icon: Type, label: "Text" },
@@ -235,6 +237,12 @@ function LessonEditorForm({
           </Card>
         </div>
       </div>
+
+      <Card>
+        <CardContent className="pt-6">
+          <LessonSkillMapper lessonId={lesson.id} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

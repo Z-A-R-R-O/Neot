@@ -80,6 +80,9 @@
 - [x] Adaptive recommendation engine (review/practice/advance based on mastery)
 - [x] Recommendations API (`/api/gamification/recommendations`)
 - [x] Recommendations integrated into student dashboard
+- [x] Lesson skills API (CRUD for skill-to-lesson mapping)
+- [x] Skill mapper UI component for teachers
+- [x] Skill mapping integrated into lesson editor
 
 ## Technical Achievements
 

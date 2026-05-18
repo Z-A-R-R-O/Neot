@@ -75,6 +75,7 @@
 - [x] Adaptive recommendation engine
 - [x] Recommendations API
 - [x] Recommendations on student dashboard
+- [x] Skill-to-lesson mapping UI (teacher)
 - [ ] Badge system (definitions, awards)
 - [ ] Leaderboard (class, global)
 - [ ] XP calculation rules refinement
@@ -131,8 +132,8 @@
 | 1.75 | 10 | 10 | 100% |
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
-| 2 | 21 | 11 | 52.4% |
+| 2 | 21 | 12 | 57.1% |
 | 3 | 12 | 0 | 0% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **103** | **62** | **60.2%** |
+| **Total** | **103** | **63** | **61.2%** |
