@@ -1,8 +1,8 @@
 export { calculateStreak } from "./streak-tracker";
 export type { StreakResult } from "./streak-tracker";
 
-export { XP_REWARDS, getLevelInfo, getLevel, getLevelProgress } from "./xp-calculator";
-export type { LevelInfo } from "./xp-calculator";
+export { XP_REWARDS, XP_MULTIPLIERS, getLevelInfo, getLevel, getLevelProgress, calculateXP } from "./xp-calculator";
+export type { LevelInfo, XPCalculationOptions, XPCalculationResult } from "./xp-calculator";
 
 export { getLevelTitle } from "./level-system";
 

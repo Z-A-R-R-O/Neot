@@ -96,6 +96,8 @@
 - [x] Teacher mastery overview API (class-level skill analytics)
 - [x] Class mastery component (skill breakdown, student rankings, course filter)
 - [x] Teacher mastery view integrated into teacher dashboard
+- [x] Refined XP calculation (difficulty multipliers, streak bonus, first-try, speed, perfect quiz)
+- [x] XP bonus notifications when multipliers apply
 
 ## Technical Achievements
 

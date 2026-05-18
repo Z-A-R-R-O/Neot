@@ -4,6 +4,100 @@ export const XP_REWARDS = {
   DAILY_STREAK: 25,
 } as const;
 
+export const XP_MULTIPLIERS = {
+  difficulty: {
+    beginner: 1.0,
+    intermediate: 1.25,
+    advanced: 1.5,
+    expert: 2.0,
+  },
+  firstTryBonus: 1.25,
+  streakBonus: {
+    3: 1.1,
+    7: 1.2,
+    14: 1.3,
+    30: 1.5,
+    50: 1.75,
+    100: 2.0,
+  },
+  perfectQuizBonus: 1.5,
+  speedBonus: 1.1,
+} as const;
+
+export interface XPCalculationOptions {
+  difficulty?: "beginner" | "intermediate" | "advanced" | "expert";
+  isFirstTry?: boolean;
+  streak?: number;
+  isPerfectQuiz?: boolean;
+  isSpeedCompletion?: boolean;
+  timeSpent?: number;
+  estimatedMinutes?: number;
+}
+
+export interface XPCalculationResult {
+  baseXp: number;
+  multipliers: { name: string; multiplier: number }[];
+  totalXp: number;
+  breakdown: string;
+}
+
+export function calculateXP(baseXp: number, options: XPCalculationOptions = {}): XPCalculationResult {
+  const multipliers: { name: string; multiplier: number }[] = [];
+  let totalXp = baseXp;
+
+  const difficulty = options.difficulty ?? "beginner";
+  const diffMult = XP_MULTIPLIERS.difficulty[difficulty];
+  if (diffMult !== 1.0) {
+    multipliers.push({ name: `Difficulty (${difficulty})`, multiplier: diffMult });
+    totalXp *= diffMult;
+  }
+
+  if (options.isFirstTry) {
+    multipliers.push({ name: "First try bonus", multiplier: XP_MULTIPLIERS.firstTryBonus });
+    totalXp *= XP_MULTIPLIERS.firstTryBonus;
+  }
+
+  if (options.streak && options.streak > 0) {
+    const streakThresholds = Object.entries(XP_MULTIPLIERS.streakBonus)
+      .map(([k, v]) => ({ threshold: parseInt(k), multiplier: v }))
+      .sort((a, b) => a.threshold - b.threshold);
+
+    let bestStreakMult = 1.0;
+    for (const { threshold, multiplier } of streakThresholds) {
+      if (options.streak >= threshold) {
+        bestStreakMult = multiplier;
+      }
+    }
+
+    if (bestStreakMult > 1.0) {
+      multipliers.push({ name: `Streak bonus (${options.streak} days)`, multiplier: bestStreakMult });
+      totalXp *= bestStreakMult;
+    }
+  }
+
+  if (options.isPerfectQuiz) {
+    multipliers.push({ name: "Perfect quiz bonus", multiplier: XP_MULTIPLIERS.perfectQuizBonus });
+    totalXp *= XP_MULTIPLIERS.perfectQuizBonus;
+  }
+
+  if (options.isSpeedCompletion) {
+    multipliers.push({ name: "Speed bonus", multiplier: XP_MULTIPLIERS.speedBonus });
+    totalXp *= XP_MULTIPLIERS.speedBonus;
+  }
+
+  const roundedXp = Math.round(totalXp);
+  const breakdown = multipliers.length > 0
+    ? `${baseXp} × ${multipliers.map((m) => `${m.multiplier}x (${m.name})`).join(" × ")}`
+    : `${baseXp} (base)`;
+
+  return {
+    baseXp,
+    multipliers,
+    totalXp: roundedXp,
+    breakdown,
+  };
+}
+
 const LEVEL_THRESHOLDS: { level: number; xp: number; title: string }[] = [
   { level: 1, xp: 0, title: "Beginner" },
   { level: 2, xp: 100, title: "Curious Mind" },

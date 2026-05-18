@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { calculateStreak } from "@/lib/gamification/streak-tracker";
-import { getLevelInfo, XP_REWARDS } from "@/lib/gamification/xp-calculator";
+import { getLevelInfo, XP_REWARDS, calculateXP } from "@/lib/gamification/xp-calculator";
 import { checkAndAwardAchievements } from "@/lib/gamification/achievement-service";
 import type { NewAchievement } from "@/lib/gamification/achievement-service";
 import { checkAndAwardBadges } from "@/lib/gamification/badge-service";
@@ -177,21 +177,48 @@ async function awardLessonXp(userId: string, lessonId: string) {
       };
     }
 
-    const multiplier = getActiveMultiplier();
+    const lesson = await tx.lesson.findUnique({
+      where: { id: lessonId },
+      include: { module: { include: { course: { select: { difficulty: true, estimatedMinutes: true } } } } },
+    });
+
+    const progress = await tx.lessonProgress.findUnique({
+      where: { userId_lessonId: { userId, lessonId } },
+      select: { score: true, timeSpent: true },
+    });
+
     const baseXp = XP_REWARDS.LESSON_COMPLETE;
-    const multipliedXp = Math.round(baseXp * multiplier);
+    const difficulty = (lesson?.module.course.difficulty ?? "beginner") as "beginner" | "intermediate" | "advanced" | "expert";
+    const isFirstTry = progress?.score === 100;
+    const isPerfectQuiz = (progress?.score ?? 0) >= 100;
+    const isSpeedCompletion = lesson?.module.course.estimatedMinutes
+      ? (progress?.timeSpent ?? 0) <= lesson.module.course.estimatedMinutes * 60 * 0.5
+      : false;
+
+    const profile = await tx.profile.findUnique({ where: { id: userId } });
+    const streak = profile?.currentStreak ?? 0;
+
+    const xpResult = calculateXP(baseXp, {
+      difficulty,
+      isFirstTry,
+      streak,
+      isPerfectQuiz,
+      isSpeedCompletion,
+    });
+
+    const seasonalMultiplier = getActiveMultiplier();
+    const finalXp = Math.round(xpResult.totalXp * seasonalMultiplier);
 
     await tx.xPTransaction.create({
       data: {
         userId,
-        amount: multipliedXp,
+        amount: finalXp,
         reason: "lesson_completed",
         lessonId,
       },
     });
 
-    const profile = await tx.profile.findUnique({ where: { id: userId } });
-    const newXp = (profile?.xp ?? 0) + multipliedXp;
+    const newXp = (profile?.xp ?? 0) + finalXp;
     const levelInfo = getLevelInfo(newXp);
 
     const streakResult = calculateStreak(
@@ -241,6 +268,18 @@ async function awardLessonXp(userId: string, lessonId: string) {
       });
     }
 
+    if (xpResult.multipliers.length > 1) {
+      await tx.notification.create({
+        data: {
+          userId,
+          type: "xp_bonus",
+          title: `+${finalXp} XP!`,
+          message: `Bonus multipliers applied: ${xpResult.multipliers.slice(1).map((m) => m.name).join(", ")}`,
+          link: "/dashboard",
+        },
+      });
+    }
+
     const newAchievements = await checkAndAwardAchievements(userId, tx);
     const newBadges = await checkAndAwardBadges(userId, tx);
     const seasonalBonuses = await trackSeasonalProgress(userId, tx);
@@ -248,7 +287,7 @@ async function awardLessonXp(userId: string, lessonId: string) {
     const activeEventName = seasonalBonuses.length > 0 ? seasonalBonuses[0].event : undefined;
 
     return {
-      xpAwarded: multipliedXp,
+      xpAwarded: finalXp,
       streak: streakResult.streak,
       longestStreak: streakResult.longestStreak,
       level: levelInfo.level,

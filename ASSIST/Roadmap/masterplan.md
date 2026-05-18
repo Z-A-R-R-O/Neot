@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 168 | 79.6% |
+| Z-01 LMS Flow | 211 | 169 | 80.1% |
 | Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **333** | **70.0%** |
+| **Combined** | **476** | **334** | **70.2%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -37,6 +37,7 @@
 | Badge System | ✅ Complete | Rarity tiers (common-legendary), progress indicators, rarity filtering |
 | Streak Notifications | ✅ Complete | Warnings, milestones, recovery prompts, streak heatmap |
 | Mastery Teacher View | ✅ Complete | Class-level skill analytics, student rankings, course filtering |
+| XP System | ✅ Complete | Difficulty multipliers, streak bonus, first-try bonus, speed bonus, perfect quiz bonus |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
 | Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
@@ -69,3 +70,4 @@
 | 2026-05-18 | Badge rarity system | 5 tiers (common-legendary) with distinct visual styling and progress tracking |
 | 2026-05-18 | Streak notifications on dashboard | Proactive nudges prevent streak loss and motivate consistency |
 | 2026-05-18 | Teacher mastery view | Class-level skill analytics help teachers identify gaps and celebrate wins |
+| 2026-05-18 | Refined XP calculation | Multi-factor XP rewards (difficulty, streak, first-try, speed, perfect quiz) incentivize quality learning |
