@@ -51,6 +51,7 @@ model Profile {
   receivedMessages Message[] @relation("RecipientMessages")
   blogPosts BlogPost[]
   assignmentSubmissions AssignmentSubmission[]
+  skillMastery SkillMastery[]
 
   @@map("profiles")
 }
@@ -153,6 +154,7 @@ model Lesson {
   progress LessonProgress[]
   bookmarks Bookmark[]
   lessonNotes LessonNote[]
+  lessonSkills LessonSkill[]
 
   @@map("lessons")
 }
@@ -731,4 +733,58 @@ model AssignmentSubmission {
   @@index([userId])
   @@index([status])
   @@map("assignment_submissions")
+}
+
+model Skill {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String   @default("general")
+  icon        String?
+  color       String?  @default("#3b82f6")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  masteryRecords SkillMastery[]
+  lessonSkills  LessonSkill[]
+
+  @@index([category])
+  @@map("skills")
+}
+
+model SkillMastery {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  skillId   String   @map("skill_id")
+  score     Float    @default(0)
+  attempts  Int      @default(0)
+  correct   Int      @default(0)
+  lastAttempt DateTime? @map("last_attempt")
+  difficulty Int     @default(1) @map("difficulty")
+  streak    Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+  @@index([userId])
+  @@index([skillId])
+  @@map("skill_mastery")
+}
+
+model LessonSkill {
+  id        String   @id @default(uuid())
+  lessonId  String   @map("lesson_id")
+  skillId   String   @map("skill_id")
+  weight    Float    @default(1.0)
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  skill  Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, skillId])
+  @@index([lessonId])
+  @@index([skillId])
+  @@map("lesson_skills")
 }

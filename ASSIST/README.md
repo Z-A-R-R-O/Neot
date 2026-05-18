@@ -66,7 +66,7 @@ code ASSIST/Log/YYYY-MM-DD-HHmm.md
 ## Workflow
 
 ```
-Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  Commit
+Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  Update ASSIST  →  Commit
 ```
 
 | Step | Where | What |
@@ -76,7 +76,10 @@ Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  
 | **Spec** | `Vision/` + `Core/` | Read architecture + role specs |
 | **Build** | `web/src/` | Implement the code |
 | **Log** | `Log/YYYY-MM-DD-HHmm.md` | What changed, why, status, next |
+| **Update ASSIST** | `Roadmap/`, `Execution/` | Progress %, shipped items, checklists |
 | **Commit** | `Tools/git-helper.ps1` | Auto-numbered: `XX -- NEOT -- desc` |
+
+**ASSIST must always reflect reality.** Never commit code without updating ASSIST docs.
 
 ## Current Status
 

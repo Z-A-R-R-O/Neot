@@ -10,6 +10,7 @@ import type { NewAchievement } from "@/lib/gamification/achievement-service";
 import { checkAndAwardBadges } from "@/lib/gamification/badge-service";
 import type { NewBadge } from "@/lib/gamification/badge-service";
 import { getActiveMultiplier, trackSeasonalProgress } from "@/lib/gamification/seasonal-event-service";
+import { updateLessonMastery } from "@/lib/gamification/mastery-service";
 import { recalculateEnrollmentProgress } from "@/lib/courses/enrollment-service";
 import { awardCourseCompletion } from "@/lib/courses/completion-service";
 import { updateContinueLearning } from "@/lib/courses/continue-learning";
@@ -102,6 +103,7 @@ export async function POST(
   let newBadges: NewBadge[] = [];
   let seasonalBonus = 0;
   let activeSeasonalEvent: string | undefined;
+  let masteryUpdates: Awaited<ReturnType<typeof updateLessonMastery>> = [];
 
   if (isNewCompletion) {
     const result = await awardLessonXp(userId, id);
@@ -113,6 +115,10 @@ export async function POST(
     newBadges = result.newBadges;
     seasonalBonus = result.seasonalBonus;
     activeSeasonalEvent = result.activeSeasonalEvent;
+
+    if (parsed.data.score !== undefined) {
+      masteryUpdates = await updateLessonMastery(userId, id, parsed.data.score / 100);
+    }
 
     const lesson = await prisma.lesson.findUnique({
       where: { id },
@@ -143,6 +149,11 @@ export async function POST(
     newBadges: newBadges.length > 0 ? newBadges : undefined,
     seasonalBonus: seasonalBonus > 0 ? seasonalBonus : undefined,
     activeSeasonalEvent,
+    masteryUpdates: masteryUpdates.length > 0 ? masteryUpdates.map((m) => ({
+      skill: m.skill,
+      score: m.mastery.score,
+      difficulty: m.mastery.difficulty,
+    })) : undefined,
   });
 }
 

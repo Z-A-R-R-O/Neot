@@ -23,3 +23,8 @@ export { getActiveEvents, getUpcomingEvents, SEASONAL_EVENTS } from "./seasonal-
 export type { SeasonalEventDefinition } from "./seasonal-events";
 export { getActiveEventsForUser, trackSeasonalProgress, getActiveMultiplier, ensureSeasonalEventsSeeded } from "./seasonal-event-service";
 export type { ActiveEvent } from "./seasonal-event-service";
+
+export { calculateMasteryScore, adjustDifficulty, getMasteryLevel, getMasteryColor, getTrend, getNextRecommendation } from "./mastery-engine";
+export type { MasteryResult, MasteryUpdate } from "./mastery-engine";
+export { updateSkillMastery, updateLessonMastery, getUserMasteryOverview, getSkillTrend, getWeakAreas, getStrongAreas } from "./mastery-service";
+export { seedDefaultSkills } from "./skill-seeder";

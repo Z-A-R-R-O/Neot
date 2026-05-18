@@ -3,7 +3,7 @@
 ## The Cycle
 
 ```
-Read Plan → Pick Task → Read Spec → Build → Log → Commit → Repeat
+Read Plan → Pick Task → Read Spec → Build → Log → Update ASSIST → Commit → Repeat
 ```
 
 ## Step by Step
@@ -73,7 +73,19 @@ Create `ASSIST/Log/YYYY-MM-DD-HHmm.md`:
 - Need to fix...
 ```
 
-### 6. Commit
+### 6. Update ASSIST (MUST DO)
+
+**Every change must be reflected in ASSIST/.** After building:
+
+- Update `Roadmap/masterplan.md` — progress %, status, gap analysis, next tasks
+- Update `Roadmap/shipped.md` — add completed items
+- Update `Execution/checklists/` — mark items ✅
+- Update `Roadmap/phases.md` — if phase status changed
+- Update relevant `Vision/` files — if spec changed during implementation
+
+**Never commit without updating ASSIST.** The docs are the source of truth.
+
+### 7. Commit
 
 ```powershell
 .\ASSIST\Tools\git-helper.ps1 "Short description of changes"

@@ -64,16 +64,21 @@
 - [x] Zustand overlay store
 
 ## Phase 2: Adaptive + Gamification 🚧
+- [x] Mastery tracking database models (Skill, SkillMastery, LessonSkill)
+- [x] Mastery engine (calculate, adjust difficulty, trend detection)
+- [x] Mastery service (update, query, weak/strong areas)
+- [x] Skill seeder (10 default skills)
+- [x] Mastery tracking wired into lesson progress API
+- [x] Mastery analytics API
+- [x] Mastery dashboard component
+- [x] Mastery page (`/dashboard/mastery`)
 - [ ] Badge system (definitions, awards)
 - [ ] Leaderboard (class, global)
 - [ ] XP calculation rules refinement
 - [ ] Level progression thresholds
 - [ ] Streak notifications
-- [ ] Adaptive difficulty algorithm
-- [ ] Mastery tracking data model
-- [ ] Recommendation engine
-- [ ] Mastery dashboard (student)
-- [ ] Mastery dashboard (teacher)
+- [ ] Adaptive recommendation engine
+- [ ] Mastery dashboard (teacher view)
 - [ ] Spaced repetition system
 - [ ] At-risk student identification
 
@@ -124,8 +129,8 @@
 | 1.75 | 10 | 10 | 100% |
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
-| 2 | 12 | 0 | 0% |
+| 2 | 18 | 8 | 44.4% |
 | 3 | 12 | 0 | 0% |
 | 4 | 9 | 0 | 0% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **94** | **51** | **54.3%** |
+| **Total** | **100** | **59** | **59.0%** |

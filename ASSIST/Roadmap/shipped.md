@@ -67,6 +67,17 @@
 - [x] Block registry
 - [x] Zustand overlay store
 
+### Phase 2: Adaptive + Gamification
+- [x] Mastery tracking database models (Skill, SkillMastery, LessonSkill)
+- [x] Mastery engine (calculate, adjust difficulty, trend detection)
+- [x] Mastery service (update, query, weak/strong areas)
+- [x] Skill seeder (10 default skills across categories)
+- [x] Mastery tracking wired into lesson progress API
+- [x] Mastery analytics API (`/api/gamification/mastery`)
+- [x] Mastery dashboard component (category filter, skill cards, weak/strong areas)
+- [x] Mastery page (`/dashboard/mastery`)
+- [x] Navigation integration (sidebar + nav service)
+
 ## Technical Achievements
 
 - [x] Course assignment system
