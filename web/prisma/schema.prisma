@@ -50,6 +50,7 @@ model Profile {
   sentMessages Message[] @relation("SenderMessages")
   receivedMessages Message[] @relation("RecipientMessages")
   blogPosts BlogPost[]
+  assignmentSubmissions AssignmentSubmission[]
 
   @@map("profiles")
 }
@@ -706,4 +707,28 @@ model BlogPost {
   @@index([slug])
   @@index([authorId])
   @@map("blog_posts")
+}
+
+model AssignmentSubmission {
+  id          String   @id @default(uuid())
+  lessonId    String   @map("lesson_id")
+  userId      String   @map("user_id")
+  blockId     String   @map("block_id")
+  content     String   @default("{}")
+  fileUrl     String?  @map("file_url")
+  status      String   @default("submitted")
+  score       Float?
+  feedback    String?
+  gradedAt    DateTime? @map("graded_at")
+  gradedById  String?  @map("graded_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, userId, blockId])
+  @@index([lessonId])
+  @@index([userId])
+  @@index([status])
+  @@map("assignment_submissions")
 }

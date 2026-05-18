@@ -16,6 +16,7 @@ import { TextEditor } from "@/components/teacher/block-editors/text-editor";
 import { VideoEditor } from "@/components/teacher/block-editors/video-editor";
 import { QuizEditor } from "@/components/teacher/block-editors/quiz-editor";
 import { PdfEditor } from "@/components/teacher/block-editors/pdf-editor";
+import { AssignmentEditor } from "@/components/teacher/block-editors/assignment-editor";
 
 interface Block {
   id: string;
@@ -109,6 +110,15 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
     if (blockType === "pdf") {
       newBlock.content = { url: "", title: "" } as unknown as Record<string, unknown>;
     }
+    if (blockType === "assignment") {
+      newBlock.content = {
+        title: "",
+        instructions: "",
+        maxScore: 100,
+        allowFileUpload: true,
+        maxFileSizeMB: 10,
+      } as unknown as Record<string, unknown>;
+    }
     setBlocks((prev) => [...prev, newBlock]);
   }
 
@@ -150,6 +160,14 @@ export function LessonEditor({ lessonId }: LessonEditorProps) {
           <PdfEditor
             content={block.content}
             onChange={(content) => handleBlockContentChange(block.id, content)}
+          />
+        );
+      case "assignment":
+        return (
+          <AssignmentEditor
+            content={block.content}
+            onChange={(content) => handleBlockContentChange(block.id, content)}
+            onDelete={() => handleDeleteBlock(block.id)}
           />
         );
       case "image":

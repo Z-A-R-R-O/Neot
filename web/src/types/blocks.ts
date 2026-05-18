@@ -9,7 +9,8 @@ export type BlockType =
   | "code"
   | "file"
   | "divider"
-  | "pdf";
+  | "pdf"
+  | "assignment";
 
 export interface BaseBlock {
   id: string;
@@ -113,6 +114,19 @@ export interface PdfBlock extends BaseBlock {
   };
 }
 
+export interface AssignmentBlock extends BaseBlock {
+  type: "assignment";
+  content: {
+    title: string;
+    instructions: string;
+    maxScore: number;
+    allowFileUpload: boolean;
+    allowedFileTypes?: string[];
+    maxFileSizeMB?: number;
+    dueDate?: string;
+  };
+}
+
 export type LessonBlock =
   | TextBlock
   | VideoBlock
@@ -124,4 +138,5 @@ export type LessonBlock =
   | CodeBlock
   | FileBlock
   | DividerBlock
-  | PdfBlock;
+  | PdfBlock
+  | AssignmentBlock;

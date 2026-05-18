@@ -131,4 +131,17 @@ export const blockDefinitions: BlockDefinition[] = [
     icon: "Minus",
     fields: [],
   },
+  {
+    id: "assignment",
+    name: "Assignment",
+    description: "Student submission with teacher grading",
+    icon: "FileCheck",
+    fields: [
+      { key: "title", label: "Title", type: "text", required: true },
+      { key: "instructions", label: "Instructions", type: "textarea", required: true },
+      { key: "maxScore", label: "Max Score", type: "number", required: false },
+      { key: "allowFileUpload", label: "Allow File Upload", type: "boolean", required: false },
+      { key: "maxFileSizeMB", label: "Max File Size (MB)", type: "number", required: false },
+    ],
+  },
 ];
