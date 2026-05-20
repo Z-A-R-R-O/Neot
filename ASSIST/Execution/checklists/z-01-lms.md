@@ -97,7 +97,7 @@
 - [x] Content generation API
 - [x] Quiz auto-generation (AI-powered quiz generator in lesson editor)
 - [x] Question bank (reusable questions with search/filter)
-- [ ] Safety guardrails
+- [x] Safety guardrails (profanity filter, sensitive topic detection, rate limiting)
 - [ ] Flutter app setup
 - [ ] API client
 - [ ] Auth flow (mobile)
@@ -147,7 +147,7 @@
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
-| 3 | 13 | 4 | 30.8% |
+| 3 | 13 | 5 | 38.5% |
 | 4 | 17 | 15 | 88.2% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **113** | **89** | **78.8%** |
+| **Total** | **113** | **90** | **79.6%** |
