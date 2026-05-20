@@ -107,7 +107,7 @@ What it does:
 1. Opens a small always-on-top overlay.
 2. Watches for image matches against `templates/stop-icon.png` and `templates/send-icon.png`.
 3. If the stop/wait icon matches, it does nothing.
-4. If the send icon matches, it types `Next`, waits 2 seconds, and submits.
+4. If the send icon matches, it types `Next / Continue `, waits 2 seconds, and submits.
 5. Scans once every 10 seconds.
 
 Decision logic:
@@ -115,7 +115,7 @@ Decision logic:
 | Condition | Action |
 |-----------|--------|
 | `stop-icon.png` matches | Do nothing |
-| `send-icon.png` matches | Type `Next`, wait 2 seconds, submit |
+| `send-icon.png` matches | Type `Next / Continue `, wait 2 seconds, submit |
 | No template matches | Wait for the next scan |
 | `--autostart` flag used | Starts watching immediately |
 

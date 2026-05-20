@@ -3,7 +3,7 @@
 Template-based helper that watches the chat send/stop control.
 
 - If `templates/stop-icon.png` matches, Auto-Next does nothing.
-- If `templates/send-icon.png` matches, Auto-Next types `Next` and clicks the matched send icon.
+- If `templates/send-icon.png` matches, Auto-Next types `Next / Continue ` and clicks the matched send icon.
 - It scans once every 10 seconds.
 
 ## Run
@@ -38,7 +38,7 @@ pip install pyautogui Pillow numpy opencv-python
 2. Every 10 seconds, it searches the screen for `templates/stop-icon.png`.
 3. If the stop icon matches, it does nothing.
 4. If the stop icon does not match, it searches for `templates/send-icon.png`.
-5. If the send icon matches, it types `Next` and clicks the matched send icon.
+5. If the send icon matches, it types `Next / Continue ` and clicks the matched send icon.
 
 ## Mini Manual
 
@@ -48,7 +48,7 @@ pip install pyautogui Pillow numpy opencv-python
 4. Leave the overlay running.
 5. Auto-Next scans every 10 seconds.
 6. Red stop/wait icon: no action.
-7. Send icon: type `Next`, wait 2 seconds, submit.
+7. Send icon: type `Next / Continue `, wait 2 seconds, submit.
 8. Press `STOP` to pause.
 
 ## Structure

@@ -13,6 +13,7 @@ class MatchResult:
     state: str
     label: str
     location: tuple[int, int, int, int] | None = None
+    input_location: tuple[int, int, int, int] | None = None
 
     @property
     def is_send(self) -> bool:
@@ -23,7 +24,7 @@ class MatchResult:
         return self.state == "stop"
 
     def __str__(self) -> str:
-        return f"State: {self.label} Location={self.location}"
+        return f"State: {self.label} Location={self.location} InputBox={self.input_location}"
 
 
 class ScreenReader:
@@ -33,19 +34,21 @@ class ScreenReader:
         self.templates_dir = templates_dir or Path(__file__).resolve().parents[1] / "templates"
         self.send_template = self.templates_dir / "send-icon.png"
         self.stop_template = self.templates_dir / "stop-icon.png"
+        self.input_box_template = self.templates_dir / "input-box.png"
         self.confidence = confidence
 
     def read_state(self) -> MatchResult:
         send_location = self._find_template(self.send_template)
         stop_location = self._find_template(self.stop_template)
+        input_location = self._find_template(self.input_box_template)
 
         if stop_location is not None and send_location is None:
-            return MatchResult("stop", "STOP ICON - do nothing", stop_location)
+            return MatchResult("stop", "STOP ICON - do nothing", stop_location, input_location)
 
         if send_location is not None:
-            return MatchResult("send", "SEND ICON - type Next", send_location)
+            return MatchResult("send", "SEND ICON - type Next / Continue", send_location, input_location)
 
-        return MatchResult("unknown", "NO TEMPLATE MATCH")
+        return MatchResult("unknown", "NO TEMPLATE MATCH", None, input_location)
 
     def _find_template(self, template: Path) -> tuple[int, int, int, int] | None:
         if not template.exists():
@@ -77,3 +80,10 @@ class ScreenReader:
     def send_click_point(location: tuple[int, int, int, int]) -> tuple[int, int]:
         left, top, width, height = location
         return left + width - 12, top + height // 2
+
+    @staticmethod
+    def input_click_point(location: tuple[int, int, int, int]) -> tuple[int, int]:
+        left, top, _width, height = location
+        x = max(0, left - 120)
+        y = top + height // 2
+        return int(x), int(y)

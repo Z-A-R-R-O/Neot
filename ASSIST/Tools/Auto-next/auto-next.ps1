@@ -1,16 +1,16 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-  Auto-Next for NEOT - Smart decision engine: types "Next" only when there's work remaining.
+  Auto-Next for NEOT - Smart decision engine: types "Next / Continue " only when there's work remaining.
 .DESCRIPTION
-  Analyzes checklists, masterplan, and current state to decide whether to type "Next".
+  Analyzes checklists, masterplan, and current state to decide whether to type "Next / Continue ".
   Only triggers when there are remaining tasks to work on.
 .EXAMPLE
   .\auto-next.ps1
-  # Checks state and types "Next" if work remains
+  # Checks state and types "Next / Continue " if work remains
 .EXAMPLE
   .\auto-next.ps1 -Force
-  # Always type "Next" regardless of state
+  # Always type "Next / Continue " regardless of state
 #>
 
 param(
@@ -114,12 +114,42 @@ if ($activeWindow) {
 }
 
 # ── 6. Execute ─────────────────────────────────────────────────
-Write-Host "  [AUTO-NEXT] $totalRemaining tasks remaining - typing 'Next' in $Delay second(s)..." -ForegroundColor Cyan
+$sendText = "Next / Continue "
+
+Write-Host "  [AUTO-NEXT] $totalRemaining tasks remaining - typing '$sendText' in $Delay second(s)..." -ForegroundColor Cyan
 Write-Host ""
 
 Start-Sleep -Seconds $Delay
 
-Write-Host "  [AUTO-NEXT] Typing 'Next'..." -ForegroundColor Cyan
+Write-Host "  [AUTO-NEXT] Typing '$sendText'..." -ForegroundColor Cyan
+
+# Add-Type for mouse click
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class MouseHelper {
+    [DllImport("user32.dll")]
+    public static extern bool SetCursorPos(int x, int y);
+    [DllImport("user32.dll")]
+    public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
+    public const int MOUSEEVENTF_LEFTDOWN = 0x02;
+    public const int MOUSEEVENTF_LEFTUP = 0x04;
+    public static void Click(int x, int y) {
+        SetCursorPos(x, y);
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+}
+"@
+
+# Click the input box area (offset left of where the send button typically is)
+# Uses screen center as fallback
+$screenWidth = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width
+$screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
+$clickX = [int]($screenWidth * 0.4)
+$clickY = [int]($screenHeight * 0.85)
+[MouseHelper]::Click($clickX, $clickY)
+Start-Sleep -Milliseconds 500
 
 # Use WScript.Shell for more reliable key simulation
 $wshell = New-Object -ComObject WScript.Shell
@@ -127,8 +157,8 @@ $wshell = New-Object -ComObject WScript.Shell
 # Small delay to ensure focus is ready
 Start-Sleep -Milliseconds 300
 
-# Type "Next"
-$wshell.SendKeys("Next")
+# Type static input text
+$wshell.SendKeys($sendText)
 
 # Wait for send button to appear/activate
 Write-Host "  [AUTO-NEXT] Waiting for send button to activate..." -ForegroundColor Cyan
@@ -148,5 +178,5 @@ Start-Sleep -Milliseconds 200
 # Fallback: Try tilde as alternative Enter
 $wshell.SendKeys("~")
 
-Write-Host "  [AUTO-NEXT] Done - 'Next' sent." -ForegroundColor Green
+Write-Host "  [AUTO-NEXT] Done - '$sendText' sent." -ForegroundColor Green
 Write-Host ""

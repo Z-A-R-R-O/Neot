@@ -54,7 +54,7 @@ Auto-Next is a small overlay that keeps the AI chat moving.
 - Press `START`.
 - Click the AI chat input during the short countdown.
 - If the red stop/wait icon is visible, Auto-Next does nothing.
-- If the send icon is visible, Auto-Next types `Next`, waits 2 seconds, and submits.
+- If the send icon is visible, Auto-Next types `Next / Continue `, waits 2 seconds, and submits.
 - It scans once every 10 seconds.
 - Press `STOP` to pause or `EXIT` to close.
 

@@ -87,7 +87,7 @@ Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -
 | **Update ASSIST** | `Roadmap/`, `Execution/` | Progress %, shipped items, checklists |
 | **Commit** | `Tools/git-helper.ps1` | Auto-numbered: `XX -- NEOT -- desc` |
 
-Auto-Next is an optional local automation tool, not a required workflow step. Python version image-matches the AI chat send/stop icons: stop icon means wait, send icon means type `Next`, wait 2 seconds, then submit.
+Auto-Next is an optional local automation tool, not a required workflow step. Python version image-matches the AI chat send/stop icons: stop icon means wait, send icon means type `Next / Continue `, wait 2 seconds, then submit.
 
 Manual command:
 

@@ -21,12 +21,12 @@ class EngineConfig:
     scan_interval_seconds: float = 20.0
     focus_delay_seconds: float = 3.0
     submit_delay_seconds: float = 2.0
-    send_text: str = "Next"
+    send_text: str = "Next / Continue "
     type_interval_seconds: float = 0.05
 
 
 class AutoNextEngine:
-    """Every scan: stop icon does nothing, send icon types Next and submits."""
+    """Every scan: stop icon does nothing, send icon types static text and submits."""
 
     def __init__(
         self,
@@ -109,7 +109,7 @@ class AutoNextEngine:
 
         if state.is_send:
             self.update_status("Ready")
-            self.update_action("Typing Next")
+            self.update_action(f"Typing {self.config.send_text}")
             self._type_next_and_submit(state)
             return
 
@@ -123,14 +123,32 @@ class AutoNextEngine:
         else:
             self.log(f"SCAN: {state}")
 
+    def _click_input_box(self, state: MatchResult) -> None:
+        loc = state.input_location
+        if loc is not None:
+            left, top, width, height = loc
+            x = left + width // 2
+            y = top + height // 2
+            pyautogui.click(x, y)
+            time.sleep(0.2)
+            return
+        loc = state.location
+        if loc is None:
+            return
+        x, y = ScreenReader.input_click_point(loc)
+        pyautogui.click(x, y)
+        time.sleep(0.2)
+
     def _type_next_and_submit(self, state: MatchResult) -> None:
+        self._click_input_box(state)
+        time.sleep(0.3)
         pyautogui.write(self.config.send_text, interval=self.config.type_interval_seconds)
         time.sleep(self.config.submit_delay_seconds)
 
         pyautogui.press("enter")
         time.sleep(3.0)
         self._last_state = None
-        self.log("Typed Next and pressed Enter. Re-scanning...")
+        self.log(f"Typed {self.config.send_text}and pressed Enter. Re-scanning...")
 
         new_state = self.reader.read_state()
         self._log_state(new_state)
