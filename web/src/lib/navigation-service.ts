@@ -27,9 +27,11 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
     { id: "teacher-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   parent: [
-    { id: "parent-overview", label: "Overview", href: "/dashboard", icon: "Eye", children: [] },
-    { id: "parent-children", label: "Children", href: "/dashboard/children", icon: "Users", children: [] },
-    { id: "parent-reports", label: "Reports", href: "/dashboard/reports", icon: "BarChart3", children: [] },
+    { id: "parent-overview", label: "Overview", href: "/parent", icon: "Eye", children: [] },
+    { id: "parent-children", label: "Children", href: "/parent/children", icon: "Users", children: [] },
+    { id: "parent-home-learning", label: "Home Learning", href: "/parent/home-learning", icon: "BookOpen", children: [] },
+    { id: "parent-reports", label: "Reports", href: "/parent/reports", icon: "BarChart3", children: [] },
+    { id: "parent-messages", label: "Messages", href: "/parent/messages", icon: "Mail", children: [] },
     { id: "parent-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   admin: [

@@ -113,6 +113,7 @@
 - [x] Parent messages (inbox, compose, reply, mark read)
 - [x] Parent alert settings component
 - [x] Parent reports content component
+- [x] Home learning support (suggestions, weak areas, activities)
 - [x] School portal foundation (layout, role-based access)
 - [x] School dashboard with stats, quick actions, activity feed
 - [x] School settings with profile and white-label branding

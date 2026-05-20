@@ -111,7 +111,7 @@
 - [x] Parent dashboard foundation
 - [x] Child progress monitoring
 - [x] Teacher communication
-- [ ] Home learning support
+- [x] Home learning support (suggestions, weak areas, activities)
 - [x] School portal foundation
 - [x] School dashboard
 - [x] School settings (profile + white-label)
@@ -148,6 +148,6 @@
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
 | 3 | 12 | 2 | 16.7% |
-| 4 | 17 | 14 | 82.4% |
+| 4 | 17 | 15 | 88.2% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **111** | **86** | **77.5%** |
+| **Total** | **111** | **87** | **78.4%** |
