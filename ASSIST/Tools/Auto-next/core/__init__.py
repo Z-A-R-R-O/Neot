@@ -1,0 +1,1 @@
+"""Core Auto-Next package."""

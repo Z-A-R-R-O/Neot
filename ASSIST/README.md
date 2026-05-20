@@ -39,7 +39,12 @@ ASSIST/
 │       └── z-02-admin.md      ← Admin flow — 265-item detailed checklist
 ├── LOG/                       ← One .md file per work session
 └── TOOLS/
-    └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <desc>"
+    ├── git-helper/
+    │   └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <desc>"
+    └── Auto-next/
+        ├── auto-next.py           ← Template-based Auto-Next watcher
+        ├── templates/             ← Send/stop icon references
+        └── auto-next.ps1          ← Fallback: Keyboard-only simulation
 ```
 
 ## Quick Start
@@ -61,12 +66,15 @@ code ASSIST/Log/YYYY-MM-DD-HHmm.md
 
 # 6. Commit
 .\ASSIST\Tools\git-helper.ps1 "Description of changes"
+
+# Optional automation helper
+python ASSIST\Tools\Auto-next\auto-next.py
 ```
 
 ## Workflow
 
 ```
-Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  Update ASSIST  →  Commit
+Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -> Commit
 ```
 
 | Step | Where | What |
@@ -79,15 +87,25 @@ Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  
 | **Update ASSIST** | `Roadmap/`, `Execution/` | Progress %, shipped items, checklists |
 | **Commit** | `Tools/git-helper.ps1` | Auto-numbered: `XX -- NEOT -- desc` |
 
+Auto-Next is an optional local automation tool, not a required workflow step. Python version image-matches the AI chat send/stop icons: stop icon means wait, send icon means type `Next`, wait 2 seconds, then submit.
+
+Manual command:
+
+```powershell
+python ASSIST\Tools\Auto-next\auto-next.py
+```
+
+Use `START` in the overlay, click the chat input during the focus countdown, and leave it running. It scans every 10 seconds.
+
 **ASSIST must always reflect reality.** Never commit code without updating ASSIST docs.
 
 ## Current Status
 
 | Plan | Progress | Active Work |
 |------|----------|-------------|
-| **Z-01 LMS Flow** | 72.5% (153/211) | Parent communication, AI features, scaling |
+| **Z-01 LMS Flow** | 81.5% (172/211) | Parent communication, school tools, mobile foundation |
 | **Z-02 Admin Flow** | 62.3% (165/265) | Properties panel, accessibility, performance |
-| **Combined** | 51.9% (318/614) | — |
+| **Combined** | 70.8% (337/476) | Phase 2 wrap-up, Phase 3/4 planning |
 
 ## Phase Selection Rules
 
@@ -105,3 +123,4 @@ Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  
 | **5** Scale + Marketplace | All prior | Everything stable |
 
 **Shipped:** ✅ Phases 0, 1, 1.5, 1.75, UI, 2.5, D complete.
+

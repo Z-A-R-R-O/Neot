@@ -41,7 +41,22 @@ npx prisma generate          # Generate Prisma client
 
 # Git (use the helper for numbered commits)
 .\ASSIST\Tools\git-helper.ps1 "Description"
+
+# Optional automation helper
+python ASSIST\Tools\Auto-next\auto-next.py
 ```
+
+## Auto-Next Mini Manual
+
+Auto-Next is a small overlay that keeps the AI chat moving.
+
+- Run: `python ASSIST\Tools\Auto-next\auto-next.py`
+- Press `START`.
+- Click the AI chat input during the short countdown.
+- If the red stop/wait icon is visible, Auto-Next does nothing.
+- If the send icon is visible, Auto-Next types `Next`, waits 2 seconds, and submits.
+- It scans once every 10 seconds.
+- Press `STOP` to pause or `EXIT` to close.
 
 ## File Locations
 

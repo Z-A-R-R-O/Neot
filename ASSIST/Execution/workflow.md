@@ -1,9 +1,9 @@
-# NEOT — Workflow
+# NEOT - Workflow
 
 ## The Cycle
 
-```
-Read Plan → Pick Task → Read Spec → Build → Log → Update ASSIST → Commit → Repeat
+```text
+Read Plan -> Pick Task -> Read Spec -> Build -> Log -> Update ASSIST -> Commit -> Repeat
 ```
 
 ## Step by Step
@@ -27,9 +27,9 @@ cat ASSIST/Execution/checklists/z-02-admin.md
 ```
 
 Look for:
-- 🔲 Not started (pick one)
-- 🚧 In progress (continue or reassign)
-- ✅ Done (skip)
+- Not started items
+- In progress items
+- Done items
 
 ### 3. Read the Spec
 
@@ -65,7 +65,7 @@ Create `ASSIST/Log/YYYY-MM-DD-HHmm.md`:
 - Refactored Z
 
 ## Status
-- Task: 🚧 In progress / ✅ Done
+- Task: In progress / Done
 - Blockers: None / [describe]
 
 ## Next
@@ -77,11 +77,11 @@ Create `ASSIST/Log/YYYY-MM-DD-HHmm.md`:
 
 **Every change must be reflected in ASSIST/.** After building:
 
-- Update `Roadmap/masterplan.md` — progress %, status, gap analysis, next tasks
-- Update `Roadmap/shipped.md` — add completed items
-- Update `Execution/checklists/` — mark items ✅
-- Update `Roadmap/phases.md` — if phase status changed
-- Update relevant `Vision/` files — if spec changed during implementation
+- Update `Roadmap/masterplan.md` - progress %, status, gap analysis, next tasks
+- Update `Roadmap/shipped.md` - add completed items
+- Update `Execution/checklists/` - mark items done
+- Update `Roadmap/phases.md` - if phase status changed
+- Update relevant `Vision/` files - if spec changed during implementation
 
 **Never commit without updating ASSIST.** The docs are the source of truth.
 
@@ -92,6 +92,45 @@ Create `ASSIST/Log/YYYY-MM-DD-HHmm.md`:
 ```
 
 Format: `XX -- NEOT -- <description>`
+
+## Optional Automation Tools
+
+Auto-Next is not part of the required delivery workflow. It is only an optional local automation helper for continuing AI chat sessions.
+
+Run it manually when useful:
+
+```powershell
+python ASSIST\Tools\Auto-next\auto-next.py
+```
+
+What it does:
+1. Opens a small always-on-top overlay.
+2. Watches for image matches against `templates/stop-icon.png` and `templates/send-icon.png`.
+3. If the stop/wait icon matches, it does nothing.
+4. If the send icon matches, it types `Next`, waits 2 seconds, and submits.
+5. Scans once every 10 seconds.
+
+Decision logic:
+
+| Condition | Action |
+|-----------|--------|
+| `stop-icon.png` matches | Do nothing |
+| `send-icon.png` matches | Type `Next`, wait 2 seconds, submit |
+| No template matches | Wait for the next scan |
+| `--autostart` flag used | Starts watching immediately |
+
+Requirements:
+
+```powershell
+pip install pyautogui Pillow numpy opencv-python
+```
+
+Mini manual:
+- Run `python ASSIST\Tools\Auto-next\auto-next.py`.
+- Press `START`.
+- Click the AI chat input during the short countdown.
+- Leave the overlay running while work continues.
+- Press `STOP` to pause or `EXIT` to close.
 
 ## Branch Strategy
 

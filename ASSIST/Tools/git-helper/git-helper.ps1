@@ -117,6 +117,11 @@ git commit -m $commitMsg
 if ($LASTEXITCODE -eq 0) {
   Write-Host "    Commit successful: $commitMsg" -ForegroundColor Green
   Write-Host ""
+
+  # Optional Auto-Next helper
+  Write-Host "  [AUTO-NEXT] Optional helper:" -ForegroundColor Cyan
+  Write-Host "    python ASSIST\Tools\Auto-next\auto-next.py" -ForegroundColor Gray
+
   Write-Host "  [NEXT] Push to remote?" -ForegroundColor Cyan
   $push = Read-Host "  Push now? (y/N)"
   if ($push -eq "y" -or $push -eq "Y") {

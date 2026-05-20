@@ -75,3 +75,4 @@
 | 2026-05-18 | Spaced repetition system | Review scheduling based on mastery decay prevents knowledge loss |
 | 2026-05-18 | AI Tutor in lesson player | Socratic method chat with lesson context helps students learn independently |
 | 2026-05-18 | Content generation API | Teachers can auto-generate quizzes, practice problems, summaries, and lesson outlines |
+| 2026-05-20 | Auto-Next uses send/stop icon templates | Template matching proved more reliable than input diffing for the JetBrains AI Chat UI |

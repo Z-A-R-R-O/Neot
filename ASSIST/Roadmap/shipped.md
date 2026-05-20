@@ -113,6 +113,7 @@
 - [x] SEO meta tags
 - [x] Accessibility audit fixes
 - [x] Git helper script (auto-numbered commits)
+- [x] Auto-Next helper (template-based send/stop icon watcher)
 - [x] Session logging system
 - [x] ASSIST documentation structure
 
