@@ -959,3 +959,61 @@ model Tenant {
   @@index([status])
   @@map("tenants")
 }
+
+model MarketplaceListing {
+  id            String   @id @default(uuid())
+  courseId      String   @unique @map("course_id")
+  teacherId     String   @map("teacher_id")
+  title         String
+  description   String
+  price         Float    @default(0)
+  currency      String   @default("USD")
+  category      String   @default("general")
+  tags          String   @default("[]")
+  thumbnailUrl  String?  @map("thumbnail_url")
+  previewUrl    String?  @map("preview_url")
+  rating        Float    @default(0)
+  ratingCount   Int      @default(0) @map("rating_count")
+  purchaseCount Int      @default(0) @map("purchase_count")
+  status        String   @default("draft")
+  featured      Boolean  @default(false)
+  metadata      String   @default("{}")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([category])
+  @@index([featured])
+  @@index([teacherId])
+  @@map("marketplace_listings")
+}
+
+model MarketplacePurchase {
+  id          String   @id @default(uuid())
+  listingId   String   @map("listing_id")
+  buyerId     String   @map("buyer_id")
+  price       Float
+  currency    String   @default("USD")
+  status      String   @default("completed")
+  metadata    String   @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([listingId])
+  @@index([buyerId])
+  @@map("marketplace_purchases")
+}
+
+model MarketplaceReview {
+  id          String   @id @default(uuid())
+  listingId   String   @map("listing_id")
+  userId      String   @map("user_id")
+  rating      Int
+  comment     String?
+  status      String   @default("pending")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([listingId, userId])
+  @@index([listingId])
+  @@map("marketplace_reviews")
+}

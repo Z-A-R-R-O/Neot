@@ -16,6 +16,7 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
     { id: "student-achievements", label: "Achievements", href: "/dashboard/achievements", icon: "Award", children: [] },
     { id: "student-mastery", label: "Mastery", href: "/dashboard/mastery", icon: "Target", children: [] },
     { id: "student-leaderboard", label: "Leaderboard", href: "/dashboard/leaderboard", icon: "Trophy", children: [] },
+    { id: "student-marketplace", label: "Marketplace", href: "/marketplace", icon: "ShoppingCart", children: [] },
     { id: "student-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   teacher: [
