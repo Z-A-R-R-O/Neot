@@ -104,7 +104,7 @@
 - [ ] Course browsing (mobile)
 - [ ] Lesson viewing (mobile)
 - [x] Offline mode architecture (service worker, IndexedDB cache, sync queue)
-- [ ] Push notifications
+- [x] Push notifications
 - [ ] Biometric login
 
 ## Phase 4: Parent + School 🚧
@@ -147,7 +147,7 @@
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
-| 3 | 13 | 6 | 46.2% |
+| 3 | 13 | 7 | 53.8% |
 | 4 | 17 | 15 | 88.2% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **113** | **91** | **80.5%** |
+| **Total** | **113** | **92** | **81.4%** |
