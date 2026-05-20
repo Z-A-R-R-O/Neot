@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 198 | 93.8% |
-| Z-02 Admin Flow | 265 | 179 | 67.5% |
-| **Combined** | **476** | **377** | **79.2%** |
+| Z-01 LMS Flow | 211 | 199 | 94.3% |
+| Z-02 Admin Flow | 265 | 182 | 68.7% |
+| **Combined** | **476** | **381** | **80.0%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -81,3 +81,8 @@
 | 2026-05-20 | School portal with white-label branding | Schools need self-service management with custom branding, colors, logos |
 | 2026-05-20 | School staff bulk import via CSV-style text | Schools need to quickly onboard many teachers/students at once |
 | 2026-05-20 | Auto-Next uses send/stop icon templates | Template matching proved more reliable than input diffing for the JetBrains AI Chat UI |
+| 2026-05-20 | School subscription management API | Schools need self-service plan upgrades with automatic contract creation |
+| 2026-05-20 | Demo schools seed script | 3 demo schools (Free/Pro/Enterprise) with users for testing and demos |
+| 2026-05-20 | Plan change confirmation dialog | Schools need to review changes before switching subscription plans |
+| 2026-05-20 | Performance monitoring dashboard | Admins need visibility into system metrics, activity trends, and resource usage |
+| 2026-05-20 | System health checks | Real-time diagnostics for database, memory, disk, uptime, and error tracking |

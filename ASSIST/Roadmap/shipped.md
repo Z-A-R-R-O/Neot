@@ -141,6 +141,9 @@
 - [x] School registration flow (`/register/school`) with two-step form
 - [x] School registration API with validation and audit logging
 - [x] School contracts page with active contract, history, and plan selection
+- [x] School subscription management API (GET/POST `/api/school/subscription`)
+- [x] SchoolPlanSelector client component with plan upgrade flow and confirmation dialog
+- [x] Demo schools seed script (3 schools with users, contracts, white-label)
 - [x] Admin schools management page with search and stats
 
 ## Technical Achievements
@@ -152,6 +155,8 @@
 - [x] Auto-Next helper (template-based send/stop icon watcher)
 - [x] Session logging system
 - [x] ASSIST documentation structure
+- [x] Performance monitoring dashboard (system metrics, activity trends, charts)
+- [x] System health checks (DB connectivity, memory, disk, uptime, error tracking)
 
 ## Metrics
 

@@ -63,6 +63,8 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
     { id: "admin-integrations", label: "Integrations", href: "/admin/integrations", icon: "Plug", children: [] },
     { id: "admin-api", label: "API", href: "/admin/api", icon: "Code", children: [] },
     { id: "admin-accessibility", label: "Accessibility", href: "/admin/accessibility", icon: "Accessibility", children: [] },
+    { id: "admin-performance", label: "Performance", href: "/admin/performance", icon: "Activity", children: [] },
+    { id: "admin-system-health", label: "System Health", href: "/admin/system-health", icon: "Server", children: [] },
     { id: "admin-settings", label: "Settings", href: "/admin/settings", icon: "Settings", children: [] },
   ],
   school: [

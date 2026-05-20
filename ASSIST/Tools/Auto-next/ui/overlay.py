@@ -36,7 +36,11 @@ class OverlayUI:
         self.root.overrideredirect(True)
 
         screen_width = self.root.winfo_screenwidth()
-        self.root.geometry(f"210x185+{screen_width - 230}+50")
+        screen_height = self.root.winfo_screenheight()
+        dpi_scale = screen_height / 1080 if screen_height > 720 else 1.0
+        win_width = int(240 * dpi_scale)
+        win_height = int(220 * dpi_scale)
+        self.root.geometry(f"{win_width}x{win_height}+{screen_width - win_width - 20}+50")
 
         frame = tk.Frame(self.root, bg="#1a202c", bd=2, relief="solid")
         frame.pack(fill="both", expand=True)
@@ -74,7 +78,7 @@ class OverlayUI:
             bg="#2d3748",
             fg="#e2e8f0",
             font=("Consolas", 7),
-            height=5,
+            height=4,
             bd=0,
             highlightthickness=0,
         )

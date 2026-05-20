@@ -122,6 +122,8 @@
 - [x] School registration flow (`/register/school`)
 - [x] School contract management
 - [x] School contracts page with plan display
+- [x] School subscription management API (plan upgrade flow)
+- [x] Demo schools seed script (3 schools, 19 users)
 - [x] Admin schools management page
 
 ## Phase 5: Scale + Marketplace ❌
@@ -148,6 +150,6 @@
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
 | 3 | 13 | 8 | 61.5% |
-| 4 | 17 | 15 | 88.2% |
+| 4 | 19 | 18 | 94.7% |
 | 5 | 10 | 3 | 30.0% |
-| **Total** | **113** | **96** | **85.0%** |
+| **Total** | **115** | **99** | **86.1%** |

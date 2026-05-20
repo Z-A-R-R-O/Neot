@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { FileText, Plus, Calendar, DollarSign, Users } from "lucide-react";
+import { FileText, Calendar, DollarSign, Users } from "lucide-react";
 
 import { getUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SchoolPlanSelector } from "@/components/school/school-plan-selector";
 
 export default async function SchoolContractsPage() {
   const user = await getUser();
@@ -158,41 +158,16 @@ export default async function SchoolContractsPage() {
           <CardDescription>Upgrade or change your subscription.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { name: "Free", price: 0, students: 50, teachers: 5, features: ["Basic courses", "Limited storage"] },
-              { name: "Pro", price: 29.99, students: 200, teachers: 20, features: ["Full features", "Analytics", "AI tutor"] },
-              { name: "School", price: 99.99, students: 1000, teachers: 100, features: ["White-label", "Bulk users", "Priority support"] },
-              { name: "Enterprise", price: 299.99, students: -1, teachers: -1, features: ["Unlimited", "API access", "SLA", "Dedicated support"] },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-xl border p-4 ${
-                  activeContract?.type === plan.name.toLowerCase()
-                    ? "border-primary-500/30 bg-primary-500/10"
-                    : "border-border/50 bg-muted/5"
-                }`}
-              >
-                <h3 className="font-heading text-lg font-bold text-foreground">{plan.name}</h3>
-                <p className="mt-1 text-2xl font-bold text-foreground">
-                  {plan.price === 0 ? "Free" : `$${plan.price.toFixed(2)}`}
-                  {plan.price > 0 && <span className="text-sm font-normal text-muted-foreground">/mo</span>}
-                </p>
-                <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
-                  <li>{plan.students === -1 ? "Unlimited" : `${plan.students}`} students</li>
-                  <li>{plan.teachers === -1 ? "Unlimited" : `${plan.teachers}`} teachers</li>
-                  {plan.features.map((f) => (
-                    <li key={f}>{f}</li>
-                  ))}
-                </ul>
-                {activeContract?.type !== plan.name.toLowerCase() && (
-                  <Button variant="outline" size="sm" className="mt-4 w-full">
-                    Select Plan
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
+          <SchoolPlanSelector
+            plans={[
+              { id: "free", name: "Free", price: 0, students: 50, teachers: 5, features: ["Basic courses", "Limited storage"] },
+              { id: "pro", name: "Pro", price: 29.99, students: 200, teachers: 20, features: ["Full features", "Analytics", "AI tutor"] },
+              { id: "school", name: "School", price: 99.99, students: 1000, teachers: 100, features: ["White-label", "Bulk users", "Priority support"] },
+              { id: "enterprise", name: "Enterprise", price: 299.99, students: 10000, teachers: 500, features: ["Unlimited", "API access", "SLA", "Dedicated support"] },
+            ]}
+            currentPlan={activeContract?.type ?? "free"}
+            onSuccess={() => window.location.reload()}
+          />
         </CardContent>
       </Card>
     </div>
