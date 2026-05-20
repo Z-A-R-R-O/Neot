@@ -34,6 +34,7 @@ import {
   Layers,
   Webhook,
   Bookmark,
+  Building2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -75,6 +76,7 @@ const iconMap: Record<string, LucideIcon> = {
   Layers,
   Webhook,
   Bookmark,
+  Building2,
 };
 
 const fallbackNavItems: Record<Role, NavItemData[]> = {
@@ -109,6 +111,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "admin-teachers", label: "Teachers", href: "/admin/teachers", icon: "GraduationCap", children: [] },
     { id: "admin-students", label: "Students", href: "/admin/students", icon: "UserCheck", children: [] },
     { id: "admin-parents", label: "Parents", href: "/admin/parents", icon: "Heart", children: [] },
+    { id: "admin-schools", label: "Schools", href: "/admin/schools", icon: "Building2", children: [] },
     { id: "admin-courses", label: "Courses", href: "/admin/courses", icon: "BookOpen", children: [] },
     { id: "admin-pages", label: "Pages", href: "/admin/pages", icon: "FileText", children: [] },
     { id: "admin-templates", label: "Templates", href: "/admin/templates", icon: "LayoutTemplate", children: [] },
@@ -136,6 +139,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "school-dashboard", label: "Dashboard", href: "/school", icon: "LayoutDashboard", children: [] },
     { id: "school-staff", label: "Staff & Students", href: "/school/staff", icon: "Users", children: [] },
     { id: "school-courses", label: "Courses", href: "/school/courses", icon: "BookOpen", children: [] },
+    { id: "school-contracts", label: "Contracts", href: "/school/contracts", icon: "FileText", children: [] },
     { id: "school-analytics", label: "Analytics", href: "/school/analytics", icon: "BarChart3", children: [] },
     { id: "school-settings", label: "Settings", href: "/school/settings", icon: "Settings", children: [] },
   ],

@@ -18,7 +18,7 @@ StatusCallback = Callable[[str], None]
 
 @dataclass(frozen=True)
 class EngineConfig:
-    scan_interval_seconds: float = 10.0
+    scan_interval_seconds: float = 20.0
     focus_delay_seconds: float = 3.0
     submit_delay_seconds: float = 2.0
     send_text: str = "Next"
@@ -128,19 +128,4 @@ class AutoNextEngine:
         time.sleep(self.config.submit_delay_seconds)
 
         pyautogui.press("enter")
-        time.sleep(0.25)
-        pyautogui.hotkey("ctrl", "enter")
-        time.sleep(0.25)
-
-        fresh_state = self.reader.read_state()
-        if fresh_state.is_send and fresh_state.location is not None:
-            pyautogui.click(*self.reader.send_click_point(fresh_state.location))
-            self.log("Typed Next and clicked refreshed send icon.")
-            return
-
-        if state.location is not None:
-            pyautogui.click(*self.reader.send_click_point(state.location))
-            self.log("Typed Next and clicked original send icon.")
-            return
-
-        self.log("Typed Next and tried Enter/Ctrl+Enter.")
+        self.log("Typed Next and pressed Enter.")

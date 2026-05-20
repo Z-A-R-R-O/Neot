@@ -12,7 +12,7 @@
 | 2.5 | Dev Mode | ✅ Done | Visual Experience Engine |
 | 2 | Adaptive + Gamification | 🚧 Next | Mastery, badges, leaderboards, XP |
 | 3 | AI + Mobile | ❌ Planned | AI tutor, Flutter app, offline |
-| 4 | Parent + School | 🚧 In Progress | Parent dashboard, school portal, white-label |
+| 4 | Parent + School | 🚧 In Progress | Parent dashboard, school portal, white-label, contracts |
 | 5 | Scale + Marketplace | ❌ Planned | Multi-tenant, content marketplace |
 
 ## Phase Dependencies

@@ -119,8 +119,10 @@
 - [x] School students page
 - [x] School courses page
 - [x] School analytics page
-- [ ] School contract management
-- [ ] School registration flow
+- [x] School registration flow (`/register/school`)
+- [x] School contract management
+- [x] School contracts page with plan display
+- [x] Admin schools management page
 
 ## Phase 5: Scale + Marketplace ❌
 - [ ] Multi-tenant architecture
@@ -146,6 +148,6 @@
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
 | 3 | 12 | 2 | 16.7% |
-| 4 | 13 | 10 | 76.9% |
+| 4 | 17 | 14 | 82.4% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **107** | **82** | **76.6%** |
+| **Total** | **111** | **86** | **77.5%** |

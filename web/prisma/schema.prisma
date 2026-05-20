@@ -821,6 +821,7 @@ model School {
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   whiteLabel SchoolWhiteLabel?
+  contracts    SchoolContract[]
   admins       Profile[]       @relation("SchoolAdmins")
   teachers     Profile[]       @relation("SchoolTeachers")
   students     Profile[]       @relation("SchoolStudents")
@@ -853,4 +854,29 @@ model SchoolWhiteLabel {
 
   @@unique([schoolId])
   @@map("school_white_labels")
+}
+
+model SchoolContract {
+  id            String   @id @default(uuid())
+  schoolId      String   @map("school_id")
+  type          String   @default("standard") @map("contract_type")
+  status        String   @default("active")
+  startDate     DateTime @map("start_date")
+  endDate       DateTime @map("end_date")
+  maxStudents   Int      @default(100) @map("max_students")
+  maxTeachers   Int      @default(50) @map("max_teachers")
+  pricePerMonth Float    @default(0) @map("price_per_month")
+  currency      String   @default("USD")
+  features      String   @default("{}")
+  notes         String?
+  signedBy      String?  @map("signed_by")
+  signedAt      DateTime? @map("signed_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([status])
+  @@map("school_contracts")
 }

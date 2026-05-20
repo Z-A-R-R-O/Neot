@@ -121,8 +121,12 @@
 - [x] School courses page with listing
 - [x] School analytics with enrollment stats, top courses, completion rate
 - [x] School API routes (settings, white-label, staff, students)
-- [x] School database models (School, SchoolWhiteLabel)
+- [x] School database models (School, SchoolWhiteLabel, SchoolContract)
 - [x] School relations on Profile and Course models
+- [x] School registration flow (`/register/school`) with two-step form
+- [x] School registration API with validation and audit logging
+- [x] School contracts page with active contract, history, and plan selection
+- [x] Admin schools management page with search and stats
 
 ## Technical Achievements
 
@@ -140,7 +144,7 @@
 |--------|-------|
 | Total commits | 100+ |
 | Files created | 500+ |
-| Database tables | 17+ |
-| API routes | 40+ |
-| Components | 90+ |
-| Pages | 35+ |
+| Database tables | 18+ |
+| API routes | 45+ |
+| Components | 95+ |
+| Pages | 40+ |
