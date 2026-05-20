@@ -106,6 +106,10 @@
 - [x] Content generation API (quiz, practice, summary, improvements, lesson outline)
 - [x] Content generator UI for teachers
 - [x] Content generation integrated into lesson editor
+- [x] Quiz auto-generation component for teachers (AI-powered)
+- [x] Question bank with CRUD API, search, filters, and pagination
+- [x] Question Bank page for teachers (`/teacher/question-bank`)
+- [x] QuestionBank database model
 
 ### Phase 4: Parent + School
 - [x] Parent dashboard foundation (layout, children overview, alert settings)

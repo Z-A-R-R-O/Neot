@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { QuizQuestionEditor } from "@/components/teacher/block-editors/quiz-question-editor";
+import { QuizQuestionEditor } from "@/components/teacher/block-editers/quiz-question-editor";
+import { QuizAutoGenerate } from "@/components/ai/quiz-auto-generate";
 import type { QuizQuestion } from "@/types/blocks/quiz-block";
 
 interface QuizEditorProps {
@@ -51,6 +52,10 @@ export function QuizEditor({ content, onChange }: QuizEditorProps) {
     updateQuestions([...questions, newQuestion]);
   }
 
+  function handleAiInsert(newQuestions: QuizQuestion[]) {
+    updateQuestions([...questions, ...newQuestions]);
+  }
+
   function deleteQuestion(id: string) {
     updateQuestions(questions.filter((q) => q.id !== id));
   }
@@ -61,13 +66,16 @@ export function QuizEditor({ content, onChange }: QuizEditorProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <span className="text-sm font-medium text-foreground">
           {questions.length} {questions.length === 1 ? "question" : "questions"}
         </span>
-        <Button type="button" size="sm" onClick={addQuestion}>
-          <Plus className="h-4 w-4" /> Add Question
-        </Button>
+        <div className="flex gap-2">
+          <QuizAutoGenerate onInsert={handleAiInsert} existingQuestions={questions} />
+          <Button type="button" size="sm" onClick={addQuestion}>
+            <Plus className="h-4 w-4" /> Add Question
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -133,7 +141,7 @@ export function QuizEditor({ content, onChange }: QuizEditorProps) {
 
       {!questions.length && (
         <div className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-tertiary-foreground">
-          No questions yet. Click &ldquo;Add Question&rdquo; to create one.
+          No questions yet. Click &ldquo;Add Question&rdquo; to create one, or use AI to generate.
         </div>
       )}
     </div>

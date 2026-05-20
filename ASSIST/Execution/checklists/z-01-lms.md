@@ -92,11 +92,11 @@
 - [ ] Spaced repetition system
 - [ ] At-risk student identification
 
-## Phase 3: AI + Mobile ❌
+## Phase 3: AI + Mobile 🚧
 - [x] AI tutor chat interface
 - [x] Content generation API
-- [ ] Quiz auto-generation
-- [ ] Quiz auto-generation
+- [x] Quiz auto-generation (AI-powered quiz generator in lesson editor)
+- [x] Question bank (reusable questions with search/filter)
 - [ ] Safety guardrails
 - [ ] Flutter app setup
 - [ ] API client
@@ -147,7 +147,7 @@
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
-| 3 | 12 | 2 | 16.7% |
+| 3 | 13 | 4 | 30.8% |
 | 4 | 17 | 15 | 88.2% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **111** | **87** | **78.4%** |
+| **Total** | **113** | **89** | **78.8%** |

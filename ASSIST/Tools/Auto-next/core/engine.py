@@ -128,4 +128,18 @@ class AutoNextEngine:
         time.sleep(self.config.submit_delay_seconds)
 
         pyautogui.press("enter")
-        self.log("Typed Next and pressed Enter.")
+        time.sleep(3.0)
+        self._last_state = None
+        self.log("Typed Next and pressed Enter. Re-scanning...")
+
+        new_state = self.reader.read_state()
+        self._log_state(new_state)
+        if new_state.is_stop:
+            self.update_status("Waiting")
+            self.update_action("Stop icon detected after submit")
+        elif new_state.is_send:
+            self.update_status("Ready")
+            self.update_action("Send icon still visible")
+        else:
+            self.update_status("Scanning")
+            self.update_action("No icon matched after submit")

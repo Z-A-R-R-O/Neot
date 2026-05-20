@@ -29,18 +29,19 @@ class MatchResult:
 class ScreenReader:
     """Finds either the Send icon reference or the red Stop icon reference."""
 
-    def __init__(self, templates_dir: Path | None = None, confidence: float = 0.8) -> None:
+    def __init__(self, templates_dir: Path | None = None, confidence: float = 0.9) -> None:
         self.templates_dir = templates_dir or Path(__file__).resolve().parents[1] / "templates"
         self.send_template = self.templates_dir / "send-icon.png"
         self.stop_template = self.templates_dir / "stop-icon.png"
         self.confidence = confidence
 
     def read_state(self) -> MatchResult:
+        send_location = self._find_template(self.send_template)
         stop_location = self._find_template(self.stop_template)
-        if stop_location is not None:
+
+        if stop_location is not None and send_location is None:
             return MatchResult("stop", "STOP ICON - do nothing", stop_location)
 
-        send_location = self._find_template(self.send_template)
         if send_location is not None:
             return MatchResult("send", "SEND ICON - type Next", send_location)
 
@@ -48,6 +49,7 @@ class ScreenReader:
 
     def _find_template(self, template: Path) -> tuple[int, int, int, int] | None:
         if not template.exists():
+            print(f"[DEBUG] Template not found: {template}")
             return None
 
         try:
@@ -56,10 +58,17 @@ class ScreenReader:
                 grayscale=True,
                 confidence=self.confidence,
             )
-        except Exception:
+            print(f"[DEBUG] Searching {template.name} at conf={self.confidence}: {'FOUND' if box else 'NOT FOUND'}")
+        except Exception as e:
+            print(f"[DEBUG] Error searching {template.name}: {e}")
             return None
 
         if box is None:
+            return None
+
+        # Reject matches that are too small (likely false positives)
+        if box.width < 10 or box.height < 10:
+            print(f"[DEBUG] Rejected tiny match for {template.name}: {box.width}x{box.height}")
             return None
 
         return int(box.left), int(box.top), int(box.width), int(box.height)

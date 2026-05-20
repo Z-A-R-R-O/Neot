@@ -880,3 +880,28 @@ model SchoolContract {
   @@index([status])
   @@map("school_contracts")
 }
+
+model QuestionBank {
+  id          String   @id @default(uuid())
+  subject     String
+  topic       String
+  question    String
+  type        String   @default("mcq") @map("question_type")
+  options     String   @default("[]")
+  answer      String
+  explanation String?
+  hint        String?
+  difficulty  String   @default("medium")
+  tags        String   @default("[]")
+  usageCount  Int      @default(0) @map("usage_count")
+  createdBy   String   @map("created_by")
+  isPublic    Boolean  @default(false) @map("is_public")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([subject])
+  @@index([topic])
+  @@index([difficulty])
+  @@index([isPublic])
+  @@map("question_bank")
+}
