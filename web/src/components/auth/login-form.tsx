@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Mail, Lock, ArrowRight } from "lucide-react";
+import { Loader2, Mail, Lock, ArrowRight, Fingerprint } from "lucide-react";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
@@ -106,6 +106,14 @@ export function LoginForm() {
           </>
         )}
       </button>
+
+      <Link
+        href="/login/passkey"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+      >
+        <Fingerprint className="h-4 w-4" />
+        Sign in with Biometrics
+      </Link>
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

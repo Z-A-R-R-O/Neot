@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ctypes
 import threading
 import time
 from dataclasses import dataclass
@@ -126,18 +127,21 @@ class AutoNextEngine:
     def _click_input_box(self, state: MatchResult) -> None:
         loc = state.input_location
         if loc is not None:
-            left, top, width, height = loc
-            x = left + width // 2
-            y = top + height // 2
-            pyautogui.click(x, y)
-            time.sleep(0.2)
-            return
-        loc = state.location
-        if loc is None:
-            return
-        x, y = ScreenReader.input_click_point(loc)
-        pyautogui.click(x, y)
-        time.sleep(0.2)
+            x, y = pyautogui.center(loc)
+        else:
+            loc = state.location
+            if loc is None:
+                return
+            x, y = ScreenReader.input_click_point(loc)
+        self._reliable_click(x, y)
+        time.sleep(0.3)
+
+    @staticmethod
+    def _reliable_click(x: int, y: int) -> None:
+        ctypes.windll.user32.SetCursorPos(x, y)
+        time.sleep(0.05)
+        ctypes.windll.user32.mouse_event(0x02, 0, 0, 0, 0)
+        ctypes.windll.user32.mouse_event(0x04, 0, 0, 0, 0)
 
     def _type_next_and_submit(self, state: MatchResult) -> None:
         self._click_input_box(state)

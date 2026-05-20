@@ -918,3 +918,19 @@ model PushSubscription {
   @@index([userId])
   @@map("push_subscriptions")
 }
+
+model Passkey {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  credentialId    String   @unique @map("credential_id")
+  credentialPublicKey String @map("credential_public_key")
+  counter         Int      @default(0)
+  deviceType      String   @default("single-device") @map("device_type")
+  backedUp        Boolean  @default(false)
+  transports      String   @default("[]")
+  createdAt       DateTime @default(now()) @map("created_at")
+  lastUsedAt      DateTime? @map("last_used_at")
+
+  @@index([userId])
+  @@map("passkeys")
+}

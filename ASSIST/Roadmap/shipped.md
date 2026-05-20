@@ -116,6 +116,7 @@
 - [x] Offline page with cached lesson viewer
 - [x] Offline sync hook with automatic sync on reconnect
 - [x] Web push notifications (subscription management, notification settings, service worker push handler)
+- [x] WebAuthn biometric login (passkey registration, authentication, settings management)
 
 ### Phase 4: Parent + School
 - [x] Parent dashboard foundation (layout, children overview, alert settings)

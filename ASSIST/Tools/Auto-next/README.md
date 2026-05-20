@@ -62,6 +62,7 @@ Auto-next/
 |-- templates/
 |   |-- send-icon.png
 |   `-- stop-icon.png
+|   `-- input-box.png
 |-- ui/
 |   |-- overlay.py
 |   `-- __init__.py
