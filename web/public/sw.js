@@ -124,4 +124,41 @@ async function syncPendingActions(): Promise<void> {
   });
 }
 
+self.addEventListener("push", (event: PushEvent) => {
+  if (!event.data) return;
+
+  const data = event.data.json();
+  const options: NotificationOptions = {
+    body: data.body,
+    icon: data.icon ?? "/icon-192.png",
+    badge: data.badge ?? "/badge-72.png",
+    data: data.data,
+    actions: data.actions ?? [],
+    tag: data.tag ?? "default",
+    renotify: !!data.tag,
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+self.addEventListener("notificationclick", (event: NotificationEvent) => {
+  event.notification.close();
+
+  const link = event.notification.data?.link;
+  if (!link) return;
+
+  event.waitUntil(
+    self.clients.matchAll({ type: "window" }).then((clients) => {
+      for (const client of clients) {
+        if (client.url.includes(link)) {
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow(link);
+    })
+  );
+});
+
 declare const self: ServiceWorkerGlobalScope;
