@@ -3,9 +3,31 @@ import { z } from "zod";
 
 import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { runSafetyCheck, sanitizeAIResponse } from "@/lib/ai-safety";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_MODEL = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+
+const AI_RATE_LIMIT = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 20;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const current = AI_RATE_LIMIT.get(userId);
+
+  if (!current || now > current.resetAt) {
+    AI_RATE_LIMIT.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+
+  if (current.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+
+  current.count++;
+  return true;
+}
 
 const generateSchema = z.object({
   type: z.enum(["quiz", "practice", "summary", "improvements", "lesson"]),
@@ -23,6 +45,13 @@ export async function POST(request: Request) {
   const userId = await getUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!checkRateLimit(userId)) {
+    return NextResponse.json(
+      { error: "Rate limit exceeded. Try again later." },
+      { status: 429 },
+    );
   }
 
   const teacher = await prisma.profile.findUnique({
@@ -44,7 +73,15 @@ export async function POST(request: Request) {
 
   const { type, content, options } = parsed.data;
 
-  const prompt = getPrompt(type, content, options);
+  const safetyCheck = runSafetyCheck(content);
+  if (!safetyCheck.passed) {
+    return NextResponse.json(
+      { error: "Content failed safety check", issues: safetyCheck.issues },
+      { status: 400 },
+    );
+  }
+
+  const prompt = getPrompt(type, safetyCheck.sanitizedContent, options);
 
   if (!OPENAI_API_KEY) {
     const fallback = getFallbackResponse(type, content, options);
@@ -75,7 +112,9 @@ export async function POST(request: Request) {
     }
 
     const data = await response.json();
-    const generated = JSON.parse(data.choices?.[0]?.message?.content ?? "{}");
+    const rawContent = data.choices?.[0]?.message?.content ?? "{}";
+    const sanitizedContent = sanitizeAIResponse(rawContent);
+    const generated = JSON.parse(sanitizedContent);
 
     return NextResponse.json(generated);
   } catch {

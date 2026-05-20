@@ -2,9 +2,36 @@ import { NextResponse } from "next/server";
 
 import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { runSafetyCheck, sanitizeAIResponse } from "@/lib/ai-safety";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_MODEL = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+
+const AI_TUTOR_RATE_LIMIT = new Map<string, { count: number; resetAt: number }>();
+const TUTOR_RATE_LIMIT_MAX = 30;
+const TUTOR_RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+
+function checkTutorRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const current = AI_TUTOR_RATE_LIMIT.get(userId);
+
+  if (!current || now > current.resetAt) {
+    AI_TUTOR_RATE_LIMIT.set(userId, { count: 1, resetAt: now + TUTOR_RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+
+  if (current.count >= TUTOR_RATE_LIMIT_MAX) {
+    return false;
+  }
+
+  current.count++;
+  return true;
+}
+
+const BLOCKED_TUTOR_TOPICS = [
+  "homework answers", "test answers", "cheat", "hack",
+  "exploit", "bypass", "jailbreak", "ignore instructions",
+];
 
 const SYSTEM_PROMPT = `You are NEOT AI Tutor, a helpful and patient learning assistant. You guide students through concepts without giving direct answers. Use the Socratic method: ask questions, provide hints, and encourage critical thinking.
 
@@ -15,7 +42,9 @@ Rules:
 - If the student is stuck, break the problem into smaller steps
 - Be encouraging and positive
 - Keep responses concise (under 200 words unless explaining a complex concept)
-- If asked about something unrelated to learning, politely redirect to educational topics`;
+- If asked about something unrelated to learning, politely redirect to educational topics
+- Never share personal information, opinions on controversial topics, or content that could be harmful
+- If a student mentions self-harm, abuse, or other serious issues, encourage them to talk to a trusted adult`;
 
 export async function POST(request: Request) {
   const userId = await getUserId();
@@ -23,11 +52,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (!checkTutorRateLimit(userId)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a moment before asking another question." },
+      { status: 429 },
+    );
+  }
+
   const body = await request.json();
   const { message, context } = body;
 
   if (!message) {
     return NextResponse.json({ error: "Message required" }, { status: 400 });
+  }
+
+  const lowerMessage = message.toLowerCase();
+  for (const topic of BLOCKED_TUTOR_TOPICS) {
+    if (lowerMessage.includes(topic)) {
+      return NextResponse.json({
+        response: "I can't help with that. Let's focus on learning the material. What concept would you like to understand better?",
+      });
+    }
+  }
+
+  const safetyCheck = runSafetyCheck(message);
+  if (!safetyCheck.passed && safetyCheck.issues.some((i) => i.includes("sensitive topic"))) {
+    return NextResponse.json({
+      response: "That's an important topic. I'd recommend talking to a teacher or counselor about this. Is there a school subject I can help you with instead?",
+    });
   }
 
   const lessonContext = context?.lessonId
@@ -43,7 +95,7 @@ Context:
 ${lessonContext}
 ${masteryContext}
 
-Student question: ${message}
+Student question: ${safetyCheck.sanitizedContent}
 `;
 
   if (!OPENAI_API_KEY) {
@@ -75,7 +127,7 @@ Student question: ${message}
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content ?? "I'm not sure how to help with that. Can you rephrase your question?";
+    const aiResponse = sanitizeAIResponse(data.choices?.[0]?.message?.content ?? "I'm not sure how to help with that. Can you rephrase your question?");
 
     await logInteraction(userId, message, aiResponse, context);
 
