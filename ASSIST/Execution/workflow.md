@@ -3,7 +3,7 @@
 ## The Cycle
 
 ```
-Read Plan → Pick Task → Read Spec → Build → Log → Update ASSIST → Commit → Repeat
+Read Plan → Pick Task → Read Spec → Build → Log → Update ASSIST → Commit → Auto-Next → Repeat
 ```
 
 ## Step by Step
@@ -92,6 +92,44 @@ Create `ASSIST/Log/YYYY-MM-DD-HHmm.md`:
 ```
 
 Format: `XX -- NEOT -- <description>`
+
+### 8. Auto-Next (Automatic)
+
+After commit, the git-helper automatically triggers `Auto-Next`:
+
+```powershell
+.\ASSIST\Tools\Auto-next\auto-next.py
+```
+
+**What it does:**
+1. Scans checklists for remaining tasks (`- [ ]` items)
+2. Reads masterplan for active phase and progress
+3. **Decides**: If tasks remain → types "Next" + finds send button + clicks it
+4. **Skips**: If all tasks complete → shows message, no input sent
+
+**Decision logic:**
+| Condition | Action |
+|-----------|--------|
+| Tasks remain in checklists | Types "Next" + waits for send button + presses Enter |
+| All checklists complete | Skips, shows summary |
+| `-Force` flag used | Always types "Next" |
+
+**Send button detection:**
+- **Python Version (Recommended)**: Uses `pyautogui` to visually scan the screen for the send button icon. Clicks it only when it appears.
+  - Requires: `pip install pyautogui opencv-python`
+  - Setup: Save a screenshot of your send button as `ASSIST/Tools/Auto-next/send-btn.png`
+- **PowerShell Fallback**: Uses Tab + Enter keyboard simulation if Python is unavailable.
+
+**Window detection:**
+- Detects if active window looks like a chat/terminal
+- If not, gives 5 seconds to switch to the correct window
+- Supports: opencode, terminal, VS Code, Cursor, Chrome, Edge, etc.
+
+**Manual override:**
+```powershell
+# Force "Next" even if no tasks remain
+python .\ASSIST\Tools\Auto-next\auto-next.py -Force
+```
 
 ## Branch Strategy
 

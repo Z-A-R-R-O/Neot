@@ -39,7 +39,11 @@ ASSIST/
 │       └── z-02-admin.md      ← Admin flow — 265-item detailed checklist
 ├── LOG/                       ← One .md file per work session
 └── TOOLS/
-    └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <desc>"
+    ├── git-helper/
+    │   └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <desc>"
+    └── Auto-next/
+        ├── auto-next.py           ← Smart: Screen-aware, finds send button via image
+        └── auto-next.ps1          ← Fallback: Keyboard-only simulation
 ```
 
 ## Quick Start
@@ -66,7 +70,7 @@ code ASSIST/Log/YYYY-MM-DD-HHmm.md
 ## Workflow
 
 ```
-Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  Update ASSIST  →  Commit
+Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  Update ASSIST  →  Commit  →  Auto-Next
 ```
 
 | Step | Where | What |
@@ -78,6 +82,9 @@ Read the plan  →  Pick a task  →  Read the spec  →  Build  →  Log  →  
 | **Log** | `Log/YYYY-MM-DD-HHmm.md` | What changed, why, status, next |
 | **Update ASSIST** | `Roadmap/`, `Execution/` | Progress %, shipped items, checklists |
 | **Commit** | `Tools/git-helper.ps1` | Auto-numbered: `XX -- NEOT -- desc` |
+| **Auto-Next** | `Tools/Auto-next/auto-next.py` | Smart: Screen-aware, finds send button via image |
+
+**Auto-Next runs automatically after commit.** Python version uses screen recognition to click the send button when ready.
 
 **ASSIST must always reflect reality.** Never commit code without updating ASSIST docs.
 

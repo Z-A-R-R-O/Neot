@@ -117,6 +117,32 @@ git commit -m $commitMsg
 if ($LASTEXITCODE -eq 0) {
   Write-Host "    Commit successful: $commitMsg" -ForegroundColor Green
   Write-Host ""
+
+  # ── 8. Auto-Next ─────────────────────────────────────────────
+  Write-Host "  [AUTO-NEXT] Checking if more work remains..." -ForegroundColor Cyan
+  $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+  $autoNextPy = Join-Path $scriptPath "..\Auto-next\auto-next.py"
+  $autoNextPs1 = Join-Path $scriptPath "..\Auto-next\auto-next.ps1"
+
+  # Prefer Python version for screen-aware detection
+  if (Test-Path $autoNextPy) {
+    Write-Host "    Using Python screen-aware auto-next..." -ForegroundColor Yellow
+    Write-Host "    Switching focus to chat window now..." -ForegroundColor Yellow
+    Write-Host "    You have 3 seconds to click the chat window!" -ForegroundColor Yellow
+    Start-Sleep -Seconds 3
+    python $autoNextPy
+  }
+  elseif (Test-Path $autoNextPs1) {
+    Write-Host "    Using PowerShell fallback auto-next..." -ForegroundColor Yellow
+    Write-Host "    Switching focus to chat window now..." -ForegroundColor Yellow
+    Write-Host "    You have 3 seconds to click the chat window!" -ForegroundColor Yellow
+    Start-Sleep -Seconds 3
+    & $autoNextPs1 -Delay 0
+  }
+  else {
+    Write-Host "    Auto-next script not found." -ForegroundColor Yellow
+  }
+
   Write-Host "  [NEXT] Push to remote?" -ForegroundColor Cyan
   $push = Read-Host "  Push now? (y/N)"
   if ($push -eq "y" -or $push -eq "Y") {
