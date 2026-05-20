@@ -16,6 +16,7 @@ import {
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { SearchInput } from "@/components/search/search-input";
+import { OfflineControls } from "@/components/layout/offline-controls";
 import { useAuth } from "@/hooks/useAuth";
 
 const ROLE_OPTIONS = [
@@ -75,6 +76,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
       <SearchInput />
       <NotificationBell />
       <ThemeToggle />
+      <OfflineControls />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

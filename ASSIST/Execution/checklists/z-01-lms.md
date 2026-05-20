@@ -103,7 +103,7 @@
 - [ ] Auth flow (mobile)
 - [ ] Course browsing (mobile)
 - [ ] Lesson viewing (mobile)
-- [ ] Offline mode architecture
+- [x] Offline mode architecture (service worker, IndexedDB cache, sync queue)
 - [ ] Push notifications
 - [ ] Biometric login
 
@@ -147,7 +147,7 @@
 | UI | 7 | 7 | 100% |
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
-| 3 | 13 | 5 | 38.5% |
+| 3 | 13 | 6 | 46.2% |
 | 4 | 17 | 15 | 88.2% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **113** | **90** | **79.6%** |
+| **Total** | **113** | **91** | **80.5%** |

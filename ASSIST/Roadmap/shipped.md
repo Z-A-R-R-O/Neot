@@ -112,6 +112,9 @@
 - [x] QuestionBank database model
 - [x] AI safety guardrails (profanity filter, sensitive topic detection, rate limiting)
 - [x] AI tutor safety checks (blocked topics, response sanitization, rate limiting)
+- [x] Offline mode architecture (service worker with cache strategies, IndexedDB for lesson caching, sync queue)
+- [x] Offline page with cached lesson viewer
+- [x] Offline sync hook with automatic sync on reconnect
 
 ### Phase 4: Parent + School
 - [x] Parent dashboard foundation (layout, children overview, alert settings)
