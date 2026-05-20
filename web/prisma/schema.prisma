@@ -31,6 +31,7 @@ model Profile {
   lastActivityDate DateTime? @map("last_activity_date")
 
   schoolId         String?   @map("school_id")
+  tenantId         String?   @map("tenant_id")
 
   parent  Profile?  @relation("ParentChild", fields: [parentId], references: [id])
   children Profile[] @relation("ParentChild")
@@ -38,6 +39,7 @@ model Profile {
   adminSchool    School?   @relation("SchoolAdmins", fields: [schoolId], references: [id])
   teacherSchool  School?   @relation("SchoolTeachers", fields: [schoolId], references: [id])
   studentSchool  School?   @relation("SchoolStudents", fields: [schoolId], references: [id])
+  tenant         Tenant?   @relation(fields: [tenantId], references: [id])
 
   courses    Course[]
   enrollments Enrollment[]
@@ -84,6 +86,7 @@ model Course {
   categoryId       String?  @map("category_id")
   teacherId        String   @map("teacher_id")
   schoolId         String?  @map("school_id")
+  tenantId         String?  @map("tenant_id")
   subject          String?
   gradeLevel       String?  @map("grade_level")
   ageRange         String?  @map("age_range")
@@ -99,6 +102,7 @@ model Course {
   category  Category?  @relation(fields: [categoryId], references: [id])
   teacher   Profile    @relation(fields: [teacherId], references: [id])
   school    School?    @relation(fields: [schoolId], references: [id])
+  tenant    Tenant?    @relation(fields: [tenantId], references: [id])
   modules   Module[]
   enrollments Enrollment[]
   certificates Certificate[]
@@ -933,4 +937,25 @@ model Passkey {
 
   @@index([userId])
   @@map("passkeys")
+}
+
+model Tenant {
+  id            String   @id @default(uuid())
+  name          String
+  slug          String   @unique
+  status        String   @default("active")
+  plan          String   @default("free")
+  maxUsers      Int      @default(10) @map("max_users")
+  currentUser   Int      @default(0) @map("current_users")
+  settings      String   @default("{}")
+  customDomain  String?  @map("custom_domain")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  users         Profile[]
+  courses       Course[]
+
+  @@index([slug])
+  @@index([status])
+  @@map("tenants")
 }
