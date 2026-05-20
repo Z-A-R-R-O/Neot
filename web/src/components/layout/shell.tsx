@@ -7,7 +7,7 @@ import { Header } from "@/components/layout/header";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { OfflineBanner } from "@/components/layout/offline-banner";
 
-type Role = "student" | "teacher" | "parent" | "admin";
+type Role = "student" | "teacher" | "parent" | "admin" | "school";
 
 interface ShellProps {
   role: Role;

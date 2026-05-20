@@ -52,7 +52,7 @@
 - [x] White-label configuration
 - [x] Bulk user provisioning
 - [x] School-specific analytics
-- [x] Contract management
+- [x] Contract management (foundation)
 
 ## Phase 5: Advanced Admin 🚧
 - [ ] Properties panel (full implementation)

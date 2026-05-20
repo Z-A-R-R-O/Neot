@@ -60,6 +60,14 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
     { id: "admin-accessibility", label: "Accessibility", href: "/admin/accessibility", icon: "Accessibility", children: [] },
     { id: "admin-settings", label: "Settings", href: "/admin/settings", icon: "Settings", children: [] },
   ],
+  school: [
+    { id: "school-dashboard", label: "Dashboard", href: "/school", icon: "LayoutDashboard", children: [] },
+    { id: "school-staff", label: "Staff", href: "/school/staff", icon: "Users", children: [] },
+    { id: "school-students", label: "Students", href: "/school/students", icon: "UserCheck", children: [] },
+    { id: "school-courses", label: "Courses", href: "/school/courses", icon: "BookOpen", children: [] },
+    { id: "school-analytics", label: "Analytics", href: "/school/analytics", icon: "BarChart3", children: [] },
+    { id: "school-settings", label: "Settings", href: "/school/settings", icon: "Settings", children: [] },
+  ],
 };
 
 export async function getNavItems(role: string): Promise<NavItemData[]> {

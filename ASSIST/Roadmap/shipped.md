@@ -107,6 +107,23 @@
 - [x] Content generator UI for teachers
 - [x] Content generation integrated into lesson editor
 
+### Phase 4: Parent + School
+- [x] Parent dashboard foundation (layout, children overview, alert settings)
+- [x] Child detail page with enrollments, progress, achievements
+- [x] Parent messages (inbox, compose, reply, mark read)
+- [x] Parent alert settings component
+- [x] Parent reports content component
+- [x] School portal foundation (layout, role-based access)
+- [x] School dashboard with stats, quick actions, activity feed
+- [x] School settings with profile and white-label branding
+- [x] School staff management (add, remove, bulk import)
+- [x] School students page with search and stats
+- [x] School courses page with listing
+- [x] School analytics with enrollment stats, top courses, completion rate
+- [x] School API routes (settings, white-label, staff, students)
+- [x] School database models (School, SchoolWhiteLabel)
+- [x] School relations on Profile and Course models
+
 ## Technical Achievements
 
 - [x] Course assignment system
@@ -123,7 +140,7 @@
 |--------|-------|
 | Total commits | 100+ |
 | Files created | 500+ |
-| Database tables | 15+ |
-| API routes | 30+ |
-| Components | 80+ |
-| Pages | 25+ |
+| Database tables | 17+ |
+| API routes | 40+ |
+| Components | 90+ |
+| Pages | 35+ |

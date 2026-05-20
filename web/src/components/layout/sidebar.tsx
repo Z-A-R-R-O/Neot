@@ -41,7 +41,7 @@ import { cn } from "@/lib/utils";
 import { useNavigation } from "@/hooks/useNavigation";
 import type { NavItemData } from "@/lib/navigation-service";
 
-type Role = "student" | "teacher" | "parent" | "admin";
+type Role = "student" | "teacher" | "parent" | "admin" | "school";
 
 const iconMap: Record<string, LucideIcon> = {
   LayoutDashboard,
@@ -131,6 +131,13 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "admin-webhooks", label: "Webhooks", href: "/admin/webhooks", icon: "Webhook", children: [] },
     { id: "admin-accessibility", label: "Accessibility", href: "/admin/accessibility", icon: "Accessibility", children: [] },
     { id: "admin-settings", label: "Settings", href: "/admin/settings", icon: "Settings", children: [] },
+  ],
+  school: [
+    { id: "school-dashboard", label: "Dashboard", href: "/school", icon: "LayoutDashboard", children: [] },
+    { id: "school-staff", label: "Staff & Students", href: "/school/staff", icon: "Users", children: [] },
+    { id: "school-courses", label: "Courses", href: "/school/courses", icon: "BookOpen", children: [] },
+    { id: "school-analytics", label: "Analytics", href: "/school/analytics", icon: "BarChart3", children: [] },
+    { id: "school-settings", label: "Settings", href: "/school/settings", icon: "Settings", children: [] },
   ],
 };
 

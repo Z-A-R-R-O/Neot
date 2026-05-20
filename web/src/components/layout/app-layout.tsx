@@ -2,7 +2,7 @@
 
 import { Shell } from "@/components/layout/shell";
 
-type Role = "student" | "teacher" | "parent" | "admin";
+type Role = "student" | "teacher" | "parent" | "admin" | "school";
 
 interface AppLayoutProps {
   role: Role;

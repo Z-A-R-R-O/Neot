@@ -107,16 +107,20 @@
 - [ ] Push notifications
 - [ ] Biometric login
 
-## Phase 4: Parent + School ❌
-- [ ] Parent dashboard foundation
-- [ ] Child progress monitoring
-- [ ] Teacher communication
+## Phase 4: Parent + School 🚧
+- [x] Parent dashboard foundation
+- [x] Child progress monitoring
+- [x] Teacher communication
 - [ ] Home learning support
-- [ ] School account creation
-- [ ] White-label configuration
-- [ ] Bulk user provisioning
-- [ ] School analytics
-- [ ] Contract management
+- [x] School portal foundation
+- [x] School dashboard
+- [x] School settings (profile + white-label)
+- [x] School staff management (add, remove, bulk import)
+- [x] School students page
+- [x] School courses page
+- [x] School analytics page
+- [ ] School contract management
+- [ ] School registration flow
 
 ## Phase 5: Scale + Marketplace ❌
 - [ ] Multi-tenant architecture
@@ -142,6 +146,6 @@
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
 | 3 | 12 | 2 | 16.7% |
-| 4 | 9 | 0 | 0% |
+| 4 | 13 | 10 | 76.9% |
 | 5 | 10 | 0 | 0% |
-| **Total** | **103** | **72** | **69.9%** |
+| **Total** | **107** | **82** | **76.6%** |

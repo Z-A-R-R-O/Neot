@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 172 | 81.5% |
-| Z-02 Admin Flow | 265 | 165 | 62.3% |
-| **Combined** | **476** | **337** | **70.8%** |
+| Z-01 LMS Flow | 211 | 185 | 87.7% |
+| Z-02 Admin Flow | 265 | 178 | 67.2% |
+| **Combined** | **476** | **363** | **76.3%** |
 
 ## Active Phase: Phase 2 (Adaptive + Gamification)
 
@@ -43,8 +43,11 @@
 | Content Generation | ✅ Complete | Quiz questions, practice problems, summaries, lesson outlines, improvement suggestions |
 | AI Features | ❌ Not Started | AI tutor, content generation |
 | Mobile App | ❌ Not Started | Flutter app, offline mode |
-| Parent Dashboard | ❌ Not Started | Progress monitoring, communication |
-| School Tools | ❌ Not Started | White-label, bulk management |
+| Parent Dashboard | ✅ Complete | Foundation, child detail, messages, alerts |
+| School Portal | ✅ Complete | Dashboard, settings, staff, students, courses, analytics |
+| School Management | ✅ Complete | Database models, white-label, bulk provisioning |
+| AI Features | ❌ Not Started | AI tutor, content generation |
+| Mobile App | ❌ Not Started | Flutter app, offline mode |
 
 ## Next 10 Tasks
 
@@ -75,4 +78,6 @@
 | 2026-05-18 | Spaced repetition system | Review scheduling based on mastery decay prevents knowledge loss |
 | 2026-05-18 | AI Tutor in lesson player | Socratic method chat with lesson context helps students learn independently |
 | 2026-05-18 | Content generation API | Teachers can auto-generate quizzes, practice problems, summaries, and lesson outlines |
+| 2026-05-20 | School portal with white-label branding | Schools need self-service management with custom branding, colors, logos |
+| 2026-05-20 | School staff bulk import via CSV-style text | Schools need to quickly onboard many teachers/students at once |
 | 2026-05-20 | Auto-Next uses send/stop icon templates | Template matching proved more reliable than input diffing for the JetBrains AI Chat UI |

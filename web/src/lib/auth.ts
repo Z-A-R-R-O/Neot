@@ -15,6 +15,7 @@ export type AuthUser = {
   ageGroup: string | null;
   avatarUrl: string | null;
   onboardingCompleted: boolean;
+  schoolId: string | null;
 };
 
 export function hashPassword(password: string): string {
@@ -66,6 +67,7 @@ export async function getUser(): Promise<AuthUser | null> {
       ageGroup: session.user.ageGroup,
       avatarUrl: session.user.avatarUrl,
       onboardingCompleted: session.user.onboardingCompleted,
+      schoolId: session.user.schoolId,
       emailVerified: session.user.emailVerified?.toISOString() ?? null,
     };
   } catch {

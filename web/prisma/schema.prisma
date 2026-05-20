@@ -30,8 +30,14 @@ model Profile {
   longestStreak    Int       @default(0) @map("longest_streak")
   lastActivityDate DateTime? @map("last_activity_date")
 
+  schoolId         String?   @map("school_id")
+
   parent  Profile?  @relation("ParentChild", fields: [parentId], references: [id])
   children Profile[] @relation("ParentChild")
+
+  adminSchool    School?   @relation("SchoolAdmins", fields: [schoolId], references: [id])
+  teacherSchool  School?   @relation("SchoolTeachers", fields: [schoolId], references: [id])
+  studentSchool  School?   @relation("SchoolStudents", fields: [schoolId], references: [id])
 
   courses    Course[]
   enrollments Enrollment[]
@@ -77,6 +83,7 @@ model Course {
   thumbnailUrl     String?  @map("thumbnail_url")
   categoryId       String?  @map("category_id")
   teacherId        String   @map("teacher_id")
+  schoolId         String?  @map("school_id")
   subject          String?
   gradeLevel       String?  @map("grade_level")
   ageRange         String?  @map("age_range")
@@ -91,6 +98,7 @@ model Course {
 
   category  Category?  @relation(fields: [categoryId], references: [id])
   teacher   Profile    @relation(fields: [teacherId], references: [id])
+  school    School?    @relation(fields: [schoolId], references: [id])
   modules   Module[]
   enrollments Enrollment[]
   certificates Certificate[]
@@ -787,4 +795,62 @@ model LessonSkill {
   @@index([lessonId])
   @@index([skillId])
   @@map("lesson_skills")
+}
+
+model School {
+  id              String   @id @default(uuid())
+  name            String
+  code            String   @unique @map("school_code")
+  email           String?
+  phone           String?
+  address         String?
+  city            String?
+  state           String?
+  country         String?  @default("US")
+  postalCode      String?  @map("postal_code")
+  website         String?
+  status          String   @default("active")
+  tier            String   @default("free") @map("subscription_tier")
+  maxStudents     Int      @default(100) @map("max_students")
+  currentStudents Int      @default(0) @map("current_students")
+  features        String   @default("{}")
+  contractStart   DateTime? @map("contract_start")
+  contractEnd     DateTime? @map("contract_end")
+  metadata        String   @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  whiteLabel SchoolWhiteLabel?
+  admins       Profile[]       @relation("SchoolAdmins")
+  teachers     Profile[]       @relation("SchoolTeachers")
+  students     Profile[]       @relation("SchoolStudents")
+  courses      Course[]
+
+  @@index([status])
+  @@index([tier])
+  @@map("schools")
+}
+
+model SchoolWhiteLabel {
+  id             String   @id @default(uuid())
+  schoolId       String   @map("school_id")
+  logoUrl        String?  @map("logo_url")
+  faviconUrl     String?  @map("favicon_url")
+  primaryColor   String   @default("#3b82f6") @map("primary_color")
+  secondaryColor String   @default("#8b5cf6") @map("secondary_color")
+  backgroundColor String  @default("#ffffff") @map("background_color")
+  textColor      String   @default("#111827") @map("text_color")
+  fontFamily     String?  @map("font_family")
+  customCss      String?  @map("custom_css")
+  welcomeMessage String?  @map("welcome_message")
+  footerText     String?  @map("footer_text")
+  hideBranding   Boolean  @default(false) @map("hide_branding")
+  customDomain   String?  @map("custom_domain")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId])
+  @@map("school_white_labels")
 }
