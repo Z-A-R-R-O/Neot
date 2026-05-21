@@ -166,6 +166,18 @@
   - [x] Import API (`POST /api/courses/import`) — create new course from JSON with automatic category/tag creation
   - [x] Export button on each teacher course card with file download
   - [x] Import dialog with file upload on teacher courses page
+- [x] Student analytics page
+  - [x] Student Analytics API (`GET /api/analytics/student`) — XP trend, weekly activity, score distribution, XP breakdown, time spent, course progress
+  - [x] Student analytics page (`/dashboard/analytics`) with 8 stat cards + 6 recharts (Area, Bar, Pie)
+  - [x] Student analytics hook (`useStudentAnalytics`)
+  - [x] Student nav link in sidebar
+- [x] Teacher analytics CSV export (`/teacher/analytics`)
+- [x] Beta analytics feature flag enabled (`beta_analytics` → `true`)
+- [x] Admin advanced analytics
+  - [x] Revenue analytics (total revenue, platform fees, payouts, net) on admin analytics page
+  - [x] Course performance table with drill-down links to course detail
+  - [x] CSV export for admin analytics page
+  - [x] Admin analytics API extended with revenue + course performance data
 
 ## Technical Achievements
 
@@ -186,6 +198,6 @@
 | Total commits | 100+ |
 | Files created | 500+ |
 | Database tables | 18+ |
-| API routes | 47+ |
+| API routes | 48+ |
 | Components | 95+ |
 | Pages | 40+ |

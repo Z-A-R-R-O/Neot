@@ -38,6 +38,11 @@ export async function GET() {
     activeParents,
     enrollmentsByRole,
     courseCompletionRates,
+    // Revenue
+    totalRevenue,
+    totalPlatformFees,
+    totalPayouts,
+    coursePerformance,
   ] = await Promise.all([
     prisma.profile.count(),
     prisma.profile.groupBy({ by: ["role"], _count: { id: true } }),
@@ -123,6 +128,28 @@ export async function GET() {
     }),
     prisma.enrollment.findMany({
       select: { progress: true, completed: true },
+    }),
+    // Revenue analytics
+    prisma.marketplacePurchase.aggregate({
+      _sum: { price: true, platformFee: true, teacherCut: true },
+    }),
+    prisma.marketplacePurchase.aggregate({
+      _sum: { platformFee: true },
+    }),
+    prisma.payoutTransaction.aggregate({
+      where: { status: "completed" },
+      _sum: { amount: true },
+    }),
+    prisma.course.findMany({
+      where: { deletedAt: null, status: "published" },
+      select: {
+        id: true,
+        title: true,
+        enrollments: { select: { id: true, completed: true } },
+        teacher: { select: { fullName: true } },
+      },
+      orderBy: { enrollments: { _count: "desc" } },
+      take: 10,
     }),
   ]);
 
@@ -213,6 +240,23 @@ export async function GET() {
   const dau = new Set(recentXpTransactions.map((tx) => tx.userId)).size;
   const mauRatio = totalUsers > 0 ? Math.round((mau / totalUsers) * 100) : 0;
 
+  const revenue = {
+    totalRevenue: totalRevenue._sum.price ?? 0,
+    platformFees: totalPlatformFees._sum.platformFee ?? 0,
+    totalPayouts: totalPayouts._sum.amount ?? 0,
+    netRevenue: (totalRevenue._sum.price ?? 0) - (totalPayouts._sum.amount ?? 0),
+  };
+
+  const coursePerf = coursePerformance.map((c) => ({
+    id: c.id,
+    title: c.title,
+    teacher: c.teacher.fullName ?? "Unknown",
+    enrollments: c.enrollments.length,
+    completionRate: c.enrollments.length > 0
+      ? Math.round((c.enrollments.filter((e) => e.completed).length / c.enrollments.length) * 100)
+      : 0,
+  }));
+
   return NextResponse.json({
     overview: {
       totalUsers,
@@ -251,5 +295,7 @@ export async function GET() {
       avgProgress,
       roleActivity,
     },
+    revenue,
+    coursePerformance: coursePerf,
   });
 }

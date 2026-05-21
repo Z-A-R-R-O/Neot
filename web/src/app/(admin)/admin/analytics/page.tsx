@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  Users, BookOpen, GraduationCap, Trophy, Activity, Clock, TrendingUp, Target,
+  Users, BookOpen, GraduationCap, Trophy, Activity, Clock, TrendingUp, Target, Download, DollarSign,
 } from "lucide-react";
 
 import { LoadingScreen } from "@/components/ui/loading-screen";
@@ -27,6 +28,14 @@ interface TopCourse {
   status: string;
   teacher: string;
   enrollments: number;
+}
+
+interface CoursePerf {
+  id: string;
+  title: string;
+  teacher: string;
+  enrollments: number;
+  completionRate: number;
 }
 
 interface AnalyticsData {
@@ -61,6 +70,13 @@ interface AnalyticsData {
     avgProgress: number;
     roleActivity: { role: string; active: number }[];
   };
+  revenue: {
+    totalRevenue: number;
+    platformFees: number;
+    totalPayouts: number;
+    netRevenue: number;
+  };
+  coursePerformance: CoursePerf[];
 }
 
 export default function AdminAnalyticsPage() {
@@ -83,17 +99,56 @@ export default function AdminAnalyticsPage() {
   if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
   if (!data) return null;
 
+  function handleExportCSV() {
+    const rows: string[][] = [];
+    rows.push(["Metric", "Value"]);
+    rows.push(["Total Users", String(data.overview.totalUsers)]);
+    rows.push(["Total Courses", String(data.overview.totalCourses)]);
+    rows.push(["Total Enrollments", String(data.overview.totalEnrollments)]);
+    rows.push(["Completed Lessons", String(data.overview.totalCompletedLessons)]);
+    rows.push(["DAU", String(data.engagement.dau)]);
+    rows.push(["WAU", String(data.engagement.wau)]);
+    rows.push(["MAU", String(data.engagement.mau)]);
+    rows.push(["Retention Rate", `${data.engagement.retentionRate}%`]);
+    rows.push(["Total Revenue", `$${data.revenue.totalRevenue.toFixed(2)}`]);
+    rows.push(["Platform Fees", `$${data.revenue.platformFees.toFixed(2)}`]);
+    rows.push(["Net Revenue", `$${data.revenue.netRevenue.toFixed(2)}`]);
+    rows.push([]);
+    rows.push(["Top Course", "Teacher", "Status", "Enrollments"]);
+    for (const c of data.topCourses) {
+      rows.push([c.title, c.teacher, c.status, String(c.enrollments)]);
+    }
+    const csv = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `admin_analytics_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="space-y-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: easing }}
+        className="flex items-center justify-between"
       >
-        <h1 className="text-2xl font-bold text-foreground">Analytics</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Platform overview and growth metrics.
-        </p>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Analytics</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Platform overview and growth metrics.
+          </p>
+        </div>
+        <button
+          onClick={handleExportCSV}
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+        >
+          <Download className="h-4 w-4" />
+          Export CSV
+        </button>
       </motion.div>
 
       {/* Stat Cards */}
@@ -373,6 +428,91 @@ export default function AdminAnalyticsPage() {
           ))}
         </div>
       </motion.div>
+
+      {/* Revenue */}
+      {data.revenue.totalRevenue > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.32, ease: easing }}
+          className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <DollarSign className="h-5 w-5 text-green-400" />
+            <h2 className="font-heading text-base font-bold text-foreground">Revenue Overview</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-4">
+            <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+              <p className="text-xs text-muted-foreground">Total Revenue</p>
+              <p className="mt-1 font-heading text-xl font-bold text-foreground">
+                ${data.revenue.totalRevenue.toFixed(2)}
+              </p>
+            </div>
+            <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+              <p className="text-xs text-muted-foreground">Platform Fees</p>
+              <p className="mt-1 font-heading text-xl font-bold text-foreground">
+                ${data.revenue.platformFees.toFixed(2)}
+              </p>
+            </div>
+            <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+              <p className="text-xs text-muted-foreground">Teacher Payouts</p>
+              <p className="mt-1 font-heading text-xl font-bold text-foreground">
+                ${data.revenue.totalPayouts.toFixed(2)}
+              </p>
+            </div>
+            <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4">
+              <p className="text-xs text-muted-foreground">Net Revenue</p>
+              <p className={`mt-1 font-heading text-xl font-bold ${data.revenue.netRevenue >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                ${data.revenue.netRevenue.toFixed(2)}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Course Performance */}
+      {data.coursePerformance.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.34, ease: easing }}
+          className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6"
+        >
+          <h2 className="mb-4 font-heading text-base font-bold text-foreground">
+            Course Performance
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-border text-muted-foreground">
+                  <th className="pb-2 font-medium">Course</th>
+                  <th className="pb-2 font-medium">Teacher</th>
+                  <th className="pb-2 font-medium text-right">Enrollments</th>
+                  <th className="pb-2 font-medium text-right">Completion Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.coursePerformance.map((c) => (
+                  <tr key={c.id} className="border-b border-border/50 last:border-0">
+                    <td className="py-2.5">
+                      <Link href={`/admin/courses/${c.id}`} className="text-foreground hover:text-primary transition-colors">
+                        {c.title}
+                      </Link>
+                    </td>
+                    <td className="py-2.5 text-muted-foreground">{c.teacher}</td>
+                    <td className="py-2.5 text-right font-semibold text-foreground">{c.enrollments}</td>
+                    <td className="py-2.5 text-right">
+                      <span className={c.completionRate >= 50 ? "text-emerald-400" : c.completionRate >= 25 ? "text-amber-400" : "text-red-400"}>
+                        {c.completionRate}%
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      )}
 
       {/* Platform Usage */}
       <motion.div

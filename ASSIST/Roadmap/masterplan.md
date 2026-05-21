@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 200 | 94.8% |
-| Z-02 Admin Flow | 265 | 180 | 67.9% |
-| **Combined** | **476** | **380** | **79.8%** |
+| Z-01 LMS Flow | 211 | 201 | 95.3% |
+| Z-02 Admin Flow | 265 | 181 | 68.3% |
+| **Combined** | **476** | **382** | **80.3%** |
 
 ## Active Phase: Phase 5 (Scale + Marketplace)
 
@@ -59,7 +59,7 @@
 | 3 | Flutter app setup | Z-01 | Low |
 | 4 | Plugin/extensions framework | Z-01 | Low |
 | 5 | Performance optimization | Z-01 | Medium |
-| 6 | Admin advanced analytics | Z-02 | Medium |
+| 6 | ✅ Admin advanced analytics | Z-02 | Done |
 
 ## Decision Log
 
@@ -87,3 +87,5 @@
 | 2026-05-20 | Revenue sharing uses dedicated models | Separate PayoutAccount and PayoutTransaction models keep financial records clean and auditable |
 | 2026-05-20 | Purchase auto-enrolls buyer | Creating a MarketplacePurchase simultaneously creates an Enrollment to give immediate course access |
 | 2026-05-21 | Course export/import uses JSON format | Full course structure (modules, lessons, content, tags, category) serialized as JSON for portability; import auto-creates missing categories and tags |
+| 2026-05-21 | Student analytics as dedicated page with charts | Students need a self-serve analytics view showing XP trends, weekly activity, score distribution, XP breakdown, and time spent — uses recharts (same lib as teacher analytics) |
+| 2026-05-21 | Analytics CSV export as browser-side download | Generates CSV client-side from analytics API response — no server-side file storage needed |
