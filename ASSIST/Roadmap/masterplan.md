@@ -5,8 +5,8 @@
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
 | Z-01 LMS Flow | 211 | 201 | 95.3% |
-| Z-02 Admin Flow | 265 | 184 | 69.4% |
-| **Combined** | **476** | **385** | **80.9%** |
+| Z-02 Admin Flow | 265 | 185 | 69.8% |
+| **Combined** | **476** | **386** | **81.1%** |
 
 ## Active Phase: Phase 5 (Scale + Marketplace)
 
@@ -54,8 +54,9 @@
 | 2 | ✅ Z-02 checklist audit / Phase 5 reality sync | Z-02 | Done |
 | 3 | ✅ Audit log sidebar nav link | Z-02 | Done |
 | 4 | ✅ Automated backups (scheduling, restore) | Z-02 | Done |
-| 5 | Security scanning (active scanning) | Z-02 | Medium |
-| 6 | Compliance reporting | Z-02 | Low |
+| 5 | ✅ Security scanning (active scanning) | Z-02 | Done |
+| 6 | Compliance reporting | Z-02 | Medium |
+| 7 | Plugin/extensions framework | Z-01 | Low |
 
 ## Decision Log
 
@@ -87,3 +88,5 @@
 | 2026-05-21 | Analytics CSV export as browser-side download | Generates CSV client-side from analytics API response — no server-side file storage needed |
 | 2026-05-21 | Error tracking as admin feature with full lifecycle | ErrorLog Prisma model + API + admin page with filter/resolve/delete + global error catcher in Providers — captures unhandled errors and promise rejections client-side |
 | 2026-05-21 | Z-02 Phase 5 checklist updated to reality | Items 1 (properties), 2 (a11y), 3 (perf), 5 (audit), 6 (health) all confirmed built; remaining: error (now done), backups, load testing, security scans, compliance |
+| 2026-05-21 | Automated backups store records in DB | BackupRecord model tracks filename, size, type, path; restore copies file back with rollback |
+| 2026-05-21 | Security scanning as active admin tool | Runs 11 checks (password policy, registration, session TTL, rate limiting, DB type, admin count, etc.) with pass/warning/fail/info; results stored in SecurityScan model |

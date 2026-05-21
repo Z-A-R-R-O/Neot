@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ShieldCheck } from "lucide-react";
 
 export default async function AdminSecurityPage() {
   const settings = await prisma.platformSetting.findMany({
@@ -52,11 +55,19 @@ export default async function AdminSecurityPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Security</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Security configuration and policies.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Security</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Security configuration and policies.
+          </p>
+        </div>
+        <Link href="/admin/security/scan">
+          <Button variant="outline" size="sm">
+            <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
+            Run Security Scan
+          </Button>
+        </Link>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

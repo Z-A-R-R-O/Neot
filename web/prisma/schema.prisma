@@ -1110,3 +1110,17 @@ model ErrorLog {
   @@index([level])
   @@map("error_logs")
 }
+
+model SecurityScan {
+  id          String    @id @default(uuid())
+  status      String    @default("in_progress")
+  results     String    @default("[]")
+  summary     String    @default("{}")
+  triggeredBy String?   @map("triggered_by")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
+
+  @@index([createdAt])
+  @@index([status])
+  @@map("security_scans")
+}

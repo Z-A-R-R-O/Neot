@@ -218,6 +218,15 @@
   - [x] `GET/PUT /api/admin/backup/settings` — schedule config (frequency, time, retention, enable/disable)
   - [x] Enhanced admin backup page: create backup, history table, restore/delete actions, schedule settings
   - [x] Masterplan gap analysis fixed (AI Features, Admin Panel, Quiz System, Content Marketplace)
+- [x] Security scanning (active scanning)
+  - [x] SecurityScan Prisma model (status, results JSON, summary JSON, triggeredBy, timestamps)
+  - [x] Migration applied
+  - [x] 11 security checks: password policy, complexity, public registration, session TTL, login rate limit, database type, admin accounts, disabled accounts, production URL, rate limiting, user base
+  - [x] `POST /api/admin/security/scan` — run scan
+  - [x] `GET /api/admin/security/scan` — list scans
+  - [x] `GET /api/admin/security/scan/[id]` — view scan detail
+  - [x] Admin security scan page (`/admin/security/scan`) with run/refresh, history table, detail view with per-check results
+  - [x] "Run Security Scan" button on security settings page
 
 ## Metrics
 
