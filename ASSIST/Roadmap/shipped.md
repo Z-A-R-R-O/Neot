@@ -143,6 +143,27 @@
 - [x] School contracts page with active contract, history, and plan selection
 - [x] Admin schools management page with search and stats
 
+### Phase 5: Scale + Marketplace
+- [x] Revenue sharing system
+  - [x] RevenueShareConfig model (platform fee %, min payout, payout method)
+  - [x] PayoutAccount model (bank/PayPal/Stripe account per teacher)
+  - [x] PayoutTransaction model (payout request lifecycle: pending→completed/rejected)
+  - [x] MarketplacePurchase extended with teacherId, platformFee, teacherCut
+  - [x] Purchase/checkout API (`/api/marketplace/purchase`) — creates purchase + enrollment
+  - [x] Teacher earnings page (`/teacher/earnings`) with revenue summary, recent sales, payout settings
+  - [x] Payout account management API (`/api/marketplace/payout-account`)
+  - [x] Payout request API (`/api/marketplace/payouts`)
+  - [x] Admin revenue management page (`/admin/revenue`) with platform stats, config, top teachers
+  - [x] Admin revenue config API (`/api/admin/revenue`) — configure platform fee, min payout, method
+  - [x] Admin payout approval API (`/api/admin/revenue/payouts`) — approve/reject payouts
+  - [x] Purchase button component with enrolled state
+  - [x] Navigation links: Earnings (teacher), Revenue (admin), Marketplace (student)
+- [x] Course export/import tools
+  - [x] Export API (`GET /api/courses/[id]/export`) — full course JSON download (modules, lessons, content, tags, category)
+  - [x] Import API (`POST /api/courses/import`) — create new course from JSON with automatic category/tag creation
+  - [x] Export button on each teacher course card with file download
+  - [x] Import dialog with file upload on teacher courses page
+
 ## Technical Achievements
 
 - [x] Course assignment system
@@ -160,6 +181,6 @@
 | Total commits | 100+ |
 | Files created | 500+ |
 | Database tables | 18+ |
-| API routes | 45+ |
+| API routes | 47+ |
 | Components | 95+ |
 | Pages | 40+ |

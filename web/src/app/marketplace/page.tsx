@@ -1,17 +1,30 @@
 import Link from "next/link";
-import { Star, ShoppingCart, BookOpen, DollarSign } from "lucide-react";
+import { Star, BookOpen } from "lucide-react";
 
+import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PurchaseButton } from "./purchase-button";
 
 export default async function MarketplacePage() {
+  const userId = await getUserId();
+
   const listings = await prisma.marketplaceListing.findMany({
     where: { status: "published" },
     orderBy: [{ featured: "desc" }, { purchaseCount: "desc" }],
     take: 20,
   });
+
+  const purchasedIds = userId
+    ? (
+        await prisma.marketplacePurchase.findMany({
+          where: { buyerId: userId },
+          select: { listingId: true },
+        })
+      ).map((p) => p.listingId)
+    : [];
 
   const categories = await prisma.marketplaceListing.groupBy({
     by: ["category"],
@@ -95,10 +108,11 @@ export default async function MarketplacePage() {
                       <DollarSign className="h-5 w-5" />
                       {listing.price === 0 ? "Free" : listing.price.toFixed(2)}
                     </div>
-                    <Button size="sm" className="gap-2">
-                      <ShoppingCart className="h-4 w-4" />
-                      {listing.price === 0 ? "Enroll" : "Purchase"}
-                    </Button>
+                    <PurchaseButton
+                      listingId={listing.id}
+                      price={listing.price}
+                      purchased={purchasedIds.includes(listing.id)}
+                    />
                   </div>
 
                   {tags.length > 0 && (

@@ -4,18 +4,18 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 198 | 93.8% |
-| Z-02 Admin Flow | 265 | 179 | 67.5% |
-| **Combined** | **476** | **377** | **79.2%** |
+| Z-01 LMS Flow | 211 | 200 | 94.8% |
+| Z-02 Admin Flow | 265 | 180 | 67.9% |
+| **Combined** | **476** | **380** | **79.8%** |
 
-## Active Phase: Phase 2 (Adaptive + Gamification)
+## Active Phase: Phase 5 (Scale + Marketplace)
 
 ### Current Priorities
 
-1. **Phase 2: Adaptive + Gamification** — Mastery tracking, badges, leaderboards, adaptive difficulty
-2. **Phase 3: AI + Mobile** — AI tutor integration, Flutter app foundation
-3. **Phase 4: Parent + School** — Parent dashboard, school management tools
-4. **Phase 5: Scale + Marketplace** — Multi-tenant, content marketplace
+1. **Phase 5: Scale + Marketplace** — Revenue sharing, export/import tools, analytics
+2. **Phase 3: AI + Mobile** — Flutter app foundation
+3. **Phase 4: Parent + School** — Polish remaining items
+4. **Phase 2: Adaptive + Gamification** — Minor polish
 
 ### Gap Analysis
 
@@ -28,6 +28,7 @@
 | Quiz System | 🚧 Partial | Adaptive quizzes, question bank |
 | Section Registry | ✅ Complete | — |
 | Theme Engine | ✅ Complete | White-label customization |
+| Content Marketplace | 🚧 Partial | Revenue sharing built, purchase flow complete, course export/import tools |
 | Admin Panel | 🚧 Partial | Properties panel, full analytics |
 | Dev Mode | ✅ Complete | Block editor, live preview |
 | Mastery Tracking | ✅ Complete | Skill models, mastery engine, dashboard, API |
@@ -53,10 +54,12 @@
 
 | # | Task | Plan | Priority |
 |---|------|------|----------|
-| 1 | Parent dashboard foundation | Z-02 | Medium |
-| 2 | School account management | Z-02 | Medium |
+| 1 | ✅ Course export/import tools | Z-01 | Done |
+| 2 | Advanced analytics dashboards | Z-01 | Medium |
 | 3 | Flutter app setup | Z-01 | Low |
-| 4 | Offline sync architecture | Z-01 | Low |
+| 4 | Plugin/extensions framework | Z-01 | Low |
+| 5 | Performance optimization | Z-01 | Medium |
+| 6 | Admin advanced analytics | Z-02 | Medium |
 
 ## Decision Log
 
@@ -81,3 +84,6 @@
 | 2026-05-20 | School portal with white-label branding | Schools need self-service management with custom branding, colors, logos |
 | 2026-05-20 | School staff bulk import via CSV-style text | Schools need to quickly onboard many teachers/students at once |
 | 2026-05-20 | Auto-Next uses send/stop icon templates | Template matching proved more reliable than input diffing for the JetBrains AI Chat UI |
+| 2026-05-20 | Revenue sharing uses dedicated models | Separate PayoutAccount and PayoutTransaction models keep financial records clean and auditable |
+| 2026-05-20 | Purchase auto-enrolls buyer | Creating a MarketplacePurchase simultaneously creates an Enrollment to give immediate course access |
+| 2026-05-21 | Course export/import uses JSON format | Full course structure (modules, lessons, content, tags, category) serialized as JSON for portability; import auto-creates missing categories and tags |

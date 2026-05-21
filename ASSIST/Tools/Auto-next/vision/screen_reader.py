@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -31,7 +32,13 @@ class ScreenReader:
     """Finds either the Send icon reference or the red Stop icon reference."""
 
     def __init__(self, templates_dir: Path | None = None, confidence: float = 0.9) -> None:
-        self.templates_dir = templates_dir or Path(__file__).resolve().parents[1] / "templates"
+        if templates_dir is None:
+            if getattr(sys, "frozen", False):
+                base = Path(sys._MEIPASS)
+            else:
+                base = Path(__file__).resolve().parents[1]
+            templates_dir = base / "templates"
+        self.templates_dir = templates_dir
         self.send_template = self.templates_dir / "send-icon.png"
         self.stop_template = self.templates_dir / "stop-icon.png"
         self.input_box_template = self.templates_dir / "input-box.png"

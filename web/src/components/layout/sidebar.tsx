@@ -35,6 +35,8 @@ import {
   Webhook,
   Bookmark,
   Building2,
+  ShoppingCart,
+  DollarSign,
   type LucideIcon,
 } from "lucide-react";
 
@@ -77,6 +79,8 @@ const iconMap: Record<string, LucideIcon> = {
   Webhook,
   Bookmark,
   Building2,
+  ShoppingCart,
+  DollarSign,
 };
 
 const fallbackNavItems: Record<Role, NavItemData[]> = {
@@ -88,6 +92,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "student-achievements", label: "Achievements", href: "/dashboard/achievements", icon: "Award", children: [] },
     { id: "student-mastery", label: "Mastery", href: "/dashboard/mastery", icon: "Target", children: [] },
     { id: "student-leaderboard", label: "Leaderboard", href: "/dashboard/leaderboard", icon: "Trophy", children: [] },
+    { id: "student-marketplace", label: "Marketplace", href: "/marketplace", icon: "ShoppingCart", children: [] },
     { id: "student-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
   teacher: [
@@ -95,6 +100,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "teacher-courses", label: "My Courses", href: "/teacher/courses", icon: "BookOpen", children: [] },
     { id: "teacher-question-bank", label: "Question Bank", href: "/teacher/question-bank", icon: "Database", children: [] },
     { id: "teacher-analytics", label: "Analytics", href: "/teacher/analytics", icon: "BarChart3", children: [] },
+    { id: "teacher-earnings", label: "Earnings", href: "/teacher/earnings", icon: "DollarSign", children: [] },
     { id: "teacher-students", label: "Students", href: "/teacher/students", icon: "Users", children: [] },
     { id: "teacher-settings", label: "Settings", href: "/dashboard/settings", icon: "Settings", children: [] },
   ],
@@ -124,6 +130,7 @@ const fallbackNavItems: Record<Role, NavItemData[]> = {
     { id: "admin-themes", label: "Themes", href: "/admin/themes", icon: "Palette", children: [] },
     { id: "admin-blocks", label: "Blocks", href: "/admin/blocks", icon: "Puzzle", children: [] },
     { id: "admin-seo", label: "SEO", href: "/admin/seo", icon: "Globe", children: [] },
+    { id: "admin-revenue", label: "Revenue", href: "/admin/revenue", icon: "DollarSign", children: [] },
     { id: "admin-notifications", label: "Notifications", href: "/admin/notifications", icon: "Bell", children: [] },
     { id: "admin-security", label: "Security", href: "/admin/security", icon: "Shield", children: [] },
     { id: "admin-backup", label: "Backup", href: "/admin/backup", icon: "Database", children: [] },

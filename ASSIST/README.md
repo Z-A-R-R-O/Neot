@@ -103,9 +103,9 @@ Use `START` in the overlay, click the chat input during the focus countdown, and
 
 | Plan | Progress | Active Work |
 |------|----------|-------------|
-| **Z-01 LMS Flow** | 81.5% (172/211) | Parent communication, school tools, mobile foundation |
+| **Z-01 LMS Flow** | 94.8% (200/211) | Export/import tools, advanced analytics, mobile foundation |
 | **Z-02 Admin Flow** | 62.3% (165/265) | Properties panel, accessibility, performance |
-| **Combined** | 70.8% (337/476) | Phase 2 wrap-up, Phase 3/4 planning |
+| **Combined** | 79.8% (380/476) | Phase 3 AI (done), Phase 4 school (done), Phase 5 export/import |
 
 ## Phase Selection Rules
 
