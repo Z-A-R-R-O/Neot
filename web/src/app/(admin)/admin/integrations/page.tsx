@@ -1,17 +1,17 @@
 import { prisma } from "@/lib/db";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Key, Webhook, Puzzle, Link, BarChart3 } from "lucide-react";
+import { Key, Webhook, Puzzle, Link, BarChart3, Mail } from "lucide-react";
 
 export default async function AdminIntegrationsPage() {
-  const settings = await prisma.platformSetting.findMany({
-    where: { group: "integrations" },
-  });
+  const [integrationsSettings, emailSettings] = await Promise.all([
+    prisma.platformSetting.findMany({ where: { group: "integrations" } }),
+    prisma.platformSetting.findMany({ where: { group: "email" } }),
+  ]);
 
   const values: Record<string, string> = {};
-  for (const s of settings) {
-    values[s.key] = s.value;
-  }
+  for (const s of integrationsSettings) values[s.key] = s.value;
+  for (const s of emailSettings) values[s.key] = s.value;
 
   const integrations = [
     {
@@ -22,11 +22,11 @@ export default async function AdminIntegrationsPage() {
       apiKey: values["stripe_key"] ? "••••••••" + values["stripe_key"].slice(-4) : null,
     },
     {
-      name: "SendGrid",
-      description: "Email delivery for notifications and alerts",
-      icon: Key,
-      status: values["sendgrid_enabled"] ?? "disabled",
-      apiKey: values["sendgrid_key"] ? "••••••••" + values["sendgrid_key"].slice(-4) : null,
+      name: "Email Service",
+      description: "Transactional email (SendGrid / SMTP)",
+      icon: Mail,
+      status: values["email_enabled"] === "true" ? "enabled" : "disabled",
+      provider: values["email_provider"] ?? "sendgrid",
     },
     {
       name: "Webhooks",
@@ -100,6 +100,9 @@ export default async function AdminIntegrationsPage() {
                   )}
                   {"gaId" in integration && integration.gaId && (
                     <span className="text-xs text-muted-foreground">{integration.gaId}</span>
+                  )}
+                  {"provider" in integration && integration.provider && (
+                    <span className="text-xs text-muted-foreground">via {integration.provider}</span>
                   )}
                 </div>
               </CardContent>
