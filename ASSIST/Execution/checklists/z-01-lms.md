@@ -122,6 +122,8 @@
 - [x] School registration flow (`/register/school`)
 - [x] School contract management
 - [x] School contracts page with plan display
+- [x] School subscription management API (plan upgrade flow)
+- [x] Demo schools seed script (3 schools, 19 users)
 - [x] Admin schools management page
 
 ## Phase 5: Scale + Marketplace ❌
@@ -134,7 +136,7 @@
   - [x] Admin revenue management page with config
 - [ ] Plugin/extensions framework
 - [x] API platform
-- [ ] Advanced analytics
+- [x] Advanced analytics
 - [x] Export/import tools
 - [ ] Performance optimization
 - [ ] CDN integration
@@ -152,6 +154,12 @@
 | 2.5 | 8 | 8 | 100% |
 | 2 | 21 | 21 | 100% ✅ |
 | 3 | 13 | 8 | 61.5% |
+<<<<<<< HEAD
 | 4 | 17 | 15 | 88.2% |
-| 5 | 10 | 5 | 50.0% |
-| **Total** | **113** | **100** | **88.5%** |
+| 5 | 10 | 6 | 60.0% |
+| **Total** | **113** | **101** | **89.4%** |
+=======
+| 4 | 19 | 18 | 94.7% |
+| 5 | 10 | 3 | 30.0% |
+| **Total** | **115** | **99** | **86.1%** |
+>>>>>>> origin/main
