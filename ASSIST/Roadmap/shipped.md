@@ -253,6 +253,14 @@
 - [x] Phase 6 checklist audit
   - [x] Webhook system (CRUD + dispatch + admin page) marked done
   - [x] API rate limiting (configurable via security settings) marked done
+- [x] CDN integration
+  - [x] `lib/cdn.ts` — getCdnConfig, saveCdnConfig, buildCdnUrl, transformMediaUrl, isCdnConfigured
+  - [x] `GET/PUT /api/admin/cdn` — retrieve/update CDN config
+  - [x] Admin CDN page (`/admin/cdn`) with toggle, URL, prefix config, live preview
+  - [x] Media API enhanced to include `cdnUrl` field when CDN enabled
+  - [x] Audit logging for CDN changes
+  - [x] Nav sidebar link
+  - [x] Z-01 Phase 5 + Z-02 Phase 6 both marked done
 
 ## Metrics
 

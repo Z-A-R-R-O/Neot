@@ -4,9 +4,9 @@
 
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
-| Z-01 LMS Flow | 211 | 201 | 95.3% |
-| Z-02 Admin Flow | 265 | 189 | 71.3% |
-| **Combined** | **476** | **390** | **81.9%** |
+| Z-01 LMS Flow | 110 | 104 | 94.5% |
+| Z-02 Admin Flow | 60 | 52 | 86.7% |
+| **Combined** | **170** | **156** | **91.8%** |
 
 ## Active Phase: Phase 5 (Scale + Marketplace)
 
@@ -58,8 +58,9 @@
 | 6 | ✅ Compliance reporting | Z-02 | Done |
 | 7 | ✅ Load testing tools | Z-02 | Done |
 | 8 | ✅ Phase 6 audit (webhooks + rate limiting marked done) | Z-02 | Done |
-| 9 | Plugin/extensions framework | Z-01 | Low |
-| 10 | Flutter app setup | Z-01 | Low |
+| 9 | ✅ CDN integration | Z-01 + Z-02 | Done |
+| 10 | Plugin/extensions framework | Z-01 | Low |
+| 11 | Flutter app setup | Z-01 | Low |
 
 ## Decision Log
 
@@ -96,3 +97,4 @@
 | 2026-05-21 | Compliance reporting as admin feature | 16 checks across GDPR (privacy policy, data retention, age verification, cookie consent), COPPA (underage users, parental consent), data protection (encryption, backups, access control), and platform (ToS, communication) |
 | 2026-05-21 | Load testing runs concurrent requests server-side | Uses fetch with configurable concurrency/totalRequests; results include response times, percentiles (P50/P95/P99), status codes, request log |
 | 2026-05-21 | Phase 6 checklist updated | Webhook system (full CRUD + dispatch) and API rate limiting (setting) marked as done |
+| 2026-05-21 | CDN integration uses settings pattern | PlatformSetting group "cdn" stores URL, prefixes, enabled flag; lib/cdn.ts provides helpers (getCdnConfig, transformMediaUrl, buildCdnUrl); media API injects cdnUrl field when enabled |

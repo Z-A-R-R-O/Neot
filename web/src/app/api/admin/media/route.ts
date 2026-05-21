@@ -4,6 +4,7 @@ import { getUser } from "@/lib/auth";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { createAuditLog } from "@/lib/audit-log";
+import { getCdnConfig, transformMediaUrl } from "@/lib/cdn";
 
 export async function GET(request: Request) {
   const user = await getUser();
@@ -48,7 +49,14 @@ export async function GET(request: Request) {
     },
   });
 
-  return NextResponse.json(media);
+  const cdnConfig = await getCdnConfig();
+
+  const enriched = media.map((item) => ({
+    ...item,
+    cdnUrl: transformMediaUrl(cdnConfig, item.url),
+  }));
+
+  return NextResponse.json(enriched);
 }
 
 export async function POST(request: Request) {
