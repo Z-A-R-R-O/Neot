@@ -109,6 +109,8 @@ model Course {
   tags CourseTag[]
   reviews Review[]
 
+  @@index([teacherId])
+  @@index([status])
   @@map("courses")
 }
 
@@ -189,6 +191,7 @@ model LessonProgress {
   @@unique([userId, lessonId])
   @@index([userId])
   @@index([lessonId])
+  @@index([updatedAt])
   @@map("lesson_progress")
 }
 
@@ -985,6 +988,7 @@ model MarketplaceListing {
   @@index([category])
   @@index([featured])
   @@index([teacherId])
+  @@index([price])
   @@map("marketplace_listings")
 }
 

@@ -28,9 +28,12 @@ export async function GET(request: Request) {
       author: { select: { id: true, fullName: true, avatarUrl: true } },
     },
     orderBy: { publishedAt: "desc" },
+    take: 50,
   });
 
-  return NextResponse.json(posts);
+  return NextResponse.json(posts, {
+    headers: { "Cache-Control": "public, max-age=300, s-maxage=600" },
+  });
 }
 
 export async function POST(request: Request) {

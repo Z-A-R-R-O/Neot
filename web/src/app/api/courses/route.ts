@@ -41,6 +41,7 @@ export async function GET(request: Request) {
   const courses = await prisma.course.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    take: 200,
     include: {
       category: { select: { id: true, name: true, slug: true } },
       teacher: { select: { id: true, fullName: true, avatarUrl: true } },
@@ -49,7 +50,9 @@ export async function GET(request: Request) {
     },
   });
 
-  return NextResponse.json(courses);
+  return NextResponse.json(courses, {
+    headers: { "Cache-Control": "public, max-age=60, s-maxage=120" },
+  });
 }
 
 export async function POST(request: Request) {

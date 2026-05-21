@@ -58,7 +58,7 @@
 | 2 | Advanced analytics dashboards | Z-01 | Medium |
 | 3 | Flutter app setup | Z-01 | Low |
 | 4 | Plugin/extensions framework | Z-01 | Low |
-| 5 | Performance optimization | Z-01 | Medium |
+| 5 | ✅ Performance optimization | Z-01 | Done |
 | 6 | ✅ Admin advanced analytics | Z-02 | Done |
 
 ## Decision Log

@@ -190,6 +190,11 @@
 - [x] ASSIST documentation structure
 - [x] Performance monitoring dashboard (system metrics, activity trends, charts)
 - [x] System health checks (DB connectivity, memory, disk, uptime, error tracking)
+- [x] Performance optimization
+  - [x] Pagination limits (`take: 200`) on courses API to prevent unbounded queries
+  - [x] Pagination limits (`take: 50`) on blog API
+  - [x] Cache-Control headers on public GET APIs (courses: 60s, blog: 300s)
+  - [x] Database indexes on `course.teacherId`, `course.status`, `lessonProgress.updatedAt`, `marketplaceListing.price`
 
 ## Metrics
 

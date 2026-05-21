@@ -103,9 +103,9 @@ Use `START` in the overlay, click the chat input during the focus countdown, and
 
 | Plan | Progress | Active Work |
 |------|----------|-------------|
-| **Z-01 LMS Flow** | 95.3% (201/211) | Student analytics page, mobile foundation |
+| **Z-01 LMS Flow** | 95.7% (202/211) | Performance optimization, mobile foundation |
 | **Z-02 Admin Flow** | 68.3% (181/265) | Revenue analytics, course performance, CSV export |
-| **Combined** | 80.3% (382/476) | Phase 5 export/import + analytics (student + admin), Phase 2/3/4 complete |
+| **Combined** | 80.5% (383/476) | Phase 5 perf optimization, Phase 2/3/4 complete |
 
 ## Phase Selection Rules
 
