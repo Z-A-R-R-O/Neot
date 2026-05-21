@@ -76,7 +76,7 @@
 - [x] CDN configuration
 - [x] Webhook system (fully built with CRUD, events, dispatch)
 - [x] API rate limiting (configurable via security settings)
-- [ ] Third-party app marketplace
+- [x] Third-party app marketplace
 
 ## Progress
 
@@ -90,5 +90,5 @@
 | 3 | 7 | 7 | 100% |
 | 4 | 5 | 5 | 100% |
 | 5 | 10 | 10 | 100% |
-| 6 | 10 | 9 | 90% |
-| **Total** | **60** | **59** | **98.3%** |
+| 6 | 10 | 10 | 100% |
+| **Total** | **60** | **60** | **100%** |

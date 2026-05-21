@@ -1271,3 +1271,47 @@ model SisSyncLog {
   @@index([createdAt])
   @@map("sis_sync_logs")
 }
+
+model MarketplaceApp {
+  id            String   @id @default(uuid())
+  name          String
+  description   String
+  developer     String
+  developerUrl  String?  @map("developer_url")
+  iconUrl       String?  @map("icon_url")
+  category      String   @default("general")
+  tags          String   @default("[]")
+  version       String   @default("1.0.0")
+  configSchema  String   @default("{}") @map("config_schema")
+  webhookUrl    String?  @map("webhook_url")
+  status        String   @default("pending")
+  installCount  Int      @default(0) @map("install_count")
+  rating        Float    @default(0)
+  ratingCount   Int      @default(0) @map("rating_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  installations AppInstallation[]
+
+  @@index([status])
+  @@index([category])
+  @@map("marketplace_apps")
+}
+
+model AppInstallation {
+  id         String   @id @default(uuid())
+  appId      String   @map("app_id")
+  userId     String   @map("user_id")
+  schoolId   String?  @map("school_id")
+  config     String   @default("{}")
+  status     String   @default("active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  app        MarketplaceApp @relation(fields: [appId], references: [id])
+
+  @@unique([appId, userId, schoolId])
+  @@index([appId])
+  @@index([userId])
+  @@map("app_installations")
+}
