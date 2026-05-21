@@ -172,7 +172,7 @@ export function TeacherMasteryOverview() {
       )}
 
       {/* Student Rankings */}
-      {data.studentSummaries.length > 0 && (
+      {data.studentSummaries?.length > 0 && (
         <div>
           <h3 className="mb-3 flex items-center gap-2 font-semibold">
             <TrendingUp className="h-4 w-4" />

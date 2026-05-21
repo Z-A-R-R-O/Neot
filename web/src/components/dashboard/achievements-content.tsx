@@ -314,7 +314,7 @@ export function DashboardAchievementsContent({ achievements, earnedAchievementId
                 {filteredBadges.filter((b) => !b.earned).map((b, i) => {
                   const rarity = rarityConfig[b.rarity];
                   const RarityIcon = rarity.icon;
-                  const criteria = JSON.parse(b.criteria);
+                  const criteria = (() => { try { return JSON.parse(b.criteria || "{}"); } catch { return {}; } })();
                   let progressLabel = "";
                   let progressValue = 0;
                   let progressMax = 1;

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import { getNextRecommendation, getMasteryLevel } from "./mastery-engine";
 
 export interface Recommendation {

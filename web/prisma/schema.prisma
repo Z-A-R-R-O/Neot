@@ -50,6 +50,8 @@ model Profile {
   bookmarks Bookmark[]
   ssoLinks UserLink[]
   payments Payment[]
+  purchaseBuyer MarketplacePurchase[] @relation("PurchaseBuyer")
+  purchaseTeacher MarketplacePurchase[] @relation("PurchaseTeacher")
   lessonNotes LessonNote[]
   userBadges UserBadge[]
   reviews Review[]
@@ -991,6 +993,7 @@ model MarketplaceListing {
   @@index([featured])
   @@index([teacherId])
   @@index([price])
+  purchases     MarketplacePurchase[]
   @@map("marketplace_listings")
 }
 
@@ -1006,6 +1009,10 @@ model MarketplacePurchase {
   status      String   @default("completed")
   metadata    String   @default("{}")
   createdAt   DateTime @default(now()) @map("created_at")
+
+  listing     MarketplaceListing @relation(fields: [listingId], references: [id])
+  buyer       Profile  @relation("PurchaseBuyer", fields: [buyerId], references: [id])
+  teacher     Profile  @relation("PurchaseTeacher", fields: [teacherId], references: [id])
 
   @@index([listingId])
   @@index([buyerId])

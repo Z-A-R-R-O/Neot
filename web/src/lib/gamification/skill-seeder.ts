@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/db';
 
 const DEFAULT_SKILLS = [
   { name: 'Logic & Reasoning', description: 'Critical thinking and problem-solving abilities', category: 'cognitive', icon: '🧠', color: '#8b5cf6' },

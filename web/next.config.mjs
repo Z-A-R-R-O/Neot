@@ -9,6 +9,10 @@ const nextConfig = {
     ],
   },
 
+  turbopack: {
+    root: "E:\\NEOT\\web",
+  },
+
   async headers() {
     return [
       {
