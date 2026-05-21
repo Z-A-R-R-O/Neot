@@ -1124,3 +1124,18 @@ model SecurityScan {
   @@index([status])
   @@map("security_scans")
 }
+
+model ComplianceReport {
+  id          String    @id @default(uuid())
+  status      String    @default("in_progress")
+  category    String    @default("all")
+  results     String    @default("[]")
+  summary     String    @default("{}")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
+
+  @@index([createdAt])
+  @@index([category])
+  @@index([status])
+  @@map("compliance_reports")
+}

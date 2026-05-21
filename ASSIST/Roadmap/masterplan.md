@@ -5,8 +5,8 @@
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
 | Z-01 LMS Flow | 211 | 201 | 95.3% |
-| Z-02 Admin Flow | 265 | 185 | 69.8% |
-| **Combined** | **476** | **386** | **81.1%** |
+| Z-02 Admin Flow | 265 | 186 | 70.2% |
+| **Combined** | **476** | **387** | **81.3%** |
 
 ## Active Phase: Phase 5 (Scale + Marketplace)
 
@@ -55,8 +55,9 @@
 | 3 | ✅ Audit log sidebar nav link | Z-02 | Done |
 | 4 | ✅ Automated backups (scheduling, restore) | Z-02 | Done |
 | 5 | ✅ Security scanning (active scanning) | Z-02 | Done |
-| 6 | Compliance reporting | Z-02 | Medium |
-| 7 | Plugin/extensions framework | Z-01 | Low |
+| 6 | ✅ Compliance reporting | Z-02 | Done |
+| 7 | Load testing tools | Z-02 | Low |
+| 8 | Plugin/extensions framework | Z-01 | Low |
 
 ## Decision Log
 
@@ -90,3 +91,4 @@
 | 2026-05-21 | Z-02 Phase 5 checklist updated to reality | Items 1 (properties), 2 (a11y), 3 (perf), 5 (audit), 6 (health) all confirmed built; remaining: error (now done), backups, load testing, security scans, compliance |
 | 2026-05-21 | Automated backups store records in DB | BackupRecord model tracks filename, size, type, path; restore copies file back with rollback |
 | 2026-05-21 | Security scanning as active admin tool | Runs 11 checks (password policy, registration, session TTL, rate limiting, DB type, admin count, etc.) with pass/warning/fail/info; results stored in SecurityScan model |
+| 2026-05-21 | Compliance reporting as admin feature | 16 checks across GDPR (privacy policy, data retention, age verification, cookie consent), COPPA (underage users, parental consent), data protection (encryption, backups, access control), and platform (ToS, communication) |

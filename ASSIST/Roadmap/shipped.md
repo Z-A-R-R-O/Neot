@@ -227,6 +227,19 @@
   - [x] `GET /api/admin/security/scan/[id]` — view scan detail
   - [x] Admin security scan page (`/admin/security/scan`) with run/refresh, history table, detail view with per-check results
   - [x] "Run Security Scan" button on security settings page
+- [x] Compliance reporting
+  - [x] ComplianceReport Prisma model (status, category, results JSON, summary JSON)
+  - [x] Migration applied
+  - [x] 16 compliance checks across 4 categories:
+    - GDPR: privacy policy, data retention, data access, right to erasure, age verification, cookie consent
+    - COPPA: underage users, parental consent
+    - Data Protection: encryption at rest, encryption in transit, data backups, access controls
+    - Platform: terms of service, user communication
+  - [x] `POST /api/admin/compliance` — run report (with category filter)
+  - [x] `GET /api/admin/compliance` — list reports
+  - [x] `GET /api/admin/compliance/[id]` — view report detail
+  - [x] Admin compliance page (`/admin/compliance`) with category filter, run/refresh, history table, detail view with per-check results
+  - [x] Nav sidebar link
 
 ## Metrics
 
