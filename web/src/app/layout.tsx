@@ -4,6 +4,8 @@ import "./globals.css";
 
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { Providers } from "@/app/providers";
+import { AnalyticsScripts } from "@/components/analytics/analytics-scripts";
+import { getAnalyticsConfig } from "@/lib/analytics";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,11 +23,13 @@ export const metadata: Metadata = {
   description: "Adaptive learning that molds to each learner.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const analyticsConfig = await getAnalyticsConfig();
+
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
@@ -52,6 +56,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <Providers>{children}</Providers>
         </ErrorBoundary>
+        <AnalyticsScripts config={analyticsConfig} />
       </body>
     </html>
   );

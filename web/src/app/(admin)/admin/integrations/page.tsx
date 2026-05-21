@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Key, Webhook, Puzzle, Link } from "lucide-react";
+import { Key, Webhook, Puzzle, Link, BarChart3 } from "lucide-react";
 
 export default async function AdminIntegrationsPage() {
   const settings = await prisma.platformSetting.findMany({
@@ -48,6 +48,13 @@ export default async function AdminIntegrationsPage() {
       status: values["oauth_enabled"] ?? "disabled",
       providers: values["oauth_providers"] ?? "",
     },
+    {
+      name: "Google Analytics",
+      description: "Visitor tracking and analytics",
+      icon: BarChart3,
+      status: values["analytics_enabled"] ?? "disabled",
+      gaId: values["analytics_ga4_id"] ? values["analytics_ga4_id"] : null,
+    },
   ];
 
   return (
@@ -90,6 +97,9 @@ export default async function AdminIntegrationsPage() {
                   )}
                   {"providers" in integration && integration.providers && (
                     <span className="text-xs text-muted-foreground">{integration.providers}</span>
+                  )}
+                  {"gaId" in integration && integration.gaId && (
+                    <span className="text-xs text-muted-foreground">{integration.gaId}</span>
                   )}
                 </div>
               </CardContent>
