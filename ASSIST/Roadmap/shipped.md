@@ -240,6 +240,19 @@
   - [x] `GET /api/admin/compliance/[id]` — view report detail
   - [x] Admin compliance page (`/admin/compliance`) with category filter, run/refresh, history table, detail view with per-check results
   - [x] Nav sidebar link
+- [x] Load testing tools
+  - [x] LoadTestRun Prisma model (targetUrl, method, concurrency, totalRequests, results JSON, summary JSON)
+  - [x] Migration applied
+  - [x] Load test engine: configurable URL/method/concurrency/requests, concurrent fetch with timing
+  - [x] Summary stats: success/fail count, avg/min/max/P50/P95/P99 response times, requests/sec, status codes
+  - [x] `POST /api/admin/load-test` — run test (validates URL, caps concurrency at 50, requests at 200)
+  - [x] `GET /api/admin/load-test` — list runs
+  - [x] `GET /api/admin/load-test/[id]` — view detail with full request log
+  - [x] Admin load test page (`/admin/load-test`) with endpoint combo presets, config form, history table, detail view with stat cards, timing breakdown, status codes, request log
+  - [x] Nav sidebar link
+- [x] Phase 6 checklist audit
+  - [x] Webhook system (CRUD + dispatch + admin page) marked done
+  - [x] API rate limiting (configurable via security settings) marked done
 
 ## Metrics
 

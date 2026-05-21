@@ -5,8 +5,8 @@
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
 | Z-01 LMS Flow | 211 | 201 | 95.3% |
-| Z-02 Admin Flow | 265 | 186 | 70.2% |
-| **Combined** | **476** | **387** | **81.3%** |
+| Z-02 Admin Flow | 265 | 189 | 71.3% |
+| **Combined** | **476** | **390** | **81.9%** |
 
 ## Active Phase: Phase 5 (Scale + Marketplace)
 
@@ -56,8 +56,10 @@
 | 4 | ✅ Automated backups (scheduling, restore) | Z-02 | Done |
 | 5 | ✅ Security scanning (active scanning) | Z-02 | Done |
 | 6 | ✅ Compliance reporting | Z-02 | Done |
-| 7 | Load testing tools | Z-02 | Low |
-| 8 | Plugin/extensions framework | Z-01 | Low |
+| 7 | ✅ Load testing tools | Z-02 | Done |
+| 8 | ✅ Phase 6 audit (webhooks + rate limiting marked done) | Z-02 | Done |
+| 9 | Plugin/extensions framework | Z-01 | Low |
+| 10 | Flutter app setup | Z-01 | Low |
 
 ## Decision Log
 
@@ -92,3 +94,5 @@
 | 2026-05-21 | Automated backups store records in DB | BackupRecord model tracks filename, size, type, path; restore copies file back with rollback |
 | 2026-05-21 | Security scanning as active admin tool | Runs 11 checks (password policy, registration, session TTL, rate limiting, DB type, admin count, etc.) with pass/warning/fail/info; results stored in SecurityScan model |
 | 2026-05-21 | Compliance reporting as admin feature | 16 checks across GDPR (privacy policy, data retention, age verification, cookie consent), COPPA (underage users, parental consent), data protection (encryption, backups, access control), and platform (ToS, communication) |
+| 2026-05-21 | Load testing runs concurrent requests server-side | Uses fetch with configurable concurrency/totalRequests; results include response times, percentiles (P50/P95/P99), status codes, request log |
+| 2026-05-21 | Phase 6 checklist updated | Webhook system (full CRUD + dispatch) and API rate limiting (setting) marked as done |

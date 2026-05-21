@@ -1139,3 +1139,20 @@ model ComplianceReport {
   @@index([status])
   @@map("compliance_reports")
 }
+
+model LoadTestRun {
+  id             String    @id @default(uuid())
+  status         String    @default("in_progress")
+  targetUrl      String    @map("target_url")
+  method         String    @default("GET")
+  concurrency    Int       @default(5)
+  totalRequests  Int       @default(20) @map("total_requests")
+  results        String    @default("[]")
+  summary        String    @default("{}")
+  errorMessage   String?   @map("error_message")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  completedAt    DateTime? @map("completed_at")
+
+  @@index([createdAt])
+  @@map("load_test_runs")
+}
