@@ -5,8 +5,8 @@
 | Plan | Items | Done | Progress |
 |------|-------|------|----------|
 | Z-01 LMS Flow | 211 | 201 | 95.3% |
-| Z-02 Admin Flow | 265 | 181 | 68.3% |
-| **Combined** | **476** | **382** | **80.3%** |
+| Z-02 Admin Flow | 265 | 183 | 69.1% |
+| **Combined** | **476** | **384** | **80.7%** |
 
 ## Active Phase: Phase 5 (Scale + Marketplace)
 
@@ -54,12 +54,12 @@
 
 | # | Task | Plan | Priority |
 |---|------|------|----------|
-| 1 | ✅ Course export/import tools | Z-01 | Done |
-| 2 | Advanced analytics dashboards | Z-01 | Medium |
-| 3 | Flutter app setup | Z-01 | Low |
+| 1 | ✅ Error tracking integration | Z-02 | Done |
+| 2 | ✅ Z-02 checklist audit / Phase 5 reality sync | Z-02 | Done |
+| 3 | ✅ Audit log sidebar nav link | Z-02 | Done |
 | 4 | Plugin/extensions framework | Z-01 | Low |
-| 5 | ✅ Performance optimization | Z-01 | Done |
-| 6 | ✅ Admin advanced analytics | Z-02 | Done |
+| 5 | Flutter app setup | Z-01 | Low |
+| 6 | Automated backups (scheduling, restore) | Z-02 | Low |
 
 ## Decision Log
 
@@ -89,3 +89,5 @@
 | 2026-05-21 | Course export/import uses JSON format | Full course structure (modules, lessons, content, tags, category) serialized as JSON for portability; import auto-creates missing categories and tags |
 | 2026-05-21 | Student analytics as dedicated page with charts | Students need a self-serve analytics view showing XP trends, weekly activity, score distribution, XP breakdown, and time spent — uses recharts (same lib as teacher analytics) |
 | 2026-05-21 | Analytics CSV export as browser-side download | Generates CSV client-side from analytics API response — no server-side file storage needed |
+| 2026-05-21 | Error tracking as admin feature with full lifecycle | ErrorLog Prisma model + API + admin page with filter/resolve/delete + global error catcher in Providers — captures unhandled errors and promise rejections client-side |
+| 2026-05-21 | Z-02 Phase 5 checklist updated to reality | Items 1 (properties), 2 (a11y), 3 (perf), 5 (audit), 6 (health) all confirmed built; remaining: error (now done), backups, load testing, security scans, compliance |

@@ -1073,3 +1073,24 @@ model MarketplaceReview {
   @@index([listingId])
   @@map("marketplace_reviews")
 }
+
+model ErrorLog {
+  id         String   @id @default(uuid())
+  message    String
+  stack      String?
+  level      String   @default("error")
+  source     String   @default("frontend")
+  url        String?
+  method     String?
+  statusCode Int?     @map("status_code")
+  userId     String?  @map("user_id")
+  userAgent  String?  @map("user_agent")
+  metadata   String   @default("{}")
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([resolved])
+  @@index([level])
+  @@map("error_logs")
+}

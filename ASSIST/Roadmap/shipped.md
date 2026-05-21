@@ -195,6 +195,19 @@
   - [x] Pagination limits (`take: 50`) on blog API
   - [x] Cache-Control headers on public GET APIs (courses: 60s, blog: 300s)
   - [x] Database indexes on `course.teacherId`, `course.status`, `lessonProgress.updatedAt`, `marketplaceListing.price`
+- [x] Error tracking integration
+  - [x] ErrorLog Prisma model (level, source, stack trace, metadata, resolved status)
+  - [x] Migration applied
+  - [x] GET/POST /api/admin/error-logs (list with filters, capture)
+  - [x] PATCH/DELETE /api/admin/error-logs/[id] (resolve, delete)
+  - [x] Admin error logs page (filter by level/source/status, expand details, resolve/delete)
+  - [x] ErrorBoundary component (catches React render errors)
+  - [x] GlobalErrorCatcher (window.onerror + unhandledrejection) registered in Providers
+  - [x] Nav sidebar link for error logs
+- [x] Z-02 Phase 5 checklist audit
+  - [x] Marked properties panel, accessibility tools, perf dashboard, audit viewer, system health as done
+  - [x] Progress updated from 71.7% → 75% (45/60)
+- [x] Audit log nav link added to admin sidebar
 
 ## Metrics
 
