@@ -1315,3 +1315,23 @@ model AppInstallation {
   @@index([userId])
   @@map("app_installations")
 }
+
+model Plugin {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String
+  version     String   @default("1.0.0")
+  author      String
+  enabled     Boolean  @default(false)
+  config      String   @default("{}")
+  hooks       String   @default("[]")
+  webhookUrl  String?  @map("webhook_url")
+  iconUrl     String?  @map("icon_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@index([enabled])
+  @@map("plugins")
+}
