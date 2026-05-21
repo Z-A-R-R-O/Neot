@@ -266,9 +266,112 @@
 
 | Metric | Value |
 |--------|-------|
-| Total commits | 100+ |
-| Files created | 500+ |
-| Database tables | 18+ |
-| API routes | 48+ |
-| Components | 95+ |
-| Pages | 40+ |
+| Total commits | 185 |
+| Files created | 1000+ |
+| Database tables | 30+ |
+| API routes | 100+ |
+| Components | 200+ |
+| Pages | 80+ |
+| Flutter screens | 6 |
+| Prisma migrations | 15+ |
+
+## Phase 6: Integrations (Z-02)
+
+- [x] SSO/SAML integration
+  - [x] SsoProvider Prisma model (name, type, clientId/Secret, issuerUrl, enabled)
+  - [x] UserLink Prisma model (userId, providerId, externalId, email)
+  - [x] `lib/sso.ts` — CRUD, OAuth2 URL builder, code exchange, user info fetch, auto-create/link accounts
+  - [x] `GET/POST /api/admin/sso` — list/create providers
+  - [x] `GET/PATCH/DELETE /api/admin/sso/[id]` — manage providers
+  - [x] `GET /api/auth/sso` — list enabled providers for login page
+  - [x] `GET /api/auth/sso/[provider]` — initiate OAuth2 redirect
+  - [x] `GET /api/auth/sso/[provider]/callback` — exchange code, create session
+  - [x] SsoButtons component on login page
+  - [x] Admin SSO page (`/admin/sso`) with CRUD and toggle
+  - [x] Supports Google, Microsoft, GitHub (built-in endpoints) + custom/SAML
+- [x] Payment gateway (Stripe)
+  - [x] Payment Prisma model (userId, amount, stripeIntentId, status, purchaseId)
+  - [x] `lib/stripe.ts` — config CRUD, createPaymentIntent, webhook handler
+  - [x] `GET/PUT /api/admin/stripe/config` — Stripe API keys, webhook secret, currency
+  - [x] `POST /api/payments/create-intent` — creates PaymentIntent + Payment record
+  - [x] `POST /api/payments/webhook` — handles payment_intent.succeeded/failed
+  - [x] `/checkout` page with Stripe Payment Element
+  - [x] `/marketplace/purchase/success` confirmation page
+  - [x] Marketplace purchase flow redirects to checkout when Stripe enabled
+  - [x] Admin Stripe page (`/admin/stripe`) with config form
+- [x] Email service (SendGrid)
+  - [x] `lib/email.ts` — SendGrid REST API sender, email templates (verification, password reset, welcome)
+  - [x] `GET/PUT /api/admin/email/config` — provider, API key, from email/name
+  - [x] `POST /api/admin/email/test` — send test email
+  - [x] Wired into signup (verification + welcome) and forgot-password (reset email)
+  - [x] Admin email page (`/admin/email`) with config and test send
+- [x] Analytics integration (GA4, Mixpanel)
+  - [x] `lib/analytics.ts` — config reader/writer
+  - [x] `GET/PUT /api/admin/analytics/config` — fetch/update GA4/Mixpanel settings
+  - [x] `AnalyticsScripts` client component with gtag.js + Mixpanel script injection
+  - [x] Wired in root layout (server component reads config, passes to client)
+  - [x] Admin analytics config page (`/admin/analytics/config`)
+  - [x] Integrations page shows Analytics card with status
+- [x] CDN configuration
+  - [x] `lib/cdn.ts` — getCdnConfig, saveCdnConfig, buildCdnUrl, transformMediaUrl
+  - [x] `GET/PUT /api/admin/cdn` — CDN config with URL validation + audit logging
+  - [x] Admin CDN page (`/admin/cdn`) with toggle, URL, prefix config, live preview
+  - [x] Media API enhanced to include `cdnUrl` field when CDN enabled
+- [x] Webhook system (fully built with CRUD, events, dispatch)
+- [x] API rate limiting (configurable via security settings)
+- [x] LTI integration (LMS standard)
+  - [x] LtiRegistration Prisma model (issuer, clientId, deploymentId, auth/token/keyset URLs)
+  - [x] `lib/lti.ts` — CRUD, findLtiRegistration, NEOT endpoint URLs
+  - [x] `GET/POST /api/admin/lti` — list/create registrations
+  - [x] `GET/PATCH/DELETE /api/admin/lti/[id]` — manage registrations
+  - [x] `GET /api/lti/oidc` — OIDC login flow (redirects to LMS auth URL)
+  - [x] `POST /api/lti/launch` — JWT validation with jose, LTI claim extraction, auto-create users
+  - [x] `GET /api/lti/keyset` — JWK keyset endpoint for LMS verification
+  - [x] Admin LTI page (`/admin/lti`) with CRUD and copy-able NEOT URLs
+- [x] SIS integration (student info systems)
+  - [x] SisConfig Prisma model (name, provider, apiUrl, apiKey, csvMapping, schoolId)
+  - [x] SisSyncLog Prisma model (status, recordsSynced, recordsFailed, errors, summary)
+  - [x] `lib/sis.ts` — CRUD, processCsvUpload (parses CSV, creates/updates profiles by email)
+  - [x] `GET/POST /api/admin/sis` — list/create configs
+  - [x] `GET/PATCH/DELETE /api/admin/sis/[id]` — manage configs
+  - [x] `POST /api/admin/sis/sync` — CSV upload + processing
+  - [x] `GET /api/admin/sis/logs` — sync history
+  - [x] Admin SIS page (`/admin/sis`) with config CRUD, CSV upload, sync history
+- [x] Third-party app marketplace
+  - [x] MarketplaceApp Prisma model (name, description, developer, category, version, configSchema, status)
+  - [x] AppInstallation Prisma model (appId, userId, schoolId, config, status)
+  - [x] `lib/marketplace-apps.ts` — CRUD, install/uninstall with count tracking
+  - [x] `GET/POST /api/admin/marketplace-apps` — admin list/create
+  - [x] `GET/PATCH/DELETE /api/admin/marketplace-apps/[id]` — approve/reject/edit/delete
+  - [x] `GET /api/marketplace-apps` — browse approved apps
+  - [x] `POST/DELETE /api/marketplace-apps` — install/uninstall
+  - [x] `GET /api/marketplace-apps/installations` — user's installed apps
+  - [x] Admin marketplace page (`/admin/marketplace-apps`) with approval workflow
+  - [x] User apps page (`/apps`) with browse by category, install/uninstall, installed tab
+
+## Phase 3: Mobile (Z-01)
+
+- [x] Flutter app setup
+  - [x] `flutter/pubspec.yaml` — Dio, go_router, provider, cached_network_image, video_player, chewie, connectivity_plus, shared_preferences, flutter_spinkit
+  - [x] `flutter/lib/main.dart` — app entry with GoRouter navigation, dark/light themes
+  - [x] `flutter/lib/core/theme.dart` — Material 3 light/dark themes
+  - [x] `flutter/lib/core/config.dart` — API base URL configuration
+  - [x] `flutter/lib/core/api_client.dart` — Dio HTTP client with session cookie management, secure storage
+  - [x] `flutter/lib/models/models.dart` — User, Course, Lesson, Module with JSON parsing
+  - [x] `flutter/lib/providers/auth_provider.dart` — login/logout/session management with Provider
+  - [x] `flutter/lib/screens/login_screen.dart` — email/password login with loading state
+  - [x] `flutter/lib/screens/home_screen.dart` — dashboard with user stats, quick actions
+  - [x] `flutter/lib/screens/courses_screen.dart` — course listing with thumbnails
+  - [x] `flutter/lib/screens/course_detail_screen.dart` — course detail with modules/lessons expansion
+  - [x] `flutter/lib/screens/lesson_screen.dart` — lesson viewing with markdown content, complete button
+  - [x] `flutter/lib/screens/profile_screen.dart` — user profile with stats, sign out
+
+## Plugin System (Z-01)
+
+- [x] Plugin/extensions framework
+  - [x] Plugin Prisma model (name, slug, version, author, enabled, config JSON, hooks JSON, webhookUrl)
+  - [x] `lib/plugins.ts` — CRUD, triggerHook() dispatches to plugin webhooks, getPluginsByHook()
+  - [x] `GET/POST /api/admin/plugins` — list/create plugins
+  - [x] `GET/PATCH/DELETE /api/admin/plugins/[slug]` — manage plugins
+  - [x] Admin plugins page (`/admin/plugins`) with CRUD, enable/disable toggle, hook checkboxes, config viewer
+  - [x] 15 hook types: before/after login, signup, purchase, course publish, lesson complete, on XP award, badge unlock, notification, webhook dispatch, custom
