@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { getUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { getStripeConfig } from "@/lib/stripe";
 
 export async function POST(request: NextRequest) {
   const userId = await getUserId();
@@ -32,6 +33,16 @@ export async function POST(request: NextRequest) {
 
   if (existingPurchase) {
     return NextResponse.json({ error: "Already purchased" }, { status: 400 });
+  }
+
+  const stripeConfig = await getStripeConfig();
+
+  if (stripeConfig.enabled && stripeConfig.secretKey) {
+    return NextResponse.json({
+      checkout: true,
+      checkoutUrl: `/checkout?listingId=${listingId}`,
+      amount: listing.price,
+    });
   }
 
   const config = await prisma.revenueShareConfig.findFirst({

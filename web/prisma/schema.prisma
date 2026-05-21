@@ -49,6 +49,7 @@ model Profile {
   certificates Certificate[]
   bookmarks Bookmark[]
   ssoLinks UserLink[]
+  payments Payment[]
   lessonNotes LessonNote[]
   userBadges UserBadge[]
   reviews Review[]
@@ -1191,4 +1192,29 @@ model UserLink {
   @@unique([providerId, externalId])
   @@index([userId])
   @@map("user_links")
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  amount          Float
+  currency        String   @default("USD")
+  status          String   @default("pending")
+  stripeIntentId  String?  @map("stripe_intent_id")
+  stripeEventId   String?  @map("stripe_event_id")
+  stripeChargeId  String?  @map("stripe_charge_id")
+  listingId       String?  @map("listing_id")
+  purchaseId      String?  @map("purchase_id")
+  metadata        String   @default("{}")
+  errorMessage    String?  @map("error_message")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user            Profile  @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([stripeIntentId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("payments")
 }

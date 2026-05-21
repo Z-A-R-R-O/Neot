@@ -4,22 +4,24 @@ import { Badge } from "@/components/ui/badge";
 import { Key, Webhook, Puzzle, Link, BarChart3, Mail } from "lucide-react";
 
 export default async function AdminIntegrationsPage() {
-  const [integrationsSettings, emailSettings] = await Promise.all([
+  const [integrationsSettings, emailSettings, stripeSettings] = await Promise.all([
     prisma.platformSetting.findMany({ where: { group: "integrations" } }),
     prisma.platformSetting.findMany({ where: { group: "email" } }),
+    prisma.platformSetting.findMany({ where: { group: "stripe" } }),
   ]);
 
   const values: Record<string, string> = {};
   for (const s of integrationsSettings) values[s.key] = s.value;
   for (const s of emailSettings) values[s.key] = s.value;
+  for (const s of stripeSettings) values[s.key] = s.value;
 
   const integrations = [
     {
       name: "Stripe",
       description: "Payment processing for course purchases",
       icon: Key,
-      status: values["stripe_enabled"] ?? "disabled",
-      apiKey: values["stripe_key"] ? "••••••••" + values["stripe_key"].slice(-4) : null,
+      status: values["stripe_enabled"] === "true" ? "enabled" : "disabled",
+      currency: values["stripe_currency"] ? values["stripe_currency"].toUpperCase() : null,
     },
     {
       name: "Email Service",
@@ -103,6 +105,9 @@ export default async function AdminIntegrationsPage() {
                   )}
                   {"provider" in integration && integration.provider && (
                     <span className="text-xs text-muted-foreground">via {integration.provider}</span>
+                  )}
+                  {"currency" in integration && integration.currency && (
+                    <span className="text-xs text-muted-foreground">{integration.currency}</span>
                   )}
                 </div>
               </CardContent>
