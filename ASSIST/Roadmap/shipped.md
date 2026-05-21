@@ -208,6 +208,16 @@
   - [x] Marked properties panel, accessibility tools, perf dashboard, audit viewer, system health as done
   - [x] Progress updated from 71.7% → 75% (45/60)
 - [x] Audit log nav link added to admin sidebar
+- [x] Automated backups (scheduling, restore)
+  - [x] BackupRecord Prisma model (filename, size, status, type, file path)
+  - [x] Migration applied
+  - [x] `POST /api/admin/backup/trigger` — triggers a backup, saves file to `backups/` dir
+  - [x] `GET /api/admin/backup/records` — list backup history with pagination
+  - [x] `POST /api/admin/backup/records/[id]/restore` — restore from backup with rollback
+  - [x] `DELETE /api/admin/backup/records` — delete backup record and file
+  - [x] `GET/PUT /api/admin/backup/settings` — schedule config (frequency, time, retention, enable/disable)
+  - [x] Enhanced admin backup page: create backup, history table, restore/delete actions, schedule settings
+  - [x] Masterplan gap analysis fixed (AI Features, Admin Panel, Quiz System, Content Marketplace)
 
 ## Metrics
 
