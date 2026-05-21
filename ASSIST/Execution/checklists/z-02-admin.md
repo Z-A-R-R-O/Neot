@@ -68,7 +68,7 @@
 
 ## Phase 6: Integrations 🚧
 - [x] SSO/SAML integration
-- [ ] LTI integration (LMS standard)
+- [x] LTI integration (LMS standard)
 - [ ] SIS integration (student info systems)
 - [x] Payment gateway (Stripe)
 - [x] Email service (SendGrid)
@@ -90,5 +90,5 @@
 | 3 | 7 | 7 | 100% |
 | 4 | 5 | 5 | 100% |
 | 5 | 10 | 10 | 100% |
-| 6 | 10 | 7 | 70% |
-| **Total** | **60** | **57** | **95%** |
+| 6 | 10 | 8 | 80% |
+| **Total** | **60** | **58** | **96.7%** |

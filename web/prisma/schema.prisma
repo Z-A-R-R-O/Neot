@@ -1218,3 +1218,22 @@ model Payment {
   @@index([createdAt])
   @@map("payments")
 }
+
+model LtiRegistration {
+  id             String   @id @default(uuid())
+  name           String
+  issuer         String
+  clientId       String   @map("client_id")
+  deploymentId   String   @map("deployment_id")
+  authUrl        String   @map("auth_url")
+  tokenUrl       String   @map("token_url")
+  keysetUrl      String   @map("keyset_url")
+  enabled        Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([issuer])
+  @@index([clientId])
+  @@index([enabled])
+  @@map("lti_registrations")
+}
