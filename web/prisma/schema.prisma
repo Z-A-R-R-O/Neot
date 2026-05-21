@@ -1237,3 +1237,37 @@ model LtiRegistration {
   @@index([enabled])
   @@map("lti_registrations")
 }
+
+model SisConfig {
+  id          String   @id @default(uuid())
+  name        String
+  provider    String   // csv, powerschool, infinitecampus, custom
+  apiUrl      String?  @map("api_url")
+  apiKey      String?  @map("api_key")
+  csvMapping  String   @default("{}") @map("csv_mapping")
+  schoolId    String?  @map("school_id")
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([provider])
+  @@index([enabled])
+  @@map("sis_configs")
+}
+
+model SisSyncLog {
+  id          String   @id @default(uuid())
+  configId    String   @map("config_id")
+  status      String   @default("in_progress")
+  recordsSynced Int    @default(0) @map("records_synced")
+  recordsFailed Int    @default(0) @map("records_failed")
+  errors      String   @default("[]")
+  summary     String   @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
+
+  @@index([configId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("sis_sync_logs")
+}
