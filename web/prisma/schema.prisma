@@ -48,6 +48,7 @@ model Profile {
   userAchievements UserAchievement[]
   certificates Certificate[]
   bookmarks Bookmark[]
+  ssoLinks UserLink[]
   lessonNotes LessonNote[]
   userBadges UserBadge[]
   reviews Review[]
@@ -1155,4 +1156,39 @@ model LoadTestRun {
 
   @@index([createdAt])
   @@map("load_test_runs")
+}
+
+model SsoProvider {
+  id           String   @id @default(uuid())
+  name         String
+  providerType String   @map("provider_type") // google, microsoft, github, saml
+  clientId     String   @map("client_id")
+  clientSecret String   @map("client_secret")
+  issuerUrl    String?  @map("issuer_url")
+  enabled      Boolean  @default(true)
+  buttonLabel  String?  @map("button_label")
+  iconUrl      String?  @map("icon_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  userLinks    UserLink[]
+
+  @@index([providerType])
+  @@index([enabled])
+  @@map("sso_providers")
+}
+
+model UserLink {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  providerId   String   @map("provider_id")
+  externalId   String   @map("external_id")
+  email        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user         Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider     SsoProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, externalId])
+  @@index([userId])
+  @@map("user_links")
 }

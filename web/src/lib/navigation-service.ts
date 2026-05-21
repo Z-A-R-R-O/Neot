@@ -60,6 +60,7 @@ const fallbackNavItems: Record<string, NavItemData[]> = {
     { id: "admin-error-logs", label: "Error Logs", href: "/admin/error-logs", icon: "Bug", children: [] },
     { id: "admin-audit-logs", label: "Audit Logs", href: "/admin/audit-logs", icon: "ClipboardList", children: [] },
     { id: "admin-security", label: "Security", href: "/admin/security", icon: "Shield", children: [] },
+    { id: "admin-sso", label: "SSO / SAML", href: "/admin/sso", icon: "LogIn", children: [] },
     { id: "admin-backup", label: "Backup", href: "/admin/backup", icon: "Database", children: [] },
     { id: "admin-version-history", label: "Version History", href: "/admin/version-history", icon: "History", children: [] },
     { id: "admin-components", label: "Components", href: "/admin/components", icon: "Box", children: [] },

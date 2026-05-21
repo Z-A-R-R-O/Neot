@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
+import { SsoButtons } from "@/components/auth/sso-buttons";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -114,6 +115,8 @@ export function LoginForm() {
         <Fingerprint className="h-4 w-4" />
         Sign in with Biometrics
       </Link>
+
+      <SsoButtons />
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

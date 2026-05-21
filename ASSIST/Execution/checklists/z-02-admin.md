@@ -67,7 +67,7 @@
 - [x] Compliance reporting
 
 ## Phase 6: Integrations 🚧
-- [ ] SSO/SAML integration
+- [x] SSO/SAML integration
 - [ ] LTI integration (LMS standard)
 - [ ] SIS integration (student info systems)
 - [ ] Payment gateway (Stripe)
@@ -90,5 +90,5 @@
 | 3 | 7 | 7 | 100% |
 | 4 | 5 | 5 | 100% |
 | 5 | 10 | 10 | 100% |
-| 6 | 10 | 4 | 40% |
-| **Total** | **60** | **54** | **90%** |
+| 6 | 10 | 5 | 50% |
+| **Total** | **60** | **55** | **91.7%** |
