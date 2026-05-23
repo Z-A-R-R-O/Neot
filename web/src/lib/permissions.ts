@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { ensureDefaultRoles } from "@/lib/roles";
 
 type PermissionAction = "create" | "read" | "update" | "delete";
 type PermissionResource =
@@ -24,6 +25,7 @@ export async function checkPermission(
   action: PermissionAction,
 ): Promise<boolean> {
   try {
+    await ensureDefaultRoles();
     const roleDoc = await prisma.role.findUnique({ where: { name: role } });
     if (!roleDoc) return false;
 
