@@ -5,13 +5,13 @@
 | Phase | Items | Done | Progress |
 |-------|-------|------|----------|
 | V3-0: Foundation | 15 | 10 | 67% |
-| V3-1: Learning Worlds | 18 | 0 | 0% |
+| V3-1: Learning Worlds | 18 | 15 | 83% |
 | V3-2: AI Personalization Engine | 20 | 0 | 0% |
 | V3-3: Engagement Loops | 14 | 0 | 0% |
 | V3-4: Story Mode | 16 | 0 | 0% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **112** | **5** | **4%** |
+| **Total** | **112** | **25** | **22%** |
 
 ---
 
@@ -44,7 +44,7 @@
 
 ---
 
-## V3-1: Learning Worlds 🔲
+## V3-1: Learning Worlds 🚧
 
 > **Goal:** Build the Learning Worlds UI that replaces the traditional course catalog. Create skill trees. Migrate coding content.
 > **Duration:** 4-5 days
@@ -52,30 +52,30 @@
 
 ### Learning Worlds UI
 
-- [ ] Build `LearningWorldsPage` — main landing page showing available worlds as themed cards
-- [ ] Build `WorldDetailPage` — shows islands within a world, unlock status, progress per island
-- [ ] Build `IslandDetailPage` — shows content nodes (lessons/challenges) within an island
-- [ ] Build `WorldCard` component — themed world card with progress ring, locked/unlocked state
-- [ ] Build `IslandCard` component — island card with prerequisite indicators, completion status
-- [ ] Build `WorldProgressBar` — visual progress through a world showing islands as nodes
-- [ ] Build `SkillTree` visualization component — graph view of concepts and their prerequisite chains
-- [ ] Build `SkillTreeNode` component — individual concept node with mastered/in-progress/locked states
+- [x] Build `LearningWorldsPage` — main landing page showing available worlds as themed cards
+- [x] Build `WorldDetailPage` — shows islands within a world, unlock status, progress per island
+- [x] Build `IslandDetailPage` — shows content nodes (lessons/challenges) within an island
+- [x] Build `WorldCard` component — themed world card with progress ring, locked/unlocked state
+- [x] Build `IslandCard` component — island card with prerequisite indicators, completion status
+- [x] Build `WorldProgressBar` — visual progress through a world showing islands as nodes
+- [x] Build `SkillTree` visualization component — graph view of concepts and their prerequisite chains
+- [x] Build `SkillTreeNode` component — individual concept node with mastered/in-progress/locked states
 - [ ] Build world completion animation/celebration — unlock next world effect
 
 ### API Routes
 
-- [ ] `GET /api/worlds` — list all worlds with progress for current student
-- [ ] `GET /api/worlds/[id]` — world detail with islands and progress
-- [ ] `GET /api/worlds/[id]/islands` — islands within a world with unlock status
-- [ ] `GET /api/worlds/[id]/skill-tree` — concept graph for a world
-- [ ] `POST /api/worlds/progress` — update world/island completion
+- [x] `GET /api/worlds` — list all worlds with progress for current student
+- [x] `GET /api/worlds/[id]` — world detail with islands and progress
+- [x] `GET /api/worlds/[id]/islands` — islands within a world with unlock status
+- [x] `GET /api/worlds/[id]/skill-tree` — concept graph for a world
+- [x] `POST /api/worlds/progress` — update world/island completion
 
 ### Navigation & Routing
 
-- [ ] Add `/worlds` route replacing `/courses` as primary student landing
-- [ ] Update sidebar navigation: "Learning Worlds" replaces "Courses" as primary nav
-- [ ] Add "Skill Tree" link in student navigation
-- [ ] Ensure old `/courses` route still works but redirects from main nav
+- [x] Add `/worlds` route replacing `/courses` as primary student landing
+- [x] Update sidebar navigation: "Learning Worlds" replaces "Courses" as primary nav
+- [x] Add "Skill Tree" link in student navigation
+- [x] Ensure old `/courses` route still works but redirects from main nav
 
 ---
 

@@ -37,6 +37,7 @@ import {
   Building2,
   ShoppingCart,
   DollarSign,
+  Earth,
   type LucideIcon,
 } from "lucide-react";
 
@@ -81,11 +82,13 @@ const iconMap: Record<string, LucideIcon> = {
   Building2,
   ShoppingCart,
   DollarSign,
+  Earth,
 };
 
 const fallbackNavItems: Record<Role, NavItemData[]> = {
   student: [
     { id: "student-home", label: "Home", href: "/dashboard", icon: "LayoutDashboard", children: [] },
+    { id: "student-worlds", label: "Learning Worlds", href: "/worlds", icon: "Earth", children: [] },
     { id: "student-courses", label: "My Courses", href: "/dashboard/courses", icon: "BookOpen", children: [] },
     { id: "student-bookmarks", label: "Bookmarks", href: "/dashboard/bookmarks", icon: "Bookmark", children: [] },
     { id: "student-notes", label: "Notes", href: "/dashboard/notes", icon: "FileText", children: [] },
