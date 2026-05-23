@@ -1444,10 +1444,23 @@ model WorldProgress {
   @@map("world_progress")
 }
 
+model LearningStyle {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  label       String
+  description String?
+  icon        String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  profiles StudentLearningProfile[]
+
+  @@map("learning_styles")
+}
+
 model StudentLearningProfile {
   id              String   @id @default(uuid())
   userId          String   @unique @map("user_id")
-  learningStyle   String   @default("unknown")
+  learningStyleId String?  @map("learning_style_id")
   preferredDifficulty Int  @default(2) @map("preferred_difficulty")
   interests       String   @default("[]")
   attentionSpan   Int      @default(20) @map("attention_span")
@@ -1456,6 +1469,8 @@ model StudentLearningProfile {
   styleOverridden Boolean  @default(false) @map("style_overridden")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
+
+  learningStyle LearningStyle? @relation(fields: [learningStyleId], references: [id])
 
   @@map("student_learning_profiles")
 }

@@ -12,6 +12,15 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log("Seeding v3: Learning Worlds + Concepts...");
 
+  const learningStyles = [
+    { id: "style-visual", name: "visual", label: "Visual", description: "Learns best through images, diagrams, and visual content", icon: "👁️" },
+    { id: "style-auditory", name: "auditory", label: "Auditory", description: "Learns best through listening and audio explanations", icon: "🎧" },
+    { id: "style-reading", name: "reading", label: "Reading", description: "Learns best through text, code samples, and reading", icon: "📖" },
+    { id: "style-kinesthetic", name: "kinesthetic", label: "Kinesthetic", description: "Learns best through hands-on practice and interactive content", icon: "🛠️" },
+  ];
+  for (const s of learningStyles) await prisma.learningStyle.upsert({ where: { id: s.id }, update: {}, create: s });
+  console.log(`  LearningStyles: ${learningStyles.length}`);
+
   await prisma.learningWorld.upsert({
     where: { id: "world-python" },
     update: {},

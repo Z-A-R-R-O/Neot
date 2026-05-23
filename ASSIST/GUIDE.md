@@ -44,6 +44,12 @@ npx prisma generate          # Generate Prisma client
 
 # Optional automation helper
 python ASSIST\Tools\Auto-next\auto-next.py
+
+Or use the standalone executable (no Python needed):
+
+```powershell
+.\ASSIST\Tools\Auto-next\dist\Auto-Next.exe
+```
 ```
 
 ## Auto-Next Mini Manual

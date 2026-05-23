@@ -4,7 +4,7 @@
 
 | Phase | Items | Done | Progress |
 |-------|-------|------|----------|
-| V3-0: Foundation | 14 | 5 | 36% |
+| V3-0: Foundation | 15 | 10 | 67% |
 | V3-1: Learning Worlds | 18 | 0 | 0% |
 | V3-2: AI Personalization Engine | 20 | 0 | 0% |
 | V3-3: Engagement Loops | 14 | 0 | 0% |
@@ -23,18 +23,18 @@
 
 ### Docs & Strategy
 
-- [ ] Update `ASSIST/Core/vision.md` — Replace old LMS vision with new Adaptive Learning Universe vision
-- [ ] Update `ASSIST/Roadmap/phases.md` — Add V3-0 through V3-6 phase map
-- [ ] Update `ASSIST/Roadmap/masterplan.md` — Add v3 as active phase with status tracking
-- [ ] Update `ASSIST/README.md` — Add v3 to navigation, structure, and status section
-- [ ] Verify `master.md` is linked from ASSIST/README.md as strategic North Star
+- [x] Update `ASSIST/Core/vision.md` — Replace old LMS vision with new Adaptive Learning Universe vision
+- [x] Update `ASSIST/Roadmap/phases.md` — Add V3-0 through V3-6 phase map
+- [x] Update `ASSIST/Roadmap/masterplan.md` — Add v3 as active phase with status tracking
+- [x] Update `ASSIST/README.md` — Add v3 to navigation, structure, and status section
+- [x] Verify `master.md` is linked from ASSIST/README.md as strategic North Star
 
 ### Data Model (Prisma)
 
-- [ ] Add `LearningStyle` model — stores student's detected learning style (visual/auditory/reading/kinesthetic)
+- [x] Add `LearningStyle` model — stores student's detected learning style (visual/auditory/reading/kinesthetic)
 - [x] Add `Concept` model — represents a learnable concept with title, description, difficulty level, domain
 - [x] Add `ConceptPrerequisite` model — many-to-many: Concept A requires Concept B (also handles reverse dependencies)
-- [ ] Add `LearningWorld` model — world container (e.g., "Python World") with theme, description, order
+- [x] Add `LearningWorld` model — world container (e.g., "Python World") with theme, description, order
 - [x] Add `Island` model — sub-container within a world (e.g., "Variables Island") with prerequisites
 - [x] Add `WorldProgress` model — tracks which worlds/islands a student has unlocked/completed
 - [x] Add `StudentLearningProfile` model — stores detected style, preferred difficulty, interests, attention span indicators

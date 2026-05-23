@@ -61,6 +61,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Start watching as soon as the overlay opens.",
     )
+    parser.add_argument(
+        "--confidence",
+        type=float,
+        default=0.7,
+        help="Template matching confidence (0.0-1.0). Lower = more tolerant. Default: 0.7",
+    )
     return parser.parse_args()
 
 
@@ -73,7 +79,7 @@ def main() -> int:
     from vision.screen_reader import ScreenReader
 
     args = parse_args()
-    reader = ScreenReader()
+    reader = ScreenReader(confidence=args.confidence)
     engine = AutoNextEngine(reader=reader)
 
     ui = OverlayUI(

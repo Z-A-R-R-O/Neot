@@ -6,8 +6,8 @@
 |------|-------|------|----------|
 | Z-01 LMS Flow | 110 | 110 | 100% ✅ |
 | Z-02 Admin Flow | 60 | 60 | 100% ✅ |
-| **Z-03 Adaptive Universe** | **112** | **5** | **4% 🚧** |
-| **Combined v2+v3** | **282** | **175** | **62% 🚧** |
+| **Z-03 Adaptive Universe** | **112** | **10** | **9% 🚧** |
+| **Combined v2+v3** | **282** | **180** | **64% 🚧** |
 
 ## Active Phase: V3-0 — Foundation
 
@@ -17,13 +17,14 @@ See `ASSIST/Execution/checklists/z-03-adaptive-universe.md` for detailed task li
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | Update ASSIST docs (vision, phases, checklist) | 🔲 |
+| 1 | Update ASSIST docs (vision, phases, checklist) | ✅ Done |
 | 2 | Add Concept Graph data models (Concept, Prerequisite, Dependency, LearningWorld, Island) | ✅ Done |
 | 3 | Add Learning World models (World, Island, Progress) | ✅ Done |
 | 4 | Add StudentLearningProfile model | ✅ Done |
 | 5 | Add AdPlacement model | ✅ Done |
-| 6 | Create Prisma migration | ✅ Done |
-| 7 | Seed initial Coding/CS concepts (51 concepts, 54 prerequisites) | ✅ Done |
+| 6 | Add LearningStyle model | ✅ Done |
+| 7 | Create Prisma migration | ✅ Done |
+| 8 | Seed initial Coding/CS concepts (51 concepts, 54 prerequisites) | ✅ Done |
 
 ### Next After V3-0
 
@@ -56,7 +57,7 @@ See `ASSIST/Execution/checklists/z-03-adaptive-universe.md` for detailed task li
 
 | Phase | Items | Status | Est. Duration |
 |-------|-------|--------|--------------|
-| V3-0: Foundation | 14 | 🔲 Active (36%) | 2-3 days |
+| V3-0: Foundation | 15 | 🔲 Active (67%) | 2-3 days |
 | V3-1: Learning Worlds | 18 | 🔲 Planned | 4-5 days |
 | V3-2: AI Personalization | 20 | 🔲 Planned | 6-8 days |
 | V3-3: Engagement Loops | 14 | 🔲 Planned | 4-5 days |

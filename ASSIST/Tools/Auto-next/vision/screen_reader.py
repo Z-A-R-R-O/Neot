@@ -31,7 +31,7 @@ class MatchResult:
 class ScreenReader:
     """Finds either the Send icon reference or the red Stop icon reference."""
 
-    def __init__(self, templates_dir: Path | None = None, confidence: float = 0.9) -> None:
+    def __init__(self, templates_dir: Path | None = None, confidence: float = 0.7) -> None:
         if templates_dir is None:
             if getattr(sys, "frozen", False):
                 base = Path(sys._MEIPASS)

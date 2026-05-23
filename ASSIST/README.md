@@ -42,7 +42,7 @@ ASSIST/
 │   └── checklists/
 │       ├── z-01-lms.md        ← LMS flow — 110 items (100% ✅)
 │       ├── z-02-admin.md      ← Admin flow — 60 items (100% ✅)
-│       └── z-03-adaptive-universe.md  ← NEW: v3 — 112 items (0% 🔲)
+│       └── z-03-adaptive-universe.md  ← NEW: v3 — 112 items (9% 🚧)
 
 ├── LOG/                       ← One .md file per work session
 
@@ -113,8 +113,8 @@ Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -
 |------|-------|------|----------|
 | **Z-01 LMS Flow** | 110 | 110 | 100% ✅ Shipped |
 | **Z-02 Admin Flow** | 60 | 60 | 100% ✅ Shipped |
-| **Z-03 Adaptive Universe** | 112 | 0 | 0% 🔲 Active |
-| **Combined** | **282** | **170** | **60% 🚧** |
+| **Z-03 Adaptive Universe** | 112 | 10 | 9% 🔲 Active |
+| **Combined** | **282** | **180** | **64% 🚧** |
 
 ## Strategic Documents Reference
 
@@ -140,4 +140,4 @@ Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -
 | **V3-6** Scale + Launch | All prior | Everything functional |
 
 **Shipped:** ✅ v2 complete (170/170, 185 commits).
-**Active:** 🔲 V3-0 Foundation — start here.
+**Active:** 🚧 V3-0 Foundation — 67% (10/15 items).

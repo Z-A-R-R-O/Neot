@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 a = Analysis(
     ['auto-next.py'],
     pathex=[],
@@ -35,4 +34,8 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    contents_directory='.',
 )
+
+# v2: Cover for PyInstaller 6+
+# v3: Template matching tuning
