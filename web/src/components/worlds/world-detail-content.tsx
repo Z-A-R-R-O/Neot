@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { IslandCard } from "./island-card";
 import { WorldProgressBar } from "./world-progress-bar";
+import { WorldCompletionCelebration } from "./world-completion-celebration";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
 import { StaggerContainer, StaggerItem } from "@/components/ui/motion";
@@ -49,7 +50,17 @@ export function WorldDetailContent({ params }: { params: Promise<{ worldId: stri
   if (error) return <ErrorState message={error.message} />;
   if (!world) return <ErrorState message="World not found" />;
 
-  return (
+  const allCompleted = world.islands.length > 0 && world.islands.every((i) => i.progress.status === "completed");
+  const totalXp = world.islands.reduce((sum, i) => sum + i.progress.xpEarned, 0);
+
+  return (<>
+    <WorldCompletionCelebration
+      worldTitle={world.title}
+      worldColor={world.color}
+      islandCount={world.islands.length}
+      xpEarned={totalXp}
+      show={allCompleted}
+    />
     <div className="mx-auto max-w-4xl space-y-8">
       <Link
         href="/worlds"
@@ -96,5 +107,5 @@ export function WorldDetailContent({ params }: { params: Promise<{ worldId: stri
         </StaggerContainer>
       </div>
     </div>
-  );
+  </>);
 }

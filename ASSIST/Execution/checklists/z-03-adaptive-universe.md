@@ -6,12 +6,12 @@
 |-------|-------|------|----------|
 | V3-0: Foundation | 15 | 10 | 67% |
 | V3-1: Learning Worlds | 18 | 15 | 83% |
-| V3-2: AI Personalization Engine | 20 | 0 | 0% |
+| V3-2: AI Personalization Engine | 26 | 19 | 73% |
 | V3-3: Engagement Loops | 14 | 0 | 0% |
 | V3-4: Story Mode | 16 | 0 | 0% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **112** | **25** | **22%** |
+| **Total** | **112** | **44** | **39%** |
 
 ---
 
@@ -79,7 +79,7 @@
 
 ---
 
-## V3-2: AI Personalization Engine 🔲
+## V3-2: AI Personalization Engine 🚧
 
 > **Goal:** Build the core moat — dynamic learning paths, learning style detection, weakness detection, adaptive difficulty.
 > **Duration:** 6-8 days
@@ -87,32 +87,32 @@
 
 ### Learning Style Detector
 
-- [ ] Build passive detection algorithm — analyze student behavior:
+- [x] Build passive detection algorithm — analyze student behavior:
   - Watches videos longer vs. reads text longer → visual vs. reading
-  - Skips to code playground → kinesthetic
+  - Completes quizzes/practice → kinesthetic
   - Listens to audio explanations → auditory
-- [ ] Build active learning style quiz (5-7 questions, optional)
-- [ ] Build `LearningStyleProfile` page — shows detected style, allow manual override
-- [ ] Store style in `StudentLearningProfile` model
-- [ ] Build `LearningStyleProvider` — React context providing style info to all components
+- [x] Build active learning style quiz (5 questions, optional)
+- [x] Build `LearningStyleProfile` page — shows detected style, allow manual override
+- [x] Store style in `StudentLearningProfile` model
+- [x] Build `LearningStyleProvider` — React context providing style info to all components
 
 ### Dynamic Learning Path Engine
 
-- [ ] Build `PathGenerator` algorithm — takes concept graph + mastery data + learning style → generates optimal path
+- [x] Build `PathGenerator` algorithm — takes concept graph + mastery data + learning style → generates optimal path
   - For visual learners: prefer video, animations, diagrams
   - For reading learners: prefer text, code samples, docs
   - For kinesthetic: prefer interactive, coding challenges
   - For auditory: prefer audio explanations, discussions
-- [ ] Build `DynamicPathAPI` — `POST /api/path/generate` — returns personalized learning path
+- [x] Build `DynamicPathAPI` — `POST /api/path/generate` — returns personalized learning path
 - [ ] Build `LearningPathVisualization` — shows the student's unique journey through their world
-- [ ] Build `CurrentPathIndicator` — "You are here" marker on the skill tree
-- [ ] Build `NextUp` component — shows the single next recommended action
+- [x] Build `CurrentPathIndicator` — "You are here" marker on the skill tree
+- [x] Build `NextUp` component — shows the single next recommended action
 
 ### Weakness Detection
 
-- [ ] Build `WeaknessAnalyzer` — cross-references quiz performance, time spent, retries, mastery decay
-- [ ] Build `GapDetector` — finds concepts that are prerequisites but have low mastery
-- [ ] Build `WeakAreaPanel` component — shows weak areas with recommended review
+- [x] Build `WeaknessAnalyzer` — cross-references quiz performance, time spent, retries, mastery decay
+- [x] Build `GapDetector` — finds concepts that are prerequisites but have low mastery
+- [x] Build `WeakAreaPanel` component — shows weak areas with recommended review
 - [ ] Build `FoundationRebuilder` — automatically suggests revisiting prerequisite concepts when gaps found
 - [ ] Build `WeaknessAlert` — notification on dashboard when foundation gaps are detected
 
@@ -125,13 +125,13 @@
 
 ### API Routes
 
-- [ ] `GET /api/student/learning-profile` — retrieve learning style and preferences
-- [ ] `PUT /api/student/learning-profile` — update learning preferences, override style
-- [ ] `POST /api/student/detect-style` — trigger style analysis
-- [ ] `GET /api/path/current` — get current dynamic learning path
-- [ ] `GET /api/path/recommendations` — personalized next-step recommendations
-- [ ] `GET /api/student/weakness-report` — detailed weakness analysis
-- [ ] `POST /api/lesson/difficulty-feedback` — report difficulty preference per lesson
+- [x] `GET /api/student/learning-profile` — retrieve learning style and preferences
+- [x] `PUT /api/student/learning-profile` — update learning preferences, override style
+- [x] `POST /api/student/detect-style` — trigger style analysis
+- [x] `GET /api/path/current` — get current dynamic learning path
+- [x] `GET /api/path/recommendations` — personalized next-step recommendations
+- [x] `GET /api/student/weakness-report` — detailed weakness analysis
+- [x] `POST /api/lesson/difficulty-feedback` — report difficulty preference per lesson
 
 ---
 

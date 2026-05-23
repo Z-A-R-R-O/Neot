@@ -6,8 +6,8 @@
 |------|-------|------|----------|
 | Z-01 LMS Flow | 110 | 110 | 100% ✅ |
 | Z-02 Admin Flow | 60 | 60 | 100% ✅ |
-| **Z-03 Adaptive Universe** | **112** | **25** | **22% 🚧** |
-| **Combined v2+v3** | **282** | **195** | **69% 🚧** |
+| **Z-03 Adaptive Universe** | **112** | **44** | **39% 🚧** |
+| **Combined v2+v3** | **282** | **214** | **76% 🚧** |
 
 ## Active Phase: V3-0 — Foundation
 
@@ -59,7 +59,7 @@ See `ASSIST/Execution/checklists/z-03-adaptive-universe.md` for detailed task li
 |-------|-------|--------|--------------|
 | V3-0: Foundation | 15 | 🔲 Active (67%) | 2-3 days |
 | V3-1: Learning Worlds | 18 | 🚧 Active (83%) | 4-5 days |
-| V3-2: AI Personalization | 20 | 🔲 Planned | 6-8 days |
+| V3-2: AI Personalization | 26 | 🚧 Active (73%) | 6-8 days |
 | V3-3: Engagement Loops | 14 | 🔲 Planned | 4-5 days |
 | V3-4: Story Mode | 16 | 🔲 Planned | 5-6 days |
 | V3-5: Monetization | 14 | 🔲 Planned | 4-5 days |
