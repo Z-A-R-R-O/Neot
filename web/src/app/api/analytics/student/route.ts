@@ -16,7 +16,6 @@ export async function GET() {
     enrollments,
     lessonProgresses,
     xpTransactions,
-    quizProgresses,
   ] = await Promise.all([
     prisma.profile.findUnique({
       where: { id: userId },
@@ -38,21 +37,19 @@ export async function GET() {
       select: { amount: true, reason: true, createdAt: true },
       orderBy: { createdAt: "asc" },
     }),
-    prisma.quizProgress?.findMany?.({
-      where: { userId },
-      select: { score: true, total: true, completedAt: true },
-      orderBy: { completedAt: "desc" },
-    }) ?? Promise.resolve([]),
   ]);
 
-  const totalLessons = lessonProgresses.length;
-  const completedLessons = lessonProgresses.filter((lp) => lp.status === "completed").length;
-  const inProgressLessons = lessonProgresses.filter((lp) => lp.status === "in_progress").length;
-  const totalTimeSpent = lessonProgresses.reduce((sum, lp) => sum + lp.timeSpent, 0);
+  type LP = typeof lessonProgresses[number];
+  type XP = typeof xpTransactions[number];
 
-  const scored = lessonProgresses.filter((lp) => lp.score != null);
+  const totalLessons = lessonProgresses.length;
+  const completedLessons = lessonProgresses.filter((lp: LP) => lp.status === "completed").length;
+  const inProgressLessons = lessonProgresses.filter((lp: LP) => lp.status === "in_progress").length;
+  const totalTimeSpent = lessonProgresses.reduce((sum: number, lp: LP) => sum + lp.timeSpent, 0);
+
+  const scored = lessonProgresses.filter((lp: LP) => lp.score != null);
   const avgScore = scored.length > 0
-    ? Math.round(scored.reduce((sum, lp) => sum + (lp.score ?? 0), 0) / scored.length)
+    ? Math.round(scored.reduce((sum: number, lp: LP) => sum + (lp.score ?? 0), 0) / scored.length)
     : 0;
 
   const totalXp = profile?.xp ?? 0;
@@ -70,9 +67,14 @@ export async function GET() {
   for (let i = 11; i >= 0; i--) {
     const weekEnd = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
     const weekStart = new Date(weekEnd.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const weekProgress = lessonProgresses.filter((lp) => {
+const weekProgress = lessonProgresses.filter((lp: LP) => {
       const d = lp.updatedAt;
       return d >= weekStart && d < weekEnd;
+    });
+    weeklyActivity.push({
+      week: `W${12 - i}`,
+      completed: weekProgress.filter((lp: LP) => lp.status === "completed").length,
+      timeSpent: weekProgress.reduce((sum: number, lp: LP) => sum + lp.timeSpent, 0),
     });
     weeklyActivity.push({
       week: `W${12 - i}`,
@@ -119,8 +121,8 @@ export async function GET() {
     last28Days.push({ date: key, minutes: Math.round((hoursByDay[key] ?? 0) / 60) });
   }
 
-  const avgQuizScore = quizProgresses.length > 0
-    ? Math.round(quizProgresses.reduce((s, q) => s + (q.total > 0 ? (q.score / q.total) * 100 : 0), 0) / quizProgresses.length)
+  const avgQuizScore = lessonProgresses.filter((lp: LP) => lp.score != null).length > 0
+    ? Math.round(lessonProgresses.filter((lp: LP) => lp.score != null).reduce((s: number, lp: LP) => s + lp.score!, 0) / lessonProgresses.filter((lp: LP) => lp.score != null).length)
     : null;
 
   return NextResponse.json({

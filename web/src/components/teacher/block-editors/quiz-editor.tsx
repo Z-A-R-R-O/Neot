@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { QuizQuestionEditor } from "@/components/teacher/block-editers/quiz-question-editor";
+import { QuizQuestionEditor } from "@/components/teacher/block-editors/quiz-question-editor";
 import { QuizAutoGenerate } from "@/components/ai/quiz-auto-generate";
 import type { QuizQuestion } from "@/types/blocks/quiz-block";
 

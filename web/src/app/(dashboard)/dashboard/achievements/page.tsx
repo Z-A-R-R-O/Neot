@@ -26,7 +26,7 @@ export default async function DashboardAchievementsPage() {
     id: a.id,
     name: a.name,
     description: a.description,
-    iconUrl: a.icon,
+    iconUrl: a.icon ?? null,
     xpReward: a.xpReward,
     earned: earnedAchievementIds.has(a.id),
   }));

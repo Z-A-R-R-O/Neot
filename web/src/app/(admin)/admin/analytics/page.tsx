@@ -98,24 +98,25 @@ export default function AdminAnalyticsPage() {
   if (loading) return <LoadingScreen fullScreen={false} message="Loading analytics..." />;
   if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
   if (!data) return null;
+  const d = data;
 
   function handleExportCSV() {
     const rows: string[][] = [];
     rows.push(["Metric", "Value"]);
-    rows.push(["Total Users", String(data.overview.totalUsers)]);
-    rows.push(["Total Courses", String(data.overview.totalCourses)]);
-    rows.push(["Total Enrollments", String(data.overview.totalEnrollments)]);
-    rows.push(["Completed Lessons", String(data.overview.totalCompletedLessons)]);
-    rows.push(["DAU", String(data.engagement.dau)]);
-    rows.push(["WAU", String(data.engagement.wau)]);
-    rows.push(["MAU", String(data.engagement.mau)]);
-    rows.push(["Retention Rate", `${data.engagement.retentionRate}%`]);
-    rows.push(["Total Revenue", `$${data.revenue.totalRevenue.toFixed(2)}`]);
-    rows.push(["Platform Fees", `$${data.revenue.platformFees.toFixed(2)}`]);
-    rows.push(["Net Revenue", `$${data.revenue.netRevenue.toFixed(2)}`]);
+    rows.push(["Total Users", String(d.overview.totalUsers)]);
+    rows.push(["Total Courses", String(d.overview.totalCourses)]);
+    rows.push(["Total Enrollments", String(d.overview.totalEnrollments)]);
+    rows.push(["Completed Lessons", String(d.overview.totalCompletedLessons)]);
+    rows.push(["DAU", String(d.engagement.dau)]);
+    rows.push(["WAU", String(d.engagement.wau)]);
+    rows.push(["MAU", String(d.engagement.mau)]);
+    rows.push(["Retention Rate", `${d.engagement.retentionRate}%`]);
+    rows.push(["Total Revenue", `$${d.revenue.totalRevenue.toFixed(2)}`]);
+    rows.push(["Platform Fees", `$${d.revenue.platformFees.toFixed(2)}`]);
+    rows.push(["Net Revenue", `$${d.revenue.netRevenue.toFixed(2)}`]);
     rows.push([]);
     rows.push(["Top Course", "Teacher", "Status", "Enrollments"]);
-    for (const c of data.topCourses) {
+    for (const c of d.topCourses) {
       rows.push([c.title, c.teacher, c.status, String(c.enrollments)]);
     }
     const csv = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n");

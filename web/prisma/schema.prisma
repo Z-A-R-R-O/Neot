@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 model Profile {
@@ -1342,4 +1341,137 @@ model Plugin {
   @@index([slug])
   @@index([enabled])
   @@map("plugins")
+}
+
+// ── V3: Adaptive Learning Universe ────────────────────────────────────────────
+
+model Concept {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  difficulty  Int      @default(1)
+  domain      String   @default("coding")
+  icon        String?
+  color       String?  @default("#3b82f6")
+  worldId     String?  @map("world_id")
+  islandId    String?  @map("island_id")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  world         Island?               @relation(fields: [islandId], references: [id])
+  prerequisites ConceptPrerequisite[] @relation("ConceptPrerequisite")
+  dependents    ConceptPrerequisite[] @relation("ConceptDependent")
+
+  @@index([domain])
+  @@index([worldId])
+  @@index([islandId])
+  @@map("concepts")
+}
+
+model ConceptPrerequisite {
+  id              String @id @default(uuid())
+  conceptId       String @map("concept_id")
+  prerequisiteId  String @map("prerequisite_id")
+
+  concept      Concept @relation("ConceptPrerequisite", fields: [conceptId], references: [id], onDelete: Cascade)
+  prerequisite Concept @relation("ConceptDependent", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+
+  @@unique([conceptId, prerequisiteId])
+  @@index([conceptId])
+  @@index([prerequisiteId])
+  @@map("concept_prerequisites")
+}
+
+model LearningWorld {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  theme       String   @default("default")
+  icon        String?
+  color       String?  @default("#3b82f6")
+  order       Int      @default(0)
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  islands Island[]
+
+  @@index([order])
+  @@index([isActive])
+  @@map("learning_worlds")
+}
+
+model Island {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  worldId     String   @map("world_id")
+  icon        String?
+  color       String?  @default("#6366f1")
+  order       Int      @default(0)
+  requiredMastery Float @default(0.8) @map("required_mastery")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  world      LearningWorld @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  concepts   Concept[]
+  progresses WorldProgress[]
+
+  @@index([worldId])
+  @@index([order])
+  @@map("islands")
+}
+
+model WorldProgress {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  worldId   String?  @map("world_id")
+  islandId  String?  @map("island_id")
+  status    String   @default("locked")
+  progress  Float    @default(0)
+  xpEarned  Int      @default(0) @map("xp_earned")
+  startedAt DateTime? @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  island Island? @relation(fields: [islandId], references: [id])
+
+  @@unique([userId, islandId])
+  @@index([userId])
+  @@index([status])
+  @@map("world_progress")
+}
+
+model StudentLearningProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique @map("user_id")
+  learningStyle   String   @default("unknown")
+  preferredDifficulty Int  @default(2) @map("preferred_difficulty")
+  interests       String   @default("[]")
+  attentionSpan   Int      @default(20) @map("attention_span")
+  memoryScore     Float    @default(0.5) @map("memory_score")
+  quizCompleted   Boolean  @default(false) @map("quiz_completed")
+  styleOverridden Boolean  @default(false) @map("style_overridden")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("student_learning_profiles")
+}
+
+model AdPlacement {
+  id        String   @id @default(uuid())
+  page      String
+  location  String
+  slotName  String   @map("slot_name")
+  adUnit    String?  @map("ad_unit")
+  enabled   Boolean  @default(true)
+  priority  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([page, location])
+  @@index([enabled])
+  @@map("ad_placements")
 }

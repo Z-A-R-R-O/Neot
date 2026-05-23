@@ -195,7 +195,7 @@ export function ContentGenerator({ initialContent = "", onInsert }: ContentGener
           <pre className="max-h-64 overflow-auto rounded bg-background p-3 text-xs">
             {JSON.stringify(result, null, 2)}
           </pre>
-          {result.note && (
+          {(result.note as string | undefined) && (
             <p className="mt-2 text-xs text-amber-500">{result.note as string}</p>
           )}
         </div>

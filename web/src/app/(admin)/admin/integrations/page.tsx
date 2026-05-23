@@ -89,25 +89,25 @@ export default async function AdminIntegrationsPage() {
                   <Badge variant={integration.status === "enabled" ? "default" : "secondary"}>
                     {integration.status === "enabled" ? "Enabled" : "Disabled"}
                   </Badge>
-                  {"apiKey" in integration && integration.apiKey && (
-                    <span className="text-xs text-muted-foreground">{integration.apiKey}</span>
-                  )}
+                  {"apiKey" in integration && integration.apiKey ? (
+                    <span className="text-xs text-muted-foreground">{String(integration.apiKey)}</span>
+                  ) : null}
                   {"endpoints" in integration && integration.endpoints !== undefined && (
                     <span className="text-xs text-muted-foreground">
-                      {integration.endpoints} endpoint{integration.endpoints !== 1 ? "s" : ""}
+                      {String(integration.endpoints)} endpoint{integration.endpoints !== 1 ? "s" : ""}
                     </span>
                   )}
                   {"providers" in integration && integration.providers && (
-                    <span className="text-xs text-muted-foreground">{integration.providers}</span>
+                    <span className="text-xs text-muted-foreground">{String(integration.providers)}</span>
                   )}
                   {"gaId" in integration && integration.gaId && (
-                    <span className="text-xs text-muted-foreground">{integration.gaId}</span>
+                    <span className="text-xs text-muted-foreground">{String(integration.gaId)}</span>
                   )}
                   {"provider" in integration && integration.provider && (
-                    <span className="text-xs text-muted-foreground">via {integration.provider}</span>
+                    <span className="text-xs text-muted-foreground">via {String(integration.provider)}</span>
                   )}
                   {"currency" in integration && integration.currency && (
-                    <span className="text-xs text-muted-foreground">{integration.currency}</span>
+                    <span className="text-xs text-muted-foreground">{String(integration.currency)}</span>
                   )}
                 </div>
               </CardContent>

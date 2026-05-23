@@ -13,28 +13,15 @@ export async function POST(request: Request) {
 
   const passkey = await prisma.passkey.findUnique({
     where: { credentialId },
-    include: {
-      user: {
-        select: {
-          id: true,
-          email: true,
-          fullName: true,
-          role: true,
-          status: true,
-          ageGroup: true,
-          avatarUrl: true,
-          onboardingCompleted: true,
-          schoolId: true,
-        },
-      },
-    },
   });
 
   if (!passkey) {
     return NextResponse.json({ error: "Credential not found" }, { status: 404 });
   }
 
-  if (passkey.user.status !== "active") {
+  const user = await prisma.profile.findUnique({ where: { id: passkey.userId } });
+
+  if (!user || user.status !== "active") {
     return NextResponse.json({ error: "Account is not active" }, { status: 403 });
   }
 
@@ -48,10 +35,10 @@ export async function POST(request: Request) {
   const response = NextResponse.json({
     success: true,
     user: {
-      id: passkey.user.id,
-      email: passkey.user.email,
-      fullName: passkey.user.fullName,
-      role: passkey.user.role,
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
     },
   });
 

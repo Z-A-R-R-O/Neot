@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -8,7 +8,23 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function PurchaseSuccessPage() {
+export default function PurchaseSuccessPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-[60vh] items-center justify-center p-6">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-muted-foreground" />
+          </CardHeader>
+        </Card>
+      </div>
+    }>
+      <PurchaseSuccessPage />
+    </Suspense>
+  );
+}
+
+function PurchaseSuccessPage() {
   const searchParams = useSearchParams();
   const listingId = searchParams.get("listingId");
   const [isProcessing, setIsProcessing] = useState(true);

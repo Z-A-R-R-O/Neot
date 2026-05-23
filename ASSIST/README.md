@@ -12,10 +12,12 @@ ASSIST is the structured execution layer for the NEOT Learning Platform. Every t
 ASSIST/
 ├── README.md                  ← THIS FILE — navigation + workflow
 ├── GUIDE.md                   ← Quick-start for new contributors
+
 ├── CORE/                      ← Mission, architecture, engineering standards
-│   ├── vision.md              ← What we're building and why
+│   ├── vision.md              ← What we're building and why (NEW: Adaptive Universe)
 │   ├── architecture.md        ← System design, tech stack, data flow
 │   └── principles.md          ← Code conventions, review checklist, standards
+
 ├── VISION/                    ← Detailed specs per role/system
 │   ├── student.md             ← Student learning experience
 │   ├── teacher.md             ← Teacher content creation
@@ -27,45 +29,60 @@ ASSIST/
 │   ├── mobile.md              ← Flutter mobile strategy
 │   ├── business.md            ← Revenue models, pricing, projections
 │   └── dev-mode.md            ← Visual Experience Engine (Dev Mode)
+
 ├── ROADMAP/                   ← What's done, what's next, what's planned
-│   ├── masterplan.md          ← Z-01 + Z-02 combined status + gap analysis
-│   ├── phases.md              ← Phase map, dependencies, entry gates
-│   └── shipped.md             ← Complete shipped inventory
+│   ├── masterplan.md          ← Combined v2 + v3 status, priorities
+│   ├── phases.md              ← Phase map including v3 phases
+│   ├── shipped.md             ← Complete v2 shipped inventory (LMS)
+│   └── v3-transition.md       ← NEW: LMS → Adaptive Universe transition plan
+
 ├── EXECUTION/                 ← How to work, conventions, checklists
 │   ├── workflow.md            ← Plan → Build → Log → Commit
 │   ├── conventions.md         ← Naming, commits, branch strategy
 │   └── checklists/
-│       ├── z-01-lms.md        ← LMS flow — 110-item checklist
-│       └── z-02-admin.md      ← Admin flow — 60-item checklist
+│       ├── z-01-lms.md        ← LMS flow — 110 items (100% ✅)
+│       ├── z-02-admin.md      ← Admin flow — 60 items (100% ✅)
+│       └── z-03-adaptive-universe.md  ← NEW: v3 — 112 items (0% 🔲)
+
 ├── LOG/                       ← One .md file per work session
+
 └── TOOLS/
     ├── git-helper/
-    │   └── git-helper.ps1         ← Auto-numbered commits: "XX -- NEOT -- <desc>"
+    │   └── git-helper.ps1         ← Auto-numbered commits
     └── Auto-next/
-        ├── auto-next.py           ← Template-based Auto-Next watcher
+        ├── auto-next.py           ← Auto-Next watcher
         ├── templates/             ← Send/stop icon references
         └── auto-next.ps1          ← Fallback: Keyboard-only simulation
+
+## Root-Level Strategic Document
+
+master.md  ← NEW: Strategic North Star — full vision for the Adaptive Learning Universe
 ```
 
 ## Quick Start
 
 ```powershell
-# 1. Check what's active
+# 1. Read the strategic North Star
+cat master.md
+
+# 2. Check what's active
 cat ASSIST/Roadmap/masterplan.md
 
-# 2. Pick a task from the checklist
-cat ASSIST/Execution/checklists/z-01-lms.md
+# 3. Pick a task from the v3 checklist
+cat ASSIST/Execution/checklists/z-03-adaptive-universe.md
 
-# 3. Read the spec for context
-cat ASSIST/Vision/student.md
+# 4. Read the spec for context
+cat ASSIST/Vision/adaptive.md
 
-# 4. Build it (write code in web/)
+# 5. Build it (write code in web/)
 
-# 5. Log the session
+# 6. Log the session
 code ASSIST/Log/YYYY-MM-DD-HHmm.md
 
-# 6. Commit
-.\ASSIST\Tools\git-helper.ps1 "Description of changes"
+# 7. Update ASSIST docs (must do)
+
+# 8. Commit
+.\ASSIST\Tools\git-helper.ps1 "V3-0: Description of changes"
 
 # Optional automation helper
 python ASSIST\Tools\Auto-next\auto-next.py
@@ -79,49 +96,48 @@ Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -
 
 | Step | Where | What |
 |------|-------|------|
+| **Orient** | `master.md` | Read strategic North Star |
 | **Plan** | `Roadmap/masterplan.md` | See active phase + priority gaps |
-| **Task** | `Execution/checklists/` | Pick a 🔲 or 🚧 item |
+| **Task** | `Execution/checklists/z-03-adaptive-universe.md` | Pick a 🔲 item |
 | **Spec** | `Vision/` + `Core/` | Read architecture + role specs |
 | **Build** | `web/src/` | Implement the code |
 | **Log** | `Log/YYYY-MM-DD-HHmm.md` | What changed, why, status, next |
-| **Update ASSIST** | `Roadmap/`, `Execution/` | Progress %, shipped items, checklists |
+| **Update ASSIST** | `Roadmap/`, `Execution/` | Progress %, checklists, masterplan |
 | **Commit** | `Tools/git-helper.ps1` | Auto-numbered: `XX -- NEOT -- desc` |
-
-Auto-Next is an optional local automation tool, not a required workflow step. Python version image-matches the AI chat send/stop icons: stop icon means wait, send icon means type `Next / Continue `, wait 2 seconds, then submit.
-
-Manual command:
-
-```powershell
-python ASSIST\Tools\Auto-next\auto-next.py
-```
-
-Use `START` in the overlay, click the chat input during the focus countdown, and leave it running. It scans every 10 seconds.
 
 **ASSIST must always reflect reality.** Never commit code without updating ASSIST docs.
 
 ## Current Status
 
-| Plan | Progress | Status |
-|------|----------|--------|
-| **Z-01 LMS Flow** | 100% (110/110) | ✅ Complete |
-| **Z-02 Admin Flow** | 100% (60/60) | ✅ Complete |
-| **Combined** | 100% (170/170) | ✅ Complete |
+| Plan | Items | Done | Progress |
+|------|-------|------|----------|
+| **Z-01 LMS Flow** | 110 | 110 | 100% ✅ Shipped |
+| **Z-02 Admin Flow** | 60 | 60 | 100% ✅ Shipped |
+| **Z-03 Adaptive Universe** | 112 | 0 | 0% 🔲 Active |
+| **Combined** | **282** | **170** | **60% 🚧** |
+
+## Strategic Documents Reference
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| **Strategic North Star** | `master.md` (root) | Full vision: AI-Powered Adaptive Learning Universe |
+| **v3 Transition Plan** | `Roadmap/v3-transition.md` | How we get from LMS to Adaptive Universe |
+| **v3 Checklist** | `Execution/checklists/z-03-adaptive-universe.md` | 112-item step-by-step implementation plan |
+| **v2 Shipped Inventory** | `Roadmap/shipped.md` | Everything already built |
+| **Phase Map** | `Roadmap/phases.md` | All phases including v3 |
 
 ## Phase Selection Rules
 
 | Phase | Prerequisite | Entry Gate |
 |-------|-------------|------------|
-| **0** Foundation | None | — |
-| **1** Core Learning | Phase 0 done | Auth + DB working |
-| **1.5** Admin CMS | Phase 1 stable | Course CRUD + lesson player |
-| **1.75** Dynamic Renderer | Phase 1.5 done | Section builder + registry |
-| **UI** Redesign | Phase 1.75 done | Page builder working |
-| **2.5** Dev Mode | Phase 1.75 done | Block registry + overlay store |
-| **2** Adaptive + Gamification | Phase 1 done | Quiz + progress tracking |
-| **3** AI + Mobile | Phase 2 + 1.5 done | Adaptive profiles + CMS |
-| **4** Parent + School | Phase 1 done | Student/teacher data |
-| **5** Scale + Marketplace | All prior | Everything stable |
-| **6** Integrations | Phase 5 stable | Platform ready for external connections |
+| **v2** Z-01/Z-02 | None | ✅ Complete (170/170) |
+| **V3-0** Foundation | None | master.md + ASSIST docs aligned |
+| **V3-1** Learning Worlds | V3-0 done | Concept Graph deployed |
+| **V3-2** AI Personalization | V3-1 live | Worlds UI + graph populated |
+| **V3-3** Engagement Loops | V3-2 stable | Dynamic paths working |
+| **V3-4** Story Mode | V3-2 done | Learning profiles active |
+| **V3-5** Monetization | V3-3 + V3-4 live | Engagement metrics established |
+| **V3-6** Scale + Launch | All prior | Everything functional |
 
-**Shipped:** ✅ All phases complete. 185 commits. 170/170 checklist items delivered.
-
+**Shipped:** ✅ v2 complete (170/170, 185 commits).
+**Active:** 🔲 V3-0 Foundation — start here.

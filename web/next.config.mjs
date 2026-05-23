@@ -10,7 +10,7 @@ const nextConfig = {
   },
 
   turbopack: {
-    root: "E:\\NEOT\\web",
+    root: process.cwd(),
   },
 
   async headers() {

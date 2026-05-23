@@ -2,15 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Metadata } from "next";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { CheckCircle, XCircle, Mail, Loader2 } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Verify Email",
-  robots: { index: false, follow: false },
-};
 
 const easing = [0.16, 1, 0.3, 1] as const;
 

@@ -108,7 +108,7 @@ export function AnalyticsContent() {
           <h3 className="mb-4 text-sm font-semibold text-foreground">XP Breakdown by Source</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              <Pie data={xpBreakdown} dataKey="amount" nameKey="reason" cx="50%" cy="50%" outerRadius={80} label={({ reason, percent }) => `${reason} (${(percent * 100).toFixed(0)}%)`} labelLine>
+              <Pie data={xpBreakdown} dataKey="amount" nameKey="reason" cx="50%" cy="50%" outerRadius={80} label={(({ reason, percent }: Record<string, unknown>) => `${String(reason)} (${(Number(percent) * 100).toFixed(0)}%)`) as never} labelLine>
                 {xpBreakdown.map((_, i) => (
                   <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                 ))}
@@ -144,7 +144,7 @@ export function AnalyticsContent() {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="week" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
               <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" label={{ value: "min", angle: -90, position: "insideLeft", style: { fontSize: 10 } }} />
-              <Tooltip contentStyle={{ fontSize: 12 }} formatter={(value: number) => formatMinutes(value)} />
+              <Tooltip contentStyle={{ fontSize: 12 }} formatter={((value: number | string) => formatMinutes(Number(value))) as never} />
               <Bar dataKey="timeSpent" fill="#f59e0b" radius={[4, 4, 0, 0]} name="Time" />
             </BarChart>
           </ResponsiveContainer>

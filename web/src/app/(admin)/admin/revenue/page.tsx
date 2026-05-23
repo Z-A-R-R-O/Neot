@@ -32,11 +32,12 @@ export default async function AdminRevenuePage() {
     _count: { id: true },
   });
 
-  const pendingPayouts = await prisma.payoutTransaction.findMany({
+  const rawPayouts = await prisma.payoutTransaction.findMany({
     where: { status: "pending" },
     orderBy: { createdAt: "desc" },
     take: 20,
   });
+  const pendingPayouts = rawPayouts.map((p) => ({ ...p, createdAt: p.createdAt.toISOString() }));
 
   const topTeachers = await prisma.marketplacePurchase.groupBy({
     by: ["teacherId"],

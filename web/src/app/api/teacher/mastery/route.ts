@@ -48,13 +48,12 @@ export async function GET(request: Request) {
     select: { lessonId: true, skillId: true, weight: true },
   });
 
-  const lessonToCourse = await prisma.lesson.findMany({
+const lessons = await prisma.lesson.findMany({
     where: { module: { courseId: { in: courseIds } } },
-    select: { id: true, moduleId: true },
-    include: { module: { select: { courseId: true } } },
+    select: { id: true, moduleId: true, module: { select: { courseId: true } } },
   });
 
-  const lessonCourseMap = new Map(lessonToCourse.map((l) => [l.id, l.module.courseId]));
+  const lessonCourseMap = new Map(lessons.map((l) => [l.id, l.module.courseId]));
   const lessonSkillMap = new Map<string, { skillId: string; weight: number }[]>();
   for (const ls of lessonSkills) {
     const existing = lessonSkillMap.get(ls.lessonId) ?? [];

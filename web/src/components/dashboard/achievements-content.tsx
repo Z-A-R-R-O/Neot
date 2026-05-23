@@ -24,6 +24,7 @@ interface BadgeItem {
   rarity: "common" | "uncommon" | "rare" | "epic" | "legendary";
   xpReward: number;
   earned: boolean;
+  criteria?: string;
 }
 
 interface Props {

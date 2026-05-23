@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -84,7 +84,19 @@ function CheckoutForm({ listingId, amount }: { listingId: string; amount: number
   );
 }
 
-export default function CheckoutPage() {
+export default function CheckoutPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    }>
+      <CheckoutPage />
+    </Suspense>
+  );
+}
+
+function CheckoutPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const listingId = searchParams.get("listingId");
