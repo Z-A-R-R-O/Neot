@@ -7,11 +7,11 @@
 | V3-0: Foundation | 15 | 10 | 67% |
 | V3-1: Learning Worlds | 18 | 15 | 83% |
 | V3-2: AI Personalization Engine | 26 | 26 | 100% |
-| V3-3: Engagement Loops | 14 | 0 | 0% |
+| V3-3: Engagement Loops | 14 | 5 | 36% |
 | V3-4: Story Mode | 16 | 0 | 0% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **112** | **51** | **46%** |
+| **Total** | **112** | **56** | **50%** |
 
 ---
 
@@ -143,11 +143,11 @@
 
 ### Daily Quests
 
-- [ ] Build `Quest` model — quest definition (type, XP reward, conditions)
-- [ ] Build `StudentQuest` model — tracks daily quest assignment and completion per student
-- [ ] Build `QuestGenerator` — generates 3 daily quests per student (e.g., "Complete 2 lessons", "Score 90% on a quiz", "Try a challenge")
-- [ ] Build `QuestCard` component — shows quest, progress, XP reward
-- [ ] Build `DailyQuestsPanel` — dashboard widget showing today's quests
+- [x] Build `Quest` model — quest definition (type, XP reward, conditions)
+- [x] Build `StudentQuest` model — tracks daily quest assignment and completion per student
+- [x] Build `QuestGenerator` — generates 3 daily quests per student (e.g., "Complete 2 lessons", "Score 90% on a quiz", "Try a challenge")
+- [x] Build `QuestCard` component — shows quest, progress, XP reward
+- [x] Build `DailyQuestsPanel` — dashboard widget showing today's quests
 - [ ] Build quest completion animation — dopamine hit on quest finish
 - [ ] Build streak-based quest difficulty — longer streak = harder quests = more XP
 
@@ -168,8 +168,8 @@
 
 ### API Routes
 
-- [ ] `GET /api/quests/daily` — get today's quests
-- [ ] `POST /api/quests/[id]/claim` — claim quest rewards
+- [x] `GET /api/quests/daily` — get today's quests
+- [x] `POST /api/quests/[id]/claim` — claim quest rewards
 - [ ] `GET /api/worlds/map` — full world map with progress across all worlds
 - [ ] `GET /api/curiosity/recommendations` — curiosity-driven topic suggestions
 - [ ] `GET /api/curiosity/random` — random exciting topic

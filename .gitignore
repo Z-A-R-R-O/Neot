@@ -6,7 +6,6 @@ node_modules/
 .next/
 out/
 build/
-dist/
 .flutter-plugins
 .flutter-plugins-dependencies
 *.dart_tool/

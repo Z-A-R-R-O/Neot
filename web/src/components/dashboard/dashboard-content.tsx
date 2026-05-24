@@ -11,6 +11,7 @@ import { StreakNotificationsWidget } from "@/components/gamification/streak-noti
 import { SpacedRepetitionWidget } from "@/components/gamification/spaced-repetition-widget";
 import { FoundationRebuilder } from "@/components/learning/foundation-rebuilder";
 import { WeaknessAlert } from "@/components/learning/weakness-alert";
+import { DailyQuestsPanel } from "@/components/quests/daily-quests-panel";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -173,6 +174,15 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
         className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl"
       >
         <FoundationRebuilder />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.29, ease: easing }}
+        className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl"
+      >
+        <DailyQuestsPanel />
       </motion.div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

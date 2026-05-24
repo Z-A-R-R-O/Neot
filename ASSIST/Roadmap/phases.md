@@ -18,7 +18,7 @@
 | **V3-0** | **Foundation** | **🔲 Active** | **Concept Graph, Learning Style, docs** |
 | **V3-1** | **Learning Worlds** | **🔲 Next** | **World/Island/Dungeon UI, skill trees** |
 | **V3-2** | **AI Personalization** | **✅ Shipped** | **Dynamic paths, style detection, weakness detection, difficulty scaler** |
-| **V3-3** | **Engagement Loops** | **🔲 Next** | **Daily quests, curiosity engine, progression** |
+| **V3-3** | **Engagement Loops** | **🚧 Active** | **Daily quests, curiosity engine, progression** |
 | **V3-4** | **Story Mode** | **🔲 Planned** | **Story generator, concept simplifier, memory optimizer** |
 | **V3-5** | **Monetization** | **🔲 Planned** | **Ad placement, AdSense, sponsored learning** |
 | **V3-6** | **Scale + Launch** | **🔲 Planned** | **UX polish, performance, beta launch** |
