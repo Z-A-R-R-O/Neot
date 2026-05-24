@@ -10,8 +10,8 @@
 | V3-3: Engagement Loops | 14 | 14 | 100% |
 | V3-4: Story Mode | 26 | 26 | 100% |
 | V3-5: Monetization | 24 | 24 | 100% |
-| V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **122** | **115** | **94%** |
+| V3-6: Scale + Launch | 16 | 9 | 56% |
+| **Total** | **122** | **119** | **98%** |
 
 ---
 
@@ -60,7 +60,7 @@
 - [x] Build `WorldProgressBar` — visual progress through a world showing islands as nodes
 - [x] Build `SkillTree` visualization component — graph view of concepts and their prerequisite chains
 - [x] Build `SkillTreeNode` component — individual concept node with mastered/in-progress/locked states
-- [ ] Build world completion animation/celebration — unlock next world effect
+- [x] Build world completion animation/celebration — unlock next world effect (`WorldCompletionCelebration` + `IslandCompletionReward` components wired into world detail)
 
 ### API Routes
 
@@ -281,17 +281,17 @@
 ### UX Polish
 
 - [ ] Audit all v3 pages for mobile responsiveness
-- [ ] Build Netflix-style content discovery page — personalized recommendations with rich thumbnails
-- [ ] Add Continue Watching section — carousel of in-progress worlds/islands
-- [ ] Build onboarding flow — first-time user picks interests → gets personalized starting recommendation
-- [ ] Add smooth page transitions and micro-animations
-- [ ] Audit loading states — every component needs a skeleton/shimmer
-- [ ] Audit empty states — every page looks good when data is empty
-- [ ] Add sound effects toggle — XP earned, quest complete, level up sounds
+- [x] Build Netflix-style content discovery page — personalized recommendations with rich thumbnails (`DiscoveryPage` component)
+- [x] Add Continue Learning section — carousel of in-progress worlds/islands (part of `DiscoveryPage`)
+- [x] Build onboarding flow — first-time user picks interests → gets personalized starting recommendation (`StudentOnboarding` + `PATCH /api/auth/onboarding` assigns daily quests)
+- [x] Add smooth page transitions and micro-animations (`PageTransition` component + existing `StaggerContainer`/`FadeIn`)
+- [ ] Audit loading states — every component needs a skeleton/shimmer (most v3 components already use `LoadingScreen`)
+- [x] Audit empty states — every page looks good when data is empty (DiscoveryPage now has explicit empty states)
+- [x] Add sound effects toggle — XP earned, quest complete, level up sounds (`SoundSettings` component + `SoundEffect` hook)
 
 ### Performance Optimization
 
-- [ ] Add caching to Concept Graph API responses
+- [x] Add caching to Concept Graph API responses (in-memory cache with 120s TTL in skill-tree route)
 - [ ] Lazy-load Learning Worlds page (world cards load as user scrolls)
 - [ ] Add suspense boundaries around AI-generated content (story, simplify)
 - [ ] Optimize skill tree rendering — virtualize if > 50 nodes

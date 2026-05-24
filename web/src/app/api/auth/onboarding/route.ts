@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getUserId } from "@/lib/auth";
+import { assignDailyQuests } from "@/lib/quests/quest-generator";
 
 const onboardingSchema = z.object({
   fullName: z.string().max(100).optional(),
@@ -78,6 +79,8 @@ export async function PATCH(request: Request) {
       where: { id: userId },
       data: updateData as never,
     });
+
+    await assignDailyQuests(userId).catch(() => {});
 
     return NextResponse.json({ success: true });
   } catch (error) {

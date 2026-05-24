@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, ChevronDown, ChevronUp, Sparkles, RefreshCw } from "lucide-react";
+import { StoryFeedback } from "./story-feedback";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -91,19 +92,21 @@ export function StoryViewer({ conceptTitle, conceptDescription }: StoryViewerPro
             ))}
           </div>
 
-          <div className="mt-4 space-y-3">
-            {story.story.split("\n\n").map((para, i) => (
-              <motion.p
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="text-sm leading-relaxed text-foreground/80"
-              >
-                {para}
-              </motion.p>
-            ))}
-          </div>
+            <div className="mt-4 space-y-3">
+              {story.story.split("\n\n").map((para, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="text-sm leading-relaxed text-foreground/80"
+                >
+                  {para}
+                </motion.p>
+              ))}
+            </div>
+
+            <StoryFeedback conceptTitle={conceptTitle} />
         </motion.div>
       )}
     </div>

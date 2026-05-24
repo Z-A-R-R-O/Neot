@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { User, Shield, Bell, AlertTriangle } from "lucide-react";
+import { User, Shield, Bell, Volume2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SettingsForm } from "@/components/settings/settings-form";
 import { SecuritySettings } from "@/components/settings/security-settings";
 import { NotificationSettings } from "@/components/settings/notification-settings";
 import { AccountSettings } from "@/components/settings/account-settings";
+import { SoundSettings } from "@/components/settings/sound-settings";
 
 interface InitialData {
   fullName: string;
@@ -41,6 +42,7 @@ const TABS = [
   { id: "profile", label: "Profile", icon: User },
   { id: "security", label: "Security", icon: Shield },
   { id: "notifications", label: "Notifications", icon: Bell },
+  { id: "sound", label: "Sound", icon: Volume2 },
   { id: "account", label: "Account", icon: AlertTriangle },
 ] as const;
 
@@ -82,6 +84,7 @@ export function SettingsTabs({ initialData, notificationPreferences }: Props) {
       {activeTab === "notifications" && (
         <NotificationSettings initial={notificationPreferences} />
       )}
+      {activeTab === "sound" && <SoundSettings />}
       {activeTab === "account" && <AccountSettings />}
     </div>
   );
