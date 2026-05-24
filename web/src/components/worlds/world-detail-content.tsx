@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { IslandCard } from "./island-card";
 import { WorldProgressBar } from "./world-progress-bar";
 import { WorldCompletionCelebration } from "./world-completion-celebration";
+import { LearningPathVisualization } from "./learning-path-visualization";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
 import { StaggerContainer, StaggerItem } from "@/components/ui/motion";
@@ -91,6 +92,12 @@ export function WorldDetailContent({ params }: { params: Promise<{ worldId: stri
           <WorldProgressBar
             islands={world.islands.map((i) => ({ id: i.id, title: i.title, status: i.progress.status, color: i.color }))}
           />
+        </div>
+      )}
+
+      {world.islands.length > 0 && (
+        <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6">
+          <LearningPathVisualization worldId={world.id} />
         </div>
       )}
 

@@ -22,15 +22,17 @@ export async function POST(request: Request) {
 
   const { worldId, styleId } = parsed.data;
 
+  const profile = await prisma.studentLearningProfile.findUnique({
+    where: { userId },
+    include: { learningStyle: true },
+  });
+
   let styleName = "reading";
+  const preferredDifficulty = profile?.preferredDifficulty ?? 2;
   if (styleId) {
     const style = await prisma.learningStyle.findUnique({ where: { id: styleId } });
     if (style) styleName = style.name;
   } else {
-    const profile = await prisma.studentLearningProfile.findUnique({
-      where: { userId },
-      include: { learningStyle: true },
-    });
     styleName = profile?.learningStyle?.name ?? "reading";
   }
 
@@ -44,6 +46,7 @@ export async function POST(request: Request) {
   });
 
   const path = [];
+  let hasReachedUnlocked = false;
   for (const island of islands) {
     const progress = island.progresses[0];
     if (progress?.status === "completed") {
@@ -58,12 +61,15 @@ export async function POST(request: Request) {
                   styleName === "kinesthetic" ? "interactive" : "text",
         })),
       });
-    } else if (progress?.status === "in_progress" || progress?.status === "unlocked" || !progress) {
-      const isAvailable = !progress || progress.status !== "locked";
+    } else if (
+      !hasReachedUnlocked &&
+      (progress?.status === "in_progress" || progress?.status === "unlocked" || !progress)
+    ) {
+      hasReachedUnlocked = true;
       path.push({
         islandId: island.id,
         islandTitle: island.title,
-        status: progress?.status ?? (path.length === 0 ? "unlocked" : "locked"),
+        status: progress?.status ?? "unlocked",
         concepts: island.concepts.map((c) => ({
           id: c.id, title: c.title, difficulty: c.difficulty,
           format: styleName === "visual" ? "video" :
@@ -71,9 +77,29 @@ export async function POST(request: Request) {
                   styleName === "kinesthetic" ? "interactive" : "text",
         })),
       });
-      break;
+    } else {
+      path.push({
+        islandId: island.id,
+        islandTitle: island.title,
+        status: "locked",
+        concepts: island.concepts.map((c) => ({
+          id: c.id, title: c.title, difficulty: c.difficulty,
+          format: styleName === "visual" ? "video" :
+                  styleName === "auditory" ? "audio" :
+                  styleName === "kinesthetic" ? "interactive" : "text",
+        })),
+      });
     }
   }
+
+  const masteryRecords = await prisma.skillMastery.findMany({
+    where: { userId },
+    include: { skill: true },
+  });
+  const avgMastery = masteryRecords.length > 0
+    ? masteryRecords.reduce((sum, r) => sum + r.score, 0) / masteryRecords.length
+    : 0;
+  const adjustedDifficulty = Math.max(1, Math.min(5, Math.round(avgMastery * 5)));
 
   const contentTypes = styleName === "visual" ? ["diagrams", "animations", "videos"] :
                        styleName === "auditory" ? ["explanations", "narration"] :
@@ -83,6 +109,9 @@ export async function POST(request: Request) {
   return NextResponse.json({
     worldId,
     style: styleName,
+    preferredDifficulty,
+    adjustedDifficulty,
+    avgMastery: Math.round(avgMastery * 100),
     path,
     recommendedContentTypes: contentTypes,
     generatedAt: new Date().toISOString(),

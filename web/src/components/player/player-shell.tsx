@@ -13,6 +13,7 @@ import { BadgePopup } from "@/components/gamification/badge-popup";
 import { BookmarkToggle } from "@/components/player/bookmark-toggle";
 import { NotesPanel } from "@/components/player/notes-panel";
 import { AiTutorChat } from "@/components/ai/ai-tutor-chat";
+import { DifficultyIndicator } from "@/components/player/difficulty-indicator";
 import { FileText, CheckCircle2, Bot } from "lucide-react";
 
 interface LessonBlock {
@@ -199,6 +200,7 @@ export function LessonPlayer({
         </div>
 
         <div className="flex items-center gap-2">
+          <DifficultyIndicator lessonId={lesson.id} />
           <BookmarkToggle lessonId={lesson.id} />
           <button
             onClick={() => setAiTutorOpen(!aiTutorOpen)}

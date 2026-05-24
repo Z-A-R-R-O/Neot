@@ -9,6 +9,8 @@ import { StreakFlame } from "@/components/gamification/streak-flame";
 import { SeasonalEventsContent } from "@/components/dashboard/seasonal-events-content";
 import { StreakNotificationsWidget } from "@/components/gamification/streak-notifications-widget";
 import { SpacedRepetitionWidget } from "@/components/gamification/spaced-repetition-widget";
+import { FoundationRebuilder } from "@/components/learning/foundation-rebuilder";
+import { WeaknessAlert } from "@/components/learning/weakness-alert";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -129,6 +131,14 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
         </p>
       </motion.div>
 
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.18, ease: easing }}
+      >
+        <WeaknessAlert />
+      </motion.div>
+
       {seasonalEvents && seasonalEvents.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -153,6 +163,16 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
         transition={{ duration: 0.8, delay: 0.25, ease: easing }}
       >
         <SpacedRepetitionWidget />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.27, ease: easing }}
+        id="foundation-rebuilder"
+        className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl"
+      >
+        <FoundationRebuilder />
       </motion.div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

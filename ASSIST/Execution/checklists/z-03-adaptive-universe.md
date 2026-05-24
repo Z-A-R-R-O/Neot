@@ -6,12 +6,12 @@
 |-------|-------|------|----------|
 | V3-0: Foundation | 15 | 10 | 67% |
 | V3-1: Learning Worlds | 18 | 15 | 83% |
-| V3-2: AI Personalization Engine | 26 | 19 | 73% |
+| V3-2: AI Personalization Engine | 26 | 26 | 100% |
 | V3-3: Engagement Loops | 14 | 0 | 0% |
 | V3-4: Story Mode | 16 | 0 | 0% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **112** | **44** | **39%** |
+| **Total** | **112** | **51** | **46%** |
 
 ---
 
@@ -104,7 +104,7 @@
   - For kinesthetic: prefer interactive, coding challenges
   - For auditory: prefer audio explanations, discussions
 - [x] Build `DynamicPathAPI` — `POST /api/path/generate` — returns personalized learning path
-- [ ] Build `LearningPathVisualization` — shows the student's unique journey through their world
+- [x] Build `LearningPathVisualization` — shows the student's unique journey through their world
 - [x] Build `CurrentPathIndicator` — "You are here" marker on the skill tree
 - [x] Build `NextUp` component — shows the single next recommended action
 
@@ -113,15 +113,15 @@
 - [x] Build `WeaknessAnalyzer` — cross-references quiz performance, time spent, retries, mastery decay
 - [x] Build `GapDetector` — finds concepts that are prerequisites but have low mastery
 - [x] Build `WeakAreaPanel` component — shows weak areas with recommended review
-- [ ] Build `FoundationRebuilder` — automatically suggests revisiting prerequisite concepts when gaps found
-- [ ] Build `WeaknessAlert` — notification on dashboard when foundation gaps are detected
+- [x] Build `FoundationRebuilder` — automatically suggests revisiting prerequisite concepts when gaps found
+- [x] Build `WeaknessAlert` — notification on dashboard when foundation gaps are detected
 
 ### Real-time Difficulty Adapter
 
-- [ ] Build session-level difficulty tracker — monitors in-lesson performance (correct/incorrect rate)
-- [ ] Build `DifficultyScaler` — adjusts content difficulty within a session based on live performance
-- [ ] Add difficulty indicator to lesson player — shows "This feels: Too Easy / Just Right / Too Hard"
-- [ ] Build adaptive path recalculation — if student breezes through, accelerate path; if struggles, add remedial content
+- [x] Build session-level difficulty tracker — monitors in-lesson performance (correct/incorrect rate)
+- [x] Build `DifficultyScaler` — adjusts content difficulty within a session based on live performance
+- [x] Add difficulty indicator to lesson player — shows "This feels: Too Easy / Just Right / Too Hard"
+- [x] Build adaptive path recalculation — if student breezes through, accelerate path; if struggles, add remedial content
 
 ### API Routes
 

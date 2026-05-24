@@ -113,8 +113,8 @@ Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -
 |------|-------|------|----------|
 | **Z-01 LMS Flow** | 110 | 110 | 100% ✅ Shipped |
 | **Z-02 Admin Flow** | 60 | 60 | 100% ✅ Shipped |
-| **Z-03 Adaptive Universe** | 112 | 44 | 39% 🚧 Active |
-| **Combined** | **282** | **214** | **76% 🚧** |
+| **Z-03 Adaptive Universe** | 112 | 51 | 46% 🚧 Active |
+| **Combined** | **282** | **221** | **78% 🚧** |
 
 ## Strategic Documents Reference
 
@@ -140,4 +140,4 @@ Read the plan -> Pick a task -> Read the spec -> Build -> Log -> Update ASSIST -
 | **V3-6** Scale + Launch | All prior | Everything functional |
 
 **Shipped:** ✅ v2 complete (170/170, 185 commits).
-**Active:** 🚧 V3-2 AI Personalization — 73% (19/26 items).
+**Active:** 🚧 V3-1 Learning Worlds — 83% (15/18 items). V3-2 ✅ Complete.
