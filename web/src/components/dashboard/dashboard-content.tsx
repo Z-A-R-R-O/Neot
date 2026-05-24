@@ -15,6 +15,7 @@ import { DailyQuestsPanel } from "@/components/quests/daily-quests-panel";
 import { ExploreTab } from "@/components/curiosity/explore-tab";
 import { FeelingCuriousButton } from "@/components/curiosity/feeling-curious-button";
 import { MasteryMilestoneNotification } from "@/components/gamification/mastery-milestone-notification";
+import { NextUp } from "@/components/learning/next-up";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -445,7 +446,7 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
         transition={{ duration: 0.8, delay: 0.4, ease: easing }}
       >
         <h2 className="font-heading text-xl font-bold tracking-tight text-foreground mb-6">Insights</h2>
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl">
             <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary-500/10 blur-[60px]" />
             <div className="relative z-10 flex items-start gap-4">
@@ -468,6 +469,13 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
             <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-accent-500/10 blur-[60px]" />
             <div className="relative z-10">
               <LevelProgress xp={stats.xp} />
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl">
+            <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-blue-500/10 blur-[60px]" />
+            <div className="relative z-10">
+              <NextUp />
             </div>
           </div>
         </div>

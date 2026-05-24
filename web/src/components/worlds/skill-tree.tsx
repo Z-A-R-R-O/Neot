@@ -1,11 +1,12 @@
 "use client";
 
-import { use } from "react";
+import { use, useState, useRef, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SkillTreeNode } from "./skill-tree-node";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
 import { EmptyState } from "@/components/ui/empty-state";
+import { LazyRender } from "@/components/ui/lazy-render";
 import { GitBranch } from "lucide-react";
 
 interface Node {
@@ -110,17 +111,18 @@ export function SkillTree({ params }: { params: Promise<{ worldId: string }> }) 
         </svg>
 
         {layout.map((node) => (
-          <SkillTreeNode
-            key={node.id}
-            id={node.id}
-            title={node.title}
-            difficulty={node.difficulty}
-            color={node.color}
-            isMastered={false}
-            isInProgress={false}
-            isLocked={false}
-            position={node.position}
-          />
+          <LazyRender key={node.id} rootMargin="300px" placeholder={<div style={{ position: "absolute", left: node.position.x - NODE_W / 2, top: node.position.y - NODE_H / 2, width: NODE_W, height: NODE_H }} />}>
+            <SkillTreeNode
+              id={node.id}
+              title={node.title}
+              difficulty={node.difficulty}
+              color={node.color}
+              isMastered={false}
+              isInProgress={false}
+              isLocked={false}
+              position={node.position}
+            />
+          </LazyRender>
         ))}
       </div>
     </div>

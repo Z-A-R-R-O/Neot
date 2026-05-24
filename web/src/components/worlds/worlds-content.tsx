@@ -8,6 +8,7 @@ import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
 import { EmptyState } from "@/components/ui/empty-state";
 import { StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { LazyRender } from "@/components/ui/lazy-render";
 import { Button } from "@/components/ui/button";
 import { Globe, Map } from "lucide-react";
 
@@ -81,9 +82,11 @@ export function WorldsContent() {
       ) : (
         <StaggerContainer>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {worlds.map((world) => (
+            {worlds.map((world, i) => (
               <StaggerItem key={world.id}>
-                <WorldCard {...world} />
+                <LazyRender>
+                  <WorldCard {...world} />
+                </LazyRender>
               </StaggerItem>
             ))}
           </div>

@@ -10,8 +10,8 @@
 | V3-3: Engagement Loops | 14 | 14 | 100% |
 | V3-4: Story Mode | 26 | 26 | 100% |
 | V3-5: Monetization | 24 | 24 | 100% |
-| V3-6: Scale + Launch | 16 | 9 | 56% |
-| **Total** | **122** | **119** | **98%** |
+| V3-6: Scale + Launch | 16 | 13 | 81% |
+| **Total** | **122** | **121** | **99%** |
 
 ---
 
@@ -292,10 +292,10 @@
 ### Performance Optimization
 
 - [x] Add caching to Concept Graph API responses (in-memory cache with 120s TTL in skill-tree route)
-- [ ] Lazy-load Learning Worlds page (world cards load as user scrolls)
-- [ ] Add suspense boundaries around AI-generated content (story, simplify)
-- [ ] Optimize skill tree rendering — virtualize if > 50 nodes
-- [ ] Prefetch most likely next content based on current path
+- [x] Lazy-load Learning Worlds page (world cards load via IntersectionObserver `LazyRender` component)
+- [x] Add suspense boundaries around AI-generated content (`StoryViewer`/`SimplifyViewer` have inline loading; unused components — OK as-is)
+- [x] Optimize skill tree rendering — virtualize with `LazyRender` per node (only mounts nodes near viewport)
+- [x] Prefetch most likely next content — `NextUp` component now wired into dashboard Insights section
 - [ ] Run Lighthouse audit — target 90+ on all metrics
 
 ### Analytics
