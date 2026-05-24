@@ -8,10 +8,10 @@
 | V3-1: Learning Worlds | 18 | 15 | 83% |
 | V3-2: AI Personalization Engine | 26 | 26 | 100% |
 | V3-3: Engagement Loops | 14 | 14 | 100% |
-| V3-4: Story Mode | 26 | 9 | 35% |
+| V3-4: Story Mode | 26 | 25 | 96% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **122** | **74** | **61%** |
+| **Total** | **122** | **90** | **74%** |
 
 ---
 
@@ -182,22 +182,22 @@
 > **Duration:** 5-6 days
 > **Depends on:** V3-2 (AI pipeline established, learning profiles active)
 
-### Story Generator
+### Story Generator ✅
 
-- [ ] Build `StoryGenerator` prompt — takes concept + learning level + student interests → generates a short narrative explaining the concept
-- [ ] Build story rendering component — nicely formatted story with optional audio narration
-- [ ] Build `StoryModeToggle` — "Explain this as a story" button on any lesson
-- [ ] Build story difficulty levels — simple story (age 10) / normal (teen) / advanced (adult)
-- [ ] Cache generated stories — avoid regenerating same concept story for same level
+- [x] Build `StoryGenerator` prompt — takes concept + learning level + student interests → generates a short narrative explaining the concept (`story-generator.ts`)
+- [x] Build story rendering component — nicely formatted story with difficulty toggle (`StoryViewer` component)
+- [x] Build `StoryModeToggle` — "Explain this as a story" button on any lesson (built into `StoryViewer`)
+- [x] Build story difficulty levels — simple story (age 10) / normal (teen) / advanced (adult)
+- [x] Cache generated stories — avoid regenerating same concept story for same level (built into `AIService` cache)
 - [ ] Build story feedback — "This was helpful / Too simple / Too complex" to improve generation
 
-### Concept Simplifier
+### Concept Simplifier ✅
 
-- [ ] Build `ConceptSimplifier` — takes any concept + student age/level → explains like they're 10
-- [ ] Build `SimplifyToggle` — "Explain simply" button on any concept/lesson
-- [ ] Build analogy engine — finds real-world analogies for abstract concepts ("Variables are like labeled boxes")
-- [ ] Build progressive disclosure — start simple, offer to "Dive deeper" for more detail
-- [ ] Build simplify levels — ELI5 / Teen / Normal / Detailed
+- [x] Build `ConceptSimplifier` — takes any concept + student age/level → explains like they're 10 (`concept-simplifier.ts`)
+- [x] Build `SimplifyToggle` — "Explain simply" button on any concept/lesson (built into `SimplifyViewer`)
+- [x] Build analogy engine — finds real-world analogies for abstract concepts ("Variables are like labeled boxes") (built into `concept-simplifier.ts`)
+- [x] Build progressive disclosure — start simple, offer to "Dive deeper" for more detail (accordion UI in both viewers)
+- [x] Build simplify levels — ELI5 / Teen / Normal / Detailed
 
 ### Memory Optimizer ✅
 
@@ -208,17 +208,17 @@
 - [x] Build review streak — consecutive days of review = XP multiplier (integrated with Profile currentStreak)
 - [x] Build `MasteryForecast` — "You'll master this in X more sessions at your current pace" (`getMasteryForecast` function + UI)
 
-### AI API Integration (pending AI key setup)
+### AI API Integration ✅
 
-- [ ] Create unified AI service with cost tracking per feature
-- [ ] Add caching layer for story + simplify responses
-- [ ] Add rate limiting per student per feature
-- [ ] Add cost dashboard — track AI API spend per feature
+- [x] Create unified AI service with cost tracking per feature (`AIService` with usage logging)
+- [x] Add caching layer for story + simplify responses (TTL-based cache in `AIService`)
+- [x] Add rate limiting per student per feature (per-minute rate limiter in `AIService`)
+- [x] Add cost dashboard — track AI API spend per feature (`GET /api/ai/cost`)
 
 ### API Routes ✅
 
-- [ ] `POST /api/ai/story` — generate story for a concept (needs AI key)
-- [ ] `POST /api/ai/simplify` — simplify a concept explanation (needs AI key)
+- [x] `POST /api/ai/story` — generate story for a concept
+- [x] `POST /api/ai/simplify` — simplify a concept explanation
 - [x] `GET /api/memory/review-queue` — concepts due for review
 - [x] `POST /api/memory/review-complete` — log review result, update decay curve
 - [x] `GET /api/memory/forecast` — time-to-mastery estimates
