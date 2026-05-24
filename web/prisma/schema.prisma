@@ -1491,6 +1491,42 @@ model AdPlacement {
   @@map("ad_placements")
 }
 
+model SponsoredPath {
+  id          String   @id @default(uuid())
+  sponsorName String   @map("sponsor_name")
+  sponsorLogo String?  @map("sponsor_logo")
+  sponsorUrl  String?  @map("sponsor_url")
+  title       String
+  description String?
+  conceptIds  String   @default("[]") @map("concept_ids")
+  isActive    Boolean  @default(true) @map("is_active")
+  startsAt    DateTime? @map("starts_at")
+  endsAt      DateTime? @map("ends_at")
+  maxImpressions Int   @default(0) @map("max_impressions")
+  currentImpressions Int @default(0) @map("current_impressions")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive])
+  @@map("sponsored_paths")
+}
+
+model AdImpression {
+  id        String   @id @default(uuid())
+  userId    String?  @map("user_id")
+  slotName  String   @map("slot_name")
+  page      String
+  location  String
+  adUnit    String?
+  type      String   @default("impression")
+  sponsorId String?  @map("sponsor_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("ad_impressions")
+}
+
 model Quest {
   id          String   @id @default(uuid())
   type        String
