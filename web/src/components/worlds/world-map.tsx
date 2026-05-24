@@ -57,7 +57,7 @@ function WorldNodeCard({ world, index }: { world: WorldNode; index: number }) {
         )}
         style={!isLocked ? { borderColor: `${nodeColor}30`, boxShadow: `0 0 20px ${nodeColor}08` } : undefined}
       >
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div
             className={cn(
               "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-2xl transition-transform duration-300",
@@ -69,8 +69,8 @@ function WorldNodeCard({ world, index }: { world: WorldNode; index: number }) {
           </div>
 
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className={cn("text-lg font-semibold", isLocked ? "text-muted-foreground" : "text-foreground")}>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className={cn("break-words text-base font-semibold sm:text-lg", isLocked ? "text-muted-foreground" : "text-foreground")}>
                 {world.title}
               </h3>
               {isMastered && (
@@ -96,7 +96,7 @@ function WorldNodeCard({ world, index }: { world: WorldNode; index: number }) {
               </p>
             )}
 
-            <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground sm:gap-3">
               <span>{world.islandCount} {world.islandCount === 1 ? "island" : "islands"}</span>
               {world.total > 0 && (
                 <>
@@ -156,19 +156,19 @@ export function WorldMapView() {
   return (
     <TooltipProvider>
       <div>
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold text-foreground">World Map</h1>
+        <div className="mb-8 text-center sm:mb-10">
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">World Map</h1>
           <p className="mt-2 text-muted-foreground">
             Your learning journey across themed worlds
           </p>
         </div>
 
         <div className="relative mx-auto max-w-2xl">
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-muted" />
+          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-muted sm:left-8" />
 
           <div className="relative space-y-6">
             {worlds.map((world, i) => (
-              <div key={world.id} className={cn("relative pl-16", i === worlds.length - 1 && "pb-0")}>
+              <div key={world.id} className={cn("relative pl-10 sm:pl-16", i === worlds.length - 1 && "pb-0")}>
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10">
                   <Tooltip>
                     <TooltipTrigger asChild>

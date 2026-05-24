@@ -77,12 +77,12 @@ export function FoundationRebuilder() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-2">
           <Swords className="h-5 w-5 text-orange-400" />
           <h3 className="font-semibold text-foreground">Foundation Rebuilder</h3>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => refetch()}>
+        <Button variant="ghost" size="sm" onClick={() => refetch()} className="w-full sm:w-auto">
           <RefreshCw className="mr-1 h-3 w-3" />
           Refresh
         </Button>
@@ -109,10 +109,10 @@ export function FoundationRebuilder() {
               priorityBg[suggestion.priority] ?? "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]",
             )}
           >
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-medium text-foreground">{suggestion.islandTitle}</h4>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h4 className="break-words font-medium text-foreground">{suggestion.islandTitle}</h4>
                   {suggestion.worldTitle && (
                     <span className="text-xs text-muted-foreground">in {suggestion.worldTitle}</span>
                   )}
@@ -128,8 +128,8 @@ export function FoundationRebuilder() {
               <div className="mt-3 space-y-2">
                 {suggestion.weakConcepts.map((wc) => (
                   <div key={wc.conceptId} className="rounded-lg bg-[rgba(0,0,0,0.2)] p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-foreground">{wc.conceptTitle}</span>
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="min-w-0 break-words text-sm font-medium text-foreground">{wc.conceptTitle}</span>
                       <span className={cn(
                         "text-xs",
                         wc.masteryScore < 0.3 ? "text-red-400" : wc.masteryScore < 0.6 ? "text-yellow-400" : "text-green-400",
@@ -141,10 +141,10 @@ export function FoundationRebuilder() {
                       <div className="mt-2 space-y-1">
                         <p className="text-xs text-muted-foreground">Missing prerequisites:</p>
                         {wc.missingPrerequisites.map((pre) => (
-                          <div key={pre.conceptId} className="flex items-center justify-between rounded-md bg-[rgba(0,0,0,0.2)] px-2 py-1">
-                            <div className="flex items-center gap-2">
+                          <div key={pre.conceptId} className="flex items-start justify-between gap-3 rounded-md bg-[rgba(0,0,0,0.2)] px-2 py-1">
+                            <div className="flex min-w-0 items-start gap-2">
                               <BookOpen className="h-3 w-3 text-muted-foreground" />
-                              <span className="text-xs text-foreground">{pre.conceptTitle}</span>
+                              <span className="break-words text-xs text-foreground">{pre.conceptTitle}</span>
                             </div>
                             <span className={cn(
                               "text-xs",

@@ -48,14 +48,14 @@ export function WorldsContent() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Learning Worlds</h1>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Learning Worlds</h1>
           <p className="mt-1 text-muted-foreground">
             Explore themed worlds, master concepts, and unlock new adventures.
           </p>
         </div>
-        <div className="flex gap-1 rounded-lg border border-[rgba(255,255,255,0.08)] p-1">
+        <div className="grid w-full grid-cols-2 gap-1 rounded-lg border border-[rgba(255,255,255,0.08)] p-1 sm:w-auto">
           <Button
             variant={view === "map" ? "default" : "ghost"}
             size="sm"
@@ -82,7 +82,7 @@ export function WorldsContent() {
       ) : (
         <StaggerContainer>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {worlds.map((world, i) => (
+            {worlds.map((world) => (
               <StaggerItem key={world.id}>
                 <LazyRender>
                   <WorldCard {...world} />

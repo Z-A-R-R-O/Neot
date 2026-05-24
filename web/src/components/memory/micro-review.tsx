@@ -78,13 +78,13 @@ export function MicroReview() {
               From: {data.lessonTitle} · {data.courseTitle}
             </p>
 
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 grid gap-3 sm:flex">
               <Button
                 onClick={() => handleAnswer(true)}
                 disabled={submitting}
                 variant="outline"
                 size="sm"
-                className="gap-2 border-green-500/30 text-green-400 hover:bg-green-500/10"
+                className="w-full gap-2 border-green-500/30 text-green-400 hover:bg-green-500/10 sm:w-auto"
               >
                 <CheckCircle2 className="h-4 w-4" />
                 Got it!
@@ -94,7 +94,7 @@ export function MicroReview() {
                 disabled={submitting}
                 variant="outline"
                 size="sm"
-                className="gap-2 border-red-500/30 text-red-400 hover:bg-red-500/10"
+                className="w-full gap-2 border-red-500/30 text-red-400 hover:bg-red-500/10 sm:w-auto"
               >
                 <XCircle className="h-4 w-4" />
                 Need review

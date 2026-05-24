@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useRef, useEffect, useCallback } from "react";
+import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SkillTreeNode } from "./skill-tree-node";
 import { LoadingScreen } from "@/components/ui/loading-screen";
@@ -68,7 +68,7 @@ export function SkillTree({ params }: { params: Promise<{ worldId: string }> }) 
   const COL_WIDTH = NODE_W + GAP_X;
   const ROW_HEIGHT = NODE_H + GAP_Y;
 
-  const layout = data.nodes.map((node, idx) => {
+  const layout = data.nodes.map((node) => {
     const col = Math.min(
       objectKeys.findIndex((k) => islandGroups[k].nodes.includes(node)),
       columns - 1,
@@ -89,8 +89,8 @@ export function SkillTree({ params }: { params: Promise<{ worldId: string }> }) 
   const height = maxRows * ROW_HEIGHT + PADDING * 2;
 
   return (
-    <div className="overflow-x-auto">
-      <div className="relative" style={{ width, height }}>
+    <div className="overflow-x-auto rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-2 sm:p-4">
+      <div className="relative" style={{ width: Math.max(width, 320), height }}>
         <svg className="absolute inset-0 h-full w-full" style={{ pointerEvents: "none" }}>
           {data.edges.map((edge, idx) => {
             const from = layout.find((n) => n.id === edge.from);

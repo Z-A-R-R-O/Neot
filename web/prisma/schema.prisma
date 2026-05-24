@@ -1491,6 +1491,19 @@ model AdPlacement {
   @@map("ad_placements")
 }
 
+model AnalyticsEvent {
+  id        String   @id @default(uuid())
+  userId    String?  @map("user_id")
+  type      String
+  timestamp DateTime @default(now())
+  metadata  String   @default("{}")
+
+  @@index([userId])
+  @@index([type])
+  @@index([timestamp])
+  @@map("analytics_events")
+}
+
 model SponsoredPath {
   id          String   @id @default(uuid())
   sponsorName String   @map("sponsor_name")

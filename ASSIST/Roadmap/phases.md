@@ -15,13 +15,13 @@
 | 4 | Parent + School | ✅ Shipped | Parent dashboard, school portal |
 | 5 | Scale + Marketplace | ✅ Shipped | Multi-tenant, content marketplace |
 | 6 | Integrations | ✅ Shipped | SSO, LTI, SIS, Stripe, SendGrid, CDN |
-| **V3-0** | **Foundation** | **🔲 Active** | **Concept Graph, Learning Style, docs** |
-| **V3-1** | **Learning Worlds** | **🔲 Next** | **World/Island/Dungeon UI, skill trees** |
+| **V3-0** | **Foundation** | **✅ Shipped** | **Concept Graph, Learning Style, docs** |
+| **V3-1** | **Learning Worlds** | **✅ Shipped** | **World/Island/Dungeon UI, skill trees** |
 | **V3-2** | **AI Personalization** | **✅ Shipped** | **Dynamic paths, style detection, weakness detection, difficulty scaler** |
-| **V3-3** | **Engagement Loops** | **🚧 Active** | **Daily quests, curiosity engine, progression** |
-| **V3-4** | **Story Mode** | **🔲 Planned** | **Story generator, concept simplifier, memory optimizer** |
-| **V3-5** | **Monetization** | **🔲 Planned** | **Ad placement, AdSense, sponsored learning** |
-| **V3-6** | **Scale + Launch** | **🔲 Planned** | **UX polish, performance, beta launch** |
+| **V3-3** | **Engagement Loops** | **✅ Shipped** | **Daily quests, curiosity engine, progression** |
+| **V3-4** | **Story Mode** | **✅ Shipped** | **Story generator, concept simplifier, memory optimizer** |
+| **V3-5** | **Monetization** | **✅ Shipped** | **Ad placement, AdSense, sponsored learning** |
+| **V3-6** | **Scale + Launch** | **✅ Implementation complete** | **UX polish, performance, beta launch** |
 
 ## Phase Dependencies
 

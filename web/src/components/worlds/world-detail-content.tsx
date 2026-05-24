@@ -71,15 +71,15 @@ export function WorldDetailContent({ params }: { params: Promise<{ worldId: stri
         Back to worlds
       </Link>
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <div
-          className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl"
+          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl sm:h-20 sm:w-20 sm:text-4xl"
           style={{ backgroundColor: world.color ? `${world.color}20` : "rgba(59,130,246,0.1)" }}
         >
           {world.icon ?? "🌍"}
         </div>
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">{world.title}</h1>
+        <div className="min-w-0">
+          <h1 className="break-words text-2xl font-bold text-foreground sm:text-3xl">{world.title}</h1>
           {world.description && (
             <p className="mt-2 text-muted-foreground">{world.description}</p>
           )}
@@ -87,7 +87,7 @@ export function WorldDetailContent({ params }: { params: Promise<{ worldId: stri
       </div>
 
       {world.islands.length > 0 && (
-        <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6">
+        <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4 sm:p-6">
           <h2 className="mb-6 text-lg font-semibold text-foreground">Progress</h2>
           <WorldProgressBar
             islands={world.islands.map((i) => ({ id: i.id, title: i.title, status: i.progress.status, color: i.color }))}
@@ -96,7 +96,7 @@ export function WorldDetailContent({ params }: { params: Promise<{ worldId: stri
       )}
 
       {world.islands.length > 0 && (
-        <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6">
+        <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4 sm:p-6">
           <LearningPathVisualization worldId={world.id} />
         </div>
       )}

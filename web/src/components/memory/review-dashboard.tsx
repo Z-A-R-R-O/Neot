@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Clock, AlertCircle, Calendar, ChevronRight, Brain, TrendingUp, BarChart3, RefreshCw } from "lucide-react";
+import { Clock, AlertCircle, Calendar, ChevronRight, Brain, TrendingUp, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ErrorState } from "@/components/ui/error-state";
@@ -81,21 +81,21 @@ export function ReviewDashboard() {
     <div className="space-y-8">
       <MicroReview />
 
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Review Dashboard</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Review Dashboard</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Strengthen your memory with spaced repetition
           </p>
         </div>
-        <Button onClick={() => refetch()} disabled={isRefetching} variant="outline" size="sm" className="gap-2">
+        <Button onClick={() => refetch()} disabled={isRefetching} variant="outline" size="sm" className="w-full gap-2 sm:w-auto">
           <RefreshCw className={cn("h-4 w-4", isRefetching && "animate-spin")} />
           Refresh
         </Button>
       </div>
 
       {summary && (
-        <div className="grid gap-4 sm:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { label: "Overdue", value: summary.overdue, icon: AlertCircle, color: "text-red-400", bg: "bg-red-500/10" },
             { label: "Due Today", value: summary.due, icon: Clock, color: "text-amber-400", bg: "bg-amber-500/10" },
@@ -148,7 +148,7 @@ export function ReviewDashboard() {
                   >
                     <div
                       className={cn(
-                        "flex items-center gap-4 rounded-xl border p-4 transition-colors hover:bg-[rgba(255,255,255,0.04)]",
+                        "flex items-start gap-3 rounded-xl border p-4 transition-colors hover:bg-[rgba(255,255,255,0.04)] sm:items-center sm:gap-4",
                         "border-[rgba(255,255,255,0.06)]",
                       )}
                     >
@@ -157,13 +157,13 @@ export function ReviewDashboard() {
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="truncate text-sm font-medium text-foreground">{review.lessonTitle}</span>
                           <Badge variant="outline" className={cn("text-[10px]", config.color)}>
                             {config.label}
                           </Badge>
                         </div>
-                        <div className="mt-0.5 flex items-center gap-3 text-xs text-muted-foreground">
+                        <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground sm:gap-3">
                           <span>{review.skillName}</span>
                           <span>·</span>
                           <span>{review.masteryScore}% mastery</span>
@@ -198,8 +198,8 @@ export function ReviewDashboard() {
                 transition={{ delay: i * 0.05 }}
                 className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4"
               >
-                <div className="flex items-start justify-between">
-                  <div>
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
                     <p className="text-sm font-medium text-foreground">{f.skillName}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Current: {f.currentScore}%</p>
                   </div>
@@ -214,7 +214,7 @@ export function ReviewDashboard() {
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground sm:gap-4">
                   <span>{f.sessionsToMastery} sessions to mastery</span>
                   <span>·</span>
                   <span>~{f.estimatedDaysToMastery} days</span>

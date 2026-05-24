@@ -55,20 +55,20 @@ export function SimplifyViewer({ conceptTitle, conceptDescription }: SimplifyVie
     <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">
       <button
         onClick={() => { if (!data) fetchSimplify(); else setExpanded(!expanded); }}
-        className="flex w-full items-center justify-between p-4 text-left"
+        className="flex w-full items-start justify-between gap-3 p-4 text-left"
       >
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
             <Lightbulb className="h-4 w-4 text-amber-400" />
           </div>
-          <div>
-            <span className="text-sm font-medium text-foreground">Simplify</span>
-            <span className="ml-2 text-xs text-muted-foreground">
+          <div className="min-w-0">
+            <span className="block text-sm font-medium text-foreground sm:inline">Simplify</span>
+            <span className="block text-xs text-muted-foreground sm:ml-2 sm:inline">
               {levelLabels[level]} level
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {loading && <RefreshCw className="h-4 w-4 animate-spin text-muted-foreground" />}
           {data && (expanded ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />)}
           {!data && <Sparkles className="h-4 w-4 text-amber-400" />}

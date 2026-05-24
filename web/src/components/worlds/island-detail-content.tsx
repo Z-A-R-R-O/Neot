@@ -129,17 +129,17 @@ export function IslandDetailContent({ params }: { params: Promise<{ worldId: str
           Back to world
         </Link>
 
-        <div className="flex items-start justify-between gap-5">
-          <div className="flex items-center gap-5">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 items-start gap-4 sm:gap-5">
             <div
-              className="flex h-16 w-16 items-center justify-center rounded-2xl text-3xl"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl sm:h-16 sm:w-16 sm:text-3xl"
               style={{ backgroundColor: island.color ? `${island.color}20` : "rgba(99,102,241,0.1)" }}
             >
               {island.icon ?? "🏝️"}
             </div>
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-foreground">{island.title}</h1>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <h1 className="break-words text-xl font-bold text-foreground sm:text-2xl">{island.title}</h1>
                 {isLocked && <Lock className="h-5 w-5 text-muted-foreground" />}
                 {isCompleted && <CheckCircle2 className="h-5 w-5 text-green-500" />}
               </div>
@@ -157,7 +157,7 @@ export function IslandDetailContent({ params }: { params: Promise<{ worldId: str
               onClick={handleComplete}
               disabled={completing}
               variant="default"
-              className="shrink-0 gap-2"
+              className="w-full shrink-0 gap-2 sm:w-auto"
             >
               <CheckCircle2 className="h-4 w-4" />
               {completing ? "Completing..." : "Mark Complete"}
@@ -193,7 +193,7 @@ export function IslandDetailContent({ params }: { params: Promise<{ worldId: str
                     <StaggerItem key={concept.id}>
                       <div
                         className={cn(
-                          "flex items-center gap-4 rounded-xl border border-[rgba(255,255,255,0.06)] p-4 transition-colors",
+                          "flex items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.06)] p-4 transition-colors sm:gap-4",
                           "bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.04)]",
                         )}
                       >

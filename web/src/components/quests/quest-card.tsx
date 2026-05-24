@@ -58,7 +58,7 @@ export function QuestCard({
             : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(255,255,255,0.12)]",
       )}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         <div
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
           style={{ backgroundColor: color ? `${color}20` : "rgba(139,92,246,0.1)" }}
@@ -67,8 +67,8 @@ export function QuestCard({
         </div>
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between gap-2">
-            <h4 className="text-sm font-semibold text-foreground">{title}</h4>
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+            <h4 className="break-words text-sm font-semibold text-foreground">{title}</h4>
             <span className="shrink-0 text-xs font-medium" style={{ color: color ?? "#8b5cf6" }}>
               +{xpReward} XP
             </span>

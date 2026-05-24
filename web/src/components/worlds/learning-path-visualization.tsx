@@ -76,8 +76,8 @@ export function LearningPathVisualization({ worldId }: { worldId: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <h2 className="text-lg font-semibold text-foreground">Your Learning Path</h2>
           {data.style && (
             <p className="text-sm text-muted-foreground">
@@ -85,7 +85,7 @@ export function LearningPathVisualization({ worldId }: { worldId: string }) {
             </p>
           )}
         </div>
-        <div className="flex gap-1.5">
+        <div className="flex flex-wrap gap-1.5">
           {data.recommendedContentTypes.map((type) => {
             const Icon = formatIcons[type] ?? BookOpen;
             return (
@@ -102,7 +102,7 @@ export function LearningPathVisualization({ worldId }: { worldId: string }) {
       </div>
 
       <div className="relative">
-        <div className="absolute left-6 top-0 h-full w-0.5 bg-gradient-to-b from-primary-500/40 via-accent-500/40 to-muted" />
+        <div className="absolute left-4 top-0 h-full w-0.5 bg-gradient-to-b from-primary-500/40 via-accent-500/40 to-muted sm:left-6" />
 
         <div className="space-y-6">
           {data.path.map((island, idx) => {
@@ -117,9 +117,9 @@ export function LearningPathVisualization({ worldId }: { worldId: string }) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="relative pl-14"
+                className="relative pl-10 sm:pl-14"
               >
-                <div className="absolute left-4 top-1 z-10">
+                <div className="absolute left-2 top-1 z-10 sm:left-4">
                   {isCompleted ? (
                     <CheckCircle2 className="h-5 w-5 text-green-400" />
                   ) : isLocked ? (
@@ -148,9 +148,9 @@ export function LearningPathVisualization({ worldId }: { worldId: string }) {
                           : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]",
                   )}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-medium text-foreground">{island.islandTitle}</h3>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
+                      <h3 className="break-words font-medium text-foreground">{island.islandTitle}</h3>
                       {isCompleted && (
                         <span className="rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-medium text-green-400">
                           Mastered
@@ -168,7 +168,7 @@ export function LearningPathVisualization({ worldId }: { worldId: string }) {
                       )}
                     </div>
                     {isActive && !isCompleted && (
-                      <Button asChild variant="default" size="sm">
+                      <Button asChild variant="default" size="sm" className="w-full sm:w-auto">
                         <Link href={`/worlds/${worldId}/islands/${island.islandId}`}>
                           Continue <ArrowRight className="ml-1 h-3 w-3" />
                         </Link>

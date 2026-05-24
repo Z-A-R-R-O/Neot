@@ -36,12 +36,12 @@ export function WeaknessAlert() {
         className="relative overflow-hidden rounded-2xl border border-red-500/20 bg-gradient-to-r from-red-500/10 via-red-500/5 to-transparent p-4"
       >
         <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-red-500/10 blur-[60px]" />
-        <div className="relative z-10 flex items-start gap-4">
+        <div className="relative z-10 flex items-start gap-3 sm:gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/15">
             <AlertTriangle className="h-5 w-5 text-red-400" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h3 className="font-semibold text-foreground">Foundation Gaps Detected</h3>
               <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-medium text-red-400">
                 {data.criticalCount} critical
@@ -51,8 +51,8 @@ export function WeaknessAlert() {
               {data.totalGaps} prerequisite {data.totalGaps === 1 ? "concept needs" : "concepts need"} reinforcement.
               Strengthening your foundations will unlock new content and improve retention.
             </p>
-            <div className="mt-3 flex gap-2">
-              <Button asChild variant="default" size="sm">
+            <div className="mt-3 grid gap-2 sm:flex">
+              <Button asChild variant="default" size="sm" className="w-full sm:w-auto">
                 <Link href="#foundation-rebuilder">
                   <Shield className="mr-1 h-3 w-3" />
                   Review Gaps
