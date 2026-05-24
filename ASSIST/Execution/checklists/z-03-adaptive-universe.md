@@ -8,10 +8,10 @@
 | V3-1: Learning Worlds | 18 | 15 | 83% |
 | V3-2: AI Personalization Engine | 26 | 26 | 100% |
 | V3-3: Engagement Loops | 14 | 14 | 100% |
-| V3-4: Story Mode | 16 | 0 | 0% |
+| V3-4: Story Mode | 26 | 9 | 35% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **112** | **65** | **58%** |
+| **Total** | **122** | **74** | **61%** |
 
 ---
 
@@ -176,7 +176,7 @@
 
 ---
 
-## V3-4: Story Mode 🔲
+## V3-4: Story Mode 🚧
 
 > **Goal:** Build the AI features that make NEOT unique — story generator, concept simplifier, memory optimizer.
 > **Duration:** 5-6 days
@@ -199,29 +199,29 @@
 - [ ] Build progressive disclosure — start simple, offer to "Dive deeper" for more detail
 - [ ] Build simplify levels — ELI5 / Teen / Normal / Detailed
 
-### Memory Optimizer
+### Memory Optimizer ✅
 
-- [ ] Build enhanced spaced repetition — personalized decay curves per student based on memory patterns
-- [ ] Build `OptimalReviewTime` calculator — predicts when student is about to forget each concept
-- [ ] Build `ReviewDashboard` — shows concepts due for review ordered by urgency
-- [ ] Build `MicroReview` — 30-second review cards (quick recall, no full lesson needed)
-- [ ] Build review streak — consecutive days of review = XP multiplier
-- [ ] Build `MasteryForecast` — "You'll master this in X more sessions at your current pace"
+- [x] Build enhanced spaced repetition — personalized decay curves per student based on memory patterns (`memory-optimizer.ts`)
+- [x] Build `OptimalReviewTime` calculator — predicts when student is about to forget each concept (`predictedRetention` in memory-optimizer)
+- [x] Build `ReviewDashboard` — shows concepts due for review ordered by urgency (`ReviewDashboard` component)
+- [x] Build `MicroReview` — 30-second review cards (quick recall, no full lesson needed) (`MicroReview` component)
+- [x] Build review streak — consecutive days of review = XP multiplier (integrated with Profile currentStreak)
+- [x] Build `MasteryForecast` — "You'll master this in X more sessions at your current pace" (`getMasteryForecast` function + UI)
 
-### AI API Integration
+### AI API Integration (pending AI key setup)
 
 - [ ] Create unified AI service with cost tracking per feature
 - [ ] Add caching layer for story + simplify responses
 - [ ] Add rate limiting per student per feature
 - [ ] Add cost dashboard — track AI API spend per feature
 
-### API Routes
+### API Routes ✅
 
-- [ ] `POST /api/ai/story` — generate story for a concept
-- [ ] `POST /api/ai/simplify` — simplify a concept explanation
-- [ ] `GET /api/memory/review-queue` — concepts due for review
-- [ ] `POST /api/memory/review-complete` — log review result, update decay curve
-- [ ] `GET /api/memory/forecast` — time-to-mastery estimates
+- [ ] `POST /api/ai/story` — generate story for a concept (needs AI key)
+- [ ] `POST /api/ai/simplify` — simplify a concept explanation (needs AI key)
+- [x] `GET /api/memory/review-queue` — concepts due for review
+- [x] `POST /api/memory/review-complete` — log review result, update decay curve
+- [x] `GET /api/memory/forecast` — time-to-mastery estimates
 
 ---
 
