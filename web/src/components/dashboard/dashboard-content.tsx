@@ -12,6 +12,9 @@ import { SpacedRepetitionWidget } from "@/components/gamification/spaced-repetit
 import { FoundationRebuilder } from "@/components/learning/foundation-rebuilder";
 import { WeaknessAlert } from "@/components/learning/weakness-alert";
 import { DailyQuestsPanel } from "@/components/quests/daily-quests-panel";
+import { ExploreTab } from "@/components/curiosity/explore-tab";
+import { FeelingCuriousButton } from "@/components/curiosity/feeling-curious-button";
+import { MasteryMilestoneNotification } from "@/components/gamification/mastery-milestone-notification";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
@@ -119,6 +122,8 @@ function formatTime(seconds: number): string {
 export function DashboardContent({ name, stats, enrollments, continueLesson, recommendations, seasonalEvents, recentActivity, weeklyGoal }: DashboardContentProps) {
   return (
     <div className="space-y-10">
+      <MasteryMilestoneNotification />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -219,11 +224,22 @@ export function DashboardContent({ name, stats, enrollments, continueLesson, rec
         })}
       </div>
 
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.32, ease: easing }}
+        className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-6 shadow-xl"
+      >
+        <ExploreTab />
+      </motion.div>
+
+      <FeelingCuriousButton />
+
       {continueLesson && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.25, ease: easing }}
+          transition={{ duration: 0.8, delay: 0.35, ease: easing }}
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-heading text-xl font-bold tracking-tight text-foreground">Continue Learning</h2>

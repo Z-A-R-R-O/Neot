@@ -1,10 +1,11 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ListChecks } from "lucide-react";
 import { QuestCard } from "./quest-card";
-import { LoadingScreen } from "@/components/ui/loading-screen";
+import { QuestCompletionAnimation } from "./quest-completion-animation";
 import { ErrorState } from "@/components/ui/error-state";
 import { EmptyState } from "@/components/ui/empty-state";
 
@@ -31,6 +32,7 @@ interface QuestsResponse {
 
 export function DailyQuestsPanel() {
   const queryClient = useQueryClient();
+  const [lastClaimed, setLastClaimed] = useState<{ title: string; xpReward: number; color: string | null } | null>(null);
 
   const { data, isLoading, error } = useQuery<QuestsResponse>({
     queryKey: ["daily-quests"],
@@ -47,7 +49,11 @@ export function DailyQuestsPanel() {
       if (!res.ok) throw new Error("Failed to claim reward");
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (_data, questId) => {
+      const sq = data?.quests.find((q) => q.id === questId);
+      if (sq) {
+        setLastClaimed({ title: sq.quest.title, xpReward: sq.quest.xpReward, color: sq.quest.color });
+      }
       queryClient.invalidateQueries({ queryKey: ["daily-quests"] });
     },
   });
@@ -66,6 +72,16 @@ export function DailyQuestsPanel() {
 
   return (
     <div className="space-y-3">
+      {lastClaimed && (
+        <QuestCompletionAnimation
+          title={lastClaimed.title}
+          xpReward={lastClaimed.xpReward}
+          color={lastClaimed.color}
+          show={!!lastClaimed}
+          onClose={() => setLastClaimed(null)}
+        />
+      )}
+
       <div className="flex items-center gap-2">
         <ListChecks className="h-5 w-5 text-primary-400" />
         <h3 className="font-semibold text-foreground">Daily Quests</h3>

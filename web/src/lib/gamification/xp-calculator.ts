@@ -2,6 +2,8 @@ export const XP_REWARDS = {
   LESSON_COMPLETE: 100,
   QUIZ_PASS: 50,
   DAILY_STREAK: 25,
+  ISLAND_COMPLETE: 200,
+  WORLD_COMPLETE: 500,
 } as const;
 
 export const XP_MULTIPLIERS = {

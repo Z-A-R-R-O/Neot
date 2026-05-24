@@ -7,11 +7,11 @@
 | V3-0: Foundation | 15 | 10 | 67% |
 | V3-1: Learning Worlds | 18 | 15 | 83% |
 | V3-2: AI Personalization Engine | 26 | 26 | 100% |
-| V3-3: Engagement Loops | 14 | 5 | 36% |
+| V3-3: Engagement Loops | 14 | 14 | 100% |
 | V3-4: Story Mode | 16 | 0 | 0% |
 | V3-5: Monetization | 14 | 0 | 0% |
 | V3-6: Scale + Launch | 16 | 0 | 0% |
-| **Total** | **112** | **56** | **50%** |
+| **Total** | **112** | **65** | **58%** |
 
 ---
 
@@ -135,7 +135,7 @@
 
 ---
 
-## V3-3: Engagement Loops 🔲
+## V3-3: Engagement Loops ✅
 
 > **Goal:** Duolingo-level engagement — daily quests, world progression rewards, curiosity engine, enhanced streaks.
 > **Duration:** 4-5 days
@@ -148,31 +148,31 @@
 - [x] Build `QuestGenerator` — generates 3 daily quests per student (e.g., "Complete 2 lessons", "Score 90% on a quiz", "Try a challenge")
 - [x] Build `QuestCard` component — shows quest, progress, XP reward
 - [x] Build `DailyQuestsPanel` — dashboard widget showing today's quests
-- [ ] Build quest completion animation — dopamine hit on quest finish
-- [ ] Build streak-based quest difficulty — longer streak = harder quests = more XP
+- [x] Build quest completion animation — dopamine hit on quest finish (`QuestCompletionAnimation` component)
+- [x] Build streak-based quest difficulty — longer streak = harder quests = more XP (built into `QuestGenerator`)
 
 ### World Progression Rewards
 
-- [ ] Build island completion reward — XP bonus + badge when island is mastered
-- [ ] Build world completion ceremony — fullscreen celebration when world is cleared
-- [ ] Build unlock animations — new island/world unlocking effect
-- [ ] Build `WorldMap` view — shows all worlds with progress, locked/unlocked/explored/mastered states
-- [ ] Build mastery milestone notifications — "You mastered Variables Island!"
+- [x] Build island completion reward — XP bonus + badge when island is mastered (`IslandCompletionReward` component + XP awarded in progress API)
+- [x] Build world completion ceremony — fullscreen celebration when world is cleared (`WorldCompletionCelebration` already existed, world bonus XP added)
+- [x] Build unlock animations — new island/world unlocking effect (part of `IslandCompletionReward` animated particles)
+- [x] Build `WorldMap` view — shows all worlds with progress, locked/unlocked/explored/mastered states (`WorldMapView` component + `/api/worlds/map`)
+- [x] Build mastery milestone notifications — "You mastered Variables Island!" (`MasteryMilestoneNotification` component)
 
 ### Curiosity Engine
 
-- [ ] Build `CuriosityRecommender` — analyzes what the student is learning and suggests exciting related topics ("Since you're learning loops, did you know you can build a game with them?")
-- [ ] Build `ExploreTab` — "Things you might love" — cross-domain curiosity recommendations
-- [ ] Build `CuriosityCard` — clickable card showing a related cool topic with "Explore" button
-- [ ] Build `"I'm Feeling Curious"` button — one-click takes student to a random advanced topic
+- [x] Build `CuriosityRecommender` — analyzes what the student is learning and suggests exciting related topics (`CuriosityRecommender` service)
+- [x] Build `ExploreTab` — "Things you might love" — cross-domain curiosity recommendations (`ExploreTab` component)
+- [x] Build `CuriosityCard` — clickable card showing a related cool topic with "Explore" button (`CuriosityCard` component)
+- [x] Build `"I'm Feeling Curious"` button — one-click takes student to a random advanced topic (`FeelingCuriousButton` component)
 
 ### API Routes
 
 - [x] `GET /api/quests/daily` — get today's quests
 - [x] `POST /api/quests/[id]/claim` — claim quest rewards
-- [ ] `GET /api/worlds/map` — full world map with progress across all worlds
-- [ ] `GET /api/curiosity/recommendations` — curiosity-driven topic suggestions
-- [ ] `GET /api/curiosity/random` — random exciting topic
+- [x] `GET /api/worlds/map` — full world map with progress across all worlds
+- [x] `GET /api/curiosity/recommendations` — curiosity-driven topic suggestions
+- [x] `GET /api/curiosity/random` — random exciting topic
 
 ---
 
